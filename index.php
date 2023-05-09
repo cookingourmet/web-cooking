@@ -1,4 +1,8 @@
-<!doctype html>
+<?php
+
+echo " ";
+
+?><!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -17,55 +21,58 @@
   </head>
   <body>
 
-  <!--
-      <header class="container-fluid bg-danger d-flex justify-content-center">
-        <p class="text-lingt mb-0 p-1 ds-3">contactenos 051 981 377 382</p>
-      </header>
+ <head>
+                <div class="navbar">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light p-3" id="menu">
+                  <div class="logo">
+                 <img src="./icono/logo2.png" alt=""> 
+                </div>
 
-  <div class="container-fluid">
+                  <ul class="links">
+                    <li><a href="inicio">Inicio</a></li>
+                    <li><a href="carreras">Carreras</a></li>
+                    <li><a href="eventos">Eventos</a></li>
+                    <li><a href="contactos">Contactos</a></li>
+                  </ul>
+                  <a href="https://cookingourmet.q10.com/" class="action_btn">Aula Virtual</a>
+                  <div class="toggle_btn">
+                  <i class="fa-solid fa-bars" style="color: #e1195f;"></i> 
+                  </div>
+                  </div>
 
-    <a class="navbar-brand" href="#">
-      <img src="./icono/logo.png" alt=""> 
-  </a>
+                  <div class="dropdown_menu">
+                    <li><a href="inicio">Inicio</a></li>
+                    <li><a href="carreras">Carreras</a></li>
+                    <li><a href="eventos">Eventos</a></li>
+                    <li><a href="contactos">Contactos</a></li>
+                    <li><a href="https://cookingourmet.q10.com/" class="action_btn">Aula Virtual</a></li>
+                  </div>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+</head>
+            <script>
+              const toggleBtn = document.querySelector('.toggle_btn')
+              const toggleBtnIcon = document.querySelector('.toggle_btn i')
+              const dropDownMenu = document.querySelector('.dropdown_menu')
+
+              toggleBtn.onclick = function () {
+                dropDownMenu.classList.toggle('open')
+
+                const isOpen = dropDownMenu.classList.contains('open')
+
+                toggleBtnIcon.classList = isOpen
+                ?'fa-solid fa-xmark'
+                :'fa-solid fa-bars'
+              }
+
+            </script>
 
 
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.php">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Conocenos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Carreras</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Eventos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contacto</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-primary text-danger"  href="https://cookingourmet.q10.com/">Intranet</a>
-        </li>        
-      </ul>
 
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Correo Electronico" aria-label="email">
-        <button class="btn btn-danger  btn primary-outline-success" type="submit">Buscar</button>
-      </form>
-    </div>
-  </div>
-</nav>
--->
 
+
+
+  
+<script src="main.js"></script>
 
 <!-- Slider -->
 
@@ -122,51 +129,8 @@
   </button>
 </div>
 <br>
-<head>
-                  <div class="navbar">
 
-                  <div class="logo"><a href="">Escuela de Alta Cocina</a>
-                <!--  <img src="./icono/logo.png" alt=""> -->
-                </div>
-
-                  <ul class="links">
-                    <li><a href="inicio">Inicio</a></li>
-                    <li><a href="carreras">Carreras</a></li>
-                    <li><a href="eventos">Eventos</a></li>
-                    <li><a href="contactos">Contactos</a></li>
-                  </ul>
-                  <a href="https://cookingourmet.q10.com/" class="action_btn">Aula Virtual</a>
-                  <div class="toggle_btn">
-                  <i class="fa-solid fa-bars" style="color: #e1195f;"></i> 
-                  </div>
-                  </div>
-
-                  <div class="dropdown_menu ">
-                    <li><a href="inicio">Inicio</a></li>
-                    <li><a href="carreras">Carreras</a></li>
-                    <li><a href="eventos">Eventos</a></li>
-                    <li><a href="contactos">Contactos</a></li>
-                    <li><a href="https://cookingourmet.q10.com/" class="action_btn">Aula Virtual</a></li>
-                  </div>
-
-</head>
-            <script>
-              const toggleBtn = document.querySelector('.toggle_btn')
-              const toggleBtnIcon = document.querySelector('.toggle_btn i')
-              const dropDownMenu = document.querySelector('.dropdown_menu')
-
-              toggleBtn.onclick = function () {
-                dropDownMenu.classList.toggle('open')
-
-                const isOpen = dropDownMenu.classList.contains('open')
-
-                toggleBtnIcon.classList = isOpen
-                ?'fa-solid fa-xmark'
-                :'fa-solid fa-bars'
-              }
-
-            </script>
-
+<hr size="4px" color="black" />
 <!-- INTRO -->
 <br>
             </br>
@@ -217,11 +181,9 @@
                           <img src="./img/gast.png" alt="" class="img-fluid">
                         </div>
                         <div class="card-title text-danger fs-4">Gastronomia y Arte Culinario</div>
-                        <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing 
-                          elit. Minima voluptas distinctio ullam sunt nostrum. Doloremque,
-                           perspiciatis quos laudantium id corporis necessitatibus
-                            laboriosam, maiores eaque eum debitis eligendi numquam, 
-                            est facilis.
+                        <p class="lead">Somos una de las escuelas de cocina más prestigioa de la toda la región junín, siendo pioneros 
+                          en formas líderes profesionales en la carrera de Gastronomia y Arte Culinario. Nuestros exigentes y métodos de enseñanza ofrecen a los estudiantes un amplio
+                          conocimiento en sus respectivas áreas de trabajo.
                         </p>
                         <button class="btn bg-danger text-light">Leer Mas</button>
                         </div>
@@ -236,11 +198,9 @@
                           <img src="./img/past.png" alt="" class="img-fluid">
                         </div>
                         <div class="card-title text-danger fs-4">Panadería y Pastelería</div>
-                        <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing 
-                          elit. Minima voluptas distinctio ullam sunt nostrum. Doloremque,
-                           perspiciatis quos laudantium id corporis necessitatibus
-                            laboriosam, maiores eaque eum debitis eligendi numquam, 
-                            est facilis.
+                        <p class="lead ">la carrera de pastelería y panaderia de Cooking Gourmette guiará paso a paso desde las técnicas 
+                          hasta las más modernas con equipos de alta tecnología, donde desarrollamos tus habilidades y competencias no en uno sino en dos programas de pastelería y panadería,
+                          logrando desarrollar en ti un perfil profesional.
                         </p>
                         <button class="btn bg-danger text-light ">Leer Mas</button>
                         </div>
@@ -255,11 +215,8 @@
                           <img src="./img/bar.png" alt="" class="img-fluid">
                         </div>
                         <div class="card-title text-danger fs-4">Bar Profesional & Working Flair</div>
-                        <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing 
-                          elit. Minima voluptas distinctio ullam sunt nostrum. Doloremque,
-                           perspiciatis quos laudantium id corporis necessitatibus
-                            laboriosam, maiores eaque eum debitis eligendi numquam, 
-                            est facilis.
+                        <p class="lead">La carrera de Bar Profesiona & Working Flair, es una especializacion en la coctelería clasica, nacional e internacional, donde los estudiantes aplicaran 
+                          las enseñanza y habilidades conseguidar dentro de proceso academico y poder aplicarlos en el campo laborar del Bar Profesional y Working Flair.
                         </p>
                         <button class="btn bg-danger text-light">Leer Mas</button>
                         </div>
@@ -364,16 +321,16 @@
       <img src="./icono/logo.png" alt="">
       <br>
       <h6>Contacto: +051 916 418 843 | Direccion: Av. Ferrocarril # 587 - Huancayo</h6>
-      <h6>Email: instituto.cookingourmet@gmial.com</h6>
+      <h6>Email: instituto.cookingourmet@gmail.com</h6>
       <ul class="socials">
-        <li><a href="#"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a></li>
-        <li><a href="#"><i class="fa-brands fa-instagram" style="color: #ffffff;"></i></a></li>
-        <li><a href="#"><i class="fa-brands fa-tiktok" style="color: #ffffff;"></i></a></li>
-        <li><a href="#"><i class="fa-brands fa-whatsapp" style="color: #ffffff;"></i></a></li>
+        <li><a href="https://www.facebook.com/Cooking.Gourmet"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a></li>
+        <li><a href="https://www.instagram.com/cooking_gourmet/"><i class="fa-brands fa-instagram" style="color: #ffffff;"></i></a></li>
+        <li><a href="https://www.tiktok.com/@cookingourmet?_t=8cBGOhLGxuP&_r=1"><i class="fa-brands fa-tiktok" style="color: #ffffff;"></i></a></li>
+        <li><a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0"><i class="fa-brands fa-whatsapp" style="color: #ffffff;"></i></a></li>
       </ul>
   </div>
     <div class="footer-botton">
-      <p>copyright &copy;2023 Cooking Gourmet. Sesigned by <span>cookingourmet</span></p>
+      <p>copyright &copy;2023 Cooking Gourmet. Designed by <span>cookingourmet</span></p>
     </div>
 </footer>
 
