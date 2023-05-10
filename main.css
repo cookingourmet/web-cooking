@@ -90,7 +90,7 @@ body {
 
 body{
     height: 100vh;
-    background-color: #e6e6e6;
+    background-color: #ffffff;
 }
 
 li{
@@ -230,6 +230,8 @@ header{
     font-size: 50px;
 }
 
+
+
 /* footer  */
 *{
     margin: 0;
@@ -312,4 +314,11 @@ footer{
     text-transform: uppercase;
     opacity: .4;
     font-weight: 200;
+}
+
+
+.carrucel{
+    background-color: #ffffff;
+    margin-left: 5%;
+    margin-right: 5%;
 }
