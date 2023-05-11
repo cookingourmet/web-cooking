@@ -240,7 +240,7 @@ header{
 }
 
 footer{
-    background: #111;
+    background: #1d1d1d;
     height: auto;
     width: 100vw;
     font-family: "open sans";
@@ -259,7 +259,7 @@ footer{
 
 .footer-content h3{
     font-size: 1.8rem;
-    font-weight: 400;
+    font-weight: 400px;
     text-transform: capitalize;
     line-height: 3rem;
 }
@@ -278,6 +278,7 @@ footer{
     justify-content: center;
     margin: 1rem 0 3rem 0;
 }
+
 
 .socials li{
     margin: 0 10px;
@@ -298,7 +299,7 @@ footer{
 }
 
 .footer-botton{
-    background: #000;
+    background: #eb1052;
     width: 100vw;
     padding: 20px 0;
     text-align: center;
@@ -321,4 +322,37 @@ footer{
     background-color: #ffffff;
     margin-left: 5%;
     margin-right: 5%;
+}
+
+
+/* whatsapp */
+
+
+.container-boton{
+    position: fixed;
+    z-index: 999;
+    border-radius: 50%;
+    bottom: 10px;
+    right: 25px;
+    transition: ease 0.3s;
+    
+}
+
+.container-boton:hover{
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.boton{
+    width: 100px;
+    transition: ease 1s;
+}
+
+@keyframes efecto{
+    0%{
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.85);
+    }
+    100%{
+        box-shadow: 0 0 0 25px rgba(0, 0, 0, 0);
+    }
 }
