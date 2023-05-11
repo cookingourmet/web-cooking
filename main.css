@@ -400,9 +400,14 @@ footer{
         padding: 10px;
 }
 
-.project-counter-wrp ul li p span {
-    color:rgba(255, 255, 255, 0.8);
-    font-size: 18px;
-    margin: 0;
-    padding: 10px;
+.project-counter-wrp ul li span {
+    width: 60px;
+    background: rgba(255, 255, 255, 0.8);
+    height: 2px;
+    display: block;
+    margin: 0 auto;
+}
+
+.contador{
+    margin-right: 2%;
 }
