@@ -159,7 +159,8 @@
       <img src="./img/programa.png" class="img-fluid" alt="equipo">
     </div>
 
-       <div class="row mt-5">
+      
+      <div class="row mt-5">
         <div class="owl-carousel owl-theme">
 
           <div class="item mb-4">
@@ -265,18 +266,18 @@
         <i class="bi bi-bookmark-heart"></i>
         <p id="number3" class="number">2,000+</p><span></span>
         <p class="fw-bold text-danger">Jefe de Cocina</p>
-      </li>   
-
+      </li>     
+      
     </ul>
   </div>
 
   <script>
     var project = setInterval(EnEgresados, 1)
-    var extranjero = setInterval(EnExtranjero, 45)
-    var jefes= setInterval(Jefescocina, 7)
-    let count1 = 7600;
+    var extranjero = setInterval(EnExtranjero, 200)
+    var jefes= setInterval(Jefescocina, 50)
+    let count1 = 600;
     let count2 = 1;
-    let count3 = 100;
+    let count3 = 1;
 
     function EnEgresados() {
       count1++;
@@ -310,18 +311,6 @@
         clearInterval(jefes)
       }
     }
-
-    function Jefescocina() {
-      count3++;
-      document.querySelector("#number3").innerHTML =
-      count3;
-
-      //stop al give condition
-      if(count3 == 2000) {
-        clearInterval(jefes)
-      }
-    }
-    
   </script>
 </section>
 
