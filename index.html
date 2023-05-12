@@ -100,7 +100,7 @@
   </div>
 
   <div class="carousel-inner">
-    <div class="carousel-item active" data-bs-interval="3000">
+    <div class="carousel-item active" data-bs-interval="2000">
       <img src="./img/slider1.png" class="d-block w-100" alt="slider1">
       <div class="carousel-caption d-none d-md-block">
         <h5 class="fw-bold">PASTELERÍA Y PANADERÍA</h5>
@@ -108,7 +108,7 @@
       </div>
     </div>
 
-    <div class="carousel-item" data-bs-interval="3000">
+    <div class="carousel-item" data-bs-interval="2000">
       <img src="./img/slider2.png" class="d-block w-100" alt="slider2">
       <div class="carousel-caption d-none d-md-block">
         <h5 class="fw-bold">BAR PROFESIONAL & WORKINF FLAIR</h5>
@@ -116,7 +116,7 @@
       </div>
     </div>
  
-    <div class="carousel-item" data-bs-interval="3000">
+    <div class="carousel-item" data-bs-interval="2000">
       <img src="./img/slider3.png" class="d-block w-100" alt="slider3">
       <div class="carousel-caption d-none d-md-block">
         <h5 class="fw-bold">GASTRONOMIA Y ARTE CULINARIO</h5>
@@ -124,7 +124,7 @@
       </div>
     </div>
 
-    <div class="carousel-item" data-bs-interval="3000">
+    <div class="carousel-item" data-bs-interval="2000">
       <img src="./img/slider4.png" class="d-block w-100" alt="slider3">
       <div class="carousel-caption d-none d-md-block">
         <h5 class="fw-bold">GESTION Y ATENCION A CLIENTES</h5>
@@ -237,40 +237,79 @@
 
 </div>
 <!-- trabajo de contador --> 
- <section class="contador">
-      <h2 class="text-center">Progreso Edicativos Cooking</h2>
-      <br>
-      <div class="project-counter-wrp">
-        <ul>
-          <li>
-            <i class="bi bi-mortarboard"></i>
-            <p id="number1" class="number">11,000+</p>
-            <p>Estudiantes Egresados</p>
-          </li>
-          
-          <li>
-            <i class="bi bi-airplane"></i>
-            <p id="number1" class="number">300+</p>
-            <p>Estudiendas en el Extranjero</p>
-          </li>
-
-          <li>
-            <i class="bi bi-bookmark-heart"></i>
-            <p id="number1" class="number">2,000+</p>
-            <p>Estudiantes, jefe de Cocina</p>
-          </li>
-          
-          
-        </ul>
-      </div>
-
-  </section>
-
-
+ 
 </section>
-<br>
-<br>
-<br>
+
+<section class="contador">
+  <h2 class="text-center">Progreso Edicativos Cooking</h2>
+  <br>
+  <div class="project-counter-wrp">
+    <ul>
+      <li>
+        <i class="bi bi-mortarboard"></i>
+        <p id="number1" class="number">11,000+</p>
+        <p>Estudiantes Egresados</p>
+      </li>
+      
+      <li>
+        <i class="bi bi-airplane"></i>
+        <p id="number2" class="number">300+</p>
+        <p>Estudiendas en el Extranjero</p>
+      </li>
+
+      <li>
+        <i class="bi bi-bookmark-heart"></i>
+        <p id="number3" class="number">2,000+</p>
+        <p>Estudiantes, jefe de Cocina</p>
+      </li>     
+      
+    </ul>
+  </div>
+
+  <script>
+    var project = setInterval(projectDone, 0.5)
+    var project = setInterval(projectDone2, 0.5)
+    var project = setInterval(projectDone3, 0.5)
+    let count1 = 1;
+    let count2 = 1;
+    let count3 = 1;
+
+    function projectDone () {
+      count1++;
+      document.querySelector("#number1").innerHTML =
+      count1;
+
+      //stop al give condition
+      if(count1 == 11000) {
+        clearInterval(project)
+      }
+    }
+
+    function projectDone2 () {
+      count1++;
+      document.querySelector("#number2").innerHTML =
+      count1;
+
+      //stop al give condition
+      if(count1 == 300) {
+        clearInterval(project)
+      }
+    }
+
+    function projectDone3 () {
+      count1++;
+      document.querySelector("#number3").innerHTML =
+      count1;
+
+      //stop al give condition
+      if(count1 == 11000) {
+        clearInterval(project)
+      }
+    }
+  </script>
+</section>
+
+
 <br>
 <section>
 
