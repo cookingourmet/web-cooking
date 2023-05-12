@@ -267,24 +267,16 @@
         <p class="fw-bold text-danger">Jefe de Cocina</p>
       </li>   
 
-      <li>
-        <i class="bi bi-bookmark-heart"></i>
-        <p id="number4" class="number">1026</p><span></span>
-        <p class="fw-bold text-danger">Estudiantes</p>
-      </li> 
-
     </ul>
   </div>
 
   <script>
     var project = setInterval(EnEgresados, 1)
-    var extranjero = setInterval(EnExtranjero, 14)
-    var jefes= setInterval(Jefescocina, 1)
-    var estudiantes= setInterval(AlEstudiantes, 1)
-    let count1 = 10000;
+    var extranjero = setInterval(EnExtranjero, 45)
+    var jefes= setInterval(Jefescocina, 7)
+    let count1 = 7600;
     let count2 = 1;
-    let count3 = 1000;
-    let count4 = 260;
+    let count3 = 100;
 
     function EnEgresados() {
       count1++;
@@ -292,7 +284,7 @@
       count1;
 
       //stop al give condition
-      if(count1 == 11001) {
+      if(count1 == 11000) {
         clearInterval(project)
       }
     }
@@ -303,7 +295,7 @@
       count2;
 
       //stop al give condition
-      if(count2 == 302) {
+      if(count2 == 300) {
         clearInterval(extranjero)
       }
     }
@@ -314,22 +306,22 @@
       count3;
 
       //stop al give condition
-      if(count3 == 2042) {
+      if(count3 == 2000) {
         clearInterval(jefes)
       }
     }
 
-    function AlEstudiantes() {
-      count4++;
-      document.querySelector("#number4").innerHTML =
-      count4;
+    function Jefescocina() {
+      count3++;
+      document.querySelector("#number3").innerHTML =
+      count3;
 
       //stop al give condition
-      if(count4 == 1224) {
-        clearInterval(estudiantes)
+      if(count3 == 2000) {
+        clearInterval(jefes)
       }
     }
-
+    
   </script>
 </section>
 
