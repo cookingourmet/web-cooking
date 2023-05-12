@@ -241,40 +241,40 @@
 </section>
 
 <section class="contador">
-  <h2 class="text-center">Progreso Edicativos Cooking</h2>
+  <h2 class="text-center">Progreso Educativos Cooking</h2>
   <br>
   <div class="project-counter-wrp">
     <ul>
       <li>
         <i class="bi bi-mortarboard"></i>
         <p id="number1" class="number">11,000+</p>
-        <p>Estudiantes Egresados</p>
+        <p>Egresados</p>
       </li>
       
       <li>
         <i class="bi bi-airplane"></i>
         <p id="number2" class="number">300+</p>
-        <p>Estudiendas en el Extranjero</p>
+        <p>En el Extranjero</p>
       </li>
 
       <li>
         <i class="bi bi-bookmark-heart"></i>
         <p id="number3" class="number">2,000+</p>
-        <p>Estudiantes, jefe de Cocina</p>
+        <p>Jefe de Cocina</p>
       </li>     
       
     </ul>
   </div>
 
   <script>
-    var project = setInterval(projectDone, 0.5)
-    var project = setInterval(projectDone2, 0.5)
-    var project = setInterval(projectDone3, 0.5)
-    let count1 = 1;
+    var project = setInterval(EnEgresados, 1)
+    var extranjero = setInterval(EnExtranjero, 45)
+    var jefes= setInterval(Jefescocina, 7)
+    let count1 = 7600;
     let count2 = 1;
-    let count3 = 1;
+    let count3 = 100;
 
-    function projectDone () {
+    function EnEgresados() {
       count1++;
       document.querySelector("#number1").innerHTML =
       count1;
@@ -285,25 +285,25 @@
       }
     }
 
-    function projectDone2 () {
-      count1++;
+    function EnExtranjero() {
+      count2++;
       document.querySelector("#number2").innerHTML =
-      count1;
+      count2;
 
       //stop al give condition
-      if(count1 == 300) {
-        clearInterval(project)
+      if(count2 == 300) {
+        clearInterval(extranjero)
       }
     }
 
-    function projectDone3 () {
-      count1++;
+    function Jefescocina() {
+      count3++;
       document.querySelector("#number3").innerHTML =
-      count1;
+      count3;
 
       //stop al give condition
-      if(count1 == 11000) {
-        clearInterval(project)
+      if(count3 == 2000) {
+        clearInterval(jefes)
       }
     }
   </script>
