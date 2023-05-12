@@ -154,8 +154,12 @@
 
 <section>
   <div class="carrucel container-fluir my-5">
-      <h1 class="text-center fw-bold display-4 mb-3 text-danger ">Programas De Estudio</h1>
-      <div class="row mt-5">
+   
+    <div class="mt-5 text-center">
+      <img src="./img/programa.png" class="img-fluid" alt="equipo">
+    </div>
+
+       <div class="row mt-5">
         <div class="owl-carousel owl-theme">
 
           <div class="item mb-4">
@@ -248,31 +252,39 @@
       <li>
         <i class="bi bi-mortarboard"></i>
         <p id="number1" class="number">11000</p><span></span>
-        <p>Egresados</p>
+        <p class="fw-bold text-danger">Egresados</p>
       </li>
       
       <li>
         <i class="bi bi-airplane"></i>
         <p id="number2" class="number">300+</p><span></span>
-        <p>Extranjero</p>
+        <p class="fw-bold text-danger">Extranjero</p>
       </li>
 
       <li>
         <i class="bi bi-bookmark-heart"></i>
         <p id="number3" class="number">2,000+</p><span></span>
-        <p>Jefe de Cocina</p>
-      </li>     
-      
+        <p class="fw-bold text-danger">Jefe de Cocina</p>
+      </li>   
+
+      <li>
+        <i class="bi bi-bookmark-heart"></i>
+        <p id="number4" class="number">1026</p><span></span>
+        <p class="fw-bold text-danger">Estudiantes</p>
+      </li> 
+
     </ul>
   </div>
 
   <script>
     var project = setInterval(EnEgresados, 1)
-    var extranjero = setInterval(EnExtranjero, 45)
-    var jefes= setInterval(Jefescocina, 7)
-    let count1 = 7600;
+    var extranjero = setInterval(EnExtranjero, 14)
+    var jefes= setInterval(Jefescocina, 1)
+    var estudiantes= setInterval(AlEstudiantes, 1)
+    let count1 = 10000;
     let count2 = 1;
-    let count3 = 100;
+    let count3 = 1000;
+    let count4 = 260;
 
     function EnEgresados() {
       count1++;
@@ -280,7 +292,7 @@
       count1;
 
       //stop al give condition
-      if(count1 == 11000) {
+      if(count1 == 11001) {
         clearInterval(project)
       }
     }
@@ -291,7 +303,7 @@
       count2;
 
       //stop al give condition
-      if(count2 == 300) {
+      if(count2 == 302) {
         clearInterval(extranjero)
       }
     }
@@ -302,10 +314,22 @@
       count3;
 
       //stop al give condition
-      if(count3 == 2000) {
+      if(count3 == 2042) {
         clearInterval(jefes)
       }
     }
+
+    function AlEstudiantes() {
+      count4++;
+      document.querySelector("#number4").innerHTML =
+      count4;
+
+      //stop al give condition
+      if(count4 == 1224) {
+        clearInterval(estudiantes)
+      }
+    }
+
   </script>
 </section>
 
