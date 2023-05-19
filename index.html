@@ -42,51 +42,46 @@
   <body>
 
  <head>
-                <div class="navbar">
-
-                  <div class="logo">
-                 <img src="./icono/logo2.png" alt=""> 
-                </div>
-
-                  <ul class="links">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Carreras</a></li>
-                    <li><a href="#">Eventos</a></li>
-                    <li><a href="#">Contactos</a></li>
-                    <li><a href="#">Bolsa de Trabajo</a></li>
-                  </ul>
-                  <a href="https://cookingourmet.q10.com/" class="action_btn">Aula Virtual</a>
-                  <div class="toggle_btn">
-                  <i class="fa-solid fa-bars" style="color: #e1195f;"></i> 
-                  </div>
-                  </div>
-
-                  <div class="dropdown_menu">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Carreras</a></li>
-                    <li><a href="#">Eventos</a></li>
-                    <li><a href="#">Contactos</a></li>
-                    <li><a href="#">Bolsa de Trabajo</a></li>
-                    <li><a href="https://cookingourmet.q10.com/" class="action_btn">Aula Virtual</a></li>
-                  </div>
-
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="icono/logo2.png" alt="">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active fw-bold" aria-current="page" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="#">Eventos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Programa de Estudio</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Gastronomía y Arte Culinario</a></li>
+              <li><a class="dropdown-item" href="#">Pastelería y Panadería</a></li>
+              <li><a class="dropdown-item" href="#">Bar Profesional & Working Flair</a></li>
+              <li><a class="dropdown-item" href="#">Barismo Profesional</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger fw-bold" href="#">Aula Virtual</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="#" tabindex="-1" aria-disabled="true">Pagos</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+          <button class="btn btn-outline-danger" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </nav>
 </head>
-            <script>
-              const toggleBtn = document.querySelector('.toggle_btn')
-              const toggleBtnIcon = document.querySelector('.toggle_btn i')
-              const dropDownMenu = document.querySelector('.dropdown_menu')
-
-              toggleBtn.onclick = function () {
-                dropDownMenu.classList.toggle('open')
-
-                const isOpen = dropDownMenu.classList.contains('open')
-
-                toggleBtnIcon.classList = isOpen
-                ?'fa-solid fa-xmark'
-                :'fa-solid fa-bars'
-              }
-
-            </script>
+         
   
             <script src="main.js"></script>
 
