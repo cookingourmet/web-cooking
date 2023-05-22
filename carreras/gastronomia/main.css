@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=montserrat&display=swap');
+
+body {
+    font-family: 'montserrat', sans-serif;
+    overflow-x: hidden;
+    
+}
+
+.v-line{
+    border-left: thick solid #ff0000;
+    height:5%;
+    left: 1%;
+    position: relative;
+
+   }
