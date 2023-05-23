@@ -7,9 +7,15 @@ body {
 }
 
 .v-line{
-    border-left: thick solid #ff0000;
+    border-left: thick solid #323232;
     height:5%;
     left: 1%;
     position: relative;
 
    }
+
+.formulario{
+    background-color: #7c07c4;
+    border-radius: 10px;    
+    
+}
