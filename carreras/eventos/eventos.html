@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="main.css">
+
+  </head>
+<body>
+  <div class="header bg-dark text-center text-light p-2">
+      <i class="bi bi-facebook"></i>
+      <i class="bi bi-envelope-fill"></i>
+      <i class="bi bi-youtube"></i>
+  </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff;">
+                <div class="container-fluid">
+                  <img src="logos/logo2.png" alt="">
+                  <a class="navbar-brand" href="../../index.html">Cooking Gourmet</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="../../index.html">Incio</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Eventos</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+            
+        </div>
+        
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 w-100% p-5" style="background-color: rgb(252, 0, 84); color: aliceblue;">
+       <div class="container">
+        <h2>Eventos desarrollados gracias a Cooking Gourmet por hacer realidad esta actividad.</h2>
+       </div>
+      </div>
+      
+  </div>
+     
+    <div class="container">      
+        
+        <div class="row">
+            <div class="col-12 w-100% p-3 " style="color: rgb(252, 0, 84);">
+                <h2>La pachamanca mas grande del mundo.</h2>
+            </div>           
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <img src="images/evento.png" alt="" class="img-fluid">
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <br>
+              <h4 style="color: rgb(252, 0, 84);">Cooking Gourmer participa en la elaboracion de:</h4>
+              <p>Diez mil personas degustaron gratuitamente la pachamanca más grande del mundo que se preparó como parte de los atractivos de la Feria Nacional Ganadera Cuasimodo 2023 que se realiza en el campo de Coto Coto en la ciudad de Huancayo, región Junín.</p>
+              <p>Con un día de anticipación, trabajadores de la Municipalidad Distrital de Chilca iniciaron los preparativos para hornear el plato emblemático de la ciudad llamada la 'Incontrastable”.</p>
+              <p>Inicialmente, se armó el gigantesco horno de piedras con el apoyo de una estructura metálica, el mismo que fue calentado por más de ocho horas con abundante leña. El horno llegó a una altura de más de tres metros.</p>
+              
+            </div>            
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="contenedor">
+      <h1>Fotos del Evento</h1>
+      <div class="image-cantainer">
+        <div class="image"><img src="images/10.jpg" alt=""></div>
+        <div class="image"><img src="images/11.jpg" alt=""></div>
+        <div class="image"><img src="images/12.jpg" alt=""></div>
+        <div class="image"><img src="images/13.jpg" alt=""></div>
+        <div class="image"><img src="images/14.jpg" alt=""></div>
+        <div class="image"><img src="images/15.jpg" alt=""></div>
+        <div class="image"><img src="images/16.jpg" alt=""></div>
+        <div class="image"><img src="images/17.jpg" alt=""></div>
+
+      </div>
+      <p>Las personas que llegaron al campo ferial de Coto Coto tuvieron que hacer largas colas para poder recibir una porción del sabroso potaje; algunos asistentes recibieron su porción de pachamanca bailando. “Hay que recibir bailando esta pachamanca, he esperado casi cuatro horas, pero valió la pena hacer la cola, muchísimas gracias”, manifestó la ciudadana Maribel Apolinario.
+        El alcalde de Chilca, César Damas Laurente, declaró que la nueva gestión edil está empeñada en relanzar está actividad y declararla como patrimonio cultural: “nuestra intención definitivamente es reconocer como patrimonio cultural a Cuasimodo, y dentro de ello a la pachamanca más grande del mundo porque esta es una feria ganadera entre otros que estamos diversificando”, refirió.
+      </p>
+      <div class="popup-image">
+        <span>&times; </span>
+        <img src="images/3.png" alt="">
+      </div>
+    </div>
+    
+    
+    <script>
+
+      document.querySelectorAll('.image-cantainer img').forEach(image =>{
+        image.onclick = () =>{
+        document.querySelector('.popup-image').style.display = 'block';
+        document.querySelector('.popup-image img').src = image.getAttribute('src');
+
+         }
+    });
+
+    document.querySelector('.popup-image span').onclick = () =>{
+      document.querySelector('.popup-image').style.display = 'none';
+    }
+    </script>
+
+    <div class="container">
+    <div class="row">
+        <div class="col-12 w-100% p-3 " style="color: rgb(252, 0, 84);">
+            <h2>Proximos eventos.</h2>
+        </div>        
+    </div>
+          <div class="row text-dark">
+          <div class="col-sm-12 col-md-4">
+            <div class="card" style="width: 100%; margin-top: 20px; border: 0;">
+              <img src="images/5.png" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Barismo Pro.</h5>
+                <p class="card-text">Un texto de ejemplo rápido para colocal cerca del título de la tarjeta y componer la mayor parte del contenido de la tarjeta.</p>
+                <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" class="btn btn-danger">Quiero Asistir</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4"> 
+            <div class="card" style="width: 100; margin-top: 20px; border: 0;">
+              <img src="images/4.png" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Trufas y Bombones</h5>
+                <p class="card-text">Un texto de ejemplo rápido para colocal cerca del título de la tarjeta y componer la mayor parte del contenido de la tarjeta.</p>
+                <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" class="btn btn-danger">Quiero Asistir</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card" style="width: 100%; margin-top: 20px; border: 0;">
+              <img src="images/6.png" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Cocina Molecular</h5>
+                <p class="card-text">Un texto de ejemplo rápido para colocal cerca del título de la tarjeta y componer la mayor parte del contenido de la tarjeta.</p>
+                <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" class="btn btn-danger">Quiero Asistir</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+</body>
+
+
+</html>
+
