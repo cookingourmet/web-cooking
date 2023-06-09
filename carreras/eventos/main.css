@@ -93,9 +93,12 @@
       width: 100%;
       object-fit: cover;
       transition: .2s linear;
+      border-radius: 10px;
+      
     }
 
 
     .container .card:hover img{
       transform: scale(1.1);
     }
+  
