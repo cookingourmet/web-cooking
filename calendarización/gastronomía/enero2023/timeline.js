@@ -19,8 +19,8 @@ const frameworks = [
     },
     {
         name:"Archivar Cursos", 
-        description:"Miercoles 12 de abril. El área academica archica los cursos y ya no se admiten modificación "
-    },
+        description:"Miercoles 12 de abril. El área academica archiva los cursos y ya no se admiten modificación "
+    },  
     {
         name:"Matricula Regular MODULO II ", 
         description:"jueves 13, al sábado 15 de abril "

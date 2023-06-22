@@ -55,7 +55,7 @@ header .slider{
   position: absolute;
   height: 85%;
   border-radius: inherit;
-  background: linear-gradient(145deg, #D5A3FF 0%, #391641 100%);
+  background: linear-gradient(145deg, #ffc0ec 0%, #fd0037 100%);
   transition: all 0.3s ease;
 }
 #tab-1:checked ~ header .slider{
@@ -156,7 +156,7 @@ header .slider{
   color: #fff;
   cursor: pointer;
   margin-top: 20px;
-  background: linear-gradient(#ffbb3c 0%, #ff9c1a 100%);
+  background: linear-gradient(#ff378a 0%, #ff0000 100%);
   transition: transform 0.3s ease;
 }
 .wrapper button:hover{
