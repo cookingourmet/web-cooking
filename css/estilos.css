@@ -284,6 +284,9 @@ h2{
   .tag3 img{
     width: 400px;
     transition: 3s;
+    position: relative;
+    align-items: center;
+    margin-left: 10%;
   }
 
   .tag3 img:hover{
