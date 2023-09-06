@@ -326,7 +326,7 @@ input , textarea {
     padding: 20px 14px;
     margin-bottom: 20px;
     border: 0;
-    border-radius: 10px ;
+
     font-size: 15px;
     color: #fff;
 }
@@ -335,7 +335,7 @@ input , textarea {
     font-size: 15px;
 }
 
-:focus{
+form :focus{
     outline: 1px solid rgb(255, 0, 98);
 }
 
