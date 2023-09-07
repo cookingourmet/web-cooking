@@ -169,7 +169,7 @@ h2{
                 -5px -5px 5px rgba(255, 255, 255, 0.5);
     border-radius: 15px;
     margin: 30px;
-    margin-left: 16%;
+    
 } 
 
 .container .card2 .box{
@@ -382,7 +382,7 @@ form :focus{
 .tag4 .container .cartas{
 
     position: relative;
-    margin-left: 15%;
+    margin-left: 5%;
 }
 
 .tag4 .container .cartas .face{
