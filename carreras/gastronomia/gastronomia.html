@@ -5,402 +5,451 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Hoja de Estilos -->
     <link rel="stylesheet" href="main.css">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+    <!-- Bootstrap ICONO-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>GASTRONOMÍA</title>
+
+     <!-- Fuente-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,800;1,100;1,800;1,900&display=swap" rel="stylesheet">
+
+
   </head>
   <body>
-
-    <head>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="../../index.html">
-              <img src="img/logo2.png" alt="">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active fw-bold" aria-current="page" href="../../index.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
-                  </svg>&nbsp; Inicio</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link fw-bold" href="../eventos/eventos.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
-                    <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-                  </svg>&nbsp; Eventos</a>
-                </li>
-                <!-- Gente que trabaja 
-                <li class="nav-item">
-                  <a class="nav-link fw-bold" href="https://www.cookingourmet.edu.pe/carreras/gente/gente.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
-                    <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-                  </svg>&nbsp; Gente que Trabaja</a>
-                </li>
-              -->
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle fw-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-star" viewBox="0 0 16 16">
-                    <path d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z"/>
-                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                  </svg>&nbsp;&nbsp; Programa de Estudio</a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="../gastronomia/gastronomia.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp; Gastronomía</a></li>
-                    <li><a class="dropdown-item" href="../pasteleria/pasteleria.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp;Pastelería y Panadería</a></li>
-                    <li><a class="dropdown-item" href="../bar/bar.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp;Bar Profesional & Working Flair</a></li>
-                    <li><a class="dropdown-item" href="../barismo/barismo.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp;Barismo Profesional</a></li>
-             
-           
-                  </ul>
-      
-                  
-      
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link fw-bold" href="https://docs.google.com/forms/d/e/1FAIpQLSfEvKswcpldvWBjE4mbpvBwzpqt51dkTnvuIHUTqV-rFDTM-w/viewform?usp=sf_link" tabindex="-1" aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
-                    <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
-                  </svg> &nbsp;Pagos</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link fw-bold text-danger" href="/calendarización/index.html" tabindex="-1" aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-network" viewBox="0 0 16 16">
-                    <path d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8.5v3a1.5 1.5 0 0 1 1.5 1.5h5.5a.5.5 0 0 1 0 1H10A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5H.5a.5.5 0 0 1 0-1H6A1.5 1.5 0 0 1 7.5 10V7H2a2 2 0 0 1-2-2V4zm1 0v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1zm6 7.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5z"/>
-                  </svg> &nbsp;Calendarización</a>
-                </li>
-
-                <li><a class="dropdown-item text-danger fw-bold" href="https://cookingourmet.q10.com/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bank" viewBox="0 0 16 16">
-                  <path d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.501.501 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89L8 0ZM3.777 3h8.447L8 1 3.777 3ZM2 6v7h1V6H2Zm2 0v7h2.5V6H4Zm3.5 0v7h1V6h-1Zm2 0v7H12V6H9.5ZM13 6v7h1V6h-1Zm2-1V4H1v1h14Zm-.39 9H1.39l-.25 1h13.72l-.25-1Z"/>
-                </svg>&nbsp; Aula Virtual</a>
-              </li>
-
-                <li class="nav-item">
-                  <a class="nav-link fw-bold text-danger" href="../../intranet/index.html" tabindex="-1" aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-network" viewBox="0 0 16 16">
-                    <path d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8.5v3a1.5 1.5 0 0 1 1.5 1.5h5.5a.5.5 0 0 1 0 1H10A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5H.5a.5.5 0 0 1 0-1H6A1.5 1.5 0 0 1 7.5 10V7H2a2 2 0 0 1-2-2V4zm1 0v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1zm6 7.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5z"/>
-                  </svg> &nbsp;INTRANET</a>
-                </li>
-      
-                
-                
-              </ul>
-              <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-danger" type="submit">Buscar</button>
-              </form>
-            </div>
-          </div>
-        </nav>
-      </head>
-
-    <section>
-
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="img/gastronomia.png" class="d-block w-100" alt="...">
-              </div>
-            </div>
-          </div>
-
-    </section>
-
-    <div class="container-boton">
-      <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" target="_blank">
-          <img class="boton" src="../../icono/ws.png" alt="">
-      </a>
-    </div>
-
-    <br>
-
-    <div class="container"> 
-        <h1 class="v-line" style="color: rgb(102, 102, 102);" >&nbsp;GASTRONOMÍA</h1>
+    
+    <div class="container">
         
-    </div>
-    <br>
-
-    <section>
-        <div class="container">
-                         
-          <section>
-            <div class="div row">
-              <div class="div col-6">
-                <h2 style="color: rgb(102, 102, 102);">Perfil <span class="text-danger fg-bold">Profesional</span></h2>
-
-                <p style="color: rgb(102, 102, 102); text-justify: auto;">
-                  Somos una de las escuelas de cocina más prestigiosas de todo la región Junín, siendo pioneros en formar líderes profesionales en la cerrera de Gastronomía, Nuestra exigencia y método de enseñanza ofrerce a los estudiantes un amplio conocimiento
-                  en sus respectivas áreas.
-                </p>
-
-                <br>
-                <p>
-                  Potenciamos su crecimiento profesional de manera eficiente, practica e interactiva, creando diversas alternativas y posobilidades de emprender o laborar en empresas prestigiosas del Perú.
-                </p>
-
-                <h2 style="color: rgb(102, 102, 102);">Dirigido <span class="text-danger fg-bold">a.</span></h2>
-
-                <p>Estudiantes, Emprendedores desempeñando en el rubro, egresados de gastronomía, estudiantes de arte culinario,, público de general. Aplicando técnicas y conocimientos puntuales para descubrir y potenciar tu nivel de crecimiento profesional,
-                  aplicando tu horizonte para generar nuevos negocios.
-                </p>
-                
-                <p>Nuestra carrera esta compueso por un método de aprendizaje, de 90% práctico y 10% teórico, brindando calidad de enseñanza para generar pregnacia y fortalecimiento profesional en todos nuestros alumnos.
-                </p>
-
-              </div>
-              <div class="div col-6 text-center">
-                <img src="img/alumna.png" alt="">
+        <nav class="navbar navbar-expand-lg navbar-light ">
+            <div class="container-fluid">
+              <img src="/carreras/gastronomia/img/logo.png" alt="">
+              <a class="navbar-brand" href="#">Cookinng Gourmet</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Carreras
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="#">Gastronomía</a></li>
+                      <li><a class="dropdown-item" href="#">Pastelería</a></li>
+                      <li><a class="dropdown-item" href="#">Bar Profesional & Working Flair</a></li>
+                      <li><a class="dropdown-item" href="#">Barismo</a></li>
+                      <li><a class="dropdown-item" href="#">Cocina</a></li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Contacto</a>
+                  </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <button type="button" class="btn" style="width: 150px; padding: 10px; color: white; background: linear-gradient(to right, rgb(255, 0, 106), rgb(204, 0, 34));">Aula Virtual</button>
+                </form>
               </div>
             </div>
+          </nav>
+
+          
+    </div>
+
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-6" style="height: 350px;">
+      
+          </div>
+          <div class="col-6">
+          
+          </div>
+          <div class="col-6" style="padding: 56px;">
+            <img src="/carreras/gastronomia/img/1.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-2">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 text-center" style="padding: 25px;">
+            <img src="/carreras/gastronomia/img/3.png" alt="" class="img">
+            <h2>Perfil Profesional.</h2>
+            <p>Somos una de las escuelas de cocina más prestigiosas de todo la región Junín,
+              siendo pioneros en formar líderes profesionales en la cerrera de Gastronomía,
+              Nuestra exigencia y método de enseñanza ofrece a los estudiantes un amplio
+              conocimiento en sus respectivas áreas.</p>
+
+              <br>
+
+              <p>Potenciamos su crecimiento profesional de manera eficiente, practica e interactiva, creando diversas alternativas y posobilidades de emprender o laborar en empresas prestigiosas del Perú.</p>
+
+          </div>
+    
+          <div class="col-sm-12 col-md-12 col-lg-6 text-center" style="padding: 25px;">
+            <img src="/carreras/gastronomia/img/4.png" alt="" class="img">
+            <h2>Dirigido a:</h2>
+            <p>Estudiantes, Emprendedores desempeñando en el rubro, egresados de gastronomía, estudiantes de arte culinario,, público de general. Aplicando técnicas y conocimientos puntuales para descubrir y potenciar tu nivel de crecimiento profesional, aplicando tu horizonte para generar nuevos negocios.</p>
+             <br>
+             <p>Nuestra carrera esta compueso por un método de aprendizaje, de 90% práctico y 10% teórico, brindando calidad de enseñanza para generar pregnacia y fortalecimiento profesional en todos nuestros alumnos.</p>
+          
+          </div>
+  
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-ms-12 col-md-12 col-lg-6">
+            <h3>MALLA</h3>
+            <h4>CURRICULAR.</h4>
+
             <br>
 
-            <div class="contenedores div row">
-              <div class="contenedores col-6">
-             
-                <h2 style="color: rgb(102, 102, 102);">Malla <span class="text-danger fg-bold">Curricular</span></h2>
-                <br>
-                <div class="accordion" id="accordionExample">
-                  <div class="accordion-item">
-                    
-                    <h2 class="accordion-header" id="headingOne">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        MODULO 1
-                      </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                          <div class="list-group">
-
-                            <a  class="list-group-item list-group-item-action"><li> Cocina Peruana</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Fundamentos Gastronómicos</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Higiene y Manipulación de Alimentos</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Pastelería</li></a>
-                            <a  class="list-group-item list-group-item-action"><li>  Ética Profesional</li></a>
-                          </div>
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        MODULO 2
-                      </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        <div class="list-group">
-                          
-                          <a  class="list-group-item list-group-item-action"><li> Técnicas de bar y Coctelería</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Cicina Peruana II</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Equipamiento, Técnicas de comedor y servicio</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Tecnoloías Culinarias I</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Dieta y Nutrición</li></a>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingThree">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        MODULO 3
-                      </button>
-                    </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                            <a  class="list-group-item list-group-item-action"><li> Bromatología y Manipulación de Alimentos</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Gestión Empresarial</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Pescados y Mariscos I</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Tecnologías Culinarias II</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Cocina Vegetariana</li></a>
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFord">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFord" aria-expanded="false" aria-controls="collapseFord">
-                        MODULO 4
-                      </button>
-                    </h2>
-                    <div id="collapseFord" class="accordion-collapse collapse" aria-labelledby="headingFord" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                        <a  class="list-group-item list-group-item-action"><li> Cocina China</li></a>
-                        <a  class="list-group-item list-group-item-action"><li> Cocina Europea (Italiana, Francesa, Española)</li></a>
-                        <a  class="list-group-item list-group-item-action"><li> Panadería</li></a>
-                        <a  class="list-group-item list-group-item-action"><li> Pastelería</li></a>
-                        <a  class="list-group-item list-group-item-action"><li>  Ética Profesional</li></a>
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFive">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        MODULO 5
-                      </button>
-                    </h2>
-                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                          <a  class="list-group-item list-group-item-action"><li> Cocina Latinoamericana</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Enología y Cata de Vinos</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Postres Peruanos y Postres de Vitrina</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Recursos Humanos</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Prácticas Pre-profesionales</li></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingSix">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                        MODULO 6
-                      </button>
-                    </h2>
-                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                            <a  class="list-group-item list-group-item-action"><li> Cocina de Vanguardia y de Autor</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Cocina Regional</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Cocina Japonesa</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Practicas Profesionales</li></a>
-
-                      </div>
-                    </div>
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    MODULO 1
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ol>
+                      <li>Cocina Peruana Tradicional</li>
+                      <li>Técnicas Culinarias I</li>
+                      <li>Compras y Almacén</li>
+                      <li>Costos de Alimentación y Bebidas</li>
+                      <li>Higiene y manipulación de alimentos</li>
+                    </ol>
                   </div>
                 </div>
-
-
               </div>
-              <div class="formulario col-6 " >
-                <br>        
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    MODULO 2
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ol>
+                      <li>Cocina Peruana Regional</li>
+                      <li>Técnicas Culinarias II</li>
+                      <li>Pasteleria</li>
+                      <li>Nutrición Humana</li>
+                      <li>Recursos Humanos</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    MODULO 3
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ol>
+                      <li>Pescados y Mariscos</li>
+                      <li>Técnicas de Comedor y Servicio</li>
+                      <li>Técnicas Culinarias III</li>
+                      <li>Técnicas de Bar y Coctelería</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    MODULO 4
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ol>
+                      <li>Cocina Europea (Italiana, francesa Española)</li>
+                      <li>Postres Peruanos y POstres de Vitrina</li>
+                      <li>Panadería</li>
+                      <li>Gestión Empresarial</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    MODULO 5
+                  </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ol>
+                      <li>Cocina Latinoamericana</li>
+                      <li>Cocina China</li>
+                      <li>Enología</li>
+                      <li>Bromatología</li>
+                      <li>Prácticas pre-profesionales</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                    MODULO 6
+                  </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ol>
+                      <li>Cocina de Vanguardia y de Autor</li>
+                      <li>Cocina Japonesa</li>
+                      <li>Carbones y Parrillas</li>
+                      <li>Prácticas Profesionales</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-ms-12 col-md-12 col-lg-6">
+              <img src="/carreras/gastronomia/img/6.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-4">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-6">
+              <h2>¿Por Que</h2>
+              <h3>Elejirnos?</h3>
+          </div>
+
+        <div class="col-12">
+
+          <main class="cards">
+            <section class="card contact">
+                <div class="icon">
+                    <img src="assets/icono1.png" alt="Contact us.">
+                </div>
+                <h3>Convenios Educativos</h3>
+                <img  src="/carreras/gastronomia/assets/icono5.png" alt="">
+                <button>Conocer Mas</button>
+            </section>
+            <section class="card shop">
+                <div class="icon">
+                    <img  src="assets/icono2.png" alt="Shop here.">
+                </div>
+                <h3>Alianzas Estratégicas</h3>
+                <img src="/carreras/gastronomia/assets/icono6.png" alt="">
+                <button>Conocer Mas</button>
+            </section>
+            <section class="card about">
+                <div class="icon">
+                    <img  src="assets/icono3.png" alt="About us.">
+                </div>
+                <h3>Majora Continua</h3>
+                <span>Diseñamos procesos que nos permitirán logra los objetivos y su mejora es continuemanete según las tendencias y el avance tecnológico de los años</span>
+                <button>Conocer Mas</button>
+            </section>
+
+            <section class="card contact">
+              <div class="icon">
+                  <img  src="assets/icono4.png" alt="Contact us.">
+              </div>
+              <h3>Innovación Progresiva</h3>
+              <span>Innovamos continuamente en muchas aspectos para sorprender a nuestros clientes, educacion, infraestructura y metodologías de enseñanza </span>
+              <button>Conocer Mas</button>
+          </section>
+
+        </main>
+
+        </div>
+      </div>
+    </div>
+        
+  <div class="section-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <h1>&nbsp;Servicios Educativos</h1>
+          <ol>
+            <li>Cocina de Vanguardia y de Autor</li>
+            <li>Cocina Japonesa</li>
+            <li>Carbones y Parrillas</li>
+            <li>Prácticas Profesionales</li>
+          </ol>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <h4>&nbsp;Ventajas de Estudiar en &nbsp;Cooking &nbsp;Gourmet</h4>
+        
+            <h6><i class="bi bi-play">&nbsp;Cocina de Vanguardia y de Autor</i></h6>
+            <h6><i class="bi bi-play">&nbsp;Cocina Japonesa</i></h6>
+            <h6><i class="bi bi-play">&nbsp;Carbones y Parrillas</i></h6>
+            <h6><i class="bi bi-play">&nbsp;Prácticas Profesionales</i></h6>
+          
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-6">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="form ">
+            <div class="row">
+
+              <div class="col-sm-12 col-md-12 col-lg-6 left">
+                <h5>¿Necesitas</h5>
+                <h6>Acesoría?</h6>
+                <center><img src="/carreras/gastronomia/img/contacto.png" alt=""></center>
+              </div>
+
+              <div class="col-sm-12 col-md-12 col-lg-6 right">
+
+                <label for="validationDefault03" class="form-label" style="color: white;">Escribenos tu consulta y nuestros asesores
+                  se contactaran contigo.</label>
+
+                <div class="col-md-12">
+                  <label for="validationDefault03" class="form-label" style="color: white;">Nombres*</label>
+                  <input type="text" class="form-control" id="validationDefault03" required>
+                </div>
+          
+                <div class="col-md-12">
+                  <label for="validationDefault03" class="form-label" style="color: white;">Apellidos*</label>
+                  <input type="text" class="form-control" id="validationDefault03" required>
+                </div>
+                
                 <form class="row g-3">
-                  <h2 class="text-center" style="color: rgb(255, 255, 255);">Solicitar <span class="text- fg-bold">Información</span></h2>
-                  <div class="col-md-12">
-                    <label for="inputName" class="form-label"></label>
-                    <input type="email" class="form-control" id="inputName" placeholder="Nombres">
+                  <div class="col-md-4">
+                    <label for="validationDefaultUsername" class="form-label" style="color: white;">Celular*</label>
+                    <div class="input-group">
+                      <span class="input-group-text" id="inputGroupPrepend2">+51</span>
+                      <input type="text" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                    </div>
                   </div>
-                  
+
+                  <div class="col-md-8">
+                    <label for="validationDefault03" class="form-label" style="color: white;">Correo*</label>
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" aria-label="Username">
+                      <span class="input-group-text">@</span>
+                      <input type="text" class="form-control" placeholder="Server" aria-label="Server ">
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label" style="color: white;">Descripción*</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                  </div>
+
                   <div class="col-12">
-                    <label for="inputLast" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputLast" placeholder="Apellido Materno">
-                  </div>
-                  <div class="col-12">
-                    <label for="inputLast2" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputLast2" placeholder="Apellido Paterno">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="inputPhone" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputPhone" placeholder="Celular">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="inputCity" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputCity" placeholder="E-mail">
-                  </div>
-                  <div class="col-12">
-                    <div class="form-check text-white">
-                      <input class="form-check-input" type="checkbox" id="gridCheck">
-                      <label class="form-check-label" for="gridCheck">
-                        Acepto que me envien mas información
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+                      <label class="form-check-label" for="invalidCheck2" style="color: white;">
+                        Estoy de acuerdo a que me envien informacion.
                       </label>
                     </div>
                   </div>
-                  <div class="col-12 text-center">
-                    <button type="button" class="btn btn-light">Enviar</button>
-                  </div>
-                  <div>
-                    <br>
+                  <div class="col-12">
+                    <button class="btn " type="submit" style="background-color: rgb(255, 0, 55); color: white; width: 120px;">Enviar</button>
                   </div>
                 </form>
 
-              </div>             
+              </div>
 
-            </div>             
-
-          </section>
-     
-        </div>
-        
-    </section>
-
-    
-
-    <section>
-      <br>
-      <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="img/gastronomia4.png" class="d-block w-100" alt="...">
             </div>
+            
           </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+          <div class="footer col-sm-12 col-md-4 col-lg-3">
+            <img src="/carreras/gastronomia/assets/logo.png" alt="">
+            <ul>
+              <li><a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0">981 474 382</a></li>
+              <li><a href="https://www.google.com/maps/place/Cooking+Gourmet/@-12.0647753,-75.2072061,18z/data=!4m6!3m5!1s0x910e964be1e84681:0x4a3bf669d7ec9778!8m2!3d-12.0646169!4d-75.2069272!16s%2Fg%2F11gdpvv9sk?entry=ttu">Av. Ferrocarril #587 - Huancayo</a></li>
+              <li><a href="https://www.google.com/maps/place/12%C2%B003'28.8%22S+75%C2%B012'29.5%22W/@-12.0579917,-75.2084215,20.5z/data=!4m4!3m3!8m2!3d-12.057999!4d-75.208182?entry=ttu">Psje. Los Andes #376 - El Tambo</a></li>
+              <li><a href="/carreras/libro/index.html">Libro de Reclamaciones</a></li>
+            </ul>
+          </div>
+          <div class="footer col-sm-12 col-md-4 col-lg-3">
+            <h4>Programas de Estudio</h4>
+            <ul>
+              <li><a href="/carreras/gastronomia/gastronomia.html">Gastronomía</a></li>
+              <li><a href="/carreras/pasteleria/pasteleria.html">Pastelería</a></li>
+              <li><a href="/carreras/bar/bar.html">Bar Profesional</a></li>
+              <li><a href="/carreras/barismo/barismo.html">Barismo</a></li>
+              <li><a href="#">Cocina</a></li>
+            </ul>
+          </div>
+          <div class="footer col-sm-12 col-md-4 col-lg-3">
+            <h4>Eventos</h4>
+            <ul>
+              <li><a href="/carreras/deporte/eventos.html">Olimpiadas 2023</a></li>
+              <li><a href="/carreras/eventos/eventos.html">La Pachamanca 2023</a></li>
+              <li><a href="/carreras/barismo/barismo.html">Barismo</a></li>
+              <li><a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0">Cocina Molecular</a></li>
+            </ul>
+          </div>
+          <div class="footer col-sm-12 col-md-4 col-lg-3">
+            <h4>Redes Sociales</h4>
+            <div class="social-links">
+              <a href="https://www.facebook.com/Cooking.Gourmet"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/cooking_gourmet/"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.tiktok.com/@cooking.gourmet.oficial"><i class="bi bi-tiktok"></i></a>
+              <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0"><i class="bi bi-whatsapp"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-12 text-center">
+            <h5>Copyright ©2023 Cooking Gourmet. RUC: 20487075991</h5>
+          </div>
+      </div>
+    </div>
+  </footer>
+
+  </body>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" integrity="sha384-q9CRHqZndzlxGLOj+xrdLDJa9ittGte1NksRmgJKeCV9DrM7Kz868XYqsKWPpAmn" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     -->
-
-    <footer class="pie-pagina">
-      <div class="grupo-1">
-       <div class="box">
-        <figure>
-          <a href="https://www.cookingourmet.edu.pe/">
-            <img src="img/logo1.png" alt="logo de Slee Dw">
-          </a>
-        </figure>
-       </div>
-       <div class="box">
-          <h2 class="text-danger">SOBRE NOSOTROS:</h2>
-          <p>Somos una de las escuelas de cocina más prestigiosas de todo la región Junín, siendo pioneros en formar lideres profesionales...
-            <br>
-            <span> <a href="">Leer más.</a></span>
-           
-          </p>
-          
-      </div>
-      <div class="box">
-        <h2 class="text-danger">Siguinos:</h2>
-        <div class="red-social">
-          <a href="https://www.facebook.com/Cooking.Gourmet"><i class="bi bi-facebook"></i></a>
-          <a href="https://www.instagram.com/cooking_gourmet/"><i class="bi bi-instagram"></i></a>
-          <a href="https://www.tiktok.com/@cookingourmet?is_from_webapp=1&sender_device=pc"><i class="bi bi-tiktok"></i></a>
-          <a href="https://www.youtube.com/@cookinggourmetoficial420"><i class="bi bi-youtube"></i></a>
-          <br>
-          <br>
-          <p class="text-danger"><i class="bi bi-telephone"></i> +051 981 377 382</p>
-        </div>
-      </div>
-    </div>
-    <div class="grupo-2">
-      <small>&copy; 2023 <b>Cooking Gourmet</b> - Todos los Derechos Reservados</small>
-
-    </div>
-    </footer>
   </body>
-
-
 </html>
