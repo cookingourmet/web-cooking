@@ -24,8 +24,24 @@ body{
 }
 .section-2 .img{
     padding: 15px;
+    bottom: 10px;
+    animation: move_vector 6s ease-in-out infinite;
 
 }
+
+@keyframes move_vector{
+    0%{
+        transform: translateY(10px);
+    }
+    25%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(10px);
+    }
+}
+
+
 
 .section-2 h2{
     color: white;
@@ -46,8 +62,29 @@ body{
     font-size: 70px;
     font-weight: 800;
     color: rgb(199, 199, 199);
-    
+    display: block;
+    white-space: nowrap;
+    border-right: 4px solid;
+    width: 6ch;
+    animation: typing 2s steps(12), blink .5s infinite step-end alternate;
+    overflow: hidden;
+ 
 }
+
+@keyframes typing{
+    from { width: 0
+
+    }
+}
+
+@keyframes blink{
+    50%{
+        border-color: transparent;
+    }
+}
+
+
+
 
 .section-3 h4{
     font-family: montserrat;
@@ -55,6 +92,26 @@ body{
     font-weight: 800;
     color: rgb(189, 0, 0);
 }
+
+.section-4{
+    background: url(/carreras/gastronomia/img/backgroud.png);
+    bottom: 10px;
+    animation: fondo 6s ease-in-out infinite;
+}
+
+@keyframes fondo{
+    0%{
+        transform: translateY(10px);
+    }
+    25%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(10px);
+    }
+}
+
+
 
 .section-4 h2 {
     font-family: montserrat;
@@ -80,7 +137,17 @@ body{
 main.cards {
     display: flex;
     padding: 32px;
+    transition: 4s;
 }
+
+main .card:hover{
+    transform: scale(1.1);
+    transition: 2s;
+
+}
+
+
+
 
 main.cards section.card {
     display: flex;
