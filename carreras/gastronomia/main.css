@@ -265,7 +265,7 @@ main.cards section.card.about {
 }
 
 .section-6 .left{
-    background: rgb(216, 216, 216);
+    background: radial-gradient(rgb(238, 238, 238), rgb(172, 172, 172));
     border-radius: 20px 20px 20px 20px;
 }
 
