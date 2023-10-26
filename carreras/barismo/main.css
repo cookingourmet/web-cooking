@@ -255,6 +255,7 @@
 .section10 hr {
     height: 3px;
     background-color: #fff;
+    margin-block-end: 15px;
 
   }
 
@@ -286,4 +287,8 @@
     padding-top: 20px;
     color: #fff9d5;
     font-size: 20px;
+   }
+
+   .section10 .espaciado{
+    height:12vh;
    }
