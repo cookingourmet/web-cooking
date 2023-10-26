@@ -5,327 +5,509 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Hoja de Estilos -->
-    <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,800;1,100;1,800;1,900&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
+    <link rel="stylesheet" href="main.css">
     <title>Barismo Profesional</title>
+
+    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+
   </head>
   <body>
-
-    <head>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="../../index.html">
-              <img src="img/logo2.png" alt="">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active fw-bold" aria-current="page" href="../../index.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
-                  </svg>&nbsp; Inicio</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link fw-bold" href="../eventos/eventos.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
-                    <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-                  </svg>&nbsp; Eventos</a>
-                </li>
-                <!-- Gente que trabaja 
-                <li class="nav-item">
-                  <a class="nav-link fw-bold" href="https://www.cookingourmet.edu.pe/carreras/gente/gente.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
-                    <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-                  </svg>&nbsp; Gente que Trabaja</a>
-                </li>
-              -->
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle fw-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-star" viewBox="0 0 16 16">
-                    <path d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z"/>
-                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                  </svg>&nbsp;&nbsp; Programa de Estudio</a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="../gastronomia/gastronomia.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp; Gastronomía</a></li>
-                    <li><a class="dropdown-item" href="../pasteleria/pasteleria.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp;Pastelería y Panadería</a></li>
-                    <li><a class="dropdown-item" href="../bar/bar.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp;Bar Profesional & Working Flair</a></li>
-                    <li><a class="dropdown-item" href="../barismo/barismo.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>&nbsp;Barismo Profesional</a></li>
-           
-                   
-                  </ul>
-      
-                  
-      
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link fw-bold" href="https://docs.google.com/forms/d/e/1FAIpQLSfEvKswcpldvWBjE4mbpvBwzpqt51dkTnvuIHUTqV-rFDTM-w/viewform?usp=sf_link" tabindex="-1" aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
-                    <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
-                  </svg> &nbsp;Pagos</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link fw-bold text-danger" href="/calendarización/index.html" tabindex="-1" aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-network" viewBox="0 0 16 16">
-                    <path d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8.5v3a1.5 1.5 0 0 1 1.5 1.5h5.5a.5.5 0 0 1 0 1H10A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5H.5a.5.5 0 0 1 0-1H6A1.5 1.5 0 0 1 7.5 10V7H2a2 2 0 0 1-2-2V4zm1 0v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1zm6 7.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5z"/>
-                  </svg> &nbsp;Calendarización</a>
-                </li>
-
-                <li><a class="dropdown-item text-danger fw-bold" href="https://cookingourmet.q10.com/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bank" viewBox="0 0 16 16">
-                  <path d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.501.501 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89L8 0ZM3.777 3h8.447L8 1 3.777 3ZM2 6v7h1V6H2Zm2 0v7h2.5V6H4Zm3.5 0v7h1V6h-1Zm2 0v7H12V6H9.5ZM13 6v7h1V6h-1Zm2-1V4H1v1h14Zm-.39 9H1.39l-.25 1h13.72l-.25-1Z"/>
-                </svg>&nbsp; Aula Virtual</a>
-              </li>
-
-                <li class="nav-item">
-                  <a class="nav-link fw-bold text-danger" href="../../intranet/index.html" tabindex="-1" aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-network" viewBox="0 0 16 16">
-                    <path d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8.5v3a1.5 1.5 0 0 1 1.5 1.5h5.5a.5.5 0 0 1 0 1H10A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5H.5a.5.5 0 0 1 0-1H6A1.5 1.5 0 0 1 7.5 10V7H2a2 2 0 0 1-2-2V4zm1 0v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1zm6 7.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5z"/>
-                  </svg> &nbsp;INTRANET</a>
-                </li>
-      
-                
-                
-              </ul>
-              <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-danger" type="submit">Buscar</button>
-              </form>
-            </div>
-          </div>
-        </nav>
-      </head>
-
-    <section>
-
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="img/gastronomia.png" class="d-block w-100" alt="...">
-              </div>
-            </div>
-          </div>
-
-    </section>
-
-    <br>
-
-    <div class="container"> 
-        <h1 class="v-line" style="color: rgb(102, 102, 102);" >&nbsp;BARISMO <span style="color: rgb(75, 40, 40);" >PROFESIONAL</span></h1>
-        
-    </div>
-    <br>
-
-    <div class="container-boton">
-      <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" target="_blank">
-          <img class="boton" src="../../icono/ws.png" alt="">
-      </a>
-    </div>
-
-
-    <section>
+    <div class="section1 ">
         <div class="container">
-                         
-          <section>
-            <div class="div row">
-              <div class="div col-6">
-                <h2 style="color: rgb(102, 102, 102);">Perfil <span style="color: rgb(75, 40, 40);">Profesional</span></h2>
-
-                <p style="color: rgb(102, 102, 102); text-justify: auto;">
-                  Nuestro diplomado tiene el mayor número de horas de
-                  formación de todas las escuelas similares, 16 horas
-                  semanales con la modalidad de horas teórico-práctico.
-                </p>
-
-                <br>
-                <p>
-                  Nuestra malla curricular está formada por dieciséis (16)
-                  cursos, progresivos y secuenciales que garantizan una
-                  formación integral.
-                </p>
-
-                <h2 style="color: rgb(102, 102, 102);">Dirigido <span style="color: rgb(75, 40, 40);">a.</span></h2>
-
-                <p>Diseñado por Baristas expertos para que el participante tenga beneficios y
-                  ventajas que le aseguren una formación superior al de otras instituciones.
-                </p>
-
-                <h2 style="color: rgb(102, 102, 102);">Ventajas <span style="color: rgb(75, 40, 40);">Logradas.</span></h2>
-
-                <p>1.- Elaborar y crear bebidas frías
-                  y calientes en base a café.
-                </p>
-                <p>
-                  2.- Administrar un negocio de cafetería
-                </p>
-                <p>
-                  3.- Capacitar a su personal en la preparación de
-bebidas frías y calientes en base a café.
-                </p>
-
-              </div>
-              <div class="div col-6 text-center">
-                <img src="img/alumna.png" alt="">
-              </div>
-            </div>
-            <br>
-            <div class="contenedores div row">
-              <div class="contenedores col-6">
-             
-                <h2 style="color: rgb(102, 102, 102);">Temario y <span style="color: rgb(75, 40, 40);">Contanido</span></h2>
-                <br>
-                <div class="accordion" id="accordionExample">
-                  <div class="accordion-item">
-                    
-                    <h2 class="accordion-header" id="headingOne">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        MODULO 1
-                      </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                          <div class="list-group">
-
-                            <a  class="list-group-item list-group-item-action"><li> Inmersión al mundo del café.</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Modelos de Negocio.</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Cata.</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Bebidas frías.</li></a>
-                          </div>
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        MODULO 2
-                      </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        <div class="list-group">
-                          
-                          <a  class="list-group-item list-group-item-action"><li> Tueste.</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Sistema de extracción.</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Arte latte.</li></a>
-                          <a  class="list-group-item list-group-item-action"><li> Bebidas frías II.</li></a>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingThree">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        MODULO 3
-                      </button>
-                    </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                            <a  class="list-group-item list-group-item-action"><li> Espresso o shot.</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Máquinas.</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Estrategia de promoción y servicio.</li></a>
-                            <a  class="list-group-item list-group-item-action"><li> Latte Art - Etching.</li></a>
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFord">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFord" aria-expanded="false" aria-controls="collapseFord">
-                        MODULO 4
-                      </button>
-                    </h2>
-                    <div id="collapseFord" class="accordion-collapse collapse" aria-labelledby="headingFord" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        
-                        <a  class="list-group-item list-group-item-action"><li> Cata de perfiles, orígenes de cafés peruanos y extranjeros.</li></a>
-                        <a  class="list-group-item list-group-item-action"><li> Extracción de métodos parciales y exactos. </li></a>
-                        <a  class="list-group-item list-group-item-action"><li> Elaboración de proyecto preliminar.</li></a>
-                        <a  class="list-group-item list-group-item-action"><li> Sustentación.</li></a>
-
-                      </div>
-                    </div>
-                  </div>
-                
-                  
+            <div class="row">
+                <div class="col-ms-12 col-md-6">
+                    <img style="margin-left: 18%;" src="img/logo.png" alt="">
                 </div>
-              </div>
-              <div class="formulario col-6 " >
-                <br>        
-                <form class="row g-3">
-                  <h2 class="text-center" style="color: rgb(255, 255, 255);">Solicitar <span class="text- fg-bold">Información</span></h2>
-                  <div class="col-md-12">
-                    <label for="inputName" class="form-label"></label>
-                    <input type="email" class="form-control" id="inputName" placeholder="Nombres">
-                  </div>
-                  
-                  <div class="col-12">
-                    <label for="inputLast" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputLast" placeholder="Apellido Materno">
-                  </div>
-                  <div class="col-12">
-                    <label for="inputLast2" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputLast2" placeholder="Apellido Paterno">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="inputPhone" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputPhone" placeholder="Celular">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="inputCity" class="form-label"></label>
-                    <input type="text" class="form-control" id="inputCity" placeholder="E-mail">
-                  </div>
-                  <div class="col-12">
-                    <div class="form-check text-white">
-                      <input class="form-check-input" type="checkbox" id="gridCheck">
-                      <label class="form-check-label" for="gridCheck">
-                        Acepto que me envien mas información
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-12 text-center">
-                    <button type="button" class="btn btn-light">Enviar</button>
-                  </div>
-                  <div>
-                    <br>
-                  </div>
-                </form>
-
-              </div>             
-
-            </div>             
-
-          </section>
-     
-        </div>
-        
-    </section>
-
-    <section>
-      <br>
-      <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="img/gastronomia4.png" class="d-block w-100" alt="...">
+                <div class="col-ms-12 col-md-6 text-center">
+                    <img src="img/15.png" alt="">
+                </div>
             </div>
-          </div>
+
+        </div>
+    </div>
+
+    <div class="section2">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container-fluid">
+                  <a class="navbar-brand" style="color: #d1cbc5;" href="#">Barismo Profesional</a>
+                  <button class="navbar-toggler" type="button" style="background: #d1cdc5;" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+                      <li class="nav-item">
+                        <a class="nav-link active" style="color: #d1cbc5;" aria-current="page" href="#">Inicio</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" style="color: #d1cbc5;" aria-current="page" href="#">Eventos</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" style="color: #d1cbc5;" aria-current="page" href="#">Contacto</a>
+                      </li>
+
+                    </ul>
+                    <form class="d-flex">
+                      <button class="btn" style="background: #d1cdc5;" type="submit">Aula Virtual</button>
+                    </form>
+                  </div>
+                </div>
+              </nav>
         </div>
 
-  </section>
+    </div>
+
+    <div class="section3">
+        <div class="container">
+            <div class="row">
+                <div class="col-ms-12 col-md-6 col-lg-6">
+
+                    <div class="section3-1">
+                        <h3>Dirigido a:</h3>
+                    
+                    <div class="row">
+                        <div class="col-ms-12 col-md-6 col-lg-6 text-center ">
+                            <img src="img/chef-icono.png" alt="">
+                        </div>
+                        <div class="col-ms-12 col-md-6 col-lg-6">
+                            <li>Baristas</li>
+                            <li>Dueños o Empresarios de Cafeterías</li>
+                            <li>Caficultores</li>
+                            <li>Emprendedores</li>
+                            <li>Apasionados por el mundo del café</li>
+                            <li>Integración y aficionados por el proceso y extraccion del café</li>
+                        </div>
+                    </div>
+                    </div>
+                    
+                </div>
+
+                <div class="col-ms-12 col-md-6 col-lg-6 text-center">
+                    <img src="img/barista.png" alt="">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="section4">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <h3>Perfil Profesional:</h3>
+                        <p>Nuestro diplomado tiene el mayor número de horas de formación de todas las escuelas
+                            similares, 16 horas semanales con la modalidad de horas teórico-práctico.</p>
+                        <p>
+                            Nuestra malla curricular está formada por dieciséis (16) cursos, progresivos y secuenciales
+                            que garantizan una formación integral.
+                        </p>
+                    <h3>Dirigido a:</h3>
+                        <p>Diseñado por Baristas expertos para que el participante tenga beneficios y ventajas que
+                            le aseguren una formación superior al de otras instituciones.</p>
+                    <h3>Ventajas logradas:</h3>
+                    <ol reversed>
+                        <li>Elaborar y crear bebidas frías y calientes en base a café.</li>
+                        <li>Administrar un negocio de cafetería</li>
+                        <li>Capacitar a su personal en la preparación de bebidas frías y calientes en base a café.</li>
+                    </ol>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 text-center">
+                    <img src="img/coffee-98.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6 ">
+                    <h3>Oportunidades <span>y mejora continua.</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section6">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-4 ">
+
+                </div>
+                <div class="col-lg-6 col-md-8 ">
+
+                        <ol>
+                            <li>Nuestros tallere tiene el mayor numero de horas formación de todas las escuelas
+                                similares, 16 horas semanales con la modalidad de horas teórico-practico.
+                            </li>
+                            <li>
+                                Nuestra malla curriculas esta formada por dieciséis temas, prograsivos
+                                y secuenciales que garantizan una formación intregral.
+                            </li>
+                            <li>
+                                Todos los alumnos tienen horas de prácticas ilimitadas para alcanzar su 
+                                maximo nivel y ser uno de los mejores baristas del pais.
+                            </li>
+                            <li>
+                                Las prácticas son dirigidas y supervisadas por un barista experto.
+                            </li>
+                            <li>
+                                Programas incluye visitas de inmensión con prácticas vivenciales por 08 horas 
+                                en cafeterías asociadas para poner prácticas lo aprendido, cuando la situació 
+                                de emergencia lo permita.
+                            </li>
+                            <li>
+                                Infraestructura diseñada exclusivamente para forma
+                            </li>
+
+                        </ol>
+
+                        <div class="proceso">
+                            <h3> POROCESO&nbsp;&nbsp; <span>+</span>&nbsp;&nbsp;  ELABORACIÓN</h3>
+                        
+                            <p> Diseñado por baristas expertos par que el participante tenga beneficios y 
+                                ventajas qye la aseguren una formación superior al ed otras instituciones.
+                            </p>
+    
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="section7">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <img src="/img/logo.png" alt="">
+                </div>
+            </div>
+
+        </div>            
+    </div>
+
+    <div class="section8">
+        <div class="container">
+            <div class="row">
+                <div class="col-ms-12 col-md-12 col-lg-6">
+                    <h3>Información.</h3>
+                    <div class="section8-1">
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <img src="img/persona.png" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4>Inicio</h4>
+                                <p>13 de Noviembre</p>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                <img src="img/calendario.png" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4>Duración</h4>
+                                <p>4 meses</p>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                <img src="img/modelidad.png" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4>Modalidad</h4>
+                                <p>100% Presencial</p>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                <img src="img/reloj.png" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4>Horarios Lunes</h4>
+                                <p>8:00 a.m. - 12 p.m. (Vacante Disponibles)</p>
+                                <p>2:00 a.m. - 6 p.m. (Vacante Disponibles)</p>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    <h3>Inversión.</h3>
+                    <div class="section8-2">
+                        <div class="row">
+
+                            <div class="col-3 text-center">
+                                <img src="img/pago.png" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4>Págalo en partes desde:</h4>
+                                <ol>
+                                    <li>S/.500 <span>(4 Cuotas)</span></li>
+                                    <li>S/.650 <span>(3 Cuotas)</span></li>
+                                    <li>S/.900 <span>(2 Cuotas)</span></li>
+                                  </ol>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                <img src="img/inversion.png" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4>Inversión General: <span>S./2.000</span></h4>
+                                
+                                <div class="descuento">
+                                    <h4>Dscto. Al contado: <span>S./1.800</span></h4>
+                                </div>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                
+                            </div>
+                            <div class="col-9">
+                                <h4>Separa tu Vacante desde:</h4>
+                                <ol>
+                                    <li>Monto: s/. 100.00 <span>Matricula</span></li>
+                                    
+                                </ol>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                
+                            </div>
+                            <div class="col-9">
+                                <h4>Importante</h4>
+                                <ol>
+                                    <li> <span>Los pagos se deben realizar en la fecha indicada por nuestros asesores de venta, caso contrario se incrementará</span></li>
+                                    
+                                </ol>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                
+                            </div>
+                            <div class="col-9">
+                                <h4>Importante</h4>
+                                <ol start="2">
+                                    <li> <span>Las vacantes brindadas son totalmente limitadas, puedes reservar el tuyo con el monto mínimo de S/100.00 nuevos soles, el aporte por la reserva no tiene devolución.</span></li>
+                                    
+                                </ol>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-ms-12 col-md-12 col-lg-6">
+                    <h3>Rancilio - Epoca - E2G</h3>
+                    <img src="img/maquina.png" alt="">
+                    <h4>Rancilio-Epoca-E2G</h4>
+                    <p>Conoce su increíble resistencia y eciencia para elaborar cada producto a base del maravillo café, aprende a texturizar y calcular los tiempos de manera profesional con rancilio - E2G.</p>
+                    
+                    <div class="section8-3">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-4 text-center">
+                                <img src="img/ico-maquina.png" alt="">
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h4>Maquinas Industriales</h4>
+                                <p>Aprende todo el proceso y manejo correcto de nuestras nuevas máquinas de café. ¡Cada extracción es una inversión!</p>
+                            </div>
+                            <div class="col-lg-3 col-sm-4 text-center">
+                                <img src="img/cafe.png" alt="">
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h4>Maquinas Industriales</h4>
+                                <p>Aprende todo el proceso y manejo correcto de nuestras nuevas máquinas de café. ¡Cada extracción es una inversión!</p>
+                            </div>
+                            <div class="col-lg-3 col-sm-4 text-center">
+                                <img src="img/gusto.png" alt="">
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h4>Maquinas Industriales</h4>
+                                <p>Aprende todo el proceso y manejo correcto de nuestras nuevas máquinas de café. ¡Cada extracción es una inversión!</p>
+                            </div>
+                            <div class="col-lg-3 col-sm-4 text-center">
+                                <img src="img/vaso.png" alt="">
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h4>Maquinas Industriales</h4>
+                                <p>Aprende todo el proceso y manejo correcto de nuestras nuevas máquinas de café. ¡Cada extracción es una inversión!</p>
+                            </div>
+                            <div class="col-lg-3 col-sm-4 text-center">
+                                <img src="img/taza.png" alt="">
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h4>Maquinas Industriales</h4>
+                                <p>Aprende todo el proceso y manejo correcto de nuestras nuevas máquinas de café. ¡Cada extracción es una inversión!</p>
+                            </div>
+                            <div class="col-lg-3 col-sm-4 text-center">
+                                <img src="img/gente.png" alt="">
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h4>Maquinas Industriales</h4>
+                                <p>Aprende todo el proceso y manejo correcto de nuestras nuevas máquinas de café. ¡Cada extracción es una inversión!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>  
+            </div>
+        </div>
+
+    </div>
+
+    <div class="section7">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <img src="img/lema.png" alt="">
+                </div>
+            </div>
+
+        </div>            
+    </div>
+
+    <div class="section9">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <img src="img/logo2.png" alt="">
+                </div>
+                <hr>
+
+                <div class="sponsor">
+                    <div class="row">
+                        <div class="col-ms-12 col-md-6 col-lg-4 text-center">
+                            <div class="cuadrado">
+                                <img src="img/cafe-peru.png" alt="">
+                            </div>
+                        </div>
+                        <div class="col-ms-12 col-md-6 col-lg-4 text-center">
+                            <div class="cuadrado">
+                                <img src="img/oxa.png" alt="">
+                            </div>
+                        </div>
+                        <div class="col-ms-12 col-md-6 col-lg-4 text-center">
+                            <div class="cuadrado">
+                                <img src="img/baristastudio.png" alt="">
+                            </div>
+                        </div>
+                        <div class="col-ms-12 col-md-6 col-lg-4 text-center">
+                            <div class="cuadrado">
+                                <img src="img/coffee-logo.png" alt="">
+                            </div>
+                        </div>
+                        <div class="col-ms-12 col-md-6 col-lg-4 text-center">
+                            <div class="cuadrado">
+                                <img src="img/cafe-oxa.png" alt="">
+                            </div>
+                        </div>
+                        <div class="col-ms-12 col-md-6 col-lg-4 text-center">
+                            <div class="cuadrado">
+                                <img src="img/coffee-friends.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section10">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col-2 col-lg-1 col-md-2 text-center">
+                                <img src="img/telef.png" alt="">
+                            </div>
+                            <div class="col-10 col-lg-11 col-md-10">
+                                <h3>Contacto Central:</h3>
+                                <h4>(064) 659923</h4>
+                            </div>
+
+                            <div class="col-2 col-lg-1 col-md-2 text-center">
+                                <img src="img/telef-2.png" alt="">
+                            </div>
+                            <div class="col-10 col-lg-11 col-md-10">
+                                <h3>Matricula e Inscripción:</h3>
+                                <h4>981 - 377 - 382</h4>
+                            </div>
+                            <div class="col-2 col-lg-1 col-md-2 text-center">
+                                <img src="img/ubi.png" alt="">
+                            </div>
+                            <div class="col-10 col-lg-11 col-md-10">
+                                <h3>Sede Central:</h3>
+                                <h4>Av. Ferrocarril 587 - Huancayo</h4>
+                            </div>
+                            <div class="col-2 col-lg-1 col-md-2 text-center">
+                                <img src="img/ubi-2.png" alt="">
+                            </div>
+                            <div class="col-10 col-lg-11 col-md-10">
+                                <h3>Sucursal:</h3>
+                                <h4>Pje. Los andes N° 376 - El tambo (por el Pje. Manchego Muñoz).</h4>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <hr/>
+
+                <div class="qr">
+                    <div class="row">
+
+                        <div class="col-sm-12 col-lg-6 text-center">
+                            <img src="img/qr.png" alt="">
+                            <img src="img/qr-2.png" alt="">
+                        </div>
+
+                        <div class="col-md-6 col-lg-6">
+
+                            <div class="social">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-11 text-center">
+                                        <a href="https://www.facebook.com/Cooking.Gourmet"><i class="bi bi-facebook"></i></a>
+                                        <a href="https://www.tiktok.com/@cooking.gourmet.oficial"><i class="bi bi-tiktok"></i></a>
+                                        <a href="https://www.instagram.com/cooking_gourmet/"><i class="bi bi-instagram"></i></a>
+                                        <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0"><i class="bi bi-whatsapp"></i></a>
+
+                                        <h3>www.cookingourmet.com.pe</h3>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                </div>
+
+                <hr/>
+
+
+            </div>
+        </div>
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -336,44 +518,5 @@ bebidas frías y calientes en base a café.
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     -->
-
-    <footer class="pie-pagina">
-      <div class="grupo-1">
-       <div class="box">
-        <figure>
-          <a href="https://www.cookingourmet.edu.pe/">
-            <img src="img/logo1.png" alt="logo de Slee Dw">
-          </a>
-        </figure>
-       </div>
-       <div class="box">
-          <h2 class="text-danger">SOBRE NOSOTROS:</h2>
-          <p>Somos una de las escuelas de cocina más prestigiosas de todo la región Junín, siendo pioneros en formar lideres profesionales...
-            <br>
-            <span> <a href="">Leer más.</a></span>
-           
-          </p>
-          
-      </div>
-      <div class="box">
-        <h2 class="text-danger">Siguinos:</h2>
-        <div class="red-social">
-          <a href="https://www.facebook.com/Cooking.Gourmet"><i class="bi bi-facebook"></i></a>
-          <a href="https://www.instagram.com/cooking_gourmet/"><i class="bi bi-instagram"></i></a>
-          <a href="https://www.tiktok.com/@cookingourmet?is_from_webapp=1&sender_device=pc"><i class="bi bi-tiktok"></i></a>
-          <a href="https://www.youtube.com/@cookinggourmetoficial420"><i class="bi bi-youtube"></i></a>
-          <br>
-          <br>
-          <p class="text-danger"><i class="bi bi-telephone"></i> +051 981 377 382</p>
-        </div>
-      </div>
-    </div>
-    <div class="grupo-2">
-      <small>&copy; 2023 <b>Cooking Gourmet</b> - Todos los Derechos Reservados</small>
-
-    </div>
-    </footer>
   </body>
-
-
 </html>
