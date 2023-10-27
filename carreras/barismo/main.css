@@ -1,5 +1,13 @@
 *{
     font-family: poppins;
+    margin: 0;
+    box-sizing: border-box;
+}
+.container{
+    width: 75vw;
+    max-width: 1000px;
+    min-width: 320px;
+    margin: auto;
 }
 
 .section1{
@@ -26,14 +34,19 @@
     height: 40px;
     
 }
+.section3 .section3-1 .chef img{
+    width: 20%;
+}
 
 .section3 .section3-1 img{
-    margin-top: 30px;
+
+    width: 100%;
 }
 
 .section3 img{
     margin-top: 50px;
     margin-block-end: 50px;
+    width: 100%;
 }
 
 .section4{
@@ -59,6 +72,7 @@
 
 .section4 img{
     margin-top: 10%;
+    width: 100%;
 }
 .section4 img:hover{
     opacity: 0.4;
@@ -177,7 +191,12 @@
 
 .section8 img{
     padding: 20px;
-    position: relative;
+
+    
+}
+
+.section8 .maquina img{
+    width: 100%;
 }
 
 .section8 h4{
@@ -205,6 +224,10 @@
 }
 .section8 .section8-3 p{
     margin-left: 5px;
+}
+
+.section8 .section8-3 img{
+    width: 80%;
 }
 
 .section9 img{
