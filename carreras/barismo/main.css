@@ -223,7 +223,7 @@
 }
 
 .section10{
-    background: url(img/fondo-cafe2.png);
+    background: url(img/fondo-cafe2.svg);
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -290,5 +290,5 @@
    }
 
    .section10 .espaciado{
-    height:12vh;
+    height:vh;
    }
