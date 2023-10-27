@@ -36,18 +36,22 @@
 }
 .section3 .section3-1 .chef img{
     margin-top: 0;
-    width: 20%;
+
 }
 
 .section3 .section3-1 img{
 
-    width: 100%;
+    width: 50%;
+}
+
+.section3 .section3-1 .chef{
+    padding-top: 35px;
 }
 
 .section3 img{
     margin-top: 50px;
-    margin-block-end: 50px;
     width: 100%;
+    padding-block-end: 25px;
 }
 
 .section4{
@@ -145,10 +149,6 @@
     background-size: cover;
 }
 
-.section7 img{
-    background-position: right;
-    padding: 20px;
-}
 
 .section8 h3{
     margin-top: 50px;
@@ -297,7 +297,7 @@
   }
 
   .section10 .qr hr{
-    height:15vh;
+    height:10vh;
     width:.5vw;
     background :#c98c50;
 
@@ -310,7 +310,7 @@
 
    .section10 .qr .social a i{
     color: #C98C50;
-    font-size: 50px;
+    font-size: 40px;
     padding: 10px;
 
    }
