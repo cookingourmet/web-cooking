@@ -48,10 +48,25 @@
     padding-top: 35px;
 }
 
+@keyframes show{
+    from {
+        opacity: 0;
+        scale: 25%;
+    }
+
+    to{
+        opacity: 1;
+        scale: 100%;
+    }
+}
+
+
+
 .section3 img{
     margin-top: 50px;
     width: 100%;
     padding-block-end: 25px;
+
 }
 
 .section4{
@@ -79,6 +94,13 @@
 .section4 img{
     margin-top: 10%;
     width: 100%;
+
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
+
 }
 .section4 img:hover{
     opacity: 0.4;
@@ -162,6 +184,12 @@
 
 .section8 .section8-1 img{
     padding: 20px;
+
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 .section8 .section8-2 h4{
@@ -201,11 +229,21 @@
 .section8 img{
     padding: 20px;
 
-    
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 .section8 .maquina img{
     width: 100%;
+
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 .section8 h4{
@@ -237,11 +275,23 @@
 
 .section8 .section8-3 img{
     width: 80%;
+
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 .section9 img{
     margin-top: 150px;
     margin-block-end: 150px;
+
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 
@@ -252,6 +302,12 @@
 
 .section9 .cuadrado img{
     margin-top: 5px;
+
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 .section10{
@@ -268,6 +324,11 @@
 
 .section10 .footer img{
     margin-top: 15px;
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+
+    animation-timeline: --image;
+    animation-name: show;
 }
 
 .section10 .footer h3{
@@ -294,6 +355,7 @@
   .section10 .qr img{
     padding: 20px;
     margin-block-end: 10px;
+
   }
 
   .section10 .qr hr{
