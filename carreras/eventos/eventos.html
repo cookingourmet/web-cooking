@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Pachamana Mas Grande Del Mundo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="main.css">
+
+  </head>
+<body>
+  <div class="header bg-dark text-center text-light p-2">
+      <a href="https://www.facebook.com/Cooking.Gourmet"><i class="bi bi-facebook" style="padding: 10px; color: #fff;"></i></a>
+      <a href="https://mail.google.com/mail/u/0/#inbox?compose=new"><i class="bi bi-envelope-fill" style="padding: 10px; color: #fff;"></i></a>
+      <a href="https://www.youtube.com/@cookinggourmetoficial420"><i class="bi bi-youtube" style="padding: 10px; color: #fff;"></i></a>
+  </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff;">
+                <div class="container-fluid">
+                  <a href="../../index.html"><img src="logos/logo.png" alt=""></a>
+                  <a class="navbar-brand" href="../../index.html">Cooking Gourmet</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="../../index.html">Incio</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Eventos</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>            
+        </div>        
+     </div>
+    </div>
+    
+      <div style="background-color: rgb(252, 0, 84);">
+        <div class="container" style="padding: 30px; color: aliceblue;"> 
+          <h2>Eventos desarrollados gracias a Cooking Gourmet por hacer realidad esta actividad.</h2>
+        </div>
+      </div>
+     
+    <div class="container">      
+       
+        <div class="row">
+            <div class="col-12 w-100% p-3 " style="color: rgb(252, 0, 84);">
+                <h2>La pachamanca mas grande del mundo.</h2>
+            </div>           
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <img src="images/evento.png" alt="" class="img-fluid">
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <br>
+              <h4 style="color: rgb(252, 0, 84);">Cooking Gourmer participa en la elaboracion de:</h4>
+              <p>La pachamanca mas grande del mundo para diez mil personas que degustaron gratuitamente la pachamanca más grande del mundo que se preparó como parte de los atractivos de la Feria Nacional Ganadera Cuasimodo 2023 que se realiza en el campo de Coto Coto en la ciudad de Huancayo, región Junín.</p>
+              <p>Con un día de anticipación, trabajadores de la Municipalidad Distrital de Chilca iniciaron los preparativos para hornear el plato emblemático de la ciudad llamada la 'Incontrastable”.</p>
+              <p>Inicialmente, se armó el gigantesco horno de piedras con el apoyo de una estructura metálica, el mismo que fue calentado por más de ocho horas con abundante leña. El horno llegó a una altura de más de tres metros.</p>
+              
+            </div>            
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="contenedor">
+      <h1>Fotos del Evento</h1>
+      <div class="image-cantainer">
+        <div class="image"><img src="images/10.jpg" alt=""></div>
+        <div class="image"><img src="images/11.jpg" alt=""></div>
+        <div class="image"><img src="images/12.jpg" alt=""></div>
+        <div class="image"><img src="images/13.jpg" alt=""></div>
+        <div class="image"><img src="images/14.jpg" alt=""></div>
+        <div class="image"><img src="images/15.jpg" alt=""></div>
+        <div class="image"><img src="images/16.jpg" alt=""></div>
+        <div class="image"><img src="images/17.jpg" alt=""></div>
+
+      </div>
+      <p>Las personas que llegaron al campo ferial de Coto Coto tuvieron que hacer largas colas para poder recibir una porción del sabroso potaje; algunos asistentes recibieron su porción de pachamanca bailando. “Hay que recibir bailando esta pachamanca, he esperado casi cuatro horas, pero valió la pena hacer la cola, muchísimas gracias”, manifestó la ciudadana Maribel Apolinario.
+        El alcalde de Chilca, César Damas Laurente, declaró que la nueva gestión edil está empeñada en relanzar está actividad y declararla como patrimonio cultural: “nuestra intención definitivamente es reconocer como patrimonio cultural a Cuasimodo, y dentro de ello a la pachamanca más grande del mundo porque esta es una feria ganadera entre otros que estamos diversificando”, refirió.
+      </p>
+      <div class="popup-image">
+        <span>&times; </span>
+        <img src="images/3.png" alt="">
+      </div>
+    </div>
+    
+    
+    <script>
+
+      document.querySelectorAll('.image-cantainer img').forEach(image =>{
+        image.onclick = () =>{
+        document.querySelector('.popup-image').style.display = 'block';
+        document.querySelector('.popup-image img').src = image.getAttribute('src');
+
+         }
+    });
+
+    document.querySelector('.popup-image span').onclick = () =>{
+      document.querySelector('.popup-image').style.display = 'none';
+    }
+    </script>
+
+<div class="container">
+  <div class="row">
+      <div class="col-12 w-100% p-3 " style="color: rgb(252, 0, 84);">
+          <h2>Mas Aventos</h2>
+      </div>        
+  </div>
+        <div class="row text-dark">
+        <div class="col-sm-12 col-md-4">
+          <div class="card" style="width: 100%; margin-top: 20px; border: 0;">
+            <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0"><img src="images/barismo2.jpg" class="card-img-top" alt="..."></a>
+            
+            <div class="card-body">
+              <h5 class="card-title">Barismo Pro.</h5>
+              <p class="card-text">¡Especialízate y explora a fondo el mundo del café!
+                Reconoce diversas texturas y calidad de los diversos granos de café que existen, desarrolla y aplica conocimientos de elaboración y extracción de elementos que influyen en nuestra metodología.</p>
+              <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" class="btn btn-danger">Saber Más</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4"> 
+          <div class="card" style="width: 100; margin-top: 20px; border: 0;">
+            <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0"><img src="images/4.png" class="card-img-top" alt="..."></a>              
+            <div class="card-body">
+              <h5 class="card-title">Shawarma.</h5>
+              <p class="card-text"> Comida tipica del Libano, con una mezla de sabores muy diferente a la culinaria hace de este taller uno de los mas lindos y creativos de todos. Hacete experto en Shawarma emprende y crece dentro de la cocina internacional. Preparate porque este curso te sorprendera.
+                
+                </p>
+              <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" class="btn btn-danger">Saber Más</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <div class="card" style="width: 100%; margin-top: 20px; border: 0;">
+            <a href="/carreras/deporte/eventos.html"><img src="images/eventos.png" class="card-img-top" alt="..."></a>
+            
+            <div class="card-body">
+              <h5 class="card-title">Olimpiadas - 2023</h5>
+              <p class="card-text">Cooking Gourmer Realiza las Olimpiadas 2023 Para todos sus Estudiantes:
+                Agradecemos a cada unos de nuestros estudiantes por hacer realidad estas olimpiadas deportivas 2023 - donde cada uno de ellos participo en distintas diciplicas tanto en Futbol y Boley para damas y cabelleros  </p>
+              <a href="/carreras/deporte/eventos.html" class="btn btn-danger">Saber Más</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+  </div>
+
+    <div class="footer" style="padding: 30px; background-color: black;">
+      <div class="row ">
+        <div class="col-sm-12 col-md-4 text-center" style="background-color: rgb(0, 0, 0); padding: 20px;">
+          <img src="./logos/logo2.png" alt="">
+          <br>
+          <img src="./logos/25.png" alt="">
+          <h6><span style="color: rgb(216, 173, 17);">15 Años</span><samp style="color: #fff;"> Formando Emprendedores</samp></h6>
+          <p style="color: #fff;">Liderando en el serctor gastronómico en la ciudad de huancayo.</p>
+        </div>
+        <div class="col-sm-12 col-md-4" style="background-color: rgb(0, 0, 0); padding: 20px;">
+          <h6 style="color: #cdcdcd;">MENU PRINCIPAL</h6>
+          
+          <div class="menu" style="color: #cdcdcd;">            
+ 
+          <li><i class="bi bi-bank"> <a href="../../index.html" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Incio</a></i></li>
+          <li><i class="bi bi-balloon-heart"> <a href="../eventos/eventos.html" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Eventos</a></i></li>
+          <li><i class="bi bi-bar-chart-line"> <a href="../gente/gente.html" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Gente que trabaja</a></i></li>
+          <li><i class="bi bi-book"> <a href="../../index.html" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Programa de Estudio</a></i></li>
+          <li><i class="bi bi-currency-dollar"> <a href="https://docs.google.com/forms/d/e/1FAIpQLSfEvKswcpldvWBjE4mbpvBwzpqt51dkTnvuIHUTqV-rFDTM-w/viewform?usp=sf_link" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Pagos</a></i></li>
+          <li><i class="bi bi-building"> <a href="https://cookingourmet.q10.com/" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Aula Virtual</a></i></li>
+          <li><i class="bi bi-mortarboard"> <a href="../../intranet/index.html" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Intranet</a></i></li> 
+          <li><i class="bi bi-book"> <a href="../../carreras/libro/index.html" style="color: #cdcdcd; text-decoration: none;"> &nbsp; &nbsp;Libro de Reclamaciones</a></i></li>       
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4" style="color: #cdcdcd; background-color: rgb(0, 0, 0); padding: 20px;">
+          <h6>NUESTRAS SEDES</h6>
+          <ul>
+            <li> Sede Huancayo
+                <ul>
+                    <li>Avenida Ferrocarril</li>
+                    <li>#587</li>
+                    <li>Referencia (Ezquina entre cuzco y Ferrocarril)</li>
+                </ul>
+            </li>
+            <li> Sede El Tambo
+                <ul>
+                  <li>Pasaje los Andes</li>
+                  <li>#376</li>
+                  <li>Referencia (Esquina Huancas y Manchego Muñoz)</li>
+                </ul>
+            </li>
+          </ul>
+        </div>   
+        
+        <div class="col-12 text-center text-light">
+          <h6>Copyright ©2023 <a href="../../index.html" style="text-decoration: none; color: #cdcdcd;">Cooking Gourmet.</a> Designed By <a href="https://www.idexaperu.com/" style="text-decoration: none; color: #cdcdcd;">Idexa-Perú</a></h6>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+</body>
+
+
+</html>
+
