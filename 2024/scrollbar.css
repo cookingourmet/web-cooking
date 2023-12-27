@@ -1,0 +1,73 @@
+header
+{
+	font-family: 'Lobster', cursive;
+	text-align: center;
+	font-size: 25px;	
+}
+
+#info
+{
+	font-size: 18px;
+	color: #555;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+a{
+	color: #074E8C;
+}
+
+.scrollbar {
+    float: left;
+    height: 200px;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.force-overflow
+{
+    min-height: 200px;
+    padding-right: 3%;
+}
+
+#wrapper
+{
+	text-align: center;
+	width: 500px;
+	margin: auto;
+}
+
+
+
+
+
+/*
+ *  STYLE 7
+ */
+
+#style-7::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px #434d51;
+	background-color: #434d51;
+	border-radius: 10px;
+}
+
+#style-7::-webkit-scrollbar
+{
+	width: 7px;
+	/* background-color: #575b7f; */
+}
+
+#style-7::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: #acb30c;
+}
+
+
+
+
+
+
+
+

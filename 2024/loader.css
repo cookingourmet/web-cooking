@@ -1,0 +1,74 @@
+body {
+    position: relative;
+  }
+  .loadertlk {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: absolute;
+    z-index: 100;
+  }
+  
+  .loadertlk {
+    padding-top: 20%;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(45deg, #000000, #242424);
+  }
+  .imgloader {
+    text-align: center;
+  }
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .dot {
+    background: white;
+    margin: 5px;
+    animation-name: loader;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  
+  .dot:nth-child(1) {
+    animation-delay: 0.2s;
+  }
+  .dot:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+  .dot:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+  .dot:nth-child(4) {
+    animation-delay: 0.8s;
+  }
+  .dot:nth-child(5) {
+    animation-delay: 1s;
+  }
+  
+  @keyframes loader {
+    from {
+      width: 2px;
+      height: 2px;
+      border-radius: calc(2px / 2);
+    }
+    to {
+      width: 20px;
+      height: 20px;
+      border-radius: calc(20px / 2);
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .loadertlk {
+      padding-top: 50%;
+    }
+  }
+  @media only screen and (max-width: 576px) {
+    .loadertlk {
+      padding-top: 70%;
+    }
+  }

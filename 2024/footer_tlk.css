@@ -1,0 +1,27 @@
+.logo_footer {
+    width: 20%;
+    }
+
+    @media only screen and (max-width: 920px) {
+      .logo_footer {
+    width: 35%;
+    }
+    }
+
+    @media only screen and (max-width: 740px) {
+      .logo_footer {
+    width: 45%;
+    }
+    }
+
+    @media only screen and (max-width: 540px) {
+      .logo_footer {
+    width: 55%;
+    }
+    }
+
+    @media only screen and (max-width: 420px) {
+      .logo_footer {
+    width: 65%;
+    }
+    }
