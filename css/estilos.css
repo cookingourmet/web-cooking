@@ -201,7 +201,7 @@ h2{
 .container .card2:hover .box{
     transform: translateY(-50px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(45deg, #b422e0, #ff0062);
+    background: linear-gradient(45deg, #e4e4e4, #b6b6b6);
     transition: 0.8s;
 }
 
@@ -234,7 +234,7 @@ h2{
 .container .card2:hover .box .content h3,
 .container .card2:hover .box .content p
 {
-    color: #fff;
+    color: #242424;
 }
 
 .container .card2 .box .content p{
