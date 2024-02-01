@@ -68,6 +68,10 @@
                               <li class="nav-item">
                                 <a class="nav-link active" style="color: #fff;" aria-current="page" href="https://cookingourmet.q10.com/">Aula Virtual</a>
                               </li>
+
+                              <li class="nav-item">
+                                <a class="nav-link active" style="color: #fff;" aria-current="page" href="#">Pagos</a>
+                              </li>
     
                             </ul>
                             <form class="d-flex" role="Buscar">
@@ -464,23 +468,27 @@
                 <a href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0"><i class="fa-brands fa-whatsapp"></i></a>
             </div>
         </div>
-        <form>
+        <form action="https://formsubmit.co/admin@cookingourmet.edu.pe" method="POST">
             <div class="input-box">
-                <input type="text" placeholder="Nombre y apellido" required>
+                <input type="text" name="name" placeholder="Nombre y apellido" required>
                 <i class="fa-solid fa-user"></i>
             </div>
             <div class="input-box">
-                <input type="email" required placeholder="Correo electrónico">
+                <input type="email" name="email" required placeholder="Correo electrónico">
                 <i class="fa-solid fa-envelope"></i>
             </div>
             <div class="input-box">
-                <input type="text" placeholder="Asunto">
+                <input type="text" name="subject" placeholder="Asunto">
                 <i class="fa-solid fa-pen-to-square"></i>
             </div>
             <div class="input-box">
-                <textarea placeholder="Escribe tu mensaje..."></textarea>
+                <textarea placeholder="Escribe tu mensaje..." name="coments"></textarea>
             </div>
             <button type="submit">Enviar mensaje</button>
+
+            <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
+
+            <input type="hidden" name="_captcha" id="false">
         </form>
     </div>
 
