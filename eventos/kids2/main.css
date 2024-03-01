@@ -57,7 +57,7 @@ body{
 
 .section1 .section1-1 p{
     margin-top: 5%;
-    margin-left: 35px;
+    margin-left: 16%;
     font-size: 20px;
     font-weight: 400;
 }
@@ -71,6 +71,7 @@ body{
 
 
 .section1 .section1-1 h5{
+    margin-top: 5%;
     font-size: 20px;
     font-weight: 800;
 }
