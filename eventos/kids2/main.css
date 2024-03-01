@@ -1,13 +1,12 @@
 *{
-   font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: weight;
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 100;
     font-style: normal;
   }
 
 
 body{
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat Alternates", sans-serif;
 }
 
 
@@ -38,8 +37,9 @@ body{
 
 .section1 .section1-1 h1{
     font-weight: 900;
-    font-size: 5rem;
-    font-family: "Montserrat";
+    font-size: 6rem;
+    font-family: "Montserrat Alternates", sans-serif;
+    line-height: 0.9;
     
 }
 
@@ -49,23 +49,26 @@ body{
         font-size: 3rem;
     }
 
-    .section1 .section1-1 h2{
-        font-weight: 800;
-        font-size: 1rem;
-    }
 }
 
 
-.section1 .section1-1 h2{
-    font-weight: 800;
-    font-size: 3.4rem;
-}
+
+
 
 .section1 .section1-1 p{
+    margin-top: 5%;
     margin-left: 35px;
     font-size: 20px;
     font-weight: 400;
 }
+
+.section1 .section1-1 p span{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+
 
 .section1 .section1-1 h5{
     font-size: 20px;
