@@ -131,6 +131,28 @@ body{
 }
 
 
+
+.locales{
+    color: #cecece;
+    font: 400 16px/1.5 exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
+    text-align: center;
+    /* img size is 50x50 */
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
+    -webkit-animation: bg-scrolling-reverse .92s infinite;
+    /* Safari 4+ */
+    -moz-animation: bg-scrolling-reverse .92s infinite;
+    /* Fx 5+ */
+    -o-animation: bg-scrolling-reverse .92s infinite;
+    /* Opera 12+ */
+    animation: bg-scrolling-reverse .92s infinite;
+    /* IE 10+ */
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    animation-timing-function: linear;
+}
+
+
 .nosotros{
     background: url(../images/fondo2.png);
     background-color: #fff;
@@ -178,16 +200,16 @@ body{
 
 
 
-.locales{
-    background: url(../images/fondo5.png);
-    background-color: #eeeeee;
-}
 
 .locales h3{
-    
+    color: #000;
     margin-top: 5%;
 }
 
+
+.locales p{
+    color: #000;
+}
 
 .carreras {
     display: flex;
@@ -195,9 +217,24 @@ body{
     align-items: center;
     justify-content: center;
     min-height: 90vh;
-    background: linear-gradient(to bottom right, rgb(230, 230, 230), pink);
+    height:200px;
+    background: rgb(189, 189, 189);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgb(255, 222, 160) 0%, rgb(249, 246, 255) 48%, rgb(255, 139, 226) 100%);
+    background-size: 300% 100%;
+    animation: gradient 15s ease infinite;
 }
 
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
 
 
 
