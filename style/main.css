@@ -4,14 +4,6 @@
 
 
 
-
-body{
-    background-color: black;
-}
-
-
-
-
 .float{
 	position:fixed;
 	width:60px;
@@ -131,6 +123,43 @@ body{
     animation-timing-function: linear;
 }
 
+
+.lema{
+    margin-top: 50px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    text-align: center;
+    padding: 50px;
+}
+
+.lema h2{
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.lema h4{
+    padding: 30px;
+}
+
+.cooking{
+    padding-block-end: 40px;
+}
+.cooking h2{
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 25px;
+    font-style: normal;
+    text-align: center;
+    background-color: rgb(255, 0, 64);
+    padding: 10px;
+    color: #fff;
+    border-radius: 50px;
+}
+
+.cooking a{
+    text-decoration: none;
+}
 
 
 .locales{
