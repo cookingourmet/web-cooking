@@ -182,44 +182,27 @@
     animation-timing-function: linear;
 }
 
-
-.nosotros{
-    background: url(../images/fondo2.png);
-    background-color: #fff;
+.oportunidades{
+    background-color: rgb(255, 0, 64);
+    padding: 40px;
+    font-family: "Poppins", sans-serif;
 }
 
-.nosotros h3{
-    padding-top: 15%;
-    font-size: 30px;
-    color: #3f3f3f;
-
+.oportunidades .foto{
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+   
 }
 
-.nosotros span{
-    font-weight: 600;
-    color: #ff0066;
+.texto{
+    font-family: "Poppins", sans-serif;
+    margin-top: 30px;
+    color: #fff;
+    margin-left: 40px;
 }
 
-.nosotros2{
-    width: 75vw;
-    max-width: 1000px;
-    min-width: 320px;
-    margin: auto;
-}
-.nosotros img{
-    width: 100%;
-    padding-top: 20%;
-}
-
-.nosotros .ventajas{
-    margin-top: 15%;
-    margin-left: 10%;
-}
-
-.nosotros .ventajas .card{
-    border-color: #ff0066;
-    margin-top: 10px;
-    margin-block-end: 10px;
+.texto h4{
+    font-weight: 700;
 }
 
 
