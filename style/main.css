@@ -157,6 +157,12 @@
     border-radius: 50px;
 }
 
+.cooking h2:hover{
+    background-color: rgb(202, 0, 34);
+    color: #fff;
+    box-shadow: 5px 15px 30px rgba(124, 0, 0, 0.466);
+}
+
 .cooking a{
     text-decoration: none;
 }
@@ -240,7 +246,10 @@
     }
 }
 
-
+.carreras h3{
+    font-weight: 700;
+    font-size: 30px;
+}
 
 .cards {
     position: relative;
