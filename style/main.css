@@ -58,7 +58,14 @@
 
 .menu{
     background-color: rgb(49, 49, 49);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000; 
 }
+
+
+
 @import url(https://fonts.googleapis.com/css?family=Exo:100);
 /* Background data (Original source: https://subtlepatterns.com/grid-me/) */
 /* Animations */
@@ -121,6 +128,7 @@
     -moz-animation-timing-function: linear;
     -o-animation-timing-function: linear;
     animation-timing-function: linear;
+    margin-top: 80px;
 }
 
 
