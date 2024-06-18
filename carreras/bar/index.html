@@ -64,6 +64,47 @@
                           <li><a class="dropdown-item" href="../cocina/cocina.html">Cocina</a></li>
                           <li><a class="dropdown-item" href="../barismo/barismo.html">Barismo</a></li>
                         </ul>
+
+                        <style>
+                           .dropdown-menu {
+      display: none;
+      position: absolute;
+      background-color: rgb(49, 49, 49);
+      min-width: 160px;
+      top: 100%; /* Position below the parent li */
+      z-index: 1001; /* Higher than the main menu */
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .dropdown-item {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-item:hover {
+      background-color: rgb(70, 70, 70);
+    }
+
+    .menu li:hover .dropdown-menu {
+      display: block;
+      animation: dropdown 0.3s ease-in-out;
+    }
+
+    @keyframes dropdown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+                        </style>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link active" aria-current="page" style="color: white;" href="../eventos/eventos.html">talleres</a>
@@ -90,7 +131,7 @@
               <h1>BAR</h1>
               <h1>PROFESIONAL</h1>
               <H4>¡Conviértete en el rey de la barra!</H4>
-              <h1>Inicio: 13 de Mayo 2024</h1>
+              <h1>Inicio: 12 de Agosto 2024</h1>
             </div>
             <div class="col-sm-12 col-md-6 col-lg-6">
               <img src="images/bar.png" alt="">
