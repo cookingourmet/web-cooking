@@ -100,6 +100,35 @@ body{
 
 }
 
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Ajusta según sea necesario */
+}
+
+.share-buttons a {
+    margin: 0 10px; /* Espaciado entre los botones */
+}
+
+button {
+    background-color: #4CAF50; /* Verde */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
 .footer{
     margin: 0;
     padding: 0;

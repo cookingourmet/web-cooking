@@ -187,6 +187,18 @@
                     <p>
                         ¡No esperes más! Inscríbete en el programa que más te apasiona y comienza a construir una carrera exitosa en el mundo de la gastronomía. Para más información, visita nuestra página web o contáctanos directamente. ¡Te esperamos en Cooking Gourmet, donde tus sueños culinarios se hacen realidad! 
                     </p>
+
+                    
+                    <div class="share-buttons">
+                      <a id="facebookShare" href="https://www.cookingourmet.edu.pe/blog/index.html" target="_blank">
+                          <button>Compartir en Facebook</button>
+                      </a>
+                  
+                      <a id="whatsappShare" href="https://api.whatsapp.com/send/?phone=51981377382&text=Hola%2C+quiero+informaci%C3%B3n+sobre+la+carrera+de&type=phone_number&app_absent=0" target="_blank">
+                          <button>Compartir en WhatsApp</button>
+                      </a>
+                  </div>
+
                     </div>
                 </div>
 
@@ -234,6 +246,15 @@
             </div>
         </div>
     </div>
+
+
+  <script>
+    const currentUrl = encodeURIComponent(window.location.href);
+    document.getElementById('facebookShare').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+    document.getElementById('whatsappShare').href = `https://api.whatsapp.com/send?text=Mira esta página: ${currentUrl}`;
+  </script>
+
+  
 
     <footer class="footer">
         <div class="container">
