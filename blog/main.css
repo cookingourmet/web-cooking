@@ -11,16 +11,29 @@ body{
 }
 
 .head{
-    background-color: rgb(204, 0, 25);
-    color: white;
+    background-color: rgb(255, 0, 62);
     padding: 4em;
 
 }
 
 .head h1{
+    text-align: left;
+    color: #fff;
+    font-size: 60px;
+}
+
+.head h1 span{
+    font-weight: 800;
+}
+
+.head h3 {
+    background-color: #fff;
+    width: 250px;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 20px;
     text-align: center;
-    font-size: 50px;
-    font-weight: 900;
 }
 
 .contenido .left img{
@@ -38,6 +51,20 @@ body{
     margin-top: 10px;
 }
 
+.contenido h3{
+    text-align: left;
+    font-weight: 700;
+    padding: 10px;
+    padding-block-end: 20px;
+}
+.contenido ol li{
+    color: red;
+    font-weight: 600;
+    font-size: 20px;
+}
+.contenido p{
+    text-align: justify;
+}
 
 
 
