@@ -1,0 +1,89 @@
+body{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+}
+
+.container{
+    width: 80vw;
+    max-width: 1200px;
+    min-width: 320px;
+    margin: auto;
+}
+
+.head{
+    background-color: rgb(204, 0, 25);
+    color: white;
+    padding: 4em;
+
+}
+
+.head h1{
+    text-align: center;
+    font-size: 50px;
+    font-weight: 900;
+}
+
+.contenido .left img{
+    width: 100%;
+    padding: 2vw;
+}
+
+.carta{
+    margin-top: 2vw;
+
+}
+
+.carta .card{
+    padding: 5px;
+    margin-top: 10px;
+}
+
+
+
+
+.footer{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #000000;
+    padding: 30px 0;
+}
+
+.footer .container{
+    align-items: center;
+    position: relative;
+}
+
+.footer h4{
+    color: rgb(230, 230, 230);
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+.footer li{
+    padding-top: 5px;
+}
+.footer li a{
+    color: white;
+    text-decoration: none;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.footer li a:hover{
+    color: #fa2263;
+}
+.footer a i{
+    color: white;
+    margin-left: 20px;
+}
+
+.footer a i:hover{
+    color: #fa2263;
+}
+.footer .container h5{
+    color: white;
+    font-weight: 20;
+    font-size: 12px;
+    align-items: center;
+}
