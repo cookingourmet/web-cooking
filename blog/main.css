@@ -104,11 +104,12 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px; /* Ajusta según sea necesario */
+    margin: 20px; /* Espaciado alrededor del contenedor de botones */
+    padding: 20px; /* Espaciado interno del contenedor de botones */
 }
 
 .share-buttons a {
-    margin: 0 10px; /* Espaciado entre los botones */
+    margin: 10px; /* Espaciado entre los botones */
 }
 
 button {
@@ -128,6 +129,11 @@ button:hover {
     background-color: #45a049;
 }
 
+button i {
+    margin-right: 8px; /* Espaciado entre el icono y el texto */
+    font-size: 20px; /* Tamaño del icono */
+    vertical-align: middle;
+}
 
 .footer{
     margin: 0;
