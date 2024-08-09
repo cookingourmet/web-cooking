@@ -10,6 +10,32 @@ body{
     margin: auto;
 }
 
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#25d366;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+  font-size:30px;
+	box-shadow: 2px 2px 3px #999;
+  z-index:100;
+}
+.float:hover {
+	text-decoration: none;
+	color: #25d366;
+  background-color:#fff;
+}
+
+.my-float{
+	margin-top:16px;
+}
+
+
+
 .head{
     background-color: rgb(255, 0, 62);
     padding: 4em;
@@ -37,8 +63,9 @@ body{
 }
 
 .contenido .left img{
+    padding-top: 2vw;
+    padding-right: 2vw;
     width: 100%;
-    padding: 2vw;
 }
 
 .carta{
@@ -64,9 +91,14 @@ body{
 }
 .contenido p{
     text-align: justify;
+    padding-right: 2vw;
 }
 
+.contenido ol p{
+    text-align: justify;
+    padding-right: 2vw;
 
+}
 
 .footer{
     margin: 0;
