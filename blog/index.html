@@ -214,46 +214,104 @@
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
-                    
-                    <div class="carta">
-                        <div class="card" style="width: 21rem;">
-                            <img src="images/parrillas.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                          </div>
-
-                          <div class="card" style="width: 21rem;">
-                            <img src="images/china.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                          </div>
-
-                          <div class="card" style="width: 21rem;">
-                            <img src="images/gastronomia.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                          </div>
-
-                          <div class="card" style="width: 21rem;">
-                            <img src="images/pasteleria.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                          </div>
-
-                          <div class="card" style="width: 21rem;">
-                            <img src="images/bar.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                          </div>
+                  <div class="carta">
+                    <div class="card" style="width: 21rem;" data-pdf="materiales/Brochure digital - parrillas_compressed.pdf">
+                      <img src="images/parrillas.png" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <p class="card-text">Contenido relacionado con parrillas.</p>
+                      </div>
                     </div>
-
-
+                
+                    <div class="card" style="width: 21rem;" data-pdf="materiales/Brochure digital - cocina china.pdf">
+                      <img src="images/china.png" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <p class="card-text">Contenido relacionado con cocina china.</p>
+                      </div>
+                    </div>
+                
+                    <div class="card" style="width: 21rem;" data-pdf="materiales/01 Brochure digital Gastronomía.pdf">
+                      <img src="images/gastronomia.png" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <p class="card-text">Contenido relacionado con gastronomía.</p>
+                      </div>
+                    </div>
+                
+                    <div class="card" style="width: 21rem;" data-pdf="materiales/02 Brochure digital Pastelería.pdf">
+                      <img src="images/pasteleria.png" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <p class="card-text">Contenido relacionado con pastelería.</p>
+                      </div>
+                    </div>
+                
+                    <div class="card" style="width: 21rem;" data-pdf="materiales/03 Brochure digital Bar.pdf">
+                      <img src="images/bar.png" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <p class="card-text">Contenido relacionado con coctelería.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                
+
+               <!-- Modal -->
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formModalLabel">Contáctanos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombres</label>
+            <input type="text" class="form-control" id="nombre" required>
+          </div>
+          <div class="mb-3">
+            <label for="apellidos" class="form-label">Apellidos</label>
+            <input type="text" class="form-control" id="apellidos" required>
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Número de Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" required>
+          </div>
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="correo" required>
+          </div>
+          <div class="mb-3">
+            <label for="comentario" class="form-label">Comentario</label>
+            <textarea class="form-control" id="comentario" rows="3" required></textarea>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <a href="#" id="downloadLink" download class="btn btn-secondary">Descargar Contenido</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+      card.addEventListener('click', function() {
+        const pdfLink = card.getAttribute('data-pdf');
+        document.getElementById('downloadLink').href = pdfLink;
+        
+        const formModal = new bootstrap.Modal(document.getElementById('formModal'));
+        formModal.show();
+      });
+    });
+  });
+</script>
+
+
+
             </div>
         </div>
     </div>
