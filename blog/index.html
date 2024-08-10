@@ -166,11 +166,12 @@
                             En este programa intensivo, cada mes te sumergirás en dos especialidades culinarias diferentes. 
 
                            <div class="lista">
-                            <ol>
-                              <li> 1er mes: Cocina peruana y el arte del bar.</li>
-                              <li> 2do mes: Pastelería y pescados y mariscos.</li>
-                              <li> 3er mes: Comida China y Parrillas y carbones.</li>
-                            </ol>
+
+                            <ul>
+                              <li>1er mes: Cocina peruana y el arte del bar.</li>
+                              <li>2do mes: Pastelería y pescados y mariscos.</li>
+                              <li>3er mes: Comida China y Parrillas y carbones.</li>
+                            </ul>
                            </div>
 
                             
@@ -189,7 +190,7 @@
 
                     <img src="images/blog2.png" alt="">
 
-                    <h4>¿POR QUÉ ELEGIR COOKING GOURMET?</h4>
+                    <h3>¿Por qué elegir cooking gourmet?</h3>
                     <p>
                         En Cooking Gourmet, no solo enseñamos a cocinar; enseñamos a vivir la pasión por la gastronomía. Nuestros programas están diseñados para ofrecer una educación de alta calidad, con un enfoque práctico y personalizado. Contamos con instalaciones de vanguardia y un equipo de instructores altamente calificados que te guiarán en cada paso de tu formación. 
                     </p>
@@ -263,61 +264,118 @@
                 
 
                <!-- Modal -->
-<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formModalLabel">Contáctanos</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="nombre" class="form-label">Nombres</label>
-            <input type="text" class="form-control" id="nombre" required>
-          </div>
-          <div class="mb-3">
-            <label for="apellidos" class="form-label">Apellidos</label>
-            <input type="text" class="form-control" id="apellidos" required>
-          </div>
-          <div class="mb-3">
-            <label for="telefono" class="form-label">Número de Teléfono</label>
-            <input type="tel" class="form-control" id="telefono" required>
-          </div>
-          <div class="mb-3">
-            <label for="correo" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" id="correo" required>
-          </div>
-          <div class="mb-3">
-            <label for="comentario" class="form-label">Comentario</label>
-            <textarea class="form-control" id="comentario" rows="3" required></textarea>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-primary">Enviar</button>
-            <a href="#" id="downloadLink" download class="btn btn-secondary">Descargar Contenido</a>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+               <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="formModalLabel">Contáctanos</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="contactForm" method="POST" action="/send-email">
+                        <div class="mb-3">
+                          <label for="nombre" class="form-label">Nombres</label>
+                          <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="apellidos" class="form-label">Apellidos</label>
+                          <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="telefono" class="form-label">Número de Teléfono</label>
+                          <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{7,15}" title="Ingrese un número de teléfono válido (solo números, entre 7 y 15 dígitos)" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="correo" class="form-label">Correo Electrónico</label>
+                          <input type="email" class="form-control" id="correo" name="correo" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="comentario" class="form-label">Comentario</label>
+                          <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Enviar y Descargar</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              
+              
 
+              <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const cards = document.querySelectorAll('.card');
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const telefonoInput = document.getElementById('telefono');
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.card');
+  // Función para verificar si todos los campos están llenos
+  function checkFormCompletion() {
+    const inputs = form.querySelectorAll('input, textarea');
+    let allFilled = true;
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        allFilled = false;
+      }
+    });
+    submitBtn.disabled = !allFilled; // Habilitar o deshabilitar el botón
+  }
 
-    cards.forEach(card => {
-      card.addEventListener('click', function() {
-        const pdfLink = card.getAttribute('data-pdf');
-        document.getElementById('downloadLink').href = pdfLink;
-        
-        const formModal = new bootstrap.Modal(document.getElementById('formModal'));
-        formModal.show();
-      });
+  // Escucha cambios en los campos del formulario
+  form.querySelectorAll('input, textarea').forEach(input => {
+    input.addEventListener('input', checkFormCompletion);
+  });
+
+  // Validación dinámica para el campo de teléfono
+  telefonoInput.addEventListener('input', function(event) {
+    this.value = this.value.replace(/\D/g, ''); // Reemplaza cualquier carácter que no sea un número
+  });
+
+  cards.forEach(card => {
+    card.addEventListener('click', function() {
+      const pdfLink = card.getAttribute('data-pdf');
+      form.dataset.pdf = pdfLink;
+
+      const formModal = new bootstrap.Modal(document.getElementById('formModal'));
+      formModal.show();
     });
   });
-</script>
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Previene el comportamiento por defecto del formulario
+
+    const formData = new FormData(form);
+    fetch('/send-email', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+      alert('Correo enviado');
+      const pdfLink = form.dataset.pdf;
+      const downloadLink = document.createElement('a');
+      downloadLink.href = pdfLink;
+      downloadLink.download = pdfLink.split('/').pop();
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      
+      const formModal = bootstrap.Modal.getInstance(document.getElementById('formModal'));
+      formModal.hide();
+    })
+    .catch(error => {
+      alert('Error al enviar el correo');
+    });
+  });
+});
+
+              </script>
+              
+              
+              
 
 
 

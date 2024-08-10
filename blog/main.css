@@ -89,6 +89,7 @@ body{
 
 .contenido h4{
     padding: 20px;
+    
 }
 .contenido ol li{
     color: red;
@@ -96,7 +97,7 @@ body{
     font-size: 20px;
 }
 
-.contenido .lista ol li{
+.contenido .lista ul li{
     color: #000000;
     font-weight: 400;
     font-size: 17px;
