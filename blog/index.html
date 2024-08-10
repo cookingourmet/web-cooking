@@ -112,7 +112,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">                  
-                        <h1> ¿Conoces los programas <span>estudios</span> de <span>Cooking Gourmet</span></h2>
+                        <h1> ¿Conoces los programas de <span>estudios</span> en <span>Cooking Gourmet</span></h2>
                         <br>
                         <h3>Conoce más ahora</h3>
                 </div>
@@ -195,7 +195,7 @@
                         En Cooking Gourmet, no solo enseñamos a cocinar; enseñamos a vivir la pasión por la gastronomía. Nuestros programas están diseñados para ofrecer una educación de alta calidad, con un enfoque práctico y personalizado. Contamos con instalaciones de vanguardia y un equipo de instructores altamente calificados que te guiarán en cada paso de tu formación. 
                     </p>
                     <p>
-                        ¡No esperes más! Inscríbete en el programa que más te apasiona y comienza a construir una carrera exitosa en el mundo de la gastronomía. Para más información, visita nuestra página web o contáctanos directamente. ¡Te esperamos en Cooking Gourmet, donde tus sueños culinarios se hacen realidad! 
+                        ¡No esperes más! Inscríbete en el programa que más te apasiona y comienza a construir una carrera exitosa en el mundo de la gastronomía. ¡Te esperamos en Cooking Gourmet, donde tus sueños culinarios se hacen realidad! 
                     </p>
 
                     
@@ -263,116 +263,123 @@
                 </div>
                 
 
-               <!-- Modal -->
-               <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="formModalLabel">Contáctanos</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form id="contactForm" method="POST" action="/send-email">
-                        <div class="mb-3">
-                          <label for="nombre" class="form-label">Nombres</label>
-                          <input type="text" class="form-control" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="apellidos" class="form-label">Apellidos</label>
-                          <input type="text" class="form-control" id="apellidos" name="apellidos" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="telefono" class="form-label">Número de Teléfono</label>
-                          <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{7,15}" title="Ingrese un número de teléfono válido (solo números, entre 7 y 15 dígitos)" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="correo" class="form-label">Correo Electrónico</label>
-                          <input type="email" class="form-control" id="correo" name="correo" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="comentario" class="form-label">Comentario</label>
-                          <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                          <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Enviar y Descargar</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="formModalLabel">Contáctanos</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <form id="contactForm" action="https://formsubmit.co/cliente@cookingourmet.edu.pe" method="POST">
+                                  <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombres</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="correo" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="correo" name="correo" required>
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="comentario" class="form-label">Comentario</label>
+                                    <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                                  </div>
+                                  <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Enviar y Descargar</button>
+                                </form>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>          
               
+                        <script>
+                          document.addEventListener('DOMContentLoaded', function() {
+                            const cards = document.querySelectorAll('.card');
+                            const form = document.getElementById('contactForm');
+                            const submitBtn = document.getElementById('submitBtn');
+                            const telefonoInput = document.getElementById('telefono');
+                        
+                            // Función para verificar si todos los campos están llenos
+                            function checkFormCompletion() {
+                              const inputs = form.querySelectorAll('input, textarea');
+                              let allFilled = true;
+                              inputs.forEach(input => {
+                                if (!input.value.trim()) {
+                                  allFilled = false;
+                                }
+                              });
+                              submitBtn.disabled = !allFilled; // Habilitar o deshabilitar el botón
+                            }
+                        
+                            // Escucha cambios en los campos del formulario
+                            form.querySelectorAll('input, textarea').forEach(input => {
+                              input.addEventListener('input', checkFormCompletion);
+                            });
+                        
+                            // Validación dinámica para el campo de teléfono
+                            telefonoInput.addEventListener('input', function(event) {
+                              this.value = this.value.replace(/\D/g, ''); // Reemplaza cualquier caracter que no sea un número
+                            });
+                        
+                            // Muestra el modal y asigna el PDF correspondiente
+                            cards.forEach(card => {
+                              card.addEventListener('click', function() {
+                                const pdfLink = card.getAttribute('data-pdf');
+                                form.dataset.pdf = pdfLink;
+                        
+                                const formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                                formModal.show();
+                              });
+                            });
+                        
+                            // Manejo del envío del formulario
+                            form.addEventListener('submit', function(event) {
+                              event.preventDefault(); // Previene el comportamiento por defecto del formulario
+                        
+                              const formData = new FormData(form);
+                              fetch(form.action, {
+                                method: 'POST',
+                                body: formData
+                              })
+                              .then(response => {
+                                if (response.ok) {
+                                  // Éxito al enviar el formulario
+                                  const pdfLink = form.dataset.pdf;
+                                  const downloadLink = document.createElement('a');
+                                  downloadLink.href = pdfLink;
+                                  downloadLink.download = pdfLink.split('/').pop();
+                                  document.body.appendChild(downloadLink);
+                                  downloadLink.click();
+                                  document.body.removeChild(downloadLink);
+                        
+                                  const formModal = bootstrap.Modal.getInstance(document.getElementById('formModal'));
+                                  formModal.hide();
+                        
+                                  alert('Formulario enviado correctamente. El PDF se descargará automáticamente.');
+                                } else {
+                                  // Error al enviar el formulario
+                                  alert('Error al enviar el formulario. Por favor, inténtelo de nuevo.');
+                                }
+                              })
+                              .catch(error => {
+                                // Error en la solicitud de red
+                                alert('Error en la solicitud. Por favor, inténtelo de nuevo.');
+                              });
+                            });
+                          });
+                        </script>
+                        
               
-              
-
-              <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const cards = document.querySelectorAll('.card');
-  const form = document.getElementById('contactForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const telefonoInput = document.getElementById('telefono');
-
-  // Función para verificar si todos los campos están llenos
-  function checkFormCompletion() {
-    const inputs = form.querySelectorAll('input, textarea');
-    let allFilled = true;
-    inputs.forEach(input => {
-      if (!input.value.trim()) {
-        allFilled = false;
-      }
-    });
-    submitBtn.disabled = !allFilled; // Habilitar o deshabilitar el botón
-  }
-
-  // Escucha cambios en los campos del formulario
-  form.querySelectorAll('input, textarea').forEach(input => {
-    input.addEventListener('input', checkFormCompletion);
-  });
-
-  // Validación dinámica para el campo de teléfono
-  telefonoInput.addEventListener('input', function(event) {
-    this.value = this.value.replace(/\D/g, ''); // Reemplaza cualquier carácter que no sea un número
-  });
-
-  cards.forEach(card => {
-    card.addEventListener('click', function() {
-      const pdfLink = card.getAttribute('data-pdf');
-      form.dataset.pdf = pdfLink;
-
-      const formModal = new bootstrap.Modal(document.getElementById('formModal'));
-      formModal.show();
-    });
-  });
-
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Previene el comportamiento por defecto del formulario
-
-    const formData = new FormData(form);
-    fetch('/send-email', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-      alert('Correo enviado');
-      const pdfLink = form.dataset.pdf;
-      const downloadLink = document.createElement('a');
-      downloadLink.href = pdfLink;
-      downloadLink.download = pdfLink.split('/').pop();
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      
-      const formModal = bootstrap.Modal.getInstance(document.getElementById('formModal'));
-      formModal.hide();
-    })
-    .catch(error => {
-      alert('Error al enviar el correo');
-    });
-  });
-});
-
-              </script>
               
               
               
