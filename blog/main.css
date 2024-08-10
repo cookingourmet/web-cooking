@@ -95,6 +95,12 @@ body{
     font-weight: 600;
     font-size: 20px;
 }
+
+.contenido .lista ol li{
+    color: #000000;
+    font-weight: 400;
+    font-size: 17px;
+}
 .contenido p{
     text-align: justify;
     padding-right: 2vw;
