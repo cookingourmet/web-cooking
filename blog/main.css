@@ -70,6 +70,7 @@ body{
 
 .carta{
     margin-top: 2vw;
+    cursor: pointer;
 
 }
 
@@ -81,8 +82,13 @@ body{
 .contenido h3{
     text-align: left;
     font-weight: 700;
-    padding: 10px;
+    padding: 20px;
     padding-block-end: 20px;
+    
+}
+
+.contenido h4{
+    padding: 20px;
 }
 .contenido ol li{
     color: red;
