@@ -136,12 +136,13 @@
                               <img src="icon/logo2.png" alt="">
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-4">
-                              <video width="260" height="400" controls autoplay muted>
+                              <video width="260" height="400" controls autoplay>
                                 <source src="images/blog1.mp4" type="video/mp4">
                                 <p>Tu navegador no admite la etiqueta de video.</p>
                               </video>
-                              
                             </div>
+                            
+                            
                             <div class="col-sm-12 col-md-12 col-lg-4">
                               <img src="icon/16.png" alt="">
                             </div>
@@ -191,7 +192,6 @@
                           <h5>Estudiantes como jefe de Cocina</h5>
                         </div>
                       </div>
-
                       <script>
                         $(document).ready(function() {
                           // Función para contar el número hasta el valor objetivo
@@ -218,7 +218,7 @@
                           // Llamar a la función cuando el elemento esté en la vista
                           $(window).on('scroll', function() {
                             if (isElementInView('.contador')) {
-                              animateNumber('.contador .col-4:nth-child(1) h1', 15000, 10000);
+                              animateNumber('.contador .col-4:nth-child(1) h1', 15000, 5000); // Acelerado a 5 segundos
                               animateNumber('.contador .col-4:nth-child(2) h1', 380, 10000);
                               animateNumber('.contador .col-4:nth-child(3) h1', 2500, 10000);
                               $(window).off('scroll'); // Desactivar el scroll una vez ejecutado
@@ -227,13 +227,18 @@
                       
                           // Ejecutar al cargar la página en caso de que el elemento ya esté en vista
                           if (isElementInView('.contador')) {
-                            animateNumber('.contador .col-4:nth-child(1) h1', 15000, 10000);
+                            animateNumber('.contador .col-4:nth-child(1) h1', 15000, 5000); // Acelerado a 5 segundos
                             animateNumber('.contador .col-4:nth-child(2) h1', 380, 10000);
                             animateNumber('.contador .col-4:nth-child(3) h1', 2500, 10000);
                             $(window).off('scroll'); // Desactivar el scroll una vez ejecutado
                           }
                         });
                       </script>
+
+
+
+
+
 <script>
   $(document).ready(function() {
     // Función para contar el número hasta el valor objetivo
