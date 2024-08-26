@@ -1,0 +1,224 @@
+body{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+}
+
+.container{
+    width: 80vw;
+    max-width: 1200px;
+    min-width: 320px;
+    margin: auto;
+}
+
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#25d366;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+  font-size:30px;
+	box-shadow: 2px 2px 3px #999;
+  z-index:100;
+}
+.float:hover {
+	text-decoration: none;
+	color: #25d366;
+  background-color:#fff;
+}
+
+.my-float{
+	margin-top:16px;
+}
+
+
+
+.head{
+    background-color: rgb(0, 0, 0);
+    padding: 4em;
+
+}
+
+.head h1{
+    text-align: left;
+    color: #fff;
+    font-size: 60px;
+}
+
+.head h1 span{
+    font-weight: 800;
+}
+
+.head h3 {
+    background-color: #fff;
+    width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+}
+
+.contenido .left{
+    padding-top: 2vw;
+    padding-right: 2vw;
+    width: 100%;
+}
+
+.video img{
+    margin-top: 30px;
+    padding: 10px;
+}
+.carta{
+    margin-top: 2vw;
+    cursor: pointer;
+
+}
+
+.carta .card{
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.contenido h3{
+    text-align: left;
+    font-weight: 700;
+    padding: 20px;
+    padding-block-end: 20px;
+    
+}
+
+.contenido h1{
+    color: rgb(83, 83, 83);
+    font-weight: 900
+}
+
+
+
+.contador .col-4 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.contenido .lista ul li{
+    color: #000000;
+    font-weight: 400;
+    font-size: 17px;
+}
+.contenido p{
+    text-align: justify;
+    padding-right: 2vw;
+}
+
+.contenido ol p{
+    text-align: justify;
+    padding-right: 2vw;
+
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px; /* Espaciado alrededor del contenedor de botones */
+    padding: 20px; /* Espaciado interno del contenedor de botones */
+}
+
+.share-buttons a {
+    margin: 10px; /* Espaciado entre los botones */
+}
+
+button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+button i {
+    margin-right: 8px; /* Espaciado entre el icono y el texto */
+    font-size: 20px; /* Tamaño del icono */
+    vertical-align: middle;
+}
+
+/* Botón de Facebook */
+.facebook-button {
+    background-color: #1877F2; /* Color corporativo de Facebook */
+}
+
+.facebook-button:hover {
+    background-color: #155db2; /* Un tono más oscuro para el hover */
+}
+
+/* Botón de WhatsApp */
+.whatsapp-button {
+    background-color: #25D366; /* Color corporativo de WhatsApp */
+}
+
+.whatsapp-button:hover {
+    background-color: #1da851; /* Un tono más oscuro para el hover */
+}
+
+
+
+
+
+
+.footer{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #000000;
+    padding: 30px 0;
+}
+
+.footer .container{
+    align-items: center;
+    position: relative;
+}
+
+.footer h4{
+    color: rgb(230, 230, 230);
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+.footer li{
+    padding-top: 5px;
+}
+.footer li a{
+    color: white;
+    text-decoration: none;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.footer li a:hover{
+    color: #fa2263;
+}
+.footer a i{
+    color: white;
+    margin-left: 20px;
+}
+
+.footer a i:hover{
+    color: #fa2263;
+}
+.footer .container h5{
+    color: white;
+    font-weight: 20;
+    font-size: 12px;
+    align-items: center;
+}
