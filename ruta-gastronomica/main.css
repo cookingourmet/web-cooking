@@ -84,11 +84,16 @@ body{
 }
 
 .contenido h3{
-    text-align: left;
+    text-align: center;
     font-weight: 700;
     padding: 20px;
     padding-block-end: 20px;
+    color: #fa2263;
     
+}
+
+.contenido h4{
+    color: #fa2263;
 }
 
 .contenido h1{
