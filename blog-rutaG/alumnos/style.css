@@ -1,0 +1,448 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #1a1a1a, #434343);
+    /*overflow: hidden; */ /* Comentar o eliminar esta línea */
+}
+
+
+/* Menú de navegación */
+nav {
+    background-color: #160909;
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que los elementos se reacomoden si no caben en la línea */
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+nav ul li a:hover {
+    background-color: #111;
+    border-radius: 5px;
+}
+
+/* Estilos para el logo */
+.logo img {
+    width: 200px; /* Tamaño inicial del logo */
+    height: auto;
+    margin-right: 20px;
+}
+
+/* Contenedor del menú con logo */
+.menu-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Animación del fondo */
+@keyframes line-animation {
+    0% {
+        background-position: 0 0;
+        opacity: 0.2; /* Opacidad inicial */
+    }
+    50% {
+        opacity: 0.6; /* Aumenta opacidad a la mitad */
+    }
+    100% {
+        background-position: 100% 100%;
+        opacity: 0.2; /* Regresa a la opacidad inicial */
+    }
+}
+/* Contenedor principal */
+.container {
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Alinear verticalmente al centro */
+    padding: 40px; /* Espaciado alrededor del contenedor */
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    position: relative; /* Para posicionar el pseudo-elemento */
+    z-index: 1; /* Para que el contenedor esté por encima del fondo */
+}
+
+/* Sección de texto */
+.text-section {
+    flex: 1; /* Ocupa espacio disponible */
+    color: white; /* Color del texto */
+    text-align: right; /* Alinea el texto a la derecha */
+    margin-right: 1%;
+}
+
+/* Estilos para títulos */
+.text-section h1 {
+    font-size: 3.5em; /* Tamaño del título */
+    background-color: rgba(255, 0, 77, 0.8); /* Color de fondo fucsia con transparencia */
+    padding: 10px; /* Espaciado interno */
+    display: inline-block; /* Para que el fondo se ajuste al tamaño del texto */
+    border-radius: 5px; /* Bordes redondeados */
+    margin-top: 2em;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Transición suave */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra del texto */
+}
+
+.text-section h1:hover {
+    background-color: rgba(255, 0, 77, 1); /* Cambio de color al pasar el mouse */
+    color: #ffffff; /* Cambio de color de texto */
+    transform: scale(1.05); /* Efecto de escalado al pasar el mouse */
+}
+
+.text-section h2 {
+    font-size: 5.5em; /* Tamaño del nombre */
+    font-weight: 500; /* Negrita */
+    margin: -40px 0; /* Ajusta el margen superior e inferior */
+    transition: color 0.3s; /* Transición suave */
+}
+
+.text-section h2:hover {
+    color: rgba(255, 0, 77, 1); /* Cambio de color al pasar el mouse */
+}
+
+.text-section h2 span {
+    font-size: 1.5em;
+    font-weight: 900; 
+    margin: 0;
+}
+
+.text-section h3 {
+    font-size: 1.5em; /* Tamaño del subtítulo */
+    font-weight: 300; /* Peso ligero */
+    margin-top: 5%;
+}
+
+/* Sección de imagen */
+.image-section {
+    margin-top: 4em; /* Espaciado superior */
+    flex: 1; /* Ocupa espacio disponible */
+    display: flex; /* Para centrar la imagen */
+    text-align: left; /* Alinea el contenido a la izquierda */
+    margin-left: 1%;
+}
+
+.image-section img {
+    max-width: 70%; /* Ajusta el tamaño máximo de la imagen */
+    height: auto; /* Mantener la proporción */
+    border-radius: 8px; /* Bordes redondeados para la imagen */
+    transition: transform 0.3s, box-shadow 0.3s; /* Transición suave para el zoom y la sombra */
+}
+
+.image-section img:hover {
+    transform: scale(1.05); /* Efecto de zoom al pasar el mouse */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Cambia a columna en pantallas más pequeñas */
+        align-items: center; /* Alinear contenido al centro */
+    }
+
+    .text-section {
+        text-align: center; /* Centrar texto en pantallas pequeñas */
+        margin-right: 0; /* Quitar margen derecho */
+        margin-bottom: 1em; /* Añadir margen inferior para separación */
+    }
+
+    .image-section {
+        margin-top: 2em; /* Ajusta el margen superior para separarla más del texto */
+        justify-content: center; /* Centra la imagen en móviles */
+    }
+
+    .image-section img {
+        max-width: 100%; /* Ajustar el tamaño de la imagen en móviles */
+    }
+}
+
+@media (max-width: 480px) {
+    .text-section, .image-section {
+        max-width: 100%; /* Ocupa el ancho completo en pantallas muy pequeñas */
+    }
+}
+
+
+
+
+
+
+/* Sección de experiencias */
+.experience-section {
+    margin-top: 80px; /* Espacio superior */
+    text-align: center; /* Centrar el h2 */
+    background-color: white; /* Fondo blanco */
+    padding: 30px 0; /* Espaciado interno superior e inferior */
+    box-shadow: none; /* Sin sombra */
+}
+
+/* Estilos para h2 */
+.experience-section h2 {
+    margin-bottom: 20px; /* Espacio inferior del título */
+    color: red; /* Cambiar color del texto a rojo */
+    text-align: center; /* Centrar h2 */
+}
+
+/* Contenedor de experiencia */
+.experience-container {
+    max-width: 100%; /* Ancho completo */
+    margin: 0 auto; /* Centrar el contenedor */
+    padding: 20px; /* Espaciado interno del contenedor */
+    display: flex; /* Usar flexbox para alinear elementos */
+    justify-content: center; /* Centrar todo el contenido */
+    align-items: center; /* Alinear verticalmente al centro */
+    background-color: white; /* Fondo blanco para el contenedor */
+    border-radius: 5px; /* Bordes redondeados opcionales */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave opcional */
+}
+
+/* Línea vertical */
+.vertical-line {
+    width: 2px; /* Ancho de la línea */
+    height: 60px; /* Altura de la línea */
+    background-color: red; /* Color de la línea */
+    margin: 0 20px; /* Espaciado lateral alrededor de la línea */
+}
+
+/* Estilos para h3 */
+.experience-section h3 {
+    margin-top: 20px; /* Espacio superior para el subtítulo */
+    color: red; /* Cambiar color del texto a rojo */
+    text-align: center; /* Alinear h3 al centro */
+    font-size: 2.5em; /* Aumentar el tamaño del texto de h3 */
+}
+
+/* Estilos para p */
+.experience-section p {
+    color: black; /* Color del texto del párrafo */
+    text-align: center; /* Alinear p al centro */
+    margin: 0; /* Sin márgenes */
+    font-style: italic; /* Estilo cursivo para el párrafo */
+    line-height: 1.5; /* Espaciado entre líneas */
+    max-width: 200px; /* Ajustar el ancho máximo del párrafo para forzar el salto de línea */
+}
+
+
+
+
+.sueños-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: #ffffff;
+    margin-left: calc(-50vw + 50%);
+}
+
+.text-container {
+    max-width: 40%; /* Más delgado */
+    padding: 20px;
+    line-height: 1.6;
+    text-align: justify; /* Justificar el texto */
+    margin: 0 15px; /* Margen a los lados del texto */
+}
+
+.image-container {
+    position: relative; /* Posiciona el contenedor de la imagen como relativo */
+    flex-shrink: 0;
+    max-width: 40%; /* Mantenido */
+    display: flex;
+    flex-direction: column; /* Alinea el logo y el video en columna */
+    align-items: center; /* Centra horizontalmente */
+}
+
+.video-container {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    margin-top: 10px; /* Espaciado superior entre el logo y el video */
+}
+
+.logo-container {
+    margin-bottom: 10px; /* Espaciado inferior entre el logo y el video */
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .sueños-section {
+        flex-direction: column; /* Cambia a columna en pantallas más pequeñas */
+        align-items: center; /* Centra el contenido */
+    }
+
+    .text-container {
+        max-width: 90%; /* Ancho máximo mayor en móviles */
+        margin: 0 15px; /* Margen a los lados en móviles */
+    }
+
+    .image-container {
+        max-width: 90%; /* Ancho máximo mayor en móviles */
+    }
+}
+
+@media (max-width: 480px) {
+    .text-container, .image-container {
+        max-width: 100%; /* Ocupa el ancho completo en pantallas muy pequeñas */
+        margin: 0 10px; /* Margen a los lados en pantallas muy pequeñas */
+    }
+}
+
+
+.counters {
+    display: flex;
+    justify-content: space-around;
+    background-color: white; /* Fondo blanco */
+    padding: 70px;
+}
+
+.counter {
+    text-align: center;
+    margin: 0 2px; /* Espacio entre contadores reducido a 2px */
+}
+
+.counter i {
+    font-size: 3em; /* Tamaño del icono aumentado */
+    color: #dc3545; /* Color rojo para el icono */
+}
+
+.counter h2 {
+    font-size: 2.5em; /* Tamaño del número */
+    color: #dc3545; /* Color rojo para el símbolo + */
+    margin: 2px 0; /* Margen superior e inferior reducido a 2px */
+}
+
+.counter h2 span {
+    color: black; /* Color negro para el número */
+}
+
+.counter p {
+    color: black; /* Color negro para el texto */
+    margin-top: 2px; /* Margen superior reducido a 2px */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .counters {
+        flex-direction: column; /* Apilar contadores en pantallas pequeñas */
+        align-items: center;
+    }
+}
+
+.share-section {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.share-section h3 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.share-btn {
+    font-size: 1.2em; /* Aumentar tamaño del texto */
+    padding: 15px 30px; /* Aumentar el tamaño del botón */
+    border: none;
+    border-radius: 8px; /* Redondeado más notable */
+    color: #fff;
+    cursor: pointer;
+    margin: 0 15px; /* Más espacio entre los botones */
+    transition: transform 0.2s;
+}
+
+.share-btn.facebook {
+    background-color: #3b5998; /* Color de Facebook */
+}
+
+.share-btn.whatsapp {
+    background-color: #25D366; /* Color de WhatsApp */
+}
+
+.share-btn:hover {
+    transform: scale(1.1); /* Incremento suave al pasar el ratón */
+}
+
+
+
+
+
+footer {
+    background-color: #000000; /* Fondo negro */
+    color: #ffffff; /* Texto blanco */
+    padding: 20px; /* Espaciado interior */
+}
+
+.footer-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    flex-wrap: wrap; /* Permite que el contenido se ajuste */
+    text-align: center; /* Centra el texto */
+}
+
+.footer-section {
+    flex: 1; /* Cada sección ocupa un espacio igual */
+    margin: 0; /* Sin margen entre secciones */
+}
+
+.footer-logo {
+    max-width: 200px; /* Tamaño máximo del logo */
+    padding: 20px;
+}
+
+.qr-code {
+    width: 80px; /* Ajusta el tamaño de los códigos QR */
+    margin: 0 50px; /* Margen horizontal de 5px entre QR */
+}
+
+.social-icons {
+    font-size: 24px; /* Tamaño de los íconos */
+    margin-bottom: 0; /* Sin espaciado debajo de los íconos */
+}
+
+.social-icons a {
+    color: red; /* Color de los íconos */
+    margin: 0 2px; /* Espaciado mínimo entre íconos */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.social-icons a:hover {
+    opacity: 0.7; /* Efecto hover */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column; /* Cambia a columna en pantallas más pequeñas */
+        align-items: center; /* Centra el contenido */
+    }
+}

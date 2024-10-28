@@ -1,0 +1,524 @@
+/* Estilos generales */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif; /* Usar la fuente Poppins */
+}
+
+/* Aplica el estilo de animación solo al logo */
+.logo {
+    width: 300px; /* Aumenta el tamaño del logo */
+    height: auto;
+    transition: transform 0.5s ease-in-out;
+    animation: zoom 3s ease-in-out infinite; /* Animación en bucle */
+}
+
+/* Definición de la animación */
+@keyframes zoom {
+    0%, 100% {
+        transform: scale(1); /* Tamaño original */
+    }
+    50% {
+        transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    }
+}
+
+/* Sección de imágenes */
+.imagenes {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente el logo y eslogan */
+    align-items: center; /* Alinea verticalmente */
+    padding: 20px; /* Espaciado alrededor de las imágenes */
+    background-color: white; /* Fondo blanco */
+}
+
+/* Aplica el layout horizontal en pantallas grandes */
+@media (min-width: 769px) {
+    .imagenes {
+        flex-direction: row; /* Logo a la izquierda y eslogan a la derecha */
+    }
+
+    .imagenes img {
+        margin: 0 20px; /* Espaciado entre logo y eslogan */
+    }
+}
+
+/* Aplica el layout vertical en pantallas pequeñas */
+@media (max-width: 768px) {
+    .imagenes {
+        flex-direction: column; /* Cambia a layout vertical en pantallas pequeñas */
+    }
+
+    .imagenes img {
+        margin: 10px 0; /* Espaciado vertical entre logo y eslogan */
+    }
+}
+
+/* Estilos para el eslogan */
+/* Estilos para el eslogan */
+.eslogan {
+    width: 800px; /* Incrementa el ancho del eslogan */
+    height: auto;
+    font-size: 1.2em; /* Incrementa el tamaño del texto dentro del eslogan si es necesario */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .eslogan {
+        width: 90%; /* Cambia el ancho para adaptarlo a pantallas pequeñas */
+        font-size: 1em; /* Reduce el tamaño del texto */
+        margin: 0 auto; /* Centra el eslogan */
+        display: block; /* Asegúrate de que se muestre correctamente */
+    }
+}
+
+/* Estilo del menú */
+.menu {
+    background-color: #2c2c2c; /* Color de fondo negro */
+    padding: 20px; /* Aumentar el espaciado dentro del menú */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave para el menú */
+}
+
+.menu-container {
+    padding: 15px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: transparent; /* Fondo transparente inicialmente */
+    transition: background-color 0.3s; /* Transición para el color de fondo */
+}
+
+/* Mostrar fondo blanco cuando el menú está activo */
+.menu-container.active {
+    background-color: white; /* Fondo blanco cuando está activo */
+}
+
+/* Menu List */
+.menu-list {
+    list-style-type: none; /* Elimina los puntos de la lista */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Hace que los elementos de la lista estén en fila */
+    justify-content: center; /* Centra los elementos del menú */
+    transition: max-height 0.3s ease-out; /* Transición suave para la altura */
+    overflow: hidden; /* Oculta el contenido que excede el contenedor */
+}
+
+.menu-list li {
+    margin: 0 30px; /* Aumentar el espaciado entre los elementos del menú */
+}
+
+.menu-list a {
+    color: white; /* Color del texto en blanco */
+    text-decoration: none; /* Elimina el subrayado */
+    padding: 15px 25px; /* Aumentar el espaciado interno de los enlaces */
+    border-radius: 4px; /* Bordes redondeados */
+    font-weight: 600; /* Peso de la fuente */
+    font-size: 18px; /* Aumentar el tamaño de la fuente */
+    transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+}
+
+/* Efecto al pasar el ratón sobre los enlaces */
+/* Efecto al pasar el ratón sobre los enlaces */
+.menu-list a:hover {
+    color: rgb(255, 0, 0); /* Cambia el color del texto a rojo */
+    border-radius: 10px; /* Bordes redondeados para el fondo */
+}
+
+
+/* Estilos para el botón de menú (responsivo) */
+.menu-toggle {
+    display: none; /* Ocultar el botón de menú en pantallas grandes */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .imagenes {
+        flex-direction: column; /* Cambia la dirección a columna en pantallas pequeñas */
+        align-items: center; /* Centra las imágenes */
+    }
+
+    .menu-list {
+        flex-direction: column; /* Cambia la dirección a columna en pantallas pequeñas */
+        max-height: 0; /* Oculta el menú inicialmente */
+        transition: max-height 0.3s ease-out; /* Transición suave para la altura */
+    }
+
+    .menu-list li {
+        margin: 10px 0; /* Espaciado vertical entre los elementos del menú */
+    }
+
+    .menu-toggle {
+        display: block; /* Muestra el botón de menú en pantallas pequeñas */
+        text-align: center; /* Centra el botón de menú */
+    }
+
+    .menu-list.active {
+        max-height: 300px; /* Ajusta a la altura necesaria al mostrar el menú */
+    }
+
+    .menu-container.active {
+        background-color: white; /* Cambia el fondo a blanco cuando el menú está activo */
+    }
+
+    .menu-list a {
+        color: #2c2c2c; /* Cambia el color de texto a gris oscuro en el modo responsivo */
+    }
+}
+
+/* Estilo para el botón de alternar */
+.toggle-btn {
+    background-color: transparent; /* Sin fondo */
+    border: none; /* Sin borde */
+    color: white; /* Color del botón en blanco */
+    font-size: 24px; /* Tamaño del texto del botón */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
+
+
+/* Estilo para el título de la galería */
+.gallery-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: rgb(255, 255, 255);
+    font-weight: normal;
+    margin-bottom: 40px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.gallery-title span {
+    font-weight: 600;
+}
+
+.title-container {
+    display: flex;
+    justify-content: center; /* Centra el título */
+    align-items: center; /* Alinea verticalmente */
+    font-family: 'Poppins', sans-serif; /* Fuente */
+    color: #fafafa; /* Color del texto */
+    font-size: 3rem; /* Tamaño del texto */
+    text-align: center; /* Alineación centrada */
+    position: relative; /* Necesario para el efecto de fondo */
+    margin: 50px 0; /* Espaciado superior e inferior */
+}
+
+.dynamic-title {
+    position: relative; /* Necesario para la animación */
+    overflow: hidden; /* Oculta el texto que se está escribiendo */
+    font-weight: bold; /* Texto en negrita para mayor énfasis */
+    opacity: 0; /* Inicialmente invisible */
+    transform: translateY(20px); /* Comienza desplazado hacia abajo */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transición suave */
+}
+
+.dynamic-title.visible {
+    opacity: 1; /* Se vuelve visible */
+    transform: translateY(0); /* Se desplaza a su posición original */
+}
+
+.dynamic-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0) 50%, rgba(255, 0, 0, 0.3));
+    z-index: -1; /* Coloca el fondo detrás del texto */
+    animation: slide 4s ease-in-out infinite; /* Deslizar el fondo */
+    border-radius: 10px; /* Bordes redondeados para suavidad */
+}
+
+@keyframes slide {
+    0% {
+        background-position: 100% 0;
+    }
+    50% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+/* Si deseas ajustar el tamaño para pantallas pequeñas */
+@media (max-width: 768px) {
+    .gallery-title {
+        font-size: 2rem; /* Tamaño más pequeño en pantallas móviles */
+    }
+}
+
+.gallery-section {
+    background-color: black;
+    padding: 40px 0; /* Espaciado más amplio para darle aire */
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas para imágenes más grandes */
+    gap: 30px; /* Aumentar el espaciado entre las imágenes */
+    max-width: 1600px; /* Ajustar el ancho máximo del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+    padding: 40px 20px; /* Espaciado superior e inferior adicional */
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px; /* Bordes redondeados para un toque moderno */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra sutil */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Suaviza el hover */
+    opacity: 0; /* Inicialmente invisible */
+    transform: translateY(20px); /* Comienza desplazado hacia abajo */
+    animation: fadeInUp 0.5s forwards; /* Añadido la animación de entrada */
+}
+
+/* Efecto de entrada hacia arriba */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gallery-item:nth-child(1) { animation-delay: 0.1s; }
+.gallery-item:nth-child(2) { animation-delay: 0.2s; }
+.gallery-item:nth-child(3) { animation-delay: 0.3s; }
+.gallery-item:nth-child(4) { animation-delay: 0.4s; }
+.gallery-item:nth-child(5) { animation-delay: 0.5s; }
+.gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+.gallery-item:hover {
+    transform: translateY(-5px); /* Efecto de "levantamiento" en el hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen para que se vea bien dentro del contenedor */
+    display: block;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Añade una transición para el zoom y brillo */
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05); /* Zoom más sutil */
+    filter: brightness(0.95); /* Ajustar el brillo para un efecto más elegante */
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro más suave */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde translúcido */
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; /* Transición más suave */
+    transform: translateY(100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.gallery-item:hover .overlay {
+    opacity: 1;
+    transform: translateY(0); /* Desliza la superposición desde abajo */
+}
+
+.overlay-content {
+    border: 2px solid white; /* Borde blanco alrededor del contenido */
+    border-radius: 8px; /* Bordes redondeados para un toque moderno */
+    padding: 15px; /* Espaciado para darle más aire */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar el contenido horizontalmente */
+    justify-content: center; /* Centrar el contenido verticalmente */
+    width: 85%; /* Ajustar el ancho del contenido */
+    height: 85%; /* Ajustar el alto para que ocupe casi toda la imagen */
+    margin: auto; /* Asegurar que el contorno esté centrado */
+}
+
+.view-more {
+    background: linear-gradient(to top, #8b0000, #ff4d4d); /* Degradado de rojo sangre a rojo claro */
+    color: white; 
+    border-image-slice: 1; /* Define cómo se aplica el degradado del borde */
+    padding: 18px 36px; /* Tamaño adecuado del botón */
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 10px; /* Bordes redondeados */
+    transition: all 0.3s ease-in-out; /* Suaviza la transición */
+    border-radius: 15px;
+}
+
+.view-more:hover {
+    background: linear-gradient(to top, #a10000, #ff6666); /* Degradado más claro al pasar el mouse */
+    transform: scale(1.05); /* Efecto de zoom en el botón */
+}
+
+.view-more:active {
+    transform: scale(0.98); /* Efecto de "clic" */
+    background: linear-gradient(to top, #ca0404, #fd2a2a); /* Color más claro al presionar */
+}
+
+.name {
+    color: #f5f5f5; /* Blanco más suave para evitar un contraste muy fuerte */
+    font-size: 1.1em; /* Aumenta ligeramente el tamaño del texto */
+    font-family: 'Poppins', sans-serif;
+    margin-top: 5px; /* Pequeño margen para separar el texto del botón */
+    letter-spacing: 0.5px; /* Espaciado entre letras para mejor legibilidad */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas en pantallas pequeñas */
+        gap: 15px; /* Menor espacio entre las imágenes en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: 1fr; /* Una columna en pantallas muy pequeñas */
+        gap: 10px; /* Espaciado más pequeño */
+    }
+}
+
+
+
+
+/* Estilos para la sección "¿Por qué elegir Cooking Gourmet?" */
+.why-choose-us {
+    background-color: #ffffff;
+    padding: 50px 20px;
+    text-align: center;
+    margin-bottom: 50px;
+    opacity: 0; /* Oculta la sección inicialmente */
+    transform: translateY(50px); /* Mueve ligeramente hacia abajo */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Transición suave */
+}
+
+.why-choose-us.show {
+    opacity: 1; /* Aparece cuando se desplaza */
+    transform: translateY(0); /* Vuelve a su posición original */
+}
+
+
+.why-choose-us .image-container {
+    margin: 30px 0;
+}
+
+.why-choose-us img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.why-choose-us h3 {
+    font-size: 28px;
+    color: #ff5a5f; /* Color llamativo */
+    margin-bottom: 20px;
+}
+
+.why-choose-us p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    text-align: justify; /* Justifica los párrafos */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.footer {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    padding: 40px 20px; /* Espaciado interno del footer */
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro con transparencia */
+
+    opacity: 0; /* Oculta el footer inicialmente */
+    transform: translateY(50px); /* Mueve ligeramente hacia abajo */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Transición suave */
+}
+
+.footer.show {
+    opacity: 1; /* Aparece cuando se desplaza */
+    transform: translateY(0); /* Vuelve a su posición original */
+}
+
+.footer-overlay {
+    position: relative;
+    z-index: 2; /* Asegura que el contenido esté por encima del video */
+}
+
+.footer-logo img {
+    max-width: 150px; /* Ajusta el tamaño del logo */
+    margin-bottom: 20px; /* Espacio debajo del logo */
+}
+
+.footer-menu {
+    margin: 20px 0; /* Espacio arriba y abajo del menú */
+}
+
+.footer-menu ul {
+    list-style: none; /* Sin viñetas */
+    padding: 0; /* Sin padding */
+}
+
+.footer-menu li {
+    display: inline; /* Muestra los elementos en línea */
+    margin: 0 15px; /* Espacio entre los elementos del menú */
+}
+
+.footer-menu a {
+    color: white; /* Color blanco para los enlaces */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Negrita para los enlaces */
+}
+
+.footer-menu a:hover {
+    text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+
+.social-media {
+    margin: 20px 0; /* Espacio arriba y abajo de los íconos de redes sociales */
+}
+
+.social-media a {
+    color: white; /* Color blanco para los íconos */
+    font-size: 24px; /* Tamaño de los íconos */
+    margin: 0 10px; /* Espacio entre los íconos */
+}
+
+.footer-copyright {
+    margin-top: 20px; /* Espacio encima del copyright */
+}
+
+.footer-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que el video cubra todo el footer */
+    z-index: 1; /* Envía el video detrás del contenido */
+}
