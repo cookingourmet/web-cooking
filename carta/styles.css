@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(-45deg, #ffccff, #ffb3e6, #ff6666, #ffcc00);
+    background-size: 400% 400%;
+    animation: gradientAnimation 20s ease infinite; /* Animación suave */
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.carta-container {
+    width: 90%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.9); /* Fondo blanco con un poco de transparencia */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-in-out;
+    margin: 20px;
+    text-align: center;
+    max-height: 80vh; /* Limita la altura del contenedor */
+    overflow-y: auto; /* Activa el desplazamiento vertical */
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #ff3366;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+h1:hover {
+    color: #ff6633; /* Cambio de color al pasar el mouse */
+}
+
+p {
+    font-size: 1.4em;
+    line-height: 1.8;
+    text-align: justify;
+    color: #333333;
+    margin-bottom: 25px;
+    font-weight: 300;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    background-color: #ff3366;
+    color: #fff;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #ff6633;
+}
+
+/* Animación de degradado */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Animación de desvanecimiento */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estrellas animadas */
+.background-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background: url('https://www.transparenttextures.com/patterns/tiny-grid.png');
+    animation: starTwinkle 5s infinite;
+    opacity: 0.4;
+}
+
+@keyframes starTwinkle {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5em;
+    }
+
+    p {
+        font-size: 1.2em;
+    }
+
+    .carta-container {
+        width: 90%; /* Más ancho en pantallas más pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    p {
+        font-size: 1.1em;
+    }
+
+    .carta-container {
+        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
+    }
+}
+
+
+.foto-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.foto {
+    width: 100%;
+    max-width: 200px; /* Ajusta el tamaño máximo */
+    height: 200px; /* Asegura que la imagen sea cuadrada */
+    border-radius: 50%; /* Hace la imagen circular */
+    object-fit: cover; /* Asegura que la imagen se ajuste bien */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra suave inicial */
+    border: 5px solid #fff; /* Borde blanco alrededor de la imagen */
+    transition: transform 1s ease, box-shadow 1s ease; /* Transición suave */
+    animation: pulse 2s infinite; /* Inicia la animación del pulso */
+}
+
+/* Animación de pulso */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+}
