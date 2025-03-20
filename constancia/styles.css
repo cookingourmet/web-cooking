@@ -1,0 +1,369 @@
+
+
+.logo-container {
+    display: flex; /* Asegura que los logos estén en fila */
+    justify-content: space-between; /* Coloca un logo a la izquierda y otro a la derecha */
+    align-items: center; /* Alinea los logos verticalmente */
+    margin-bottom: 30px; /* Espaciado entre los logos y la línea */
+}
+
+.logo-left {
+    max-width: 250px; /* Máximo ancho permitido */
+    height: auto; /* Mantiene la proporción */
+    flex-shrink: 0; /* Evita que los logos se encojan */
+}
+
+.logo-right {
+    max-width: 100px; /* Máximo ancho permitido */
+    height: auto; /* Mantiene la proporción */
+    flex-shrink: 0; /* Evita que los logos se encojan */
+}
+
+
+
+#printButton {
+    background-color: #4CAF50; /* Color de fondo verde */
+    border: none; /* Sin bordes */
+    color: white; /* Texto en blanco */
+    padding: 12px 24px; /* Espaciado interno */
+    text-align: center; /* Alineación del texto */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 16px; /* Tamaño de fuente */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor a un puntero */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+    transition: background-color 0.3s ease; /* Efecto de transición */
+  }
+
+  #printButton:hover {
+    background-color: #45a049; /* Color de fondo al pasar el mouse */
+  }
+
+/* Fondo oscuro para el formulario */
+#backgroundOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Oscurecer el fondo */
+    display: none; /* Ocultarlo por defecto */
+    z-index: 999; /* Aparece sobre todo */
+    opacity: 0; /* Invisible inicialmente */
+    transition: opacity 0.3s ease; /* Efecto suave */
+}
+
+/* Estilos del formulario */
+#formContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5); /* Animación inicial */
+    border: 2px solid #ddd;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 15px; /* Bordes redondeados más marcados */
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4); /* Sombra más elegante */
+    z-index: 1000; /* Por encima del fondo oscuro */
+    display: none; /* Oculto por defecto */
+    transition: transform 0.4s ease, opacity 0.4s ease; /* Transiciones más suaves */
+    opacity: 0;
+}
+
+/* Estilo del botón de abrir formulario */
+#openFormButton {
+    background-color: #f3003a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+}
+
+#openFormButton:hover {
+    background-color: #d10032;
+}
+
+/* Transiciones del formulario cuando aparece */
+#formContainer.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* Escala normal */
+}
+
+/* Fondo oscuro activado */
+#backgroundOverlay.active {
+    display: block;
+    opacity: 1; /* Visible */
+}
+
+/* Botón de cerrar dentro del formulario */
+#formContainer .closeButton {
+    background-color: #f3003a;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+/* Entrada de texto del formulario */
+#formContainer input {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #333;
+}
+
+#formContainer input::placeholder {
+    color: #aaa; /* Placeholder con contraste suave */
+}
+
+/* Botones dentro del formulario */
+#formContainer button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#formContainer button:hover {
+    background-color: #45a049;
+}
+
+/* Otros estilos generales de la página */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 210mm;
+    height: 313.2mm;
+    padding: 20mm;
+    margin: auto;
+    border: 1px solid #c0c0c0;
+    position: relative;
+    background: #fff;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container {
+    display: flex; /* Posiciona los logos */
+    justify-content: space-between; /* Coloca un logo a la izquierda y otro a la derecha */
+    align-items: center; /* Alinea verticalmente */
+    margin-bottom: 30px; /* Espaciado entre los logos y la línea */
+}
+
+.header h1 {
+    font-family: 'Old English Text MT', serif;
+    font-size: 80px;
+    text-align: center;
+    margin: 0;
+    font-weight: 300;
+}
+
+.header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    margin: 0;
+}
+
+.content {
+    text-align: justify; /* Justifica el texto */
+    margin-bottom: 30px; /* Espacio entre contenido */
+    font-size: 12pt; /* Tamaño del texto */
+    line-height: 1.8; /* Espaciado entre líneas */
+}
+
+.content p {
+    margin-bottom: 15px; /* Espaciado entre párrafos */
+}
+
+.content h3 {
+    text-align: center; /* Centra el texto */
+    font-size: 27pt; /* Tamaño mayor */
+    margin: 20px 0; /* Espaciado arriba y abajo */
+}
+
+.date-section {
+    text-align: right;
+    margin-right: 20px;
+    font-size: 12pt;
+    margin-bottom: 10px;
+}
+
+
+
+
+
+
+.signature-container {
+    text-align: center; /* Centra el texto */
+    margin-top: 380px; /* Baja más la firma ajustando este valor */
+    margin-bottom: 30px;
+}
+
+.signature-container .signature p {
+    margin: 5px 0; /* Reduce el espacio entre los párrafos */
+    line-height: 1.2; /* Opcional: ajusta el espaciado entre líneas */
+}
+
+
+
+
+.footer-linee {
+    display: flex; /* Coloca los colores en fila */
+    width: 100%; /* Cubre todo el ancho del contenedor */
+    height: 3px; /* Grosor de la línea */
+    margin-top: 10px; /* Espaciado antes de la línea */
+    margin-bottom: 10px; /* Espacio entre la línea y el contenido del footer */
+    position: relative; /* Permite ajustar la posición si es necesario */
+}
+
+.footer-line-red {
+    width: 25%; /* La cuarta parte será roja */
+    background-color: #f3003a; /* Color rojo */
+}
+
+.footer-line-black {
+    width: 75%; /* El resto será negro */
+    background-color: black; /* Color negro */
+    
+}
+
+
+
+
+
+
+
+
+
+
+.footer-line {
+    display: flex; /* Coloca los colores en fila */
+    width: 100%; /* Cubre todo el ancho del contenedor */
+    height: 3px; /* Grosor de la línea */
+    position: relative; /* Permite ajustar la posición si es necesario */
+}
+
+.footer-line-red {
+    width: 25%; /* La cuarta parte será roja */
+    background-color: #f3003a; /* Color rojo */
+}
+
+.footer-line-black {
+    width: 75%; /* El resto será negro */
+    background-color: black; /* Color negro */
+    
+}
+
+
+
+
+
+
+
+
+.footer {
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    align-items: center; /* Centra el contenido horizontalmente */
+    background-color: #ffffff;
+    font-size: 14px;
+    text-align: center; /* Centra el texto por defecto */
+}
+
+.footer .contact {
+    display: flex;
+    justify-content: space-between; /* Espacio entre los bloques */
+    width: 100%; /* Abarca todo el ancho del contenedor */
+    max-width: 800px; /* Limita el ancho máximo */
+}
+
+.footer .contact .left,
+.footer .contact .center,
+.footer .contact .right {
+    flex: 1; /* Asegura que cada bloque ocupe el mismo ancho */
+    text-align: left; /* Alinea texto a la izquierda */
+}
+
+.footer .contact .center {
+    text-align: center; /* Texto centrado */
+}
+
+.footer .contact .right {
+    text-align: right; /* Texto alineado a la derecha */
+}
+
+.footer .website {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+
+
+
+
+
+.footer-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    margin-top: 50px;
+    width: 100%; /* Cubre el ancho completo */
+    height: 40px;
+    background-color: #f3003a; /* Color rojo vibrante */
+    
+}
+
+.footer-bar .website{
+    margin-top: 10px;
+    text-align: center;
+    color: #fff;
+}
+
+
+@media print {
+    body * {
+        visibility: hidden; /* Oculta todo el contenido */
+    }
+    .container, .container * {
+        visibility: visible; /* Muestra únicamente la constancia */
+    }
+    .container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%; /* Asegúrate de que ocupe todo el ancho de la página */
+    }
+
+    #backgroundOverlay {
+        display: none; /* Oculta el fondo oscuro si está activo */
+    }
+}
