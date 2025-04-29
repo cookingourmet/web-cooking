@@ -107,6 +107,7 @@ nav {
 .overlay {
     font-family: 'Poppins', sans-serif;
     position: absolute;
+    margin-top: 15%;
     top: 0;
     left: 0;
     width: 100%;
