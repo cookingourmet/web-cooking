@@ -6,6 +6,10 @@
     <title>Cooking Gourmet</title>
     <link rel="stylesheet" href="css/styles.css">
     
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -131,6 +135,41 @@
   </form>
 </div>
 </div>
+
+
+
+<a href="https://wa.me/51981377382" target="_blank" class="whatsapp-button">
+  <i class="bi bi-whatsapp"></i>
+</a>
+
+
+<!-- Botón flotante -->
+<div id="chat-toggle" class="chat-toggle">
+  💬<span id="chat-alert" class="chat-alert">!</span>
+</div>
+
+<!-- Caja de chat -->
+<div id="chat-box" class="chat-box" style="display: none;">
+  <div class="chat-header">Asistente Virtual - Cuquito</div>
+  <div class="chat-body" id="chat-body"></div>
+  <div class="chat-footer">
+    <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>
+
+<!-- Formulario oculto para enviar datos -->
+<form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
+  <input type="text" name="Nombre">
+  <input type="email" name="Correo">
+  <input type="text" name="Celular">
+  <input type="text" name="Programa de Estudio">
+  <input type="text" name="Mensaje">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
+</form>
+
+
 
 
 <div class="section2">
@@ -305,13 +344,157 @@
 </footer>
 
 <style>
-  select.form-control:focus {
-  border-color: #dc3545; /* rojo (como .btn-danger) */
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* sombra roja */
-  outline: none;
+.whatsapp-button {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background-color: #25d366;
+  color: white;
+  font-size: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  transition: transform 0.3s ease;
 }
 
+.whatsapp-button:hover {
+  transform: scale(1.1);
+  background-color: #1ebc59;
+}
+
+
+
+
+
+
+
+.chat-toggle {
+  position: fixed;
+  bottom: 40px;
+  left: 40px;
+  background: #dc3545;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 28px;
+  text-align: center;
+  line-height: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: transform 0.3s;
+}
+
+.chat-toggle:hover {
+  transform: scale(1.1);
+}
+
+.chat-alert {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: yellow;
+  color: black;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.chat-box {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 300px;
+  max-height: 420px;
+  background: white;
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: #dc3545;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.chat-body {
+  padding: 10px;
+  flex-grow: 1;
+  height: 220px;
+  overflow-y: auto;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-footer {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.chat-footer button {
+  padding: 5px 10px;
+  margin-left: 5px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.bot-message, .user-message {
+  padding: 6px 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  max-width: 90%;
+}
+
+.bot-message {
+  background: #f1f1f1;
+}
+
+.user-message {
+  background: #d1e7dd;
+  align-self: flex-end;
+}
+
+
+
+
 </style>
+
 
 
 <script>
@@ -352,13 +535,127 @@ window.addEventListener("click", (event) => {
 
 
 <script>
+const chatToggle = document.getElementById('chat-toggle');
+const chatBox = document.getElementById('chat-box');
+const chatBody = document.getElementById('chat-body');
+const chatAlert = document.getElementById('chat-alert');
+const input = document.getElementById('user-input');
 
-document.querySelector('.form-toggle').addEventListener('click', function() {
-    const formContainer = document.querySelector('.floating-form');
-    formContainer.classList.toggle('open'); // Alterna la clase 'open'
+let step = 0;
+let formData = {};
+
+const steps = [
+  "¿Podrías dictarme tu nombre?",
+  "¿Cuál es tu correo electrónico?",
+  "¿Cuál es tu número de celular?",
+  "¿Qué programa de estudio te interesa?",
+  "¿Quieres dejar algún mensaje adicional?"
+];
+
+const respuestasPrevias = [
+  "Gracias.",
+  "Perfecto.",
+  "Muy bien.",
+  "Genial.",
+  "✅ ¡Gracias! Pronto nos pondremos en contacto contigo. 😊"
+];
+
+window.addEventListener('load', () => {
+  chatAlert.style.display = 'inline';
 });
 
+chatToggle.addEventListener('click', () => {
+  chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
 
+  if (chatBox.style.display === 'flex' && step === 0) {
+    chatAlert.style.display = 'none';
+    sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cuquito*.");
+    setTimeout(() => {
+      sendBotMessage(steps[0]);
+      step = 1;
+    }, 1000);
+  }
+});
+
+function sendBotMessage(message) {
+  const msg = document.createElement('div');
+  msg.className = 'bot-message';
+  msg.textContent = message;
+  chatBody.appendChild(msg);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function sendUserMessage(message) {
+  const userMsg = document.createElement('div');
+  userMsg.className = 'user-message';
+  userMsg.textContent = message;
+  chatBody.appendChild(userMsg);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function sendTypingThenMessage(respuesta, pregunta, nextStep) {
+  const typing = document.createElement('div');
+  typing.className = 'bot-message';
+  typing.textContent = "Cuquito está escribiendo...";
+  typing.id = "typing-indicator";
+  chatBody.appendChild(typing);
+  chatBody.scrollTop = chatBody.scrollHeight;
+
+  setTimeout(() => {
+    typing.remove();
+    sendBotMessage(respuesta);
+    if (pregunta) {
+      setTimeout(() => {
+        sendBotMessage(pregunta);
+        step = nextStep;
+      }, 500);
+    }
+  }, 4000);
+}
+
+function sendMessage() {
+  const message = input.value.trim();
+  if (!message) return;
+
+  sendUserMessage(message);
+  input.value = '';
+
+  switch (step) {
+    case 1:
+      formData.nombre = message;
+      sendTypingThenMessage(respuestasPrevias[0], steps[1], 2);
+      break;
+    case 2:
+      formData.correo = message;
+      sendTypingThenMessage(respuestasPrevias[1], steps[2], 3);
+      break;
+    case 3:
+      formData.celular = message;
+      sendTypingThenMessage(respuestasPrevias[2], steps[3], 4);
+      break;
+    case 4:
+      formData.programa = message;
+      sendTypingThenMessage(respuestasPrevias[3], steps[4], 5);
+      break;
+    case 5:
+      formData.mensaje = message;
+      sendTypingThenMessage(respuestasPrevias[4], "", 6);
+      setTimeout(() => {
+        enviarFormulario();
+      }, 5000);
+      break;
+  }
+}
+
+function enviarFormulario() {
+  const form = document.getElementById('cuquito-form');
+  form.elements["Nombre"].value = formData.nombre || '';
+  form.elements["Correo"].value = formData.correo || '';
+  form.elements["Celular"].value = formData.celular || '';
+  form.elements["Programa de Estudio"].value = formData.programa || '';
+  form.elements["Mensaje"].value = formData.mensaje || '';
+  form.submit();
+}
 </script>
 
 
