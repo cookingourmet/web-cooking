@@ -106,9 +106,19 @@
         <input type="phone" class="form-control" id="phone" placeholder="Tu celular" name="celular">
       </div>
       <div class="mb-3">
-        <label for="message" class="form-label">Programa de Estudio</label>
-        <input type="text" class="form-control" id="name" placeholder="Programa" name="nombre">
+        <label for="programa" class="form-label">Programa de Estudio</label>
+        <select class="form-control" id="programa" name="programa" required>
+          <option selected disabled>Seleccione un programa</option>
+          <option value="Gastronomía">Gastronomía</option>
+          <option value="Pastelería y Panadería">Pastelería y Panadería</option>
+          <option value="Bar Profesional">Bar Profesional</option>
+          <option value="Sommelier Profesional">Sommelier Profesional</option>
+          <option value="Barismo Profesional">Barismo Profesional</option>
+          <option value="Cocina Acelerada">Cocina Acelerada</option>
+          <option value="Curso personalizado">Curso personalizado</option>
+        </select>
       </div>
+
       <div class="mb-3">
         <label for="message" class="form-label">Mensaje</label>
         <textarea class="form-control" id="message" rows="3" placeholder="Escribe tu mensaje" name="mensaje"></textarea>
@@ -294,6 +304,14 @@
   </div>
 </footer>
 
+<style>
+  select.form-control:focus {
+  border-color: #dc3545; /* rojo (como .btn-danger) */
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* sombra roja */
+  outline: none;
+}
+
+</style>
 
 
 <script>
