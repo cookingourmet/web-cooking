@@ -144,11 +144,11 @@
 
 
 <!-- Botón flotante -->
- <div id="chat-toggle" class="chat-toggle">
+<div id="chat-toggle" class="chat-toggle">
         💬<span id="chat-alert" class="chat-alert">!</span>
     </div>
 
-    <div id="chat-box" class="chat-box" style="display: none;">
+    <div id="chat-box" class="chat-box">
         <div class="chat-header">Asistente Virtual - Cookito</div>
         <div class="chat-body" id="chat-body"></div>
         <div class="chat-footer">
@@ -167,7 +167,6 @@
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
     </form>
-
 
 
 
@@ -379,7 +378,7 @@
 .chat-toggle {
     position: fixed;
     bottom: 40px;
-    left: 40px; /* Mantener a la izquierda como lo tienes */
+    left: 40px;
     background: #dc3545; /* Rojo vibrante */
     color: white;
     width: 60px;
@@ -406,46 +405,72 @@
 /* --- Chat Alert (Notification Bubble) --- */
 .chat-alert {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: -5px;   /* Ajustado para que se superponga en la esquina del padre */
+    right: -5px; /* Ajustado para que se superponga en la esquina del padre */
     background: #ffc107; /* Amarillo de Bootstrap, buena visibilidad */
     color: #343a40; /* Texto oscuro para contraste */
-    width: 22px; /* Un poco más grande */
-    height: 22px;
+    width: 24px;   /* Aumentado a 24px para más espacio */
+    height: 24px;  /* Aumentado a 24px para más espacio */
     border-radius: 50%;
-    font-size: 13px; /* Ajustado para que quepa bien */
+    font-size: 16px; /* Ajustado un poco más grande para mejor centrado óptico */
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1; /* Asegura el centrado vertical del texto */
+    line-height: 1;
     padding: 0;
-    animation: pulse 1s infinite cubic-bezier(0.4, 0, 0.6, 1); /* Animación más natural */
-    border: 1px solid rgba(0, 0, 0, 0.1); /* Borde sutil */
+    box-sizing: border-box; /* Asegura el modelo de caja correcto */
+    /* Eliminado cualquier transform o text-indent estático de aquí */
+    animation: pulse 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Agregado para un mejor efecto visual */
 }
 
+/* --- Animación de pulso con corrección de posición --- */
 @keyframes pulse {
-    0% { transform: scale(0.9); opacity: 0.8; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(0.9); opacity: 0.8; }
+    0% {
+        transform: scale(0.9) translateX(-0.5px); /* Ajusta translateX hasta que el '!' se vea perfectamente centrado */
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1) translateX(-0.5px); /* Mantén el mismo valor de translateX */
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.9) translateX(-0.5px); /* Mantén el mismo valor de translateX */
+        opacity: 0.8;
+    }
 }
+
 
 /* --- Chat Box Container --- */
 .chat-box {
     position: fixed;
-    bottom: 110px; /* Ajustado para dar más espacio entre el botón y la caja */
-    left: 20px; /* Mantener a la izquierda */
-    width: 320px; /* Ancho ligeramente mayor */
-    max-height: 480px; /* Altura máxima para una mejor visualización en pantallas pequeñas */
+    bottom: 110px;
+    left: 20px;
+    width: 320px;
+    max-height: 480px;
     background: white;
-    border-radius: 12px; /* Bordes más suaves */
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.35); /* Sombra más definida */
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
     z-index: 1001;
-    overflow: hidden; /* Importante para el radio de borde */
-    transform-origin: bottom left; /* Punto de origen para futuras animaciones de apertura */
-    transition: all 0.3s ease-out; /* Transición para un posible futuro efecto de aparición */
+    overflow: hidden;
+    transform-origin: bottom left; /* Punto de origen para la escala */
+
+    /* ESTILOS INICIALES PARA LA ANIMACIÓN (cuando está oculto) */
+    opacity: 0; /* Totalmente transparente */
+    transform: scale(0.5); /* Empezará pequeño */
+    pointer-events: none; /* No interactuable cuando está oculto */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Transición suave para ambos */
+}
+
+/* CLASE QUE JS APLICARÁ CUANDO EL CHAT ESTÉ ABIERTO */
+.chat-box.is-open {
+    opacity: 1; /* Totalmente visible */
+    transform: scale(1); /* Tamaño normal */
+    pointer-events: auto; /* Interactuable */
 }
 
 /* --- Chat Header --- */
@@ -545,12 +570,13 @@
 
 /* --- Message Bubbles --- */
 .bot-message, .user-message {
-    padding: 10px 15px; /* Más padding */
-    margin-bottom: 8px; /* Espacio entre burbujas */
-    border-radius: 18px; /* Más redondeado */
-    max-width: 80%; /* Asegura que no ocupen todo el ancho */
-    word-wrap: break-word; /* Para que el texto largo se ajuste */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08); /* Sombra sutil para "profundidad" */
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    position: relative; /* Importante para posicionar el indicador de estado */
 }
 
 .bot-message {
@@ -565,6 +591,23 @@
     color: white;
     align-self: flex-end; /* Alinear a la derecha */
     border-bottom-right-radius: 4px; /* Pequeño ajuste para el "pico" visual */
+    padding-right: 30px; /* Aumenta el padding para hacer espacio al icono de estado */
+}
+
+/* --- Message Status Indicator (Ticks) --- */
+.message-status {
+    font-size: 0.7em; /* Más pequeño que el texto del mensaje */
+    color: #888; /* Gris por defecto (enviado) */
+    position: absolute;
+    bottom: 5px; /* Ajusta la posición vertical */
+    right: 8px; /* Ajusta la posición horizontal */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Transición para el cambio de estado */
+}
+
+/* Estilo para el estado "visto" o "leído" */
+.message-status.seen {
+    color: #34b7f1; /* Azul (similar a WhatsApp) */
+    /* transform: scale(1.1); /* Opcional: efecto al cambiar de estado */
 }
 
 /* --- Typing Indicator --- */
@@ -616,8 +659,6 @@
     transform: translateY(0); /* Vuelve a su posición original al hacer clic */
     background-color: #495057; /* Un poco más oscuro para feedback de click */
 }
-
-
 
 </style>
 
@@ -671,25 +712,22 @@ const chatOptionsContainer = document.getElementById('chat-options');
 
 // Objeto para encapsular la lógica del chatbot
 const CookitoChatbot = {
-    // 'step' ahora representa el índice de la pregunta ACTUAL que Cookito va a hacer
-    // o que ya ha hecho y el usuario debe responder.
     step: 0,
     formData: {},
-    isTyping: false, // Controla si Cookito está "escribiendo"
+    isTyping: false,
 
-    // Definición del flujo de la conversación con preguntas, respuestas y OPCIONES
     chatFlow: [
         {
             id: 1,
-            question: "¿Podrías dictarme tu nombre?",
-            response: "Gracias.",
+            question: "Hola espero que estés muy bien ¿Podrías dictarme tu nombre?",
+            response: "Gracias, [nombre_usuario].",
             type: "text",
-            field: "nombre" // Campo en formData al que corresponde esta respuesta
+            field: "nombre"
         },
         {
             id: 2,
-            question: "¿Cuál es tu correo electrónico?",
-            response: "Perfecto.",
+            question: "¿Podrías brindarme tu correo electrónico?",
+            response: "Perfecto, [nombre_usuario].",
             type: "text",
             field: "correo",
             validate: (email) => CookitoChatbot.isValidEmail(email) ? true : "Por favor, ingresa un correo electrónico válido."
@@ -697,29 +735,30 @@ const CookitoChatbot = {
         {
             id: 3,
             question: "¿Cuál es tu número de celular?",
-            response: "Muy bien.",
+            response: "Muy bien, [nombre_usuario].",
             type: "text",
             field: "celular",
-            validate: (phone) => CookitoChatbot.isValidPhoneNumber(phone) ? true : "Por favor, ingresa un número de celular válido (solo dígitos)."
+            validate: (phone) => CookitoChatbot.isValidPhoneNumber(phone) ? true : "Por favor, ingresa un número de celular válido (solo dígitos y 9 dígitos, empieza con 9)."
         },
         {
             id: 4,
             question: "¿Qué programa de estudio te interesa?",
-            response: "Genial.",
-            type: "options", // Nuevo tipo de paso
+            response: "Genial, [nombre_usuario].",
+            type: "options",
             field: "programa",
             options: [
                 "Gastronomía",
-                "Pastelería y Panadería",
-                "Bar y Coctelería",
-                "Diplomado en Gestión de Restaurantes",
-                "Otro programa"
+                "Pastelería",
+                "Bar Profesional",
+                "Barismo Profesional",
+                "Sommelier",
+                "Otros Programas"
             ]
         },
         {
             id: 5,
             question: "¿Quieres dejar algún mensaje adicional?",
-            response: "✅ ¡Gracias! Pronto nos pondremos en contacto contigo. 😊",
+            response: "✅ ¡Gracias, [nombre_usuario]! Pronto nos pondremos en contacto contigo. 😊",
             type: "text",
             field: "mensaje"
         }
@@ -739,17 +778,28 @@ const CookitoChatbot = {
         });
 
         chatOptionsContainer.addEventListener('click', this.handleOptionClick.bind(this));
+
+        // Asegura que el chatbox sea 'flex' para las transiciones CSS.
+        // La opacidad inicial (0) en CSS lo mantendrá invisible hasta que se abra.
+        chatBox.style.display = 'flex';
     },
 
     handleChatToggle: function() {
-        chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+        // Alterna la clase 'is-open' para las animaciones CSS
+        chatBox.classList.toggle('is-open');
 
-        if (chatBox.style.display === 'flex' && this.step === 0) {
-            chatAlert.style.display = 'none';
+        // Si el chat se acaba de abrir Y es la primera interacción (step 0)
+        if (chatBox.classList.contains('is-open') && this.step === 0) {
+            chatAlert.style.display = 'none'; // Oculta la alerta al abrir el chat por primera vez
             this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
             setTimeout(() => {
                 this.displayNextQuestion(); // Inicia el flujo de preguntas
             }, 1000);
+        } else if (!chatBox.classList.contains('is-open')) {
+            // Si el chat se cierra, asegura que la alerta vuelva a aparecer si el flujo no ha terminado
+            if (this.step < this.chatFlow.length) {
+                chatAlert.style.display = 'inline';
+            }
         }
     },
 
@@ -758,15 +808,23 @@ const CookitoChatbot = {
         msg.className = 'bot-message';
         msg.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
         chatBody.appendChild(msg);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' }); // Scroll suave
     },
 
     sendUserMessage: function(message) {
         const userMsg = document.createElement('div');
         userMsg.className = 'user-message';
         userMsg.textContent = message;
+
+        // Crear el contenedor para los ticks/estado
+        const statusIndicator = document.createElement('span');
+        statusIndicator.className = 'message-status'; // Clase para nuestros ticks
+        statusIndicator.innerHTML = '&#10003;'; // Un solo tick (✓)
+        
+        userMsg.appendChild(statusIndicator); // Añadir el indicador al mensaje del usuario
+
         chatBody.appendChild(userMsg);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' }); // Scroll suave
     },
 
     showTypingIndicator: function() {
@@ -775,7 +833,7 @@ const CookitoChatbot = {
         typing.textContent = "Cookito está escribiendo...";
         typing.id = "typing-indicator";
         chatBody.appendChild(typing);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' }); // Scroll suave
         this.isTyping = true;
     },
 
@@ -785,14 +843,20 @@ const CookitoChatbot = {
             typingIndicator.remove();
         }
         this.isTyping = false;
+
+        // CUANDO EL BOT TERMINA DE ESCRIBIR, ACTUALIZAMOS EL ÚLTIMO MENSAJE DEL USUARIO
+        const lastUserMessage = chatBody.querySelector('.user-message:last-child');
+        if (lastUserMessage) {
+            const statusIndicator = lastUserMessage.querySelector('.message-status');
+            if (statusIndicator) {
+                statusIndicator.innerHTML = '&#10003;&#10003;'; // Doble tick (✓✓)
+                statusIndicator.classList.add('seen'); // Clase para el estilo de "visto" (azul)
+            }
+        }
     },
 
-    // Muestra la pregunta actual definida por 'this.step'
     displayNextQuestion: function() {
-        // Verifica si hemos llegado al final de las preguntas
         if (this.step >= this.chatFlow.length) {
-            // Ya no hay más preguntas, el flujo debería haber terminado o estar en estado de envío.
-            // Esto es una salvaguarda.
             console.log("Fin del flujo de preguntas o ya en estado de finalización.");
             return;
         }
@@ -801,7 +865,7 @@ const CookitoChatbot = {
 
         this.showTypingIndicator();
         this.disableUserInput(true);
-        this.clearOptions(); // Asegura que no queden opciones viejas
+        this.clearOptions();
 
         setTimeout(() => {
             this.removeTypingIndicator();
@@ -809,23 +873,21 @@ const CookitoChatbot = {
 
             if (currentQuestionData.type === "options" && currentQuestionData.options) {
                 this.renderOptions(currentQuestionData.options);
-                // Cuando hay opciones, el input de texto se oculta automáticamente
-                // y el usuario debe elegir una opción.
             } else {
-                this.disableUserInput(false); // Habilita el input si es una pregunta de texto
+                this.disableUserInput(false);
                 userInput.focus();
             }
         }, 1500);
     },
 
-    sendMessage: function(messageFromOption = null) {
+    sendMessage: function(messageFromOption) { // messageFromOption ya no tiene = null
         if (this.isTyping) return;
 
         let message;
-        if (messageFromOption !== null) {
+        // LÓGICA MEJORADA PARA EVITAR [object PointerEvent]
+        if (typeof messageFromOption === 'string' && messageFromOption) {
             message = messageFromOption;
-            // clearOptions se llama más adelante o en renderOptions/displayNextQuestion
-            // para manejar la visibilidad del input/botones.
+            this.clearOptions(); // Si viene de una opción, limpiamos los botones
         } else {
             message = userInput.value.trim();
         }
@@ -835,79 +897,76 @@ const CookitoChatbot = {
         this.sendUserMessage(message);
         userInput.value = '';
 
-        // El paso actual (this.step) es la pregunta que el usuario acaba de responder
         const answeredQuestionIndex = this.step;
         const answeredQuestionData = this.chatFlow[answeredQuestionIndex];
 
-        // Validar la entrada del usuario si el paso actual lo requería
         if (answeredQuestionData && answeredQuestionData.validate) {
             const validationResult = answeredQuestionData.validate(message);
             if (validationResult !== true) {
-                this.sendBotMessage(validationResult); // Muestra el error de validación
-                this.disableUserInput(false); // Re-habilita para que el usuario pueda corregir
+                this.sendBotMessage(validationResult);
+                this.disableUserInput(false);
                 userInput.focus();
-                return; // No avanzamos el step
+                return;
             }
         }
 
-        // Almacena el dato recolectado
         if (answeredQuestionData && answeredQuestionData.field) {
             this.formData[answeredQuestionData.field] = message;
         }
 
-        // Responde al mensaje del usuario (si el paso actual tiene una respuesta definida)
+        // LÓGICA MEJORADA PARA RESPUESTAS PERSONALIZADAS
         if (answeredQuestionData && answeredQuestionData.response) {
-            this.sendBotMessage(answeredQuestionData.response);
+            let botResponse = answeredQuestionData.response;
+            if (this.formData.nombre) {
+                botResponse = botResponse.replace('[nombre_usuario]', this.formData.nombre);
+            } else {
+                botResponse = botResponse.replace(', [nombre_usuario]', '');
+            }
+            this.sendBotMessage(botResponse);
         }
 
-        // Avanza al siguiente paso después de procesar la respuesta
         this.step++;
 
-        // Si ya no quedan más preguntas después de esta respuesta
         if (this.step >= this.chatFlow.length) {
-            this.disableUserInput(true); // Deshabilita el input al finalizar
+            this.disableUserInput(true);
             setTimeout(() => {
-                this.enviarFormularioAsincrono(); // Envía el formulario
+                this.enviarFormularioAsincrono();
             }, 1000);
         } else {
-            // Si hay más preguntas, muestra la siguiente
             setTimeout(() => {
                 this.displayNextQuestion();
             }, 500);
         }
     },
 
-    // --- Funciones de Opciones/Botones ---
     renderOptions: function(options) {
-        chatOptionsContainer.innerHTML = ''; // Limpia cualquier opción previa
+        chatOptionsContainer.innerHTML = '';
         options.forEach(optionText => {
             const button = document.createElement('button');
             button.className = 'chat-option-button';
             button.textContent = optionText;
-            button.dataset.value = optionText; // Para capturar el valor
+            button.dataset.value = optionText;
             chatOptionsContainer.appendChild(button);
         });
-        chatOptionsContainer.style.display = 'flex'; // Muestra el contenedor de opciones
-        userInput.style.display = 'none'; // Oculta el input de texto
-        sendButton.style.display = 'none'; // Oculta el botón de envío si hay opciones
+        chatOptionsContainer.style.display = 'flex';
+        userInput.style.display = 'none';
+        sendButton.style.display = 'none';
     },
 
     clearOptions: function() {
         chatOptionsContainer.innerHTML = '';
         chatOptionsContainer.style.display = 'none';
-        userInput.style.display = 'block'; // Muestra el input de texto
-        sendButton.style.display = 'block'; // Muestra el botón de envío
+        userInput.style.display = 'block';
+        sendButton.style.display = 'block';
     },
 
     handleOptionClick: function(event) {
         if (event.target.classList.contains('chat-option-button')) {
             const selectedValue = event.target.dataset.value;
-            this.clearOptions(); // Oculta las opciones una vez seleccionada una
             this.sendMessage(selectedValue); // Envía la opción como un mensaje del usuario
         }
     },
 
-    // --- Funciones de Utilidad ---
     disableUserInput: function(disable) {
         userInput.disabled = disable;
         sendButton.disabled = disable;
@@ -920,22 +979,18 @@ const CookitoChatbot = {
         }
     },
 
-    // --- Funciones de Validación ---
     isValidEmail: function(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     },
 
     isValidPhoneNumber: function(phone) {
-        const re = /^\d+$/; // Solo dígitos
-        // Asumiendo números de 9 dígitos para Perú
+        const re = /^\d+$/;
         if (phone.length !== 9) return false;
-        // Podrías añadir validación de prefijo, e.g., que empiece con 9 para celulares
         if (!phone.startsWith('9')) return false;
         return re.test(phone);
     },
 
-    // --- Envío del Formulario de forma Asíncrona ---
     enviarFormularioAsincrono: async function() {
         const form = document.getElementById('cuquito-form');
         const url = form.action;
@@ -946,8 +1001,6 @@ const CookitoChatbot = {
             return;
         }
 
-        // Llenar el formulario oculto con los datos recolectados
-        // Asegúrate de que los 'name' en tu HTML coincidan con los 'field' en chatFlow
         form.elements["Nombre"].value = this.formData.nombre || '';
         form.elements["Correo"].value = this.formData.correo || '';
         form.elements["Celular"].value = this.formData.celular || '';
@@ -963,29 +1016,19 @@ const CookitoChatbot = {
             });
 
             if (!response.ok) {
-                // Aquí puedes añadir un manejo más específico si FormSubmit devuelve códigos de error
                 throw new Error(`Error HTTP! Estado: ${response.status}`);
             }
 
-            // Opcional: Si FormSubmit te da una respuesta útil, la puedes leer aquí.
-            // const result = await response.text();
-            // console.log("Formulario enviado con éxito:", result);
-
-            // Deshabilita la entrada de usuario después del envío exitoso
             this.disableUserInput(true);
-            // Podrías mostrar un mensaje de éxito adicional aquí si lo deseas
-            // this.sendBotMessage("¡Datos enviados! Te contactaremos pronto.");
 
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
             this.sendBotMessage("¡Ups! Hubo un problema al enviar tu información. Por favor, intenta de nuevo más tarde o contáctanos directamente.");
-            // Si hay un error, permite al usuario reintentar
             this.disableUserInput(false);
         }
     }
 };
 
-// Inicializa el chatbot cuando el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', () => {
     CookitoChatbot.init();
 });
