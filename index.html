@@ -145,7 +145,7 @@
 
 <!-- Botón flotante -->
 <div id="chat-toggle" class="chat-toggle">
-        💬<span id="chat-alert" class="chat-alert">!</span>
+        💬<img id="chat-alert" class="chat-alert" src="icono.png" alt="Nueva notificación">
     </div>
 
     <div id="chat-box" class="chat-box">
@@ -402,46 +402,47 @@
     transform: scale(1.1) rotate(5deg); /* Efecto más dinámico al pasar el ratón */
 }
 
-/* --- Chat Alert (Notification Bubble) --- */
+/* --- Chat Alert (Notification Image) --- */
 .chat-alert {
-    position: absolute;
-    top: -5px;   /* Ajustado para que se superponga en la esquina del padre */
-    right: -5px; /* Ajustado para que se superponga en la esquina del padre */
-    background: #ffc107; /* Amarillo de Bootstrap, buena visibilidad */
-    color: #343a40; /* Texto oscuro para contraste */
-    width: 24px;   /* Aumentado a 24px para más espacio */
-    height: 24px;  /* Aumentado a 24px para más espacio */
-    border-radius: 50%;
-    font-size: 16px; /* Ajustado un poco más grande para mejor centrado óptico */
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    padding: 0;
-    box-sizing: border-box; /* Asegura el modelo de caja correcto */
-    /* Eliminado cualquier transform o text-indent estático de aquí */
-    animation: pulse 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Agregado para un mejor efecto visual */
+   position: absolute;
+   top: -35px;
+   right: -35px;
+   width: 70px; /* Ajusta el tamaño según tu imagen */
+   height: 70px; /* Ajusta el tamaño según tu imagen */
+   border-radius: 50%; /* Para hacerlo circular si la imagen lo permite o deseas */
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 2px; /* Opcional: si quieres un poco de espacio alrededor de la imagen */
+   box-sizing: border-box;
+   animation: pulse-image 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+   border: 1px solid rgba(255, 255, 255, 0.171);
+   box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
+   overflow: hidden; /* Asegura que la imagen respete el border-radius */
 }
 
-/* --- Animación de pulso con corrección de posición --- */
-@keyframes pulse {
-    0% {
-        transform: scale(0.9) translateX(-0.5px); /* Ajusta translateX hasta que el '!' se vea perfectamente centrado */
-        opacity: 0.8;
-    }
-    50% {
-        transform: scale(1.1) translateX(-0.5px); /* Mantén el mismo valor de translateX */
-        opacity: 1;
-    }
-    100% {
-        transform: scale(0.9) translateX(-0.5px); /* Mantén el mismo valor de translateX */
-        opacity: 0.8;
-    }
+.chat-alert img {
+   display: block; /* Evita espacios extra debajo de la imagen */
+   width: 100%;
+   height: 100%;
+   object-fit: cover; /* Ajusta la imagen al contenedor manteniendo la proporción */
 }
 
+/* --- Animación de pulso para la imagen --- */
+@keyframes pulse-image {
+   0% {
+       transform: scale(0.9);
+       opacity: 0.8;
+   }
+   50% {
+       transform: scale(1.1);
+       opacity: 1;
+   }
+   100% {
+       transform: scale(0.9);
+       opacity: 0.8;
+   }
+}
 
 /* --- Chat Box Container --- */
 .chat-box {
