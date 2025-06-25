@@ -144,30 +144,29 @@
 
 
 <!-- Botón flotante -->
-<div id="chat-toggle" class="chat-toggle">
-  💬<span id="chat-alert" class="chat-alert">!</span>
-</div>
+ <div id="chat-toggle" class="chat-toggle">
+        💬<span id="chat-alert" class="chat-alert">!</span>
+    </div>
 
-<!-- Caja de chat -->
-<div id="chat-box" class="chat-box" style="display: none;">
-  <div class="chat-header">Asistente Virtual - Cuquito</div>
-  <div class="chat-body" id="chat-body"></div>
-  <div class="chat-footer">
-    <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
-    <button onclick="sendMessage()">Enviar</button>
-  </div>
-</div>
+    <div id="chat-box" class="chat-box" style="display: none;">
+        <div class="chat-header">Asistente Virtual - Cookito</div>
+        <div class="chat-body" id="chat-body"></div>
+        <div class="chat-footer">
+            <div id="chat-options" class="chat-options"></div>
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+            <button id="send-button">Enviar</button>
+        </div>
+    </div>
 
-<!-- Formulario oculto para enviar datos -->
-<form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
-  <input type="text" name="Nombre">
-  <input type="email" name="Correo">
-  <input type="text" name="Celular">
-  <input type="text" name="Programa de Estudio">
-  <input type="text" name="Mensaje">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
-</form>
+    <form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
+        <input type="text" name="Nombre">
+        <input type="email" name="Correo">
+        <input type="text" name="Celular">
+        <input type="text" name="Programa de Estudio">
+        <input type="text" name="Mensaje">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
+    </form>
 
 
 
@@ -374,122 +373,249 @@
 
 
 
+
+
+/* --- Chat Toggle Button --- */
 .chat-toggle {
-  position: fixed;
-  bottom: 40px;
-  left: 40px;
-  background: #dc3545;
-  color: white;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  font-size: 28px;
-  text-align: center;
-  line-height: 60px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 1000;
-  transition: transform 0.3s;
+    position: fixed;
+    bottom: 40px;
+    left: 40px; /* Mantener a la izquierda como lo tienes */
+    background: #dc3545; /* Rojo vibrante */
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex; /* Para centrar el contenido */
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Sombra más pronunciada */
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out; /* Transición suave para hover */
+    -webkit-user-select: none; /* Evita selección de texto */
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .chat-toggle:hover {
-  transform: scale(1.1);
+    transform: scale(1.1) rotate(5deg); /* Efecto más dinámico al pasar el ratón */
 }
 
+/* --- Chat Alert (Notification Bubble) --- */
 .chat-alert {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: yellow;
-  color: black;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  padding: 0;
-  animation: pulse 1s infinite;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ffc107; /* Amarillo de Bootstrap, buena visibilidad */
+    color: #343a40; /* Texto oscuro para contraste */
+    width: 22px; /* Un poco más grande */
+    height: 22px;
+    border-radius: 50%;
+    font-size: 13px; /* Ajustado para que quepa bien */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Asegura el centrado vertical del texto */
+    padding: 0;
+    animation: pulse 1s infinite cubic-bezier(0.4, 0, 0.6, 1); /* Animación más natural */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Borde sutil */
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
+    0% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.8; }
 }
 
+/* --- Chat Box Container --- */
 .chat-box {
-  position: fixed;
-  bottom: 90px;
-  left: 20px;
-  width: 300px;
-  max-height: 420px;
-  background: white;
-  border-radius: 10px;
-  display: none;
-  flex-direction: column;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 1001;
-  overflow: hidden;
+    position: fixed;
+    bottom: 110px; /* Ajustado para dar más espacio entre el botón y la caja */
+    left: 20px; /* Mantener a la izquierda */
+    width: 320px; /* Ancho ligeramente mayor */
+    max-height: 480px; /* Altura máxima para una mejor visualización en pantallas pequeñas */
+    background: white;
+    border-radius: 12px; /* Bordes más suaves */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35); /* Sombra más definida */
+    z-index: 1001;
+    overflow: hidden; /* Importante para el radio de borde */
+    transform-origin: bottom left; /* Punto de origen para futuras animaciones de apertura */
+    transition: all 0.3s ease-out; /* Transición para un posible futuro efecto de aparición */
 }
 
+/* --- Chat Header --- */
 .chat-header {
-  background: #dc3545;
-  color: white;
-  padding: 10px;
-  font-weight: bold;
+    background: #dc3545; /* Rojo vibrante */
+    color: white;
+    padding: 12px 15px; /* Un poco más de padding */
+    font-weight: bold;
+    font-size: 16px; /* Tamaño de fuente ligeramente mayor */
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil debajo del header */
 }
 
+/* --- Chat Body (Messages Area) --- */
 .chat-body {
-  padding: 10px;
-  flex-grow: 1;
-  height: 220px;
-  overflow-y: auto;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
+    padding: 15px; /* Más padding para los mensajes */
+    flex-grow: 1;
+    overflow-y: auto; /* Scroll para los mensajes */
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Espacio entre mensajes */
+    background-color: #fcfcfc; /* Fondo blanco casi puro */
+    /* Estilo de scrollbar más limpio para navegadores basados en WebKit */
+    scrollbar-width: thin;
+    scrollbar-color: #dc3545 #f1f1f1;
 }
 
+.chat-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: #dc3545;
+    border-radius: 10px;
+    border: 2px solid #fcfcfc;
+}
+
+
+/* --- Chat Footer (Input and Send Button) --- */
 .chat-footer {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ccc;
+    display: flex;
+    flex-direction: column; /* Permite que las opciones y el input estén en líneas separadas */
+    padding: 10px 15px; /* Padding consistente */
+    border-top: 1px solid #e0e0e0; /* Borde más claro */
+    background-color: #ffffff;
+    gap: 10px; /* Espacio entre el input/botón y las opciones */
 }
 
-.chat-footer input {
-  flex: 1;
-  padding: 5px;
-  font-size: 14px;
+.chat-footer .input-area { /* Contenedor para input y botón de envío */
+    display: flex;
+    width: 100%;
+    gap: 5px; /* Espacio entre input y botón */
+}
+
+.chat-footer input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 25px; /* Más redondeado */
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-footer input[type="text"]:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Sombra de enfoque de color rojo */
 }
 
 .chat-footer button {
-  padding: 5px 10px;
-  margin-left: 5px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  cursor: pointer;
+    padding: 10px 20px; /* Más padding para el botón */
+    background: #dc3545; /* Rojo vibrante */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Más redondeado */
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+.chat-footer button:hover {
+    background: #c82333; /* Rojo más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Ligero levantamiento */
+}
+
+.chat-footer button:disabled {
+    background-color: #e9ecef; /* Gris claro cuando está deshabilitado */
+    color: #6c757d; /* Texto gris oscuro */
+    cursor: not-allowed;
+}
+
+/* --- Message Bubbles --- */
 .bot-message, .user-message {
-  padding: 6px 10px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  max-width: 90%;
+    padding: 10px 15px; /* Más padding */
+    margin-bottom: 8px; /* Espacio entre burbujas */
+    border-radius: 18px; /* Más redondeado */
+    max-width: 80%; /* Asegura que no ocupen todo el ancho */
+    word-wrap: break-word; /* Para que el texto largo se ajuste */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08); /* Sombra sutil para "profundidad" */
 }
 
 .bot-message {
-  background: #f1f1f1;
+    background: #e9ecef; /* Gris claro */
+    color: #212529; /* Texto oscuro */
+    align-self: flex-start; /* Alinear a la izquierda */
+    border-bottom-left-radius: 4px; /* Pequeño ajuste para el "pico" visual */
 }
 
 .user-message {
-  background: #d1e7dd;
-  align-self: flex-end;
+    background: #dc3545; /* Rojo vibrante para mensajes de usuario */
+    color: white;
+    align-self: flex-end; /* Alinear a la derecha */
+    border-bottom-right-radius: 4px; /* Pequeño ajuste para el "pico" visual */
 }
 
+/* --- Typing Indicator --- */
+.typing-indicator {
+    font-style: italic;
+    color: #6c757d; /* Gris más oscuro */
+    animation: typingPulse 1.5s infinite steps(3, start); /* Animación más suave de puntos */
+    align-self: flex-start;
+    padding-left: 10px; /* Alineación con los mensajes del bot */
+}
+
+@keyframes typingPulse {
+    0%, 80%, 100% { opacity: 0.8; }
+    40% { opacity: 0.3; }
+}
+
+
+/* --- Chat Options Container (for buttons/chips) --- */
+.chat-options {
+    width: 100%;
+    display: none; /* Por defecto oculto, JS lo mostrará */
+    flex-wrap: wrap; /* Envuelve los botones si no caben */
+    gap: 8px; /* Espacio entre los botones */
+    margin-bottom: 10px; /* Espacio por debajo de los botones */
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
+}
+
+.chat-option-button {
+    background-color: #6c757d; /* Gris oscuro para las opciones */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px; /* Más padding para los botones */
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0; /* Evita que los botones se encojan en exceso */
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chat-option-button:hover {
+    background-color: #5a6268; /* Gris más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Ligero levantamiento */
+}
+
+.chat-option-button:active {
+    transform: translateY(0); /* Vuelve a su posición original al hacer clic */
+    background-color: #495057; /* Un poco más oscuro para feedback de click */
+}
 
 
 
@@ -539,123 +665,330 @@ const chatToggle = document.getElementById('chat-toggle');
 const chatBox = document.getElementById('chat-box');
 const chatBody = document.getElementById('chat-body');
 const chatAlert = document.getElementById('chat-alert');
-const input = document.getElementById('user-input');
+const userInput = document.getElementById('user-input');
+const sendButton = document.getElementById('send-button');
+const chatOptionsContainer = document.getElementById('chat-options');
 
-let step = 0;
-let formData = {};
+// Objeto para encapsular la lógica del chatbot
+const CookitoChatbot = {
+    // 'step' ahora representa el índice de la pregunta ACTUAL que Cookito va a hacer
+    // o que ya ha hecho y el usuario debe responder.
+    step: 0,
+    formData: {},
+    isTyping: false, // Controla si Cookito está "escribiendo"
 
-const steps = [
-  "¿Podrías dictarme tu nombre?",
-  "¿Cuál es tu correo electrónico?",
-  "¿Cuál es tu número de celular?",
-  "¿Qué programa de estudio te interesa?",
-  "¿Quieres dejar algún mensaje adicional?"
-];
+    // Definición del flujo de la conversación con preguntas, respuestas y OPCIONES
+    chatFlow: [
+        {
+            id: 1,
+            question: "¿Podrías dictarme tu nombre?",
+            response: "Gracias.",
+            type: "text",
+            field: "nombre" // Campo en formData al que corresponde esta respuesta
+        },
+        {
+            id: 2,
+            question: "¿Cuál es tu correo electrónico?",
+            response: "Perfecto.",
+            type: "text",
+            field: "correo",
+            validate: (email) => CookitoChatbot.isValidEmail(email) ? true : "Por favor, ingresa un correo electrónico válido."
+        },
+        {
+            id: 3,
+            question: "¿Cuál es tu número de celular?",
+            response: "Muy bien.",
+            type: "text",
+            field: "celular",
+            validate: (phone) => CookitoChatbot.isValidPhoneNumber(phone) ? true : "Por favor, ingresa un número de celular válido (solo dígitos)."
+        },
+        {
+            id: 4,
+            question: "¿Qué programa de estudio te interesa?",
+            response: "Genial.",
+            type: "options", // Nuevo tipo de paso
+            field: "programa",
+            options: [
+                "Gastronomía",
+                "Pastelería y Panadería",
+                "Bar y Coctelería",
+                "Diplomado en Gestión de Restaurantes",
+                "Otro programa"
+            ]
+        },
+        {
+            id: 5,
+            question: "¿Quieres dejar algún mensaje adicional?",
+            response: "✅ ¡Gracias! Pronto nos pondremos en contacto contigo. 😊",
+            type: "text",
+            field: "mensaje"
+        }
+    ],
 
-const respuestasPrevias = [
-  "Gracias.",
-  "Perfecto.",
-  "Muy bien.",
-  "Genial.",
-  "✅ ¡Gracias! Pronto nos pondremos en contacto contigo. 😊"
-];
+    init: function() {
+        window.addEventListener('load', () => {
+            chatAlert.style.display = 'inline';
+        });
 
-window.addEventListener('load', () => {
-  chatAlert.style.display = 'inline';
-});
+        chatToggle.addEventListener('click', this.handleChatToggle.bind(this));
+        sendButton.addEventListener('click', this.sendMessage.bind(this));
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.sendMessage();
+            }
+        });
 
-chatToggle.addEventListener('click', () => {
-  chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+        chatOptionsContainer.addEventListener('click', this.handleOptionClick.bind(this));
+    },
 
-  if (chatBox.style.display === 'flex' && step === 0) {
-    chatAlert.style.display = 'none';
-    sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cuquito*.");
-    setTimeout(() => {
-      sendBotMessage(steps[0]);
-      step = 1;
-    }, 1000);
-  }
-});
+    handleChatToggle: function() {
+        chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
 
-function sendBotMessage(message) {
-  const msg = document.createElement('div');
-  msg.className = 'bot-message';
-  msg.textContent = message;
-  chatBody.appendChild(msg);
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
+        if (chatBox.style.display === 'flex' && this.step === 0) {
+            chatAlert.style.display = 'none';
+            this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
+            setTimeout(() => {
+                this.displayNextQuestion(); // Inicia el flujo de preguntas
+            }, 1000);
+        }
+    },
 
-function sendUserMessage(message) {
-  const userMsg = document.createElement('div');
-  userMsg.className = 'user-message';
-  userMsg.textContent = message;
-  chatBody.appendChild(userMsg);
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
+    sendBotMessage: function(message) {
+        const msg = document.createElement('div');
+        msg.className = 'bot-message';
+        msg.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    },
 
-function sendTypingThenMessage(respuesta, pregunta, nextStep) {
-  const typing = document.createElement('div');
-  typing.className = 'bot-message';
-  typing.textContent = "Cuquito está escribiendo...";
-  typing.id = "typing-indicator";
-  chatBody.appendChild(typing);
-  chatBody.scrollTop = chatBody.scrollHeight;
+    sendUserMessage: function(message) {
+        const userMsg = document.createElement('div');
+        userMsg.className = 'user-message';
+        userMsg.textContent = message;
+        chatBody.appendChild(userMsg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    },
 
-  setTimeout(() => {
-    typing.remove();
-    sendBotMessage(respuesta);
-    if (pregunta) {
-      setTimeout(() => {
-        sendBotMessage(pregunta);
-        step = nextStep;
-      }, 500);
+    showTypingIndicator: function() {
+        const typing = document.createElement('div');
+        typing.className = 'bot-message typing-indicator';
+        typing.textContent = "Cookito está escribiendo...";
+        typing.id = "typing-indicator";
+        chatBody.appendChild(typing);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        this.isTyping = true;
+    },
+
+    removeTypingIndicator: function() {
+        const typingIndicator = document.getElementById("typing-indicator");
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+        this.isTyping = false;
+    },
+
+    // Muestra la pregunta actual definida por 'this.step'
+    displayNextQuestion: function() {
+        // Verifica si hemos llegado al final de las preguntas
+        if (this.step >= this.chatFlow.length) {
+            // Ya no hay más preguntas, el flujo debería haber terminado o estar en estado de envío.
+            // Esto es una salvaguarda.
+            console.log("Fin del flujo de preguntas o ya en estado de finalización.");
+            return;
+        }
+
+        const currentQuestionData = this.chatFlow[this.step];
+
+        this.showTypingIndicator();
+        this.disableUserInput(true);
+        this.clearOptions(); // Asegura que no queden opciones viejas
+
+        setTimeout(() => {
+            this.removeTypingIndicator();
+            this.sendBotMessage(currentQuestionData.question);
+
+            if (currentQuestionData.type === "options" && currentQuestionData.options) {
+                this.renderOptions(currentQuestionData.options);
+                // Cuando hay opciones, el input de texto se oculta automáticamente
+                // y el usuario debe elegir una opción.
+            } else {
+                this.disableUserInput(false); // Habilita el input si es una pregunta de texto
+                userInput.focus();
+            }
+        }, 1500);
+    },
+
+    sendMessage: function(messageFromOption = null) {
+        if (this.isTyping) return;
+
+        let message;
+        if (messageFromOption !== null) {
+            message = messageFromOption;
+            // clearOptions se llama más adelante o en renderOptions/displayNextQuestion
+            // para manejar la visibilidad del input/botones.
+        } else {
+            message = userInput.value.trim();
+        }
+
+        if (!message) return;
+
+        this.sendUserMessage(message);
+        userInput.value = '';
+
+        // El paso actual (this.step) es la pregunta que el usuario acaba de responder
+        const answeredQuestionIndex = this.step;
+        const answeredQuestionData = this.chatFlow[answeredQuestionIndex];
+
+        // Validar la entrada del usuario si el paso actual lo requería
+        if (answeredQuestionData && answeredQuestionData.validate) {
+            const validationResult = answeredQuestionData.validate(message);
+            if (validationResult !== true) {
+                this.sendBotMessage(validationResult); // Muestra el error de validación
+                this.disableUserInput(false); // Re-habilita para que el usuario pueda corregir
+                userInput.focus();
+                return; // No avanzamos el step
+            }
+        }
+
+        // Almacena el dato recolectado
+        if (answeredQuestionData && answeredQuestionData.field) {
+            this.formData[answeredQuestionData.field] = message;
+        }
+
+        // Responde al mensaje del usuario (si el paso actual tiene una respuesta definida)
+        if (answeredQuestionData && answeredQuestionData.response) {
+            this.sendBotMessage(answeredQuestionData.response);
+        }
+
+        // Avanza al siguiente paso después de procesar la respuesta
+        this.step++;
+
+        // Si ya no quedan más preguntas después de esta respuesta
+        if (this.step >= this.chatFlow.length) {
+            this.disableUserInput(true); // Deshabilita el input al finalizar
+            setTimeout(() => {
+                this.enviarFormularioAsincrono(); // Envía el formulario
+            }, 1000);
+        } else {
+            // Si hay más preguntas, muestra la siguiente
+            setTimeout(() => {
+                this.displayNextQuestion();
+            }, 500);
+        }
+    },
+
+    // --- Funciones de Opciones/Botones ---
+    renderOptions: function(options) {
+        chatOptionsContainer.innerHTML = ''; // Limpia cualquier opción previa
+        options.forEach(optionText => {
+            const button = document.createElement('button');
+            button.className = 'chat-option-button';
+            button.textContent = optionText;
+            button.dataset.value = optionText; // Para capturar el valor
+            chatOptionsContainer.appendChild(button);
+        });
+        chatOptionsContainer.style.display = 'flex'; // Muestra el contenedor de opciones
+        userInput.style.display = 'none'; // Oculta el input de texto
+        sendButton.style.display = 'none'; // Oculta el botón de envío si hay opciones
+    },
+
+    clearOptions: function() {
+        chatOptionsContainer.innerHTML = '';
+        chatOptionsContainer.style.display = 'none';
+        userInput.style.display = 'block'; // Muestra el input de texto
+        sendButton.style.display = 'block'; // Muestra el botón de envío
+    },
+
+    handleOptionClick: function(event) {
+        if (event.target.classList.contains('chat-option-button')) {
+            const selectedValue = event.target.dataset.value;
+            this.clearOptions(); // Oculta las opciones una vez seleccionada una
+            this.sendMessage(selectedValue); // Envía la opción como un mensaje del usuario
+        }
+    },
+
+    // --- Funciones de Utilidad ---
+    disableUserInput: function(disable) {
+        userInput.disabled = disable;
+        sendButton.disabled = disable;
+        if (disable) {
+            userInput.style.cursor = 'not-allowed';
+            sendButton.style.cursor = 'not-allowed';
+        } else {
+            userInput.style.cursor = 'text';
+            sendButton.style.cursor = 'pointer';
+        }
+    },
+
+    // --- Funciones de Validación ---
+    isValidEmail: function(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    },
+
+    isValidPhoneNumber: function(phone) {
+        const re = /^\d+$/; // Solo dígitos
+        // Asumiendo números de 9 dígitos para Perú
+        if (phone.length !== 9) return false;
+        // Podrías añadir validación de prefijo, e.g., que empiece con 9 para celulares
+        if (!phone.startsWith('9')) return false;
+        return re.test(phone);
+    },
+
+    // --- Envío del Formulario de forma Asíncrona ---
+    enviarFormularioAsincrono: async function() {
+        const form = document.getElementById('cuquito-form');
+        const url = form.action;
+
+        if (!url) {
+            this.sendBotMessage("Error: La URL de envío del formulario no está definida. Por favor, contacta a soporte.");
+            console.error("El formulario 'cuquito-form' no tiene una URL de acción (action attribute).");
+            return;
+        }
+
+        // Llenar el formulario oculto con los datos recolectados
+        // Asegúrate de que los 'name' en tu HTML coincidan con los 'field' en chatFlow
+        form.elements["Nombre"].value = this.formData.nombre || '';
+        form.elements["Correo"].value = this.formData.correo || '';
+        form.elements["Celular"].value = this.formData.celular || '';
+        form.elements["Programa de Estudio"].value = this.formData.programa || '';
+        form.elements["Mensaje"].value = this.formData.mensaje || '';
+
+        try {
+            const formDataToSend = new FormData(form);
+
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formDataToSend
+            });
+
+            if (!response.ok) {
+                // Aquí puedes añadir un manejo más específico si FormSubmit devuelve códigos de error
+                throw new Error(`Error HTTP! Estado: ${response.status}`);
+            }
+
+            // Opcional: Si FormSubmit te da una respuesta útil, la puedes leer aquí.
+            // const result = await response.text();
+            // console.log("Formulario enviado con éxito:", result);
+
+            // Deshabilita la entrada de usuario después del envío exitoso
+            this.disableUserInput(true);
+            // Podrías mostrar un mensaje de éxito adicional aquí si lo deseas
+            // this.sendBotMessage("¡Datos enviados! Te contactaremos pronto.");
+
+        } catch (error) {
+            console.error('Error al enviar el formulario:', error);
+            this.sendBotMessage("¡Ups! Hubo un problema al enviar tu información. Por favor, intenta de nuevo más tarde o contáctanos directamente.");
+            // Si hay un error, permite al usuario reintentar
+            this.disableUserInput(false);
+        }
     }
-  }, 4000);
-}
+};
 
-function sendMessage() {
-  const message = input.value.trim();
-  if (!message) return;
-
-  sendUserMessage(message);
-  input.value = '';
-
-  switch (step) {
-    case 1:
-      formData.nombre = message;
-      sendTypingThenMessage(respuestasPrevias[0], steps[1], 2);
-      break;
-    case 2:
-      formData.correo = message;
-      sendTypingThenMessage(respuestasPrevias[1], steps[2], 3);
-      break;
-    case 3:
-      formData.celular = message;
-      sendTypingThenMessage(respuestasPrevias[2], steps[3], 4);
-      break;
-    case 4:
-      formData.programa = message;
-      sendTypingThenMessage(respuestasPrevias[3], steps[4], 5);
-      break;
-    case 5:
-      formData.mensaje = message;
-      sendTypingThenMessage(respuestasPrevias[4], "", 6);
-      setTimeout(() => {
-        enviarFormulario();
-      }, 5000);
-      break;
-  }
-}
-
-function enviarFormulario() {
-  const form = document.getElementById('cuquito-form');
-  form.elements["Nombre"].value = formData.nombre || '';
-  form.elements["Correo"].value = formData.correo || '';
-  form.elements["Celular"].value = formData.celular || '';
-  form.elements["Programa de Estudio"].value = formData.programa || '';
-  form.elements["Mensaje"].value = formData.mensaje || '';
-  form.submit();
-}
+// Inicializa el chatbot cuando el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
+    CookitoChatbot.init();
+});
 </script>
 
 
