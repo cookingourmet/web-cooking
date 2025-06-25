@@ -780,13 +780,15 @@ const userInput = document.getElementById('user-input');
 const sendButton = document.getElementById('send-button');
 const chatOptionsContainer = document.getElementById('chat-options');
 
-// Objeto para encapsular la lógica del chatbot
+const messageSound = new Audio('audio/mensaje.mp3'); 
+
 const CookitoChatbot = {
     step: 0,
     formData: {},
     isTyping: false,
 
     chatFlow: [
+        // ... (Tu chatFlow permanece igual) ...
         {
             id: 1,
             question: "Hola espero que estés muy bien ¿Podrías dictarme tu nombre?",
@@ -837,6 +839,8 @@ const CookitoChatbot = {
     init: function() {
         window.addEventListener('load', () => {
             chatAlert.style.display = 'inline';
+            // Eliminamos la llamada a this.playMessageSound() aquí.
+            // El sonido inicial se gestionará en handleChatToggle.
         });
 
         chatToggle.addEventListener('click', this.handleChatToggle.bind(this));
@@ -853,9 +857,14 @@ const CookitoChatbot = {
     },
 
     handleChatToggle: function() {
+        const wasClosed = !chatBox.classList.contains('is-open'); // Verifica si se estaba cerrado antes del toggle
         chatBox.classList.toggle('is-open');
 
         if (chatBox.classList.contains('is-open') && this.step === 0) {
+            // Solo reproduce el sonido si el chat se acaba de abrir Y es la primera interacción
+            if (wasClosed) { // Asegura que solo suene al ABRIRlo, no al cerrarlo y reabrirlo sin completar el flujo.
+                this.playMessageSound(); 
+            }
             chatAlert.style.display = 'none';
             this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
             setTimeout(() => {
@@ -868,48 +877,54 @@ const CookitoChatbot = {
         }
     },
 
+    playMessageSound: function() {
+        messageSound.currentTime = 0;
+        messageSound.play().catch(e => console.log("Error al reproducir el sonido:", e.message));
+    },
+
     sendBotMessage: function(message) {
+        // El sonido se reproduce cada vez que el bot envía un mensaje (después de la interacción inicial)
+        this.playMessageSound(); 
+
         const msg = document.createElement('div');
         msg.className = 'bot-message';
-        // Crear el icono del bot
         const icon = document.createElement('img');
-        icon.src = 'icono2.png'; // Asegúrate de que esta ruta sea correcta
+        icon.src = 'icono2.png';
         icon.alt = 'Icono del Bot';
         icon.className = 'message-icon';
         
-        // Crear el contenedor de texto para el mensaje
         const textContent = document.createElement('span');
         textContent.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
 
-        msg.appendChild(icon); // Primero el icono
-        msg.appendChild(textContent); // Luego el texto
+        msg.appendChild(icon);
+        msg.appendChild(textContent);
         
         chatBody.appendChild(msg);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
     },
 
+    // ... (El resto de tus funciones como sendUserMessage, showTypingIndicator, etc., permanecen iguales) ...
+
     sendUserMessage: function(message) {
+        // No reproducimos sonido para los mensajes del usuario, solo para los del bot
         const userMsg = document.createElement('div');
         userMsg.className = 'user-message';
         
-        // Crear el contenedor de texto para el mensaje
         const textContent = document.createElement('span');
         textContent.textContent = message;
 
-        // Crear el icono del usuario
         const icon = document.createElement('img');
-        icon.src = 'icono3.png'; // Asegúrate de que esta ruta sea correcta
+        icon.src = 'icono2.png';
         icon.alt = 'Icono del Usuario';
         icon.className = 'message-icon';
 
-        // Crear el indicador de estado (ticks)
         const statusIndicator = document.createElement('span');
         statusIndicator.className = 'message-status';
         statusIndicator.innerHTML = '&#10003;';
         
-        userMsg.appendChild(textContent); // Primero el texto
-        userMsg.appendChild(statusIndicator); // Después el indicador de estado
-        userMsg.appendChild(icon); // Al final el icono del usuario
+        userMsg.appendChild(textContent);
+        userMsg.appendChild(statusIndicator);
+        userMsg.appendChild(icon);
         
         chatBody.appendChild(userMsg);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
@@ -1000,7 +1015,6 @@ const CookitoChatbot = {
             this.formData[answeredQuestionData.field] = message;
         }
 
-        // Lógica de respuesta normal (siempre se ejecuta)
         if (answeredQuestionData && answeredQuestionData.response) {
             let botResponse = answeredQuestionData.response;
             if (this.formData.nombre) {
@@ -1011,9 +1025,8 @@ const CookitoChatbot = {
             this.sendBotMessage(botResponse);
         }
 
-        this.step++; // Siempre avanzamos al siguiente paso
+        this.step++;
 
-        // --- Lógica de envío de PDF y formulario al FINAL del flujo ---
         if (this.step >= this.chatFlow.length) {
             this.disableUserInput(true);
 
@@ -1069,8 +1082,6 @@ const CookitoChatbot = {
 
         const pdfMessage = document.createElement('div');
         pdfMessage.className = 'bot-message';
-        // Aquí también podrías añadir el icono del bot si quieres que el enlace PDF tenga un icono
-        // Pero por simplicidad, lo he dejado como un mensaje de texto normal con enlace.
         pdfMessage.innerHTML = `<a href="${pdfPath}" target="_blank" class="pdf-link">Descargar PDF de ${programName} <i class="bi bi-file-earmark-pdf-fill"></i></a>`;
         chatBody.appendChild(pdfMessage);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
