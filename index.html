@@ -406,10 +406,10 @@
 /* --- Chat Alert (Notification Image) --- */
 .chat-alert {
    position: absolute;
-   top: -35px;
-   right: -35px;
-   width: 70px; /* Ajusta el tamaño según tu imagen */
-   height: 70px; /* Ajusta el tamaño según tu imagen */
+   top: -45px;
+   right: -45px;
+   width: 90px; /* Ajusta el tamaño según tu imagen */
+   height: 90px; /* Ajusta el tamaño según tu imagen */
    border-radius: 50%; /* Para hacerlo circular si la imagen lo permite o deseas */
    display: flex;
    align-items: center;
@@ -717,6 +717,7 @@ const CookitoChatbot = {
     step: 0,
     formData: {},
     isTyping: false,
+    // Eliminamos pdfSentForCurrentStep ya no es necesario aquí
 
     chatFlow: [
         {
@@ -756,6 +757,7 @@ const CookitoChatbot = {
                 "Sommelier",
                 "Otros Programas"
             ]
+            // Eliminamos sendPdf: true de aquí
         },
         {
             id: 5,
@@ -781,24 +783,19 @@ const CookitoChatbot = {
 
         chatOptionsContainer.addEventListener('click', this.handleOptionClick.bind(this));
 
-        // Asegura que el chatbox sea 'flex' para las transiciones CSS.
-        // La opacidad inicial (0) en CSS lo mantendrá invisible hasta que se abra.
         chatBox.style.display = 'flex';
     },
 
     handleChatToggle: function() {
-        // Alterna la clase 'is-open' para las animaciones CSS
         chatBox.classList.toggle('is-open');
 
-        // Si el chat se acaba de abrir Y es la primera interacción (step 0)
         if (chatBox.classList.contains('is-open') && this.step === 0) {
-            chatAlert.style.display = 'none'; // Oculta la alerta al abrir el chat por primera vez
+            chatAlert.style.display = 'none';
             this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
             setTimeout(() => {
-                this.displayNextQuestion(); // Inicia el flujo de preguntas
+                this.displayNextQuestion();
             }, 1000);
         } else if (!chatBox.classList.contains('is-open')) {
-            // Si el chat se cierra, asegura que la alerta vuelva a aparecer si el flujo no ha terminado
             if (this.step < this.chatFlow.length) {
                 chatAlert.style.display = 'inline';
             }
@@ -810,7 +807,7 @@ const CookitoChatbot = {
         msg.className = 'bot-message';
         msg.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
         chatBody.appendChild(msg);
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' }); // Scroll suave
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
     },
 
     sendUserMessage: function(message) {
@@ -818,15 +815,14 @@ const CookitoChatbot = {
         userMsg.className = 'user-message';
         userMsg.textContent = message;
 
-        // Crear el contenedor para los ticks/estado
         const statusIndicator = document.createElement('span');
-        statusIndicator.className = 'message-status'; // Clase para nuestros ticks
-        statusIndicator.innerHTML = '&#10003;'; // Un solo tick (✓)
+        statusIndicator.className = 'message-status';
+        statusIndicator.innerHTML = '&#10003;';
         
-        userMsg.appendChild(statusIndicator); // Añadir el indicador al mensaje del usuario
+        userMsg.appendChild(statusIndicator);
 
         chatBody.appendChild(userMsg);
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' }); // Scroll suave
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
     },
 
     showTypingIndicator: function() {
@@ -835,7 +831,7 @@ const CookitoChatbot = {
         typing.textContent = "Cookito está escribiendo...";
         typing.id = "typing-indicator";
         chatBody.appendChild(typing);
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' }); // Scroll suave
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
         this.isTyping = true;
     },
 
@@ -846,13 +842,12 @@ const CookitoChatbot = {
         }
         this.isTyping = false;
 
-        // CUANDO EL BOT TERMINA DE ESCRIBIR, ACTUALIZAMOS EL ÚLTIMO MENSAJE DEL USUARIO
         const lastUserMessage = chatBody.querySelector('.user-message:last-child');
         if (lastUserMessage) {
             const statusIndicator = lastUserMessage.querySelector('.message-status');
             if (statusIndicator) {
-                statusIndicator.innerHTML = '&#10003;&#10003;'; // Doble tick (✓✓)
-                statusIndicator.classList.add('seen'); // Clase para el estilo de "visto" (azul)
+                statusIndicator.innerHTML = '&#10003;&#10003;';
+                statusIndicator.classList.add('seen');
             }
         }
     },
@@ -882,14 +877,13 @@ const CookitoChatbot = {
         }, 1500);
     },
 
-    sendMessage: function(messageFromOption) { // messageFromOption ya no tiene = null
+    sendMessage: function(messageFromOption) {
         if (this.isTyping) return;
 
         let message;
-        // LÓGICA MEJORADA PARA EVITAR [object PointerEvent]
         if (typeof messageFromOption === 'string' && messageFromOption) {
             message = messageFromOption;
-            this.clearOptions(); // Si viene de una opción, limpiamos los botones
+            this.clearOptions();
         } else {
             message = userInput.value.trim();
         }
@@ -916,7 +910,7 @@ const CookitoChatbot = {
             this.formData[answeredQuestionData.field] = message;
         }
 
-        // LÓGICA MEJORADA PARA RESPUESTAS PERSONALIZADAS
+        // Lógica de respuesta normal (siempre se ejecuta)
         if (answeredQuestionData && answeredQuestionData.response) {
             let botResponse = answeredQuestionData.response;
             if (this.formData.nombre) {
@@ -927,14 +921,29 @@ const CookitoChatbot = {
             this.sendBotMessage(botResponse);
         }
 
-        this.step++;
+        this.step++; // Siempre avanzamos al siguiente paso
 
+        // --- Lógica de envío de PDF y formulario al FINAL del flujo ---
         if (this.step >= this.chatFlow.length) {
-            this.disableUserInput(true);
-            setTimeout(() => {
+            this.disableUserInput(true); // Deshabilita el input mientras se procesa el final
+
+            // Primero, enviamos el mensaje del PDF
+            if (this.formData.programa) { // Solo si se seleccionó un programa
+                this.sendBotMessage("¡Gracias por tu interés! Aquí tienes el PDF del programa que seleccionaste:");
+                // Retraso para que el mensaje anterior sea visible antes del PDF
+                setTimeout(() => {
+                    this.sendPdfLink(this.formData.programa); 
+                    // Retraso adicional para que el PDF sea visible antes de enviar el formulario
+                    setTimeout(() => {
+                        this.enviarFormularioAsincrono();
+                    }, 1500); // Pequeño retraso antes de enviar el formulario
+                }, 1000); // Retraso antes de mostrar el enlace PDF
+            } else {
+                // Si no se seleccionó programa, o hay un error, solo se envía el formulario
                 this.enviarFormularioAsincrono();
-            }, 1000);
+            }
         } else {
+            // Si no es el final del flujo, muestra la siguiente pregunta
             setTimeout(() => {
                 this.displayNextQuestion();
             }, 500);
@@ -965,8 +974,21 @@ const CookitoChatbot = {
     handleOptionClick: function(event) {
         if (event.target.classList.contains('chat-option-button')) {
             const selectedValue = event.target.dataset.value;
-            this.sendMessage(selectedValue); // Envía la opción como un mensaje del usuario
+            this.sendMessage(selectedValue);
         }
+    },
+
+    sendPdfLink: function(programName) {
+        // Normaliza el nombre del programa para que coincida con el nombre del archivo PDF
+        const fileName = programName.replace(/\s+/g, '_').toLowerCase() + '.pdf';
+        const pdfPath = `pdf/${fileName}`; // Ruta a la carpeta 'pdf'
+
+        const pdfMessage = document.createElement('div');
+        pdfMessage.className = 'bot-message';
+        // Usamos innerHTML para permitir etiquetas HTML dentro del mensaje, como <a>
+        pdfMessage.innerHTML = `<a href="${pdfPath}" target="_blank" class="pdf-link">Descargar PDF de ${programName} <i class="bi bi-file-earmark-pdf-fill"></i></a>`;
+        chatBody.appendChild(pdfMessage);
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
     },
 
     disableUserInput: function(disable) {
@@ -1021,12 +1043,16 @@ const CookitoChatbot = {
                 throw new Error(`Error HTTP! Estado: ${response.status}`);
             }
 
+            // Una vez enviado el formulario, podemos considerar el chat como "completado"
+            // y mantener el input deshabilitado, o re-habilitarlo para una nueva conversación.
+            // Por ahora, lo mantenemos deshabilitado.
             this.disableUserInput(true);
+            this.sendBotMessage("¡Listo! Tu información ha sido enviada. Nos pondremos en contacto contigo pronto.");
 
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
             this.sendBotMessage("¡Ups! Hubo un problema al enviar tu información. Por favor, intenta de nuevo más tarde o contáctanos directamente.");
-            this.disableUserInput(false);
+            this.disableUserInput(false); // Re-habilita si falla, para que el usuario pueda reintentar
         }
     }
 };
