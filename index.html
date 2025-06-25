@@ -578,23 +578,66 @@
     max-width: 80%;
     word-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-    position: relative; /* Importante para posicionar el indicador de estado */
+    position: relative; /* Importante para posicionar los iconos */
+    display: flex; /* Para alinear el texto y el icono */
+    align-items: flex-end; /* Alinea los elementos al fondo, si el icono es más bajo que el texto */
+    gap: 8px; /* Espacio entre el icono y el texto */
 }
 
 .bot-message {
-    background: #e9ecef; /* Gris claro */
-    color: #212529; /* Texto oscuro */
-    align-self: flex-start; /* Alinear a la izquierda */
-    border-bottom-left-radius: 4px; /* Pequeño ajuste para el "pico" visual */
+    background: #e9ecef;
+    color: #212529;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    padding-left: 45px; /* Más padding para el icono del bot */
+    flex-direction: row-reverse; /* El icono del bot irá a la izquierda visualmente */
+    text-align: left; /* Alinea el texto a la izquierda */
 }
 
 .user-message {
-    background: #dc3545; /* Rojo vibrante para mensajes de usuario */
+    background: #dc3545;
     color: white;
-    align-self: flex-end; /* Alinear a la derecha */
-    border-bottom-right-radius: 4px; /* Pequeño ajuste para el "pico" visual */
-    padding-right: 30px; /* Aumenta el padding para hacer espacio al icono de estado */
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    padding-right: 45px; /* Más padding para el icono del usuario y el status */
+    /* Ya tienes padding-right: 30px; en tu CSS, lo he aumentado a 45px */
+    flex-direction: row; /* El icono del usuario irá a la derecha visualmente */
+    text-align: right; /* Alinea el texto a la derecha */
 }
+
+
+
+/* --- Estilos para los nuevos iconos en las burbujas de chat --- */
+.message-icon {
+    width: 30px; /* Tamaño del icono */
+    height: 30px;
+    border-radius: 50%; /* Para hacerlos circulares */
+    object-fit: cover; /* Asegura que la imagen cubra el área */
+    position: absolute;
+    bottom: 5px; /* Alineación vertical */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* Sombra sutil para darle profundidad */
+}
+
+
+/* Posición del icono del bot */
+.bot-message .message-icon {
+    left: 5px; /* Al lado izquierdo del mensaje del bot */
+}
+
+/* Posición del icono del usuario */
+.user-message .message-icon {
+    right: 5px; /* Al lado derecho del mensaje del usuario */
+    /* Ajustamos esto para que no colisione con el status-indicator */
+}
+
+/* Ajuste del status-indicator para el mensaje del usuario */
+.user-message .message-status {
+    position: absolute; /* Ya es absoluto */
+    bottom: 5px; /* Mantener la misma altura */
+    right: 8px; /* Era 8px, asegúrate de que no colisione con el icono */
+    /* Si el icono es de 30px y el padding-right es 45px, el status debería quedar bien */
+}
+
 
 /* --- Message Status Indicator (Ticks) --- */
 .message-status {
@@ -662,6 +705,31 @@
     background-color: #495057; /* Un poco más oscuro para feedback de click */
 }
 
+
+
+
+
+
+/* Estilo para el enlace de descarga del PDF */
+.pdf-link {
+    color: #007bff; /* Un color de enlace estándar, puedes ajustarlo */
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espacio entre el texto y el icono */
+}
+
+.pdf-link:hover {
+    text-decoration: underline;
+}
+
+.pdf-link i {
+    font-size: 1.2em; /* Tamaño del icono */
+    color: #dc3545; /* Color del icono, similar al de tu marca */
+}
+
+
 </style>
 
 
@@ -717,7 +785,6 @@ const CookitoChatbot = {
     step: 0,
     formData: {},
     isTyping: false,
-    // Eliminamos pdfSentForCurrentStep ya no es necesario aquí
 
     chatFlow: [
         {
@@ -757,7 +824,6 @@ const CookitoChatbot = {
                 "Sommelier",
                 "Otros Programas"
             ]
-            // Eliminamos sendPdf: true de aquí
         },
         {
             id: 5,
@@ -805,7 +871,19 @@ const CookitoChatbot = {
     sendBotMessage: function(message) {
         const msg = document.createElement('div');
         msg.className = 'bot-message';
-        msg.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+        // Crear el icono del bot
+        const icon = document.createElement('img');
+        icon.src = 'icono2.png'; // Asegúrate de que esta ruta sea correcta
+        icon.alt = 'Icono del Bot';
+        icon.className = 'message-icon';
+        
+        // Crear el contenedor de texto para el mensaje
+        const textContent = document.createElement('span');
+        textContent.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+
+        msg.appendChild(icon); // Primero el icono
+        msg.appendChild(textContent); // Luego el texto
+        
         chatBody.appendChild(msg);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
     },
@@ -813,14 +891,26 @@ const CookitoChatbot = {
     sendUserMessage: function(message) {
         const userMsg = document.createElement('div');
         userMsg.className = 'user-message';
-        userMsg.textContent = message;
+        
+        // Crear el contenedor de texto para el mensaje
+        const textContent = document.createElement('span');
+        textContent.textContent = message;
 
+        // Crear el icono del usuario
+        const icon = document.createElement('img');
+        icon.src = 'icono3.png'; // Asegúrate de que esta ruta sea correcta
+        icon.alt = 'Icono del Usuario';
+        icon.className = 'message-icon';
+
+        // Crear el indicador de estado (ticks)
         const statusIndicator = document.createElement('span');
         statusIndicator.className = 'message-status';
         statusIndicator.innerHTML = '&#10003;';
         
-        userMsg.appendChild(statusIndicator);
-
+        userMsg.appendChild(textContent); // Primero el texto
+        userMsg.appendChild(statusIndicator); // Después el indicador de estado
+        userMsg.appendChild(icon); // Al final el icono del usuario
+        
         chatBody.appendChild(userMsg);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
     },
@@ -925,25 +1015,20 @@ const CookitoChatbot = {
 
         // --- Lógica de envío de PDF y formulario al FINAL del flujo ---
         if (this.step >= this.chatFlow.length) {
-            this.disableUserInput(true); // Deshabilita el input mientras se procesa el final
+            this.disableUserInput(true);
 
-            // Primero, enviamos el mensaje del PDF
-            if (this.formData.programa) { // Solo si se seleccionó un programa
+            if (this.formData.programa) {
                 this.sendBotMessage("¡Gracias por tu interés! Aquí tienes el PDF del programa que seleccionaste:");
-                // Retraso para que el mensaje anterior sea visible antes del PDF
                 setTimeout(() => {
                     this.sendPdfLink(this.formData.programa); 
-                    // Retraso adicional para que el PDF sea visible antes de enviar el formulario
                     setTimeout(() => {
                         this.enviarFormularioAsincrono();
-                    }, 1500); // Pequeño retraso antes de enviar el formulario
-                }, 1000); // Retraso antes de mostrar el enlace PDF
+                    }, 1500);
+                }, 1000);
             } else {
-                // Si no se seleccionó programa, o hay un error, solo se envía el formulario
                 this.enviarFormularioAsincrono();
             }
         } else {
-            // Si no es el final del flujo, muestra la siguiente pregunta
             setTimeout(() => {
                 this.displayNextQuestion();
             }, 500);
@@ -979,13 +1064,13 @@ const CookitoChatbot = {
     },
 
     sendPdfLink: function(programName) {
-        // Normaliza el nombre del programa para que coincida con el nombre del archivo PDF
         const fileName = programName.replace(/\s+/g, '_').toLowerCase() + '.pdf';
-        const pdfPath = `pdf/${fileName}`; // Ruta a la carpeta 'pdf'
+        const pdfPath = `pdf/${fileName}`;
 
         const pdfMessage = document.createElement('div');
         pdfMessage.className = 'bot-message';
-        // Usamos innerHTML para permitir etiquetas HTML dentro del mensaje, como <a>
+        // Aquí también podrías añadir el icono del bot si quieres que el enlace PDF tenga un icono
+        // Pero por simplicidad, lo he dejado como un mensaje de texto normal con enlace.
         pdfMessage.innerHTML = `<a href="${pdfPath}" target="_blank" class="pdf-link">Descargar PDF de ${programName} <i class="bi bi-file-earmark-pdf-fill"></i></a>`;
         chatBody.appendChild(pdfMessage);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
@@ -1043,16 +1128,13 @@ const CookitoChatbot = {
                 throw new Error(`Error HTTP! Estado: ${response.status}`);
             }
 
-            // Una vez enviado el formulario, podemos considerar el chat como "completado"
-            // y mantener el input deshabilitado, o re-habilitarlo para una nueva conversación.
-            // Por ahora, lo mantenemos deshabilitado.
             this.disableUserInput(true);
             this.sendBotMessage("¡Listo! Tu información ha sido enviada. Nos pondremos en contacto contigo pronto.");
 
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
             this.sendBotMessage("¡Ups! Hubo un problema al enviar tu información. Por favor, intenta de nuevo más tarde o contáctanos directamente.");
-            this.disableUserInput(false); // Re-habilita si falla, para que el usuario pueda reintentar
+            this.disableUserInput(false);
         }
     }
 };
