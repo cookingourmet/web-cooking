@@ -1,7 +1,7 @@
 
 nav {
     margin: 20px 40px; /* 20px arriba y abajo, 40px a los lados */
-    background: rgba(255, 255, 255, 0);
+    background: rgba(255, 0, 43, 0.137);
     backdrop-filter: blur(10px);
     border-radius: 10PX;
     font-family: 'Poppins', sans-serif;
@@ -17,7 +17,7 @@ nav {
 }
 
 .navbar-nav .nav-link {
-    color: white; /* Cambia el color del texto de los enlaces */
+    color: rgb(17, 17, 17); /* Cambia el color del texto de los enlaces */
 }
 
 /* Opcional: Si deseas cambiar el color del texto cuando se pasa el mouse */
