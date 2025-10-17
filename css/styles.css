@@ -51,51 +51,42 @@ nav {
 
 
 
-
 .featured-image {
-    position: relative; /* Para superponer el texto */
-    width: 100%; /* Ancho completo */
-    height: 900px; /* Altura fija */
-    overflow: hidden; /* Ocultar desbordes */
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Fondo adaptable */
+    overflow: hidden;
 }
 
 .featured-image img {
-    width: 100%; /* Imagen ocupa todo el ancho */
-    height: 100%; /* Imagen ocupa todo el alto */
-    object-fit: cover; /* Asegura que la imagen se ajuste sin deformarse */
-    transition: transform 8s ease-in-out; /* Suavidad en el zoom */
-    animation: zoomEffect 12s infinite; /* Animación más lenta */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 8s ease-in-out;
+    animation: zoomEffect 12s infinite;
 }
 
 .featured-image .overlay {
-    position: absolute; /* Superposición del texto */
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100%; /* Ancho completo */
-    height: 100%; /* Altura completa */
-    display: flex; /* Centrar contenido */
-    flex-direction: column; /* Texto en columna */
-    justify-content: center; /* Centra verticalmente */
-    align-items: center; /* Centra horizontalmente */
-
-    color: white; /* Texto blanco */
-    text-align: center; /* Centrar texto */
-    z-index: 1; /* Asegura que esté encima de la imagen */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.3); /* opcional, mejora visibilidad del texto */
 }
 
-/* Animación del zoom */
 @keyframes zoomEffect {
-    0% {
-        transform: scale(1); /* Tamaño normal */
-    }
-    50% {
-        transform: scale(1.1); /* Zoom más ligero (10%) */
-    }
-    100% {
-        transform: scale(1); /* Regresa al tamaño original */
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
-
 
 
 
