@@ -1,152 +1,133 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cooking Gourmet</title>
-    
-    <link rel="icon" type="image/png" href="icon.png"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking Gourmet</title>
+  <link rel="stylesheet" href="style.css">
 
-    <link rel="stylesheet" href="css/styles.css">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="icon" type="image/png" href="logo/icon.png"> 
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  
+  
 </head>
-  <body>
 
-    
-
-<div class="container">
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-      <!-- Reemplazamos el texto "Inicio" con una imagen -->
-      <a class="navbar-brand" href="#">
-        <img src="images/logos/logo.png" alt="Logo" style="height: 40px;">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item me-4"> <!-- Se aplica margen a la derecha de cada ítem -->
-            <a class="nav-link" href="#">Eventos</a>
-          </li>
-  
-          <li class="nav-item dropdown me-4"> <!-- Se aplica margen a la derecha -->
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Programas de estudio
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="carreras/gastronomia/gastronomia.html">Gastronomía</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="carreras/pasteleria/pasteleria.html">Pastelería</a></li>
-              <li><a class="dropdown-item" href="#">Bar Profesional</a></li>
-              <li><a class="dropdown-item" href="#">Barismo</a></li>
-              <li><a class="dropdown-item" href="#">Sommelier</a></li>
-            </ul>
-          </li>
-  
-          <li class="nav-item me-4"> <!-- Se aplica margen a la derecha -->
-            <a class="nav-link" href="https://cookingourmet.q10.com/">Aula Virtual</a>
-          </li>
-  
-          <li class="nav-item dropdown me-4"> <!-- Se aplica margen a la derecha -->
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Estudiantes
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Ruta Gastronómica</a></li>
-              <li><a class="dropdown-item" href="#">Blog</a></li>
-            </ul>
-          </li>
-
-          <li class="nav-item me-4"> <!-- Se aplica margen a la derecha -->
-            <a class="nav-link" style="background-color: rgb(248, 6, 58); color: #fff; border-radius: 5px;" href="https://cookingourmet.q10.com/Preinscripcion">INSCRIPCIÓN VIRTUAL</a>
-          </li>
-
-          <li class="nav-item me-4"> <!-- Se aplica margen a la derecha -->
-            <a class="nav-link" style="background-color: rgb(248, 6, 58); color: #fff; border-radius: 5px;" href="https://cookingourmet.q10.com/OfertaLaboral/Crear">BOLSA DE TRABAJO</a>
-          </li>
+<body>
 
 
 
+  <!-- ===== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ===== -->
+<section id="seccion10">
+  <!-- Ventana modal -->
+  <div id="promoOverlay" class="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promoTitle" aria-describedby="promoDesc">
+    <div class="promo-card" role="document">
+      <!-- Lado izquierdo: texto -->
+      <div class="promo-body">
+        <div class="promo-hint">Promoción especial</div>
+        <h2 id="promoTitle" class="promo-title">¡Aprovecha esta promoción!</h2>
+        <p id="promoDesc" class="promo-text">
+          Matricúlate ahora y recibe un descuento de 
+          <span class="promo-amount">S/. 50.00</span>
+          en tu matrícula. Sé parte de <strong>Cooking Gourmet</strong> y da el primer paso hacia tu futuro profesional.
+        </p>
 
-        </ul>
-        <form class="d-flex" role="search">
-          <button class="btn" style="background-color: rgb(248, 6, 58); color: #fff;" type="submit">Buscar</button>
-        </form>
+        <div class="promo-actions">
+          <a id="ctaEnroll" href="https://cookingourmet.q10.com/Preinscripcion" class="btn btn-primary">Matricúlate ahora</a>
+          <button id="closeBtn" class="btn btn-ghost" type="button">Cerrar</button>
+
+          <label class="no-show">
+            <input id="dontShow" type="checkbox" />
+            No mostrar por 7 días
+          </label>
+        </div>
+
+        <p class="small">*Promoción válida para nuevas matrículas. Aplican términos y condiciones.</p>
+      </div>
+
+      <!-- Lado derecho: imagen -->
+      <div class="promo-side" aria-hidden="true">
+        <img src="images/GASTRONOMIA-ALERTA.png" alt="Cocina / clase" />
+        <div class="small">Inscripciones abiertas</div>
       </div>
     </div>
-  </nav>
-  
-
-
-</div>
-
-<div class="section1">
-
-  
-
-  <div class="featured-image">
-  <div class="slider">
-    <img src="images/portada.png" alt="Imagen 1">
-    <img src="images/portada2.png" alt="Imagen 2">
-    <img src="images/portada3.png" alt="Imagen 3">
-    <img src="images/portada4.png" alt="Imagen 4">
-
   </div>
 
+  <div id="miniPromo">
+  <span>🎁 Activa Tu Promo ⭐</span>
+</div>
+
+</section>
+
+
+
+<nav>
+  <div class="logo">
+  <a href="index.html"> <!-- Aquí pones la URL a donde quieres dirigir -->
+    <img src="logo/logo.png" alt="Logo de mi sitio">
+  </a>
 </div>
 
 
+  <div class="menu-toggle" id="menu-toggle">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
 
-
-<div class="floating-form">
-  <form action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST">
-    <h5 class="form-toggle">Escribenos Aqui →</h5> <!-- Añadimos clase para el toggle -->
-    <div class="form-content">
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="name" placeholder="Tu nombre" name="nombre">
+  <div class="menu-items" id="menu-items">
+    <div class="dropdown" id="dropdown">
+      <a href="#" class="dropdown-btn">Programas de Estudio ▾</a>
+      <div class="dropdown-content">
+        <a href="programas/GASTRONOMIA/gastronomia.html">Gastronomía</a>
+        <a href="#">Pastelería</a>
+        <a href="#">Bar Profesional</a>
+        <a href="#">Barismo</a>
+        <a href="#">Sommelier</a>
+        <a href="#">Cocina</a>
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Correo</label>
-        <input type="email" class="form-control" id="email" placeholder="Tu correo" name="correo">
-      </div>
-      <div class="mb-3">
-        <label for="phone" class="form-label">Celular</label>
-        <input type="phone" class="form-control" id="phone" placeholder="Tu celular" name="celular">
-      </div>
-      <div class="mb-3">
-        <label for="programa" class="form-label">Programa de Estudio</label>
-        <select class="form-control" id="programa" name="programa" required>
-          <option selected disabled>Seleccione un programa</option>
-          <option value="Gastronomía">Gastronomía</option>
-          <option value="Pastelería y Panadería">Pastelería y Panadería</option>
-          <option value="Bar Profesional">Bar Profesional</option>
-          <option value="Sommelier Profesional">Sommelier Profesional</option>
-          <option value="Barismo Profesional">Barismo Profesional</option>
-          <option value="Cocina Acelerada">Cocina Acelerada</option>
-          <option value="Curso personalizado">Curso personalizado</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="message" class="form-label">Mensaje</label>
-        <textarea class="form-control" id="message" rows="3" placeholder="Escribe tu mensaje" name="mensaje"></textarea>
-      </div>
-      <button type="submit" class="btn btn-danger w-100">Enviar</button>
-
-      <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
-
     </div>
-  </form>
-</div>
-</div>
+    <a href="#">Eventos</a>
+    <a href="#">Estudiantes</a>
+    <a href="#">Rutas</a>
+    <a href="https://cookingourmet.q10.com/Preinscripcion">Inscripción</a>
+    <a href="https://site3.q10.com/OfertaLaboral/Crear?aplentId=fc29f47b-275b-4cdd-8f45-3fb3cb677900">Bolsa de Trabajo</a>
+    <a href="https://cookingourmet.q10.com/">Aula Virtual</a>
 
+    <!-- Redes sociales a la derecha -->
+    <div class="social-icons ms-3">
+      <a href="https://www.facebook.com/Cooking.Gourmet" target="_blank" class="text-decoration-none text-light me-2">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <a href="https://www.instagram.com/cooking_gourmet" target="_blank" class="text-decoration-none text-light me-2">
+        <i class="bi bi-instagram"></i>
+      </a>
+      <a href="https://www.tiktok.com/@cooking.gourmet.oficial" target="_blank" class="text-decoration-none text-light me-2">
+        <i class="bi bi-tiktok"></i>
+      </a>
+      <a href="https://wa.me/51981377382" target="_blank" class="text-decoration-none text-light">
+        <i class="bi bi-whatsapp"></i>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+
+  <!-- ======== SECCIÓN DE INICIO DE CLASES ======== -->
+<section class="inicio-clases">
+  <div class="contenido">
+    <h2>Inicio de clases</h2>
+    <h1>17 de Noviembre</h1>
+    <div class="botones">
+      <a href="https://cookingourmet.q10.com/Preinscripcion" class="btn btn-principal">Matricularme</a>
+      <a href="https://wa.me/51981377382" class="btn btn-secundario">Más información</a>
+    </div>
+  </div>
+</section>
 
 
 <a href="https://wa.me/51981377382" target="_blank" class="whatsapp-button">
@@ -154,21 +135,161 @@
 </a>
 
 
+  <!-- ======== SLIDER ======== -->
+  <div class="slider" id="slider">
+    <div class="slides">
+      <div class="slide"><img src="slider/slider.png" alt="Imagen 1"></div>
+      <div class="slide"><img src="slider/slider2.png" alt="Imagen 2"></div>
+      <div class="slide"><img src="slider/slider3.png" alt="Imagen 3"></div>
+      <div class="slide"><img src="slider/slider4.png" alt="Imagen 4"></div>
+      <div class="slide"><img src="slider/slider5.png" alt="Imagen 5"></div>
+    </div>
+
+    <button class="slider-btn prev" id="prev">❮</button>
+    <button class="slider-btn next" id="next">❯</button>
+
+    <div class="dots" id="dots"></div>
+  </div>
+
+
+
+
+
+  <section class="seccion-gastronomia">
+  <h2>ÚNICA ESCUELA GASTRONÓMICA EN TODA LA REGIÓN JUNÍN QUE FORMA ALUMNOS DESTACADOS.</h2>
+  <p class="descripcion">
+    Cooking Gourmet, explora y expande tu potencial para convertirte en un verdadero Chef.<br><br>
+    Una experiencia gastronómica única para aquellos que desean perfeccionar sus habilidades culinarias y alcanzar el éxito profesional.
+  </p>
+  <div class="botones">
+    <button>Sedes → </button>
+    <button>Infraestructura → </button>
+    <button>Galardones → </button>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="programas">
+  <h2>Nuestros Programas de Estudio</h2>
+  <div class="carrusel-wrapper">
+    <div class="carrusel">
+      <!-- 🔹 Primera serie -->
+      <div class="programa">
+        <img src="images/gastronomia.png" alt="Gastronomía">
+        <h3>Gastronomía</h3>
+        <p>Forma parte de los mejores chefs del país.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/pasteleria.png" alt="Pastelería">
+        <h3>Pastelería</h3>
+        <p>Aprende las técnicas de repostería profesional.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/barismo.png" alt="Barismo">
+        <h3>Barismo Profesional</h3>
+        <p>Descubre el arte del café y la coctelería moderna.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/sommelier.png" alt="Hotelería">
+        <h3>Sommelier Profesional</h3>
+        <p>Domina el arte del vino y el servicio de excelencia.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/cocina.png" alt="Panadería">
+        <h3>Cocina Acelerada</h3>
+        <p>Perfecciona tus técnicas y crea panes artesanales únicos</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/bar.png" alt="Cocina Internacional">
+        <h3>Bar Profesional</h3>
+        <p>Explora los sabores el mundo de la barra.</p>
+        <button>Ver más</button>
+      </div>
+
+      <!-- 🔁 Segunda serie duplicada (para bucle perfecto) -->
+      <div class="programa">
+        <img src="images/carrusel.png" alt="Gastronomía">
+        <h3>Gastronomía</h3>
+        <p>Forma parte de los mejores chefs del país.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/pasteleria.png" alt="Pastelería">
+        <h3>Pastelería</h3>
+        <p>Aprende las técnicas de repostería profesional.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/carrusel.png" alt="Barismo">
+        <h3>Barismo</h3>
+        <p>Descubre el arte del café y la coctelería moderna.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/bar.png" alt="Hotelería">
+        <h3>Bar Profeional</h3>
+        <p>Explora los sabores el mundo de la barra.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/carrusel.png" alt="Panadería">
+        <h3>Panadería</h3>
+        <p>Domina el arte del pan artesanal y moderno.</p>
+        <button>Ver más</button>
+      </div>
+
+      <div class="programa">
+        <img src="images/cocina.png" alt="Cocina Internacional">
+        <h3>Cocina Acelerada</h3>
+        <p>Perfecciona tus técnicas y crea panes artesanales únicos</p>
+        <button>Ver más</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 <!-- Botón flotante -->
 <div id="chat-toggle" class="chat-toggle">
-        💬<img id="chat-alert" class="chat-alert" src="icono.png" alt="Nueva notificación">
-    </div>
+  💬
+  <div id="chat-alert" class="chat-alert">
+    <img src="icono.png" alt="Alerta">
+  </div>
+</div>
 
-    <div id="chat-box" class="chat-box">
-        <div class="chat-header">Asistente Virtual - Cookito</div>
-        <div class="chat-body" id="chat-body"></div>
-        <div class="chat-footer">
-            <div id="chat-options" class="chat-options"></div>
-            <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
-            <button id="send-button">Enviar</button>
-        </div>
+<!-- Caja del chat -->
+<div id="chat-box" class="chat-box">
+  <div class="chat-header">Cookito 🤖</div>
+  <div id="chat-body" class="chat-body"></div>
+  <div class="chat-footer">
+    <div id="chat-options" class="chat-options"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+      <button id="send-button">Enviar</button>
     </div>
+  </div>
+</div>
 
+<!-- Formulario oculto -->
     <form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
         <input type="text" name="Nombre">
         <input type="email" name="Correo">
@@ -181,91 +302,26 @@
 
 
 
-<div class="section2">
-  <div class="text-container">
-      <p class="main-text">"ÚNICA ESCUELA GASTRONÓMICA EN TODA LA REGIÓN JUNÍN QUE FORMA ALUMNOS DESTACADOS."</p>
-      <p class="sub-text">Cooking Gourmet, explora y expande tu potencial para convertirte en un verdadero Chef.</p>
-      <p class="sub-text">Una experiencia gastronómica única para aquellos que desean perfeccionar sus habilidades culinarias y alcanzar el éxito profesional.</p>
-      <div class="button-container">
-          <button class="btn" data-modal="modal1">Sedes</button>
-          <button class="btn" data-modal="modal2">Infraestructura</button>
-          <button class="btn" data-modal="modal3">Galardones</button>
-      </div>
-  </div>
-</div>
-
-<!-- Modales -->
-<div id="modal1" class="modal">
-  <div class="modal-content">
-    <span class="close" data-close="modal1">&times;</span>
-    <h2>Sedes</h2>
-    <div class="image-grid">
-      <div class="image-item">
-        <p class="image-text">Sede Principal</p>
-        <img src="images/local2.png" alt="Sede Principal">
-      </div>
-      <div class="image-item">
-        <p class="image-text">Sede - El tambo</p>
-        <img src="images/local.png" alt="Sede Alternativa">
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="modal2" class="modal">
-  <div class="modal-content">
-    <span class="close" data-close="modal2">&times;</span>
-    <h2>Infraestructura</h2>
-    <div class="image-grid">
-      <div class="image-item">
-        <p class="image-text">Cocina de Alta Tecnología</p>
-        <img src="images/central.png" alt="Cocina de Alta Tecnología">
-      </div>
-      <div class="image-item">
-        <p class="image-text">Salón de Clases Moderno</p>
-        <img src="images/central.png" alt="Salón de Clases Moderno">
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="modal3" class="modal">
-  <div class="modal-content">
-    <span class="close" data-close="modal3">&times;</span>
-    <h2>Galardones</h2>
-    <div class="image-grid">
-      <div class="image-item">
-        <p class="image-text">Premio Nacional de Gastronomía</p>
-        <img src="images/galardon2.jpg" alt="Premio Nacional de Gastronomía">
-      </div>
-      <div class="image-item">
-        <p class="image-text">Reconocimiento Internacional</p>
-        <img src="images/galardones.png" alt="Reconocimiento Internacional">
-      </div>
-    </div>
-  </div>
-</div>
 
 
-
-<div class="section3">
+    <div class="section3">
   <div class="text-container">
       <h2 class="section-title">Experiencias Cooking Gourmet</h2>
       <p class="section-subtitle">Vive la experiencia de aprender de los mejores y llevar tu pasión por la gastronomía al siguiente nivel.</p>
   </div>
   <div class="experience-container">
       <div class="experience-card">
-          <img src="images/logos/icono1.jpg" alt="Experiencia 1">
+          <img src="images/icono1.jpg" alt="Experiencia 1">
           <h3>Experiencia Gastronómica Internacional</h3>
           <p>Viaje a diferentes destinos culinarios, donde nuestros alumnos exploran nuevas tendencias y técnicas gastronómicas.</p>
       </div>
       <div class="experience-card">
-          <img src="images/logos/icono2.jpg" alt="Experiencia 2">
+          <img src="images/icono2.jpg" alt="Experiencia 2">
           <h3>Cultura Gastronómica Local</h3>
           <p>Conozca y aprenda de la rica tradición culinaria peruana y sus sabores únicos, trabajando directamente con chefs expertos.</p>
       </div>
       <div class="experience-card">
-          <img src="images/logos/icono3.jpg" alt="Experiencia 3">
+          <img src="images/icono3.jpg" alt="Experiencia 3">
           <h3>Creación de Platos Innovadores</h3>
           <p>Enseñamos cómo crear platos innovadores fusionando sabores tradicionales con técnicas modernas.</p>
       </div>
@@ -274,56 +330,125 @@
 
 
 
-<div class="section4">
-  <div class="text-container">
-    <h2 class="section-title">Nuestros programas de estudios</h2>
-    <p class="section-subtitle">Descubre nuestros programas diseñadas para mejorar tu experiencia</p>
-  </div>
-
-  <div class="app-icons-container">
-    <div class="app-icon">
-      <a href="carreras/gastronomia/gastronomia.html">
-        <img src="images/logos/gastronomía.png" alt="Gastronomía">
-      </a>
-      <p class="app-name">Gastronomía</p>
+<section class="razones-section" id="razones">
+  <div class="razones-contenido">
+    <div class="razones-imagen">
+      <img src="images/central.png" alt="Cooking Gourmet">
     </div>
 
-    <div class="app-icon">
-      <a href="carreras/pasteleria/pasteleria.html">
-        <img src="images/logos/pastelería.png" alt="Pastelería">
-      </a>
-      <p class="app-name">Pastelería</p>
-    </div>
-
-    <div class="app-icon">
-      <a href="carreras/bar/index.html">
-        <img src="images/logos/bar.png" alt="Bar">
-      </a>
-      <p class="app-name">Bar</p>
-    </div>
-
-    <div class="app-icon">
-      <a href="carreras/barismo/barismo.html">
-        <img src="images/logos/barismo.png" alt="Barismo">
-      </a>
-      <p class="app-name">Barismo</p>
-    </div>
-
-    <div class="app-icon">
-      <a href="carreras/cocina/cocina.html">
-        <img src="images/logos/cocina.png" alt="Cocina">
-      </a>
-      <p class="app-name">Cocina</p>
-    </div>
-
-    <div class="app-icon">
-      <a href="sommelier.html">
-        <img src="images/logos/sommelier.png" alt="Sommelier">
-      </a>
-      <p class="app-name">Sommelier</p>
+    <div class="razones-texto">
+      <h2>5 razones para elegir <br><span>Cooking Gourmet</span></h2>
+      <p>
+        Descubre por qué somos una institución líder en educación superior. 
+        Ofrecemos excelencia académica, innovación y una experiencia superior única 
+        para formar profesionales que transformen el mundo gastronómico.
+      </p>
     </div>
   </div>
-</div>
+
+  <div class="razones-galeria">
+    <div class="razon-item">
+      <img src="images/icono1.jpg" alt="Razón 1">
+      <button>
+        Excelencia Académica
+        <img src="images/flecha.png" alt="Flecha">
+      </button>
+    </div>
+
+    <div class="razon-item">
+      <img src="images/icono2.jpg" alt="Razón 2">
+      <button>
+        Innovación y Tecnología
+        <img src="images/flecha.png" alt="Flecha">
+      </button>
+    </div>
+
+    <div class="razon-item">
+      <img src="images/icono3.jpg" alt="Razón 3">
+      <button>
+        Docentes de Calidad
+        <img src="images/flecha.png" alt="Flecha">
+      </button>
+    </div>
+
+    <div class="razon-item">
+      <img src="images/icono1.jpg" alt="Razón 4">
+      <button>
+        Infraestructura Moderna
+        <img src="images/flecha.png" alt="Flecha">
+      </button>
+    </div>
+
+    <div class="razon-item">
+      <img src="images/icono2.jpg" alt="Razón 5">
+      <button>
+        Experiencia Internacional
+        <img src="images/flecha.png" alt="Flecha">
+      </button>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- SECCIÓN 7: VIDEO INSTITUCIONAL -->
+<section class="video-section" id="video">
+  <div class="video-container">
+    <video id="videoInstitucional" muted playsinline preload="metadata">
+      <source src="images/video.mp4" type="video/mp4">
+      Tu navegador no soporta el video HTML5.
+    </video>
+
+    <!-- Controles personalizados -->
+    <div class="video-controls">
+      <button id="playPauseBtn" class="control-btn">
+        ▶
+      </button>
+      <input type="range" id="progressBar" value="0" min="0" max="100" step="0.1">
+      <button id="muteBtn" class="control-btn">
+        🔇
+      </button>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- SECCIÓN 8: EVENTOS Y PROGRAMAS ACELERADOS -->
+<section class="eventos-section" id="eventos">
+  <div class="eventos-contenido">
+    <h2>Eventos y <span>Programas Acelerados</span></h2>
+    <p>
+      Vive experiencias únicas en nuestros eventos gastronómicos, talleres intensivos y programas acelerados.
+      Aprende de los mejores chefs y potencia tus habilidades en poco tiempo.
+    </p>
+  </div>
+
+  <div class="eventos-grid">
+    <div class="evento-item">
+      <img src="images/fondant.png" alt="Evento 1">
+      <h3>Fondant Creativo</h3>
+      <p>Aprende de expertos, innova con tus propias creaciones y destaca en competencias culinarias con tu talento repostero. 🧁🔥</p>
+    </div>
+
+    <div class="evento-item">
+      <img src="images/fast-food.png" alt="Evento 2">
+      <h3>Fast Food Gourmet</h3>
+      <p>Descubre cómo llevar tus sabores favoritos al siguiente nivel. ¡Conviértete en un experto en cocina rápida y deliciosa en solo 4 semanas! 🍔✨</p>
+    </div>
+
+    <div class="evento-item">
+      <img src="images/navidad.png" alt="Evento 3">
+      <h3>Taller Cena Navideña</h3>
+      <p>Sorprende esta Navidad con una cena digna de un chef. Aprende técnicas y secretos culinarios con maestros de la gastronomía. 🍗🎄👨‍🍳</p>
+    </div>
+  </div>
+</section>
+
+
+
 
 
 <footer class="section5">
@@ -371,423 +496,203 @@
   </div>
 </footer>
 
-<style>
-.whatsapp-button {
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  background-color: #25d366;
-  color: white;
-  font-size: 30px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  z-index: 9999;
-  transition: transform 0.3s ease;
-}
 
-.whatsapp-button:hover {
-  transform: scale(1.1);
-  background-color: #1ebc59;
-}
-
-
-
-
-
-
-
-
-
-/* --- Chat Toggle Button --- */
-.chat-toggle {
-    position: fixed;
-    bottom: 40px;
-    left: 40px;
-    background: #dc3545; /* Rojo vibrante */
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex; /* Para centrar el contenido */
-    align-items: center; /* Centrado vertical */
-    justify-content: center; /* Centrado horizontal */
-    font-size: 28px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Sombra más pronunciada */
-    z-index: 1000;
-    transition: transform 0.3s ease-in-out; /* Transición suave para hover */
-    -webkit-user-select: none; /* Evita selección de texto */
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.chat-toggle:hover {
-    transform: scale(1.1) rotate(5deg); /* Efecto más dinámico al pasar el ratón */
-}
-
-/* --- Chat Alert (Notification Image) --- */
-.chat-alert {
-   position: absolute;
-   top: -45px;
-   right: -45px;
-   width: 90px; /* Ajusta el tamaño según tu imagen */
-   height: 90px; /* Ajusta el tamaño según tu imagen */
-   border-radius: 50%; /* Para hacerlo circular si la imagen lo permite o deseas */
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   padding: 2px; /* Opcional: si quieres un poco de espacio alrededor de la imagen */
-   box-sizing: border-box;
-   animation: pulse-image 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
-   border: 1px solid rgba(255, 255, 255, 0.171);
-   box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
-   overflow: hidden; /* Asegura que la imagen respete el border-radius */
-}
-
-.chat-alert img {
-   display: block; /* Evita espacios extra debajo de la imagen */
-   width: 100%;
-   height: 100%;
-   object-fit: cover; /* Ajusta la imagen al contenedor manteniendo la proporción */
-}
-
-/* --- Animación de pulso para la imagen --- */
-@keyframes pulse-image {
-   0% {
-       transform: scale(0.9);
-       opacity: 0.8;
-   }
-   50% {
-       transform: scale(1.1);
-       opacity: 1;
-   }
-   100% {
-       transform: scale(0.9);
-       opacity: 0.8;
-   }
-}
-
-/* --- Chat Box Container --- */
-.chat-box {
-    position: fixed;
-    bottom: 110px;
-    left: 20px;
-    width: 320px;
-    max-height: 480px;
-    background: white;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-    z-index: 1001;
-    overflow: hidden;
-    transform-origin: bottom left; /* Punto de origen para la escala */
-
-    /* ESTILOS INICIALES PARA LA ANIMACIÓN (cuando está oculto) */
-    opacity: 0; /* Totalmente transparente */
-    transform: scale(0.5); /* Empezará pequeño */
-    pointer-events: none; /* No interactuable cuando está oculto */
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Transición suave para ambos */
-}
-
-/* CLASE QUE JS APLICARÁ CUANDO EL CHAT ESTÉ ABIERTO */
-.chat-box.is-open {
-    opacity: 1; /* Totalmente visible */
-    transform: scale(1); /* Tamaño normal */
-    pointer-events: auto; /* Interactuable */
-}
-
-/* --- Chat Header --- */
-.chat-header {
-    background: #dc3545; /* Rojo vibrante */
-    color: white;
-    padding: 12px 15px; /* Un poco más de padding */
-    font-weight: bold;
-    font-size: 16px; /* Tamaño de fuente ligeramente mayor */
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil debajo del header */
-}
-
-/* --- Chat Body (Messages Area) --- */
-.chat-body {
-    padding: 15px; /* Más padding para los mensajes */
-    flex-grow: 1;
-    overflow-y: auto; /* Scroll para los mensajes */
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* Espacio entre mensajes */
-    background-color: #fcfcfc; /* Fondo blanco casi puro */
-    /* Estilo de scrollbar más limpio para navegadores basados en WebKit */
-    scrollbar-width: thin;
-    scrollbar-color: #dc3545 #f1f1f1;
-}
-
-.chat-body::-webkit-scrollbar {
-    width: 8px;
-}
-
-.chat-body::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.chat-body::-webkit-scrollbar-thumb {
-    background-color: #dc3545;
-    border-radius: 10px;
-    border: 2px solid #fcfcfc;
-}
-
-
-/* --- Chat Footer (Input and Send Button) --- */
-.chat-footer {
-    display: flex;
-    flex-direction: column; /* Permite que las opciones y el input estén en líneas separadas */
-    padding: 10px 15px; /* Padding consistente */
-    border-top: 1px solid #e0e0e0; /* Borde más claro */
-    background-color: #ffffff;
-    gap: 10px; /* Espacio entre el input/botón y las opciones */
-}
-
-.chat-footer .input-area { /* Contenedor para input y botón de envío */
-    display: flex;
-    width: 100%;
-    gap: 5px; /* Espacio entre input y botón */
-}
-
-.chat-footer input[type="text"] {
-    flex: 1;
-    padding: 10px 15px;
-    font-size: 14px;
-    border: 1px solid #ced4da;
-    border-radius: 25px; /* Más redondeado */
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.chat-footer input[type="text"]:focus {
-    border-color: #dc3545;
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Sombra de enfoque de color rojo */
-}
-
-.chat-footer button {
-    padding: 10px 20px; /* Más padding para el botón */
-    background: #dc3545; /* Rojo vibrante */
-    color: white;
-    border: none;
-    border-radius: 25px; /* Más redondeado */
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.chat-footer button:hover {
-    background: #c82333; /* Rojo más oscuro al pasar el ratón */
-    transform: translateY(-1px); /* Ligero levantamiento */
-}
-
-.chat-footer button:disabled {
-    background-color: #e9ecef; /* Gris claro cuando está deshabilitado */
-    color: #6c757d; /* Texto gris oscuro */
-    cursor: not-allowed;
-}
-
-/* --- Message Bubbles --- */
-.bot-message, .user-message {
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    border-radius: 18px;
-    max-width: 80%;
-    word-wrap: break-word;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-    position: relative; /* Importante para posicionar los iconos */
-    display: flex; /* Para alinear el texto y el icono */
-    align-items: flex-end; /* Alinea los elementos al fondo, si el icono es más bajo que el texto */
-    gap: 8px; /* Espacio entre el icono y el texto */
-}
-
-.bot-message {
-    background: #e9ecef;
-    color: #212529;
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    padding-left: 45px; /* Más padding para el icono del bot */
-    flex-direction: row-reverse; /* El icono del bot irá a la izquierda visualmente */
-    text-align: left; /* Alinea el texto a la izquierda */
-}
-
-.user-message {
-    background: #dc3545;
-    color: white;
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    padding-right: 45px; /* Más padding para el icono del usuario y el status */
-    /* Ya tienes padding-right: 30px; en tu CSS, lo he aumentado a 45px */
-    flex-direction: row; /* El icono del usuario irá a la derecha visualmente */
-    text-align: right; /* Alinea el texto a la derecha */
-}
-
-
-
-/* --- Estilos para los nuevos iconos en las burbujas de chat --- */
-.message-icon {
-    width: 30px; /* Tamaño del icono */
-    height: 30px;
-    border-radius: 50%; /* Para hacerlos circulares */
-    object-fit: cover; /* Asegura que la imagen cubra el área */
-    position: absolute;
-    bottom: 5px; /* Alineación vertical */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* Sombra sutil para darle profundidad */
-}
-
-
-/* Posición del icono del bot */
-.bot-message .message-icon {
-    left: 5px; /* Al lado izquierdo del mensaje del bot */
-}
-
-/* Posición del icono del usuario */
-.user-message .message-icon {
-    right: 5px; /* Al lado derecho del mensaje del usuario */
-    /* Ajustamos esto para que no colisione con el status-indicator */
-}
-
-/* Ajuste del status-indicator para el mensaje del usuario */
-.user-message .message-status {
-    position: absolute; /* Ya es absoluto */
-    bottom: 5px; /* Mantener la misma altura */
-    right: 8px; /* Era 8px, asegúrate de que no colisione con el icono */
-    /* Si el icono es de 30px y el padding-right es 45px, el status debería quedar bien */
-}
-
-
-/* --- Message Status Indicator (Ticks) --- */
-.message-status {
-    font-size: 0.7em; /* Más pequeño que el texto del mensaje */
-    color: #888; /* Gris por defecto (enviado) */
-    position: absolute;
-    bottom: 5px; /* Ajusta la posición vertical */
-    right: 8px; /* Ajusta la posición horizontal */
-    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Transición para el cambio de estado */
-}
-
-/* Estilo para el estado "visto" o "leído" */
-.message-status.seen {
-    color: #34b7f1; /* Azul (similar a WhatsApp) */
-    /* transform: scale(1.1); /* Opcional: efecto al cambiar de estado */
-}
-
-/* --- Typing Indicator --- */
-.typing-indicator {
-    font-style: italic;
-    color: #6c757d; /* Gris más oscuro */
-    animation: typingPulse 1.5s infinite steps(3, start); /* Animación más suave de puntos */
-    align-self: flex-start;
-    padding-left: 10px; /* Alineación con los mensajes del bot */
-}
-
-@keyframes typingPulse {
-    0%, 80%, 100% { opacity: 0.8; }
-    40% { opacity: 0.3; }
-}
-
-
-/* --- Chat Options Container (for buttons/chips) --- */
-.chat-options {
-    width: 100%;
-    display: none; /* Por defecto oculto, JS lo mostrará */
-    flex-wrap: wrap; /* Envuelve los botones si no caben */
-    gap: 8px; /* Espacio entre los botones */
-    margin-bottom: 10px; /* Espacio por debajo de los botones */
-    justify-content: flex-start; /* Alinea los botones a la izquierda */
-}
-
-.chat-option-button {
-    background-color: #6c757d; /* Gris oscuro para las opciones */
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px; /* Más padding para los botones */
-    cursor: pointer;
-    font-size: 13px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    flex-shrink: 0; /* Evita que los botones se encojan en exceso */
-    white-space: nowrap; /* Evita que el texto del botón se rompa */
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.chat-option-button:hover {
-    background-color: #5a6268; /* Gris más oscuro al pasar el ratón */
-    transform: translateY(-1px); /* Ligero levantamiento */
-}
-
-.chat-option-button:active {
-    transform: translateY(0); /* Vuelve a su posición original al hacer clic */
-    background-color: #495057; /* Un poco más oscuro para feedback de click */
-}
-
-
-
-
-
-
-/* Estilo para el enlace de descarga del PDF */
-.pdf-link {
-    color: #007bff; /* Un color de enlace estándar, puedes ajustarlo */
-    text-decoration: none;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px; /* Espacio entre el texto y el icono */
-}
-
-.pdf-link:hover {
-    text-decoration: underline;
-}
-
-.pdf-link i {
-    font-size: 1.2em; /* Tamaño del icono */
-    color: #dc3545; /* Color del icono, similar al de tu marca */
-}
-
-
-</style>
 
 
 
 <script>
-  // Seleccionar todos los botones y modales
-const buttons = document.querySelectorAll(".btn");
+  // ====== SECCIÓN 10: SCRIPT PROMOCIONAL ======
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('promoOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+    const dontShow = document.getElementById('dontShow');
+    const STORAGE_KEY = 'promoModalDoNotShowUntil';
+
+    // Crear el mini botón si no existe
+    let miniPromo = document.getElementById('miniPromo');
+    if (!miniPromo) {
+      miniPromo = document.createElement('div');
+      miniPromo.id = 'miniPromo';
+      miniPromo.innerHTML = '🎓 Activa Tu Promo';
+      document.body.appendChild(miniPromo);
+    }
+
+    // Estilo CSS dinámico del mini botón
+    const style = document.createElement('style');
+    style.textContent = `
+      #miniPromo {
+        position: fixed;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #ff0040;
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 12px 0 0 12px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        z-index: 9999;
+        display: none;
+      }
+      #miniPromo:hover {
+        background-color: #d60036;
+        transform: translateY(-50%) scale(1.05);
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Funciones de almacenamiento local (si las usas luego)
+    const getDoNotShowUntil = () => {
+      const v = localStorage.getItem(STORAGE_KEY);
+      return v ? parseInt(v, 10) : null;
+    };
+
+    const setDoNotShowUntil = days => {
+      const until = Date.now() + days * 24 * 60 * 60 * 1000;
+      localStorage.setItem(STORAGE_KEY, String(until));
+    };
+
+    const shouldShowModal = () => {
+      const until = getDoNotShowUntil();
+      return !until || Date.now() > until;
+    };
+
+    // Mostrar modal
+    const openModal = () => {
+      overlay.style.display = 'flex';
+      miniPromo.style.display = 'none';
+      requestAnimationFrame(() => overlay.classList.add('show'));
+    };
+
+    // Cerrar modal
+    const closeModal = () => {
+      overlay.classList.remove('show');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        miniPromo.style.display = 'flex';
+      }, 280);
+    };
+
+    // Acción al cerrar
+    const handleCloseAction = () => {
+      // if (dontShow.checked) setDoNotShowUntil(7);
+      closeModal();
+    };
+
+    // Eventos
+    closeBtn.addEventListener('click', handleCloseAction);
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) handleCloseAction();
+    });
+
+    // Al hacer clic en el mini botón → reabrir modal
+    miniPromo.addEventListener('click', openModal);
+
+    // Mostrar automáticamente al cargar
+    // if (shouldShowModal()) {
+    setTimeout(openModal, 600);
+    // }
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const video = document.getElementById("videoInstitucional");
+  const playPauseBtn = document.getElementById("playPauseBtn");
+  const muteBtn = document.getElementById("muteBtn");
+  const progressBar = document.getElementById("progressBar");
+
+  if (!video) return;
+
+  // Reproducción automática con scroll (mantiene tu funcionalidad)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.6 });
+  observer.observe(video);
+
+  // --- Controles personalizados ---
+  playPauseBtn.addEventListener("click", () => {
+    if (video.paused) {
+      video.play();
+      playPauseBtn.textContent = "⏸";
+    } else {
+      video.pause();
+      playPauseBtn.textContent = "▶";
+    }
+  });
+
+  muteBtn.addEventListener("click", () => {
+    video.muted = !video.muted;
+    muteBtn.textContent = video.muted ? "🔇" : "🔊";
+  });
+
+  // Actualizar barra de progreso
+  video.addEventListener("timeupdate", () => {
+    const progress = (video.currentTime / video.duration) * 100;
+    progressBar.value = progress;
+  });
+
+  // Permitir saltar con la barra
+  progressBar.addEventListener("input", () => {
+    const newTime = (progressBar.value / 100) * video.duration;
+    video.currentTime = newTime;
+  });
+
+  // Cambiar ícono al iniciar o pausar
+  video.addEventListener("play", () => playPauseBtn.textContent = "⏸");
+  video.addEventListener("pause", () => playPauseBtn.textContent = "▶");
+});
+</script>
+
+
+
+
+<script>
+// ======== SCRIPT DE MODALES (ajustado) ========
+
+// Seleccionar solo los botones que abren modales
+const modalButtons = document.querySelectorAll(".modal-btn");
 const modals = document.querySelectorAll(".modal");
 const closeButtons = document.querySelectorAll(".close");
 
-// Mostrar el modal al hacer clic en un botón
-buttons.forEach((button) => {
+// Mostrar el modal al hacer clic
+modalButtons.forEach((button) => {
     button.addEventListener("click", () => {
         const modalId = button.getAttribute("data-modal");
         const modal = document.getElementById(modalId);
-        modal.style.display = "flex";
+        if (modal) modal.style.display = "flex";
     });
 });
 
-// Cerrar el modal al hacer clic en el botón de cierre
+// Cerrar modal al hacer clic en la "X"
 closeButtons.forEach((close) => {
     close.addEventListener("click", () => {
         const modalId = close.getAttribute("data-close");
         const modal = document.getElementById(modalId);
-        modal.style.display = "none";
+        if (modal) modal.style.display = "none";
     });
 });
 
-// Cerrar el modal al hacer clic fuera del contenido
+// Cerrar modal al hacer clic fuera del contenido
 window.addEventListener("click", (event) => {
     modals.forEach((modal) => {
         if (event.target === modal) {
@@ -795,12 +700,12 @@ window.addEventListener("click", (event) => {
         }
     });
 });
-
 </script>
 
 
-
 <script>
+// ======== CHATBOT COOKITO (ajustado) ========
+
 const chatToggle = document.getElementById('chat-toggle');
 const chatBox = document.getElementById('chat-box');
 const chatBody = document.getElementById('chat-body');
@@ -817,10 +722,9 @@ const CookitoChatbot = {
     isTyping: false,
 
     chatFlow: [
-        // ... (Tu chatFlow permanece igual) ...
         {
             id: 1,
-            question: "Hola espero que estés muy bien ¿Podrías dictarme tu nombre?",
+            question: "Hola espero que estés muy bien 😊 ¿Podrías dictarme tu nombre?",
             response: "Gracias, [nombre_usuario].",
             type: "text",
             field: "nombre"
@@ -839,7 +743,7 @@ const CookitoChatbot = {
             response: "Muy bien, [nombre_usuario].",
             type: "text",
             field: "celular",
-            validate: (phone) => CookitoChatbot.isValidPhoneNumber(phone) ? true : "Por favor, ingresa un número de celular válido (solo dígitos y 9 dígitos, empieza con 9)."
+            validate: (phone) => CookitoChatbot.isValidPhoneNumber(phone) ? true : "Por favor, ingresa un número de celular válido (9 dígitos y empieza con 9)."
         },
         {
             id: 4,
@@ -868,223 +772,169 @@ const CookitoChatbot = {
     init: function() {
         window.addEventListener('load', () => {
             chatAlert.style.display = 'inline';
-            // Eliminamos la llamada a this.playMessageSound() aquí.
-            // El sonido inicial se gestionará en handleChatToggle.
         });
 
         chatToggle.addEventListener('click', this.handleChatToggle.bind(this));
         sendButton.addEventListener('click', this.sendMessage.bind(this));
         userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.sendMessage();
-            }
+            if (e.key === 'Enter') this.sendMessage();
         });
 
         chatOptionsContainer.addEventListener('click', this.handleOptionClick.bind(this));
 
-        chatBox.style.display = 'flex';
+        // Chat oculto por defecto
+        chatBox.style.display = 'none';
     },
 
     handleChatToggle: function() {
-        const wasClosed = !chatBox.classList.contains('is-open'); // Verifica si se estaba cerrado antes del toggle
+        const isOpen = chatBox.classList.contains('is-open');
         chatBox.classList.toggle('is-open');
 
-        if (chatBox.classList.contains('is-open') && this.step === 0) {
-            // Solo reproduce el sonido si el chat se acaba de abrir Y es la primera interacción
-            if (wasClosed) { // Asegura que solo suene al ABRIRlo, no al cerrarlo y reabrirlo sin completar el flujo.
+        if (!isOpen) {
+            chatBox.style.display = 'flex';
+            if (this.step === 0) {
                 this.playMessageSound(); 
+                chatAlert.style.display = 'none';
+                this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
+                setTimeout(() => this.displayNextQuestion(), 1000);
             }
-            chatAlert.style.display = 'none';
-            this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
-            setTimeout(() => {
-                this.displayNextQuestion();
-            }, 1000);
-        } else if (!chatBox.classList.contains('is-open')) {
-            if (this.step < this.chatFlow.length) {
-                chatAlert.style.display = 'inline';
-            }
+        } else {
+            chatBox.style.display = 'none';
+            if (this.step < this.chatFlow.length) chatAlert.style.display = 'inline';
         }
     },
 
     playMessageSound: function() {
         messageSound.currentTime = 0;
-        messageSound.play().catch(e => console.log("Error al reproducir el sonido:", e.message));
+        messageSound.play().catch(e => console.log("Error al reproducir sonido:", e.message));
     },
 
     sendBotMessage: function(message) {
-        // El sonido se reproduce cada vez que el bot envía un mensaje (después de la interacción inicial)
-        this.playMessageSound(); 
-
+        this.playMessageSound();
         const msg = document.createElement('div');
         msg.className = 'bot-message';
-        const icon = document.createElement('img');
-        icon.src = 'icono2.png';
-        icon.alt = 'Icono del Bot';
-        icon.className = 'message-icon';
-        
-        const textContent = document.createElement('span');
-        textContent.innerHTML = message.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
-
-        msg.appendChild(icon);
-        msg.appendChild(textContent);
-        
+        msg.innerHTML = `
+            <img src="icono2.png" alt="Bot" class="message-icon">
+            <span>${message.replace(/\*(.*?)\*/g, '<strong>$1</strong>')}</span>
+        `;
         chatBody.appendChild(msg);
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        setTimeout(() => {
+            chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
     },
 
-    // ... (El resto de tus funciones como sendUserMessage, showTypingIndicator, etc., permanecen iguales) ...
-
     sendUserMessage: function(message) {
-        // No reproducimos sonido para los mensajes del usuario, solo para los del bot
         const userMsg = document.createElement('div');
         userMsg.className = 'user-message';
-        
-        const textContent = document.createElement('span');
-        textContent.textContent = message;
-
-        const icon = document.createElement('img');
-        icon.src = 'icono3.png';
-        icon.alt = 'Icono del Usuario';
-        icon.className = 'message-icon';
-
-        const statusIndicator = document.createElement('span');
-        statusIndicator.className = 'message-status';
-        statusIndicator.innerHTML = '&#10003;';
-        
-        userMsg.appendChild(textContent);
-        userMsg.appendChild(statusIndicator);
-        userMsg.appendChild(icon);
-        
+        userMsg.innerHTML = `
+            <span>${message}</span>
+            <span class="message-status">&#10003;</span>
+            <img src="icono3.png" alt="Usuario" class="message-icon">
+        `;
         chatBody.appendChild(userMsg);
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        setTimeout(() => {
+            chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
     },
 
     showTypingIndicator: function() {
         const typing = document.createElement('div');
         typing.className = 'bot-message typing-indicator';
+        typing.id = 'typing-indicator';
         typing.textContent = "Cookito está escribiendo...";
-        typing.id = "typing-indicator";
         chatBody.appendChild(typing);
         chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
         this.isTyping = true;
     },
 
     removeTypingIndicator: function() {
-        const typingIndicator = document.getElementById("typing-indicator");
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) typingIndicator.remove();
         this.isTyping = false;
 
         const lastUserMessage = chatBody.querySelector('.user-message:last-child');
         if (lastUserMessage) {
-            const statusIndicator = lastUserMessage.querySelector('.message-status');
-            if (statusIndicator) {
-                statusIndicator.innerHTML = '&#10003;&#10003;';
-                statusIndicator.classList.add('seen');
+            const status = lastUserMessage.querySelector('.message-status');
+            if (status) {
+                status.innerHTML = '&#10003;&#10003;';
+                status.classList.add('seen');
             }
         }
     },
 
     displayNextQuestion: function() {
-        if (this.step >= this.chatFlow.length) {
-            console.log("Fin del flujo de preguntas o ya en estado de finalización.");
-            return;
-        }
+        if (this.step >= this.chatFlow.length) return;
 
-        const currentQuestionData = this.chatFlow[this.step];
-
+        const q = this.chatFlow[this.step];
         this.showTypingIndicator();
         this.disableUserInput(true);
         this.clearOptions();
 
         setTimeout(() => {
             this.removeTypingIndicator();
-            this.sendBotMessage(currentQuestionData.question);
-
-            if (currentQuestionData.type === "options" && currentQuestionData.options) {
-                this.renderOptions(currentQuestionData.options);
+            this.sendBotMessage(q.question);
+            if (q.type === "options") {
+                this.renderOptions(q.options);
             } else {
                 this.disableUserInput(false);
                 userInput.focus();
             }
-        }, 1500);
+        }, 1200);
     },
 
-    sendMessage: function(messageFromOption) {
+    sendMessage: function(optionMsg) {
         if (this.isTyping) return;
 
-        let message;
-        if (typeof messageFromOption === 'string' && messageFromOption) {
-            message = messageFromOption;
-            this.clearOptions();
-        } else {
-            message = userInput.value.trim();
-        }
-
+        let message = typeof optionMsg === 'string' ? optionMsg : userInput.value.trim();
         if (!message) return;
 
         this.sendUserMessage(message);
         userInput.value = '';
 
-        const answeredQuestionIndex = this.step;
-        const answeredQuestionData = this.chatFlow[answeredQuestionIndex];
+        const current = this.chatFlow[this.step];
 
-        if (answeredQuestionData && answeredQuestionData.validate) {
-            const validationResult = answeredQuestionData.validate(message);
-            if (validationResult !== true) {
-                this.sendBotMessage(validationResult);
+        if (current.validate) {
+            const valid = current.validate(message);
+            if (valid !== true) {
+                this.sendBotMessage(valid);
                 this.disableUserInput(false);
                 userInput.focus();
                 return;
             }
         }
 
-        if (answeredQuestionData && answeredQuestionData.field) {
-            this.formData[answeredQuestionData.field] = message;
-        }
+        if (current.field) this.formData[current.field] = message;
 
-        if (answeredQuestionData && answeredQuestionData.response) {
-            let botResponse = answeredQuestionData.response;
-            if (this.formData.nombre) {
-                botResponse = botResponse.replace('[nombre_usuario]', this.formData.nombre);
-            } else {
-                botResponse = botResponse.replace(', [nombre_usuario]', '');
-            }
-            this.sendBotMessage(botResponse);
-        }
+        let reply = current.response || '';
+        reply = reply.replace('[nombre_usuario]', this.formData.nombre || '');
+        this.sendBotMessage(reply);
 
         this.step++;
 
         if (this.step >= this.chatFlow.length) {
             this.disableUserInput(true);
-
             if (this.formData.programa) {
-                this.sendBotMessage("¡Gracias por tu interés! Aquí tienes el PDF del programa que seleccionaste:");
+                this.sendBotMessage("¡Gracias por tu interés! Aquí tienes el PDF del programa:");
                 setTimeout(() => {
-                    this.sendPdfLink(this.formData.programa); 
-                    setTimeout(() => {
-                        this.enviarFormularioAsincrono();
-                    }, 1500);
+                    this.sendPdfLink(this.formData.programa);
+                    setTimeout(() => this.enviarFormularioAsincrono(), 1500);
                 }, 1000);
             } else {
                 this.enviarFormularioAsincrono();
             }
         } else {
-            setTimeout(() => {
-                this.displayNextQuestion();
-            }, 500);
+            setTimeout(() => this.displayNextQuestion(), 600);
         }
     },
 
     renderOptions: function(options) {
         chatOptionsContainer.innerHTML = '';
-        options.forEach(optionText => {
-            const button = document.createElement('button');
-            button.className = 'chat-option-button';
-            button.textContent = optionText;
-            button.dataset.value = optionText;
-            chatOptionsContainer.appendChild(button);
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'chat-option-button';
+            btn.textContent = opt;
+            btn.dataset.value = opt;
+            chatOptionsContainer.appendChild(btn);
         });
         chatOptionsContainer.style.display = 'flex';
         userInput.style.display = 'none';
@@ -1098,55 +948,49 @@ const CookitoChatbot = {
         sendButton.style.display = 'block';
     },
 
-    handleOptionClick: function(event) {
-        if (event.target.classList.contains('chat-option-button')) {
-            const selectedValue = event.target.dataset.value;
-            this.sendMessage(selectedValue);
+    handleOptionClick: function(e) {
+        if (e.target.classList.contains('chat-option-button')) {
+            this.sendMessage(e.target.dataset.value);
         }
     },
 
     sendPdfLink: function(programName) {
         const fileName = programName.replace(/\s+/g, '_').toLowerCase() + '.pdf';
         const pdfPath = `pdf/${fileName}`;
-
-        const pdfMessage = document.createElement('div');
-        pdfMessage.className = 'bot-message';
-        pdfMessage.innerHTML = `<a href="${pdfPath}" target="_blank" class="pdf-link">Descargar PDF de ${programName} <i class="bi bi-file-earmark-pdf-fill"></i></a>`;
-        chatBody.appendChild(pdfMessage);
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        const msg = document.createElement('div');
+        msg.className = 'bot-message';
+        msg.innerHTML = `<a href="${pdfPath}" target="_blank" class="pdf-link">Descargar PDF de ${programName} <i class="bi bi-file-earmark-pdf-fill"></i></a>`;
+        chatBody.appendChild(msg);
+        setTimeout(() => {
+            chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
     },
 
     disableUserInput: function(disable) {
         userInput.disabled = disable;
         sendButton.disabled = disable;
-        if (disable) {
-            userInput.style.cursor = 'not-allowed';
-            sendButton.style.cursor = 'not-allowed';
-        } else {
-            userInput.style.cursor = 'text';
-            sendButton.style.cursor = 'pointer';
-        }
+        userInput.style.cursor = disable ? 'not-allowed' : 'text';
+        sendButton.style.cursor = disable ? 'not-allowed' : 'pointer';
     },
 
     isValidEmail: function(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     },
 
     isValidPhoneNumber: function(phone) {
-        const re = /^\d+$/;
-        if (phone.length !== 9) return false;
-        if (!phone.startsWith('9')) return false;
-        return re.test(phone);
+        return /^9\d{8}$/.test(phone);
     },
 
     enviarFormularioAsincrono: async function() {
         const form = document.getElementById('cuquito-form');
-        const url = form.action;
+        if (!form) {
+            this.sendBotMessage("Error: No se encontró el formulario para enviar los datos.");
+            return;
+        }
 
+        const url = form.action;
         if (!url) {
-            this.sendBotMessage("Error: La URL de envío del formulario no está definida. Por favor, contacta a soporte.");
-            console.error("El formulario 'cuquito-form' no tiene una URL de acción (action attribute).");
+            this.sendBotMessage("Error: No hay URL de destino para el formulario.");
             return;
         }
 
@@ -1158,23 +1002,12 @@ const CookitoChatbot = {
 
         try {
             const formDataToSend = new FormData(form);
-
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formDataToSend
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error HTTP! Estado: ${response.status}`);
-            }
-
-            this.disableUserInput(true);
-            this.sendBotMessage("¡Listo! Tu información ha sido enviada. Nos pondremos en contacto contigo pronto.");
-
-        } catch (error) {
-            console.error('Error al enviar el formulario:', error);
-            this.sendBotMessage("¡Ups! Hubo un problema al enviar tu información. Por favor, intenta de nuevo más tarde o contáctanos directamente.");
-            this.disableUserInput(false);
+            const res = await fetch(url, { method: 'POST', body: formDataToSend });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            this.sendBotMessage("¡Listo! Tu información ha sido enviada correctamente. 🎉");
+        } catch (e) {
+            console.error(e);
+            this.sendBotMessage("Hubo un problema al enviar tu información 😢. Por favor, intenta de nuevo.");
         }
     }
 };
@@ -1187,7 +1020,147 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+  
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+<script>
+  // ======== MENÚ RESPONSIVE ========
+  const menuToggle = document.getElementById("menu-toggle");
+  const menuItems = document.getElementById("menu-items");
+  const dropdown = document.getElementById("dropdown");
+  const dropdownBtn = dropdown.querySelector(".dropdown-btn");
+
+  menuToggle.addEventListener("click", () => {
+    menuItems.classList.toggle("active");
+  });
+
+  dropdownBtn.addEventListener("click", (e) => {
+    if (window.innerWidth <= 768) {
+      e.preventDefault();
+      dropdown.classList.toggle("active");
+    }
+  });
+
+  // ======== SLIDER INFINITO ========
+  const slidesContainer = document.querySelector(".slides");
+  const slides = document.querySelectorAll(".slide");
+  const dotsContainer = document.getElementById("dots");
+  const nextBtn = document.getElementById("next");
+  const prevBtn = document.getElementById("prev");
+
+  let index = 1; // empezamos en 1 porque clonaremos la primera y última
+  let autoSlideTimer;
+  const AUTO_INTERVAL = 5000;
+
+  // Clonar primera y última slide
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slides.length - 1].cloneNode(true);
+  slidesContainer.appendChild(firstClone);
+  slidesContainer.insertBefore(lastClone, slidesContainer.firstChild);
+
+  const allSlides = document.querySelectorAll(".slide");
+  const totalSlides = allSlides.length;
+
+  // Ajustar ancho dinámicamente
+  slidesContainer.style.width = `${totalSlides * 100}%`;
+  allSlides.forEach(slide => {
+    slide.style.width = `${100 / totalSlides}%`;
+  });
+
+  // Crear puntos
+  function createDots() {
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < slides.length; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => goToSlide(i + 1)); // +1 por el clon inicial
+      dotsContainer.appendChild(dot);
+    }
+  }
+  createDots();
+  const dots = document.querySelectorAll(".dot");
+
+  // Mostrar slide
+  function showSlide(i, smooth = true) {
+    slidesContainer.style.transition = smooth ? "transform 0.6s ease-in-out" : "none";
+    slidesContainer.style.transform = `translateX(-${i * (100 / totalSlides)}%)`;
+
+    // Actualizar puntos
+    dots.forEach(dot => dot.classList.remove("active"));
+    const dotIndex = (i - 1 + slides.length) % slides.length;
+    dots[dotIndex].classList.add("active");
+
+    // Efecto zoom
+    allSlides.forEach(slide => slide.classList.remove("active"));
+    allSlides[i].classList.add("active");
+
+    index = i;
+  }
+
+  // Funciones de navegación
+  function nextSlide() {
+    if (index >= totalSlides - 1) return;
+    showSlide(index + 1);
+  }
+
+  function prevSlide() {
+    if (index <= 0) return;
+    showSlide(index - 1);
+  }
+
+  function goToSlide(i) {
+    showSlide(i);
+    resetAutoSlide();
+  }
+
+  // Transición infinita (cuando termina el desplazamiento)
+  slidesContainer.addEventListener("transitionend", () => {
+    if (allSlides[index].isSameNode(firstClone)) {
+      showSlide(1, false);
+    } else if (allSlides[index].isSameNode(lastClone)) {
+      showSlide(totalSlides - 2, false);
+    }
+  });
+
+  // Botones
+  nextBtn.addEventListener("click", () => {
+    nextSlide();
+    resetAutoSlide();
+  });
+  prevBtn.addEventListener("click", () => {
+    prevSlide();
+    resetAutoSlide();
+  });
+
+  // Auto Slide
+  function startAutoSlide() {
+    autoSlideTimer = setInterval(nextSlide, AUTO_INTERVAL);
+  }
+  function resetAutoSlide() {
+    clearInterval(autoSlideTimer);
+    startAutoSlide();
+  }
+
+  // Iniciar
+  showSlide(index, false);
+  startAutoSlide();
+
+  window.addEventListener("resize", () => {
+    showSlide(index, false);
+  });
+
+
+
+
+
+  //carrusel
+
+
+
+
+</script>
+
+</body>
+
+
 </html>

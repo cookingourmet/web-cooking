@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastronomía</title>
+
+    <link rel="icon" type="image/png" href="../logo/icon.png"> 
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body>
+    
+
+    <nav>
+ <div class="logo">
+  <a href="../../index.html"> <!-- Aquí pones la URL a donde quieres dirigir -->
+    <img src="../logo/logo.png" alt="Logo de mi sitio">
+  </a>
+</div>
+
+
+  <div class="menu-toggle" id="menu-toggle">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <div class="menu-items" id="menu-items">
+    <div class="dropdown" id="dropdown">
+      <a href="#" class="dropdown-btn">Programas de Estudio ▾</a>
+      <div class="dropdown-content">
+        <a href="#">Gastronomía</a>
+        <a href="#">Pastelería</a>
+        <a href="#">Bar Profesional</a>
+        <a href="#">Barismo</a>
+        <a href="#">Sommelier</a>
+        <a href="#">Cocina</a>
+      </div>
+    </div>
+    <a href="#">Eventos</a>
+    <a href="#">Estudiantes</a>
+    <a href="#">Rutas</a>
+    <a href="https://cookingourmet.q10.com/Preinscripcion">Inscripción</a>
+    <a href="https://site3.q10.com/OfertaLaboral/Crear?aplentId=fc29f47b-275b-4cdd-8f45-3fb3cb677900">Bolsa de Trabajo</a>
+    <a href="https://cookingourmet.q10.com/">Aula Virtual</a>
+
+    <!-- Redes sociales a la derecha -->
+    <div class="social-icons ms-3">
+      <a href="https://www.facebook.com/Cooking.Gourmet" target="_blank" class="text-decoration-none text-light me-2">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <a href="https://www.instagram.com/cooking_gourmet" target="_blank" class="text-decoration-none text-light me-2">
+        <i class="bi bi-instagram"></i>
+      </a>
+      <a href="https://www.tiktok.com/@cooking.gourmet.oficial" target="_blank" class="text-decoration-none text-light me-2">
+        <i class="bi bi-tiktok"></i>
+      </a>
+      <a href="https://wa.me/51981377382" target="_blank" class="text-decoration-none text-light">
+        <i class="bi bi-whatsapp"></i>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="fade-in-up">
+      Programa de Estudio de <br>
+      <span class="highlight">Gastronomía</span>
+    </h1>
+
+    <p class="fade-in-up delay1">
+      Descubre el arte culinario y convierte tu pasión en tu profesión.
+    </p>
+
+    <p class="fade-in-up delay2">
+      📅 Inicio de clases: <strong>17 de noviembre</strong>
+    </p>
+
+    <div class="hero-buttons fade-in-up delay3">
+        <a href="https://cookingourmet.q10.com/Preinscripcion" class="btn-primary">Matricularme</a>
+    </div>
+    <br>
+<div class="hero-buttons fade-in-up delay3">
+  <a href="#" class="btn-secondary btn-malla">Malla Curricular</a>
+  <a href="#" class="btn-secondary btn-uniforme">Uniforme</a>
+</div>
+
+
+    <!-- 🔹 Nueva sección de horarios y requisitos -->
+    <div class="info-section fade-in-up delay4">
+  <div class="info-box">
+    <h3>🕒 Horarios</h3>
+    <ul>
+      <li><strong>Mañana:</strong> 7:00 a.m. – 10:00 a.m.</li>
+      <li><strong>Media Mañana:</strong> 10:30 a.m. – 1:30 p.m.</li>
+      <li><strong>Tarde:</strong> 2:00 p.m. – 5:00 p.m.</li>
+      <li><strong>Noche:</strong> 5:30 p.m. – 8:30 p.m.</li>
+    </ul>
+  </div>
+
+  <div class="info-box">
+    <h3>📋 Requisitos</h3>
+    <ul>
+      <li>Certificado de 1° a 5° de Secundaria</li>
+      <li>Fotocopia del DNI</li>
+      <li>Recibo de agua o luz</li>
+    </ul>
+  </div>
+</div>
+
+  </div>
+
+  <div class="hero-image fade-in-right">
+    <img src="../images/gastronomia.png" alt="Estudiante de Gastronomía" loading="lazy">
+  </div>
+</section>
+
+
+<!-- 🔹 Modal de Malla Curricular -->
+<div id="mallaModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeMalla">&times;</span>
+    <h2>Malla Curricular</h2>
+
+    <div class="malla-container">
+      <div class="semestre">
+        <h3>Semestre 1</h3>
+        <div class="nivel">
+          <h4>Nivel 1</h4>
+          <ul>
+            <li>Técnicas Básicas de Cocina</li>
+            <li>Higiene y Seguridad Alimentaria</li>
+            <li>Nutrición y Dietética</li>
+            <li>Panadería y Pastelería</li>
+            <li>Introducción a la Gastronomía</li>
+          </ul>
+        </div>
+        <div class="nivel">
+          <h4>Nivel 2</h4>
+          <ul>
+            <li>Cocina Peruana</li>
+            <li>Cocina Internacional</li>
+            <li>Servicio de Restaurante</li>
+            <li>Coctelería y Barismo</li>
+            <li>Gestión Culinaria</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="semestre">
+        <h3>Semestre 2</h3>
+        <div class="nivel">
+          <h4>Nivel 1</h4>
+          <ul>
+            <li>Pastelería Avanzada</li>
+            <li>Cocina Fusión</li>
+            <li>Costos y Presupuestos</li>
+            <li>Decoración Gastronómica</li>
+            <li>Marketing Culinario</li>
+          </ul>
+        </div>
+        <div class="nivel">
+          <h4>Nivel 2</h4>
+          <ul>
+            <li>Repostería Fina</li>
+            <li>Cocina Molecular</li>
+            <li>Gestión de Eventos</li>
+            <li>Innovación Culinaria</li>
+            <li>Proyecto Gastronómico</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="semestre">
+        <h3>Nivel Complementario</h3>
+        <div class="nivel">
+          <h4>Nivel 1</h4>
+          <ul>
+            <li>Inglés Gastronómico</li>
+            <li>Comunicación Efectiva</li>
+            <li>Emprendimiento</li>
+            <li>Trabajo en Equipo</li>
+            <li>Atención al Cliente</li>
+          </ul>
+        </div>
+        <div class="nivel">
+          <h4>Nivel 2</h4>
+          <ul>
+            <li>Liderazgo Profesional</li>
+            <li>Ética Laboral</li>
+            <li>Plan de Negocios</li>
+            <li>Gestión de Calidad</li>
+            <li>Responsabilidad Ambiental</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- ===== MODAL UNIFORME ===== -->
+<div id="uniformeModal" class="modal">
+  <div class="modal-content uniforme-modal">
+    <span class="close-btn" id="closeUniforme">&times;</span>
+    <h2>Uniforme Correcto - Gastronomía</h2>
+
+    <div class="uniforme-container">
+      <!-- Lado Izquierdo: Lista de prendas -->
+      <div class="uniforme-lista">
+        <div class="uniforme-box">
+          <ul>
+            <li>Chaqueta</li>
+            <li>Pantalón</li>
+            <li>Mandilón</li>
+            <li>Gorro de Chef</li>
+            <li>Crocs</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Lado Derecho: Imagen -->
+      <div class="uniforme-imagen">
+        <img src="../images/chef.png" alt="Uniforme correcto de gastronomía">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<section class="about-section">
+  <div class="about-left">
+    <h2 class="fade-in-up">Transforma tu <span class="highlight">Pasión</span></h2>
+
+    <ul class="fade-in-up delay1">
+      <li>🎓 <strong>Modalidad:</strong> 100% presencial</li>
+      <li>👨‍🍳 <strong>Instructores:</strong> Chefs de alto prestigio</li>
+      <li>🧠 <strong>Metodología:</strong> 80% práctica</li>
+    </ul>
+
+    <div class="about-info fade-in-up delay2">
+      <h3>Sobre Nosotros</h3>
+      <p>Nos destacamos en la formación de profesionales en pastelería en la 
+      región Junín, donde la precisión y la innovación se combinan para 
+      crear expertos en repostería de alto nivel. Nuestra formación abarca 
+      desde técnicas fundamentales hasta la elaboración de creaciones 
+      sosticadas como decoración, chocolatería, postres de vanguardia y 
+      gestión empresarial.</p>
+    </div>
+
+<div class="about-stats fade-in-up delay3">
+  <h3>Dirigido a:</h3>
+  <div class="stats-cards">
+    <div class="stats-card">
+      <p class="stats-number" data-target="11200">+0</p>
+      <p class="stats-title">Egresados</p>
+    </div>
+    <div class="stats-card">
+      <p class="stats-number" data-target="600">+0</p>
+      <p class="stats-title">En el extranjero</p>
+    </div>
+    <div class="stats-card">
+      <p class="stats-number" data-target="2000">+0</p>
+      <p class="stats-title">Con puestos de trabajo</p>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+
+  <div class="about-right fade-in-right">
+    <h2>Impulsa tu carrera <br><span class="highlight">con los mejores de la región</span></h2>
+
+    <div class="career-info">
+      <img src="../logo/bolsa-trabajo.png" alt="Bolsa de Trabajo" class="career-img">
+      <p>Accede a nuestra <strong>bolsa de trabajo</strong> con empresas líderes del sector gastronómico.</p>
+    </div>
+
+    <div class="alliances">
+      <h4>Alianzas Estratégicas</h4>
+      <div class="alliances-logos">
+        <img src="../logo/empresa1.png" alt="Empresa 1">
+        <img src="../logo/empresa2.png" alt="Empresa 2">
+        <img src="../logo/empresa3.png" alt="Empresa 3">
+        <img src="../logo/empresa4.png" alt="Empresa 4">
+        <img src="../logo/empresa5.png" alt="Empresa 5">
+        <img src="../logo/empresa6.png" alt="Empresa 6">
+        <img src="../logo/empresa7.png" alt="Empresa 7">
+        <img src="../logo/empresa8.png" alt="Empresa 8">
+        <img src="../logo/empresa9.png" alt="Empresa 9">
+      </div>
+      <p>+ de 500 empresas de gran prestigio en Huancayo</p>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="manage-section">
+  <div class="manage-left">
+    <img src="../images/alumnos-gastronomia.png" alt="Imagen de empresa">
+  </div>
+  <div class="manage-right fade-in">
+    <h2>
+      Gestiona y administra
+    </h2>
+    <h3>
+      <span class="highlight-red" id="dynamic-text"></span>
+    </h3>
+  </div>
+</section>
+
+
+
+<section class="gallery-section fade-in">
+  <h2>Experiencias Gastronómicas</h2>
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="../galeria/1.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/2.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/3.jpg" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/4.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/5.jpg" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/6.png" alt="Gastronomía"></div>
+        <div class="gallery-item"><img src="../galeria/1.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/7.jpg" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/8.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/1.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/2.png" alt="Gastronomía"></div>
+    <div class="gallery-item"><img src="../galeria/3.jpg" alt="Gastronomía"></div>
+    
+    <!-- más imágenes -->
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+  <span class="close">&times;</span>
+  <img class="lightbox-img" src="">
+</div>
+
+
+
+
+
+
+<footer class="site-footer">
+  <div class="footer-container">
+
+    <!-- LOGO -->
+    <div class="footer-logo">
+      <img src="../logo/logo.png" alt="Logo" />
+    </div>
+
+    <!-- MENÚ FOOTER -->
+    <div class="footer-menu">
+      <h4>Enlaces</h4>
+      <ul>
+        <li><a href="#">Programas de Estudio</a></li>
+        <li><a href="#">Eventos</a></li>
+        <li><a href="#">Estudiantes</a></li>
+        <li><a href="#">Rutas</a></li>
+        <li><a href="https://cookingourmet.q10.com/Preinscripcion">Inscripción</a></li>
+        <li><a href="https://site3.q10.com/OfertaLaboral/Crear?aplentId=fc29f47b-275b-4cdd-8f45-3fb3cb677900">Bolsa de Trabajo</a></li>
+        <li><a href="https://cookingourmet.q10.com/">Aula Virtual</a></li>
+      </ul>
+    </div>
+
+    <!-- REDES SOCIALES -->
+    <div class="footer-social">
+      <h4>Síguenos</h4>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/Cooking.Gourmet" target="_blank"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/cooking_gourmet" target="_blank"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.tiktok.com/@cooking.gourmet.oficial" target="_blank"><i class="bi bi-tiktok"></i></a>
+        <a href="https://wa.me/51981377382" target="_blank"><i class="bi bi-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <!-- QR CODES -->
+    <div class="footer-qr">
+      <h4>Escanea nuestros QR</h4>
+      <div class="qr-codes">
+        <img src="../logo/qr1.png" alt="QR1">
+        <img src="../logo/qr2.png" alt="QR2">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Cooking Gourmet. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menu-toggle");
+    const menuItems = document.getElementById("menu-items");
+    const dropdown = document.getElementById("dropdown");
+    const dropdownBtn = dropdown.querySelector(".dropdown-btn");
+
+    // Mostrar / ocultar menú principal
+    menuToggle.addEventListener("click", () => {
+      menuItems.classList.toggle("active");
+    });
+
+    // Activar el submenú (dropdown) solo en pantallas pequeñas
+    dropdownBtn.addEventListener("click", (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        dropdown.classList.toggle("active");
+      }
+    });
+  });
+</script>
+
+
+<script>
+  // ====== Modal Malla Curricular ======
+  const mallaBtn = document.querySelector('.btn-malla');
+  const mallaModal = document.getElementById('mallaModal');
+  const closeMalla = document.getElementById('closeMalla');
+
+  if (mallaBtn && mallaModal && closeMalla) {
+    mallaBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      mallaModal.style.display = 'flex';
+    });
+
+    closeMalla.addEventListener('click', () => {
+      mallaModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === mallaModal) {
+        mallaModal.style.display = 'none';
+      }
+    });
+  }
+
+  // ====== Modal Uniforme Correcto ======
+  const uniformeBtn = document.querySelector('.btn-uniforme');
+  const uniformeModal = document.getElementById('uniformeModal');
+  const closeUniforme = document.getElementById('closeUniforme');
+
+  if (uniformeBtn && uniformeModal && closeUniforme) {
+    uniformeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      uniformeModal.style.display = 'flex';
+    });
+
+    closeUniforme.addEventListener('click', () => {
+      uniformeModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === uniformeModal) {
+        uniformeModal.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+
+
+<script>
+
+  // ===== Contador animado con "+" al inicio =====
+document.addEventListener("DOMContentLoaded", () => {
+  const counters = document.querySelectorAll(".stats-number");
+  const speed = 200; // Más alto = más lento
+
+  counters.forEach(counter => {
+    const animate = () => {
+      const target = +counter.getAttribute("data-target");
+      const current = +counter.innerText.replace(/\D/g, ""); // Elimina cualquier caracter no numérico
+      const increment = target / speed;
+
+      if (current < target) {
+        counter.innerText = "+" + Math.ceil(current + increment).toLocaleString();
+        setTimeout(animate, 20);
+      } else {
+        counter.innerText = "+" + target.toLocaleString();
+      }
+    };
+
+    // Detecta si el contador está visible en pantalla
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animate();
+          observer.unobserve(counter); // Se anima solo una vez
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(counter);
+  });
+});
+
+
+</script>
+
+
+
+
+
+<script>
+// ===== ANIMACIÓN AL SCROLL =====
+const fadeElements = document.querySelectorAll('.fade-in');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.classList.add('visible');
+
+      // animar cada imagen del grid si hay
+      const images = entry.target.querySelectorAll('.gallery-item img');
+      images.forEach(img => {
+        img.style.animation = `zoomRandom ${Math.random() * 5 + 5}s ease-in-out infinite alternate`;
+      });
+
+      // Iniciar máquina de escribir solo cuando se vea la sección
+      if(entry.target.querySelector("#dynamic-text") && !entry.target.querySelector("#dynamic-text").dataset.started){
+        entry.target.querySelector("#dynamic-text").dataset.started = true;
+        startTyping();
+      }
+    }
+  });
+}, { threshold: 0.2 });
+
+fadeElements.forEach(el => observer.observe(el));
+
+// ===== ZOOM ALEATORIO CONTINUO =====
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes zoomRandom {
+  0% { transform: scale(1); }
+  50% { transform: scale(${1 + Math.random() * 0.1}); }
+  100% { transform: scale(1); }
+}
+`;
+document.head.appendChild(style);
+
+// ===== LIGHTBOX =====
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.querySelector(".lightbox-img");
+const closeBtn = document.querySelector(".lightbox .close");
+
+document.querySelectorAll(".gallery-item img").forEach(img => {
+  img.addEventListener("click", () => {
+    lightbox.classList.add('show');
+    lightboxImg.src = img.src;
+  });
+});
+
+closeBtn.addEventListener("click", () => {
+  lightbox.classList.remove('show');
+});
+
+lightbox.addEventListener("click", (e) => {
+  if(e.target === lightbox) lightbox.classList.remove('show');
+});
+
+// ===== TAMAÑOS ALEATORIOS POR CADA IMAGEN =====
+document.querySelectorAll(".gallery-item").forEach(item => {
+  const rowSpan = Math.floor(Math.random() * 2) + 1; // 1 o 2 filas
+  const colSpan = Math.floor(Math.random() * 2) + 1; // 1 o 2 columnas
+  item.style.gridRowEnd = `span ${rowSpan}`;
+  item.style.gridColumnEnd = `span ${colSpan}`;
+});
+
+// ===== MÁQUINA DE ESCRIBIR =====
+const texts = ["tu empresa", "tu vida", "tu futuro", "tu profesión"];
+let index = 0;
+const dynamicText = document.getElementById("dynamic-text");
+const typingSpeed = 100;
+const pauseTime = 1500;
+
+function typeText(text, i = 0) {
+  if (i < text.length) {
+    dynamicText.innerText = text.substring(0, i + 1);
+    setTimeout(() => typeText(text, i + 1), typingSpeed);
+  } else {
+    setTimeout(() => eraseText(), pauseTime);
+  }
+}
+
+function eraseText() {
+  const text = dynamicText.innerText;
+  if (text.length > 0) {
+    dynamicText.innerText = text.substring(0, text.length - 1);
+    setTimeout(eraseText, typingSpeed / 2);
+  } else {
+    index = (index + 1) % texts.length;
+    typeText(texts[index]);
+  }
+}
+
+function startTyping() {
+  if(dynamicText) typeText(texts[index]);
+}
+
+  
+</script>
+</body>
+</html>
