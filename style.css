@@ -29,6 +29,13 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 
 
 
+
+
+
+
+
+
+
 /* ====== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ====== */
 :root {
   --bg-overlay: rgba(0,0,0,0.55);
@@ -63,16 +70,19 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   animation: overlayFadeOut 0.4s ease forwards;
 }
 
-/* ===== Card ===== */
+/* ===== Card (vertical con borde blanco) ===== */
 .promo-card {
   width: 100%;
-  max-width: 680px;
+  max-width: 500px;
   background: var(--card-bg);
   border-radius: var(--radius);
+  border: 8px solid #ffffff; /* 💥 borde blanco de 8px */
   box-shadow: var(--shadow);
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 260px;
+  display: flex;
+  flex-direction: column; /* imagen arriba, texto abajo */
+  align-items: center;
+  text-align: center;
   opacity: 0;
   transform: scale(0.85) translateY(40px);
   animation: modalFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
@@ -82,9 +92,36 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   animation: modalFadeOut 0.4s ease forwards;
 }
 
-/* ===== Cuerpo del mensaje ===== */
+/* ===== Imagen (arriba) ===== */
+.promo-side {
+  width: 100%;
+  padding: 0;
+  background: linear-gradient(180deg,#f8f8f8, #fff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.promo-side img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 0;
+  animation: zoomSoft 8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Animación de zoom suave */
+@keyframes zoomSoft {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ===== Cuerpo del mensaje (abajo) ===== */
 .promo-body {
-  padding: 28px;
+  padding: 24px 28px 32px;
 }
 
 .promo-hint {
@@ -124,6 +161,8 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .btn {
@@ -160,45 +199,17 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   background: #f9f9f9;
 }
 
-/* ===== Imagen lateral ===== */
-.promo-side {
-  background: linear-gradient(180deg,#f8f8f8, #fff);
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ===== Efecto de zoom suave en la imagen ===== */
-.promo-side img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: cover;
-  animation: zoomSoft 8s ease-in-out infinite;
-  transform-origin: center;
-}
-
-/* Animación de zoom suave */
-@keyframes zoomSoft {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
 /* ===== Extras ===== */
 .small {
   font-size: 13px;
   color: var(--muted);
+  margin-top: 8px;
 }
 
 .no-show {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
   font-size: 13px;
   color: var(--muted);
 }
@@ -211,12 +222,13 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 /* ===== Responsividad ===== */
 @media (max-width: 720px) {
   .promo-card {
-    grid-template-columns: 1fr;
-    max-width: 420px;
+    max-width: 90%;
   }
-  .promo-side {
-    display: none;
+
+  .promo-side img {
+    max-height: 240px;
   }
+
   .promo-title {
     font-size: 20px;
   }
@@ -259,9 +271,7 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   }
 }
 
-
-
-
+/* ===== Botón lateral pequeño ===== */
 #miniPromo {
   position: fixed;
   right: 10px;
