@@ -37,6 +37,7 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 
 
 /* ====== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ====== */
+/* ====== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ====== */
 :root {
   --bg-overlay: rgba(0,0,0,0.55);
   --card-bg: #ffffff;
@@ -45,6 +46,10 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   --radius: 12px;
   --shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
+
+/* ------------------------------------------------ */
+/* ===== Overlay & Card (sin cambios) ===== */
+/* ------------------------------------------------ */
 
 /* ===== Overlay ===== */
 .promo-overlay {
@@ -119,7 +124,10 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   100% { transform: scale(1); }
 }
 
-/* ===== Cuerpo del mensaje (abajo) ===== */
+/* ------------------------------------------------ */
+/* ===== Cuerpo del mensaje (Ajustes clave aquí) ===== */
+/* ------------------------------------------------ */
+
 .promo-body {
   padding: 24px 28px 32px;
 }
@@ -138,22 +146,60 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   color: #111;
 }
 
-.promo-text {
+/* --- NUEVAS REGLAS PARA DETALLES --- */
+.promo-details {
+    text-align: left; /* Alinea los detalles a la izquierda para mejor lectura */
+    margin-bottom: 20px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+}
+
+.promo-details h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 8px;
+    text-align: center; /* Centra el título de la sección de detalles */
+}
+
+.promo-details ul {
+    list-style: none; /* Quita los puntos de la lista */
+    padding: 0;
+    margin: 0;
+}
+
+.promo-details li {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 5px;
+}
+/* ---------------------------------- */
+
+
+/* Se elimina la regla .promo-text ya que la información clave está ahora en .promo-details */
+/* .promo-text {
   margin: 0 0 18px;
   color: #333;
   line-height: 1.35;
-}
+} */
+
 
 .promo-amount {
+  /* Se mantiene el estilo de promo-amount para resaltar los números dentro de los li */
   display: inline-block;
   background: #fff3f3;
-  border-radius: 8px;
-  padding: 8px 12px;
+  border-radius: 6px;
+  padding: 3px 8px; /* Ajustado para que encaje mejor en la línea */
   font-weight: 800;
-  font-size: 20px;
+  font-size: 16px; /* Ajustado para la coherencia en la línea */
   color: var(--accent);
-  margin-bottom: 12px;
+  margin-left: 5px; /* Pequeño margen para separarlo del texto */
 }
+
+/* ------------------------------------------------ */
+/* ===== Botones y Extras (sin cambios mayores) ===== */
+/* ------------------------------------------------ */
 
 /* ===== Botones ===== */
 .promo-actions {
@@ -218,6 +264,10 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   width: 16px;
   height: 16px;
 }
+
+/* ------------------------------------------------ */
+/* ===== Media Queries & Animaciones (sin cambios) ===== */
+/* ------------------------------------------------ */
 
 /* ===== Responsividad ===== */
 @media (max-width: 720px) {
@@ -293,7 +343,6 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   background-color: #d60036;
   transform: translateY(-50%) scale(1.05);
 }
-
 
 
 
