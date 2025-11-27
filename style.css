@@ -47,18 +47,24 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 /* ------------------------------------------------ */
 
 /* ===== Overlay ===== */
+/* ===== Overlay ===== */
 .promo-overlay {
   position: fixed;
   inset: 0;
   background: var(--bg-overlay);
   display: none;
-  align-items: center;
+  /* 🚨 CORRECCIÓN CLAVE 1: Mueve el contenido hacia arriba */
+  align-items: flex-start; 
   justify-content: center;
   z-index: 9999;
-  padding: 20px;
+  /* Añadimos más padding superior para que el contenido no toque el borde */
+  padding: 30px 20px; 
   backdrop-filter: blur(3px);
   opacity: 0;
   animation: overlayFade 0.4s ease forwards;
+  
+  /* 🚨 CORRECCIÓN CLAVE 2: Habilitar el desplazamiento vertical */
+  overflow-y: auto; 
 }
 
 .promo-overlay.show {
