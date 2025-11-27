@@ -32,11 +32,6 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 
 
 
-
-
-
-
-/* ====== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ====== */
 /* ====== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ====== */
 :root {
   --bg-overlay: rgba(0,0,0,0.55);
@@ -48,7 +43,7 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 }
 
 /* ------------------------------------------------ */
-/* ===== Overlay & Card (sin cambios) ===== */
+/* ===== Overlay & Card ===== */
 /* ------------------------------------------------ */
 
 /* ===== Overlay ===== */
@@ -146,44 +141,35 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   color: #111;
 }
 
-/* --- NUEVAS REGLAS PARA DETALLES --- */
+/* --- REGLAS PARA DETALLES --- */
 .promo-details {
-    text-align: left; /* Alinea los detalles a la izquierda para mejor lectura */
-    margin-bottom: 20px;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 15px;
+  text-align: left; /* Alinea los detalles a la izquierda para mejor lectura */
+  margin-bottom: 20px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 15px;
 }
 
 .promo-details h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--accent);
-    margin: 0 0 8px;
-    text-align: center; /* Centra el título de la sección de detalles */
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 8px;
+  text-align: center; /* Centra el título de la sección de detalles */
 }
 
 .promo-details ul {
-    list-style: none; /* Quita los puntos de la lista */
-    padding: 0;
-    margin: 0;
+  list-style: none; /* Quita los puntos de la lista */
+  padding: 0;
+  margin: 0;
 }
 
 .promo-details li {
-    font-size: 15px;
-    color: #333;
-    line-height: 1.6;
-    margin-bottom: 5px;
-}
-/* ---------------------------------- */
-
-
-/* Se elimina la regla .promo-text ya que la información clave está ahora en .promo-details */
-/* .promo-text {
-  margin: 0 0 18px;
+  font-size: 15px;
   color: #333;
-  line-height: 1.35;
-} */
-
+  line-height: 1.6;
+  margin-bottom: 5px;
+}
+/* -------------------------- */
 
 .promo-amount {
   /* Se mantiene el estilo de promo-amount para resaltar los números dentro de los li */
@@ -198,10 +184,10 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 }
 
 /* ------------------------------------------------ */
-/* ===== Botones y Extras (sin cambios mayores) ===== */
+/* ===== Botones y Extras ===== */
 /* ------------------------------------------------ */
 
-/* ===== Botones ===== */
+/* ===== Botones de la Tarjeta ===== */
 .promo-actions {
   display: flex;
   gap: 12px;
@@ -235,14 +221,15 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 }
 
 .btn-ghost {
-  background: transparent;
-  color: #333;
-  border: 1px solid #e6e6e6;
+  background-color: #ffffff;
+  color: #ff0062;
+  border: 1px solid #ffffff;
   transition: background 0.25s ease;
 }
 
 .btn-ghost:hover {
-  background: #f9f9f9;
+  background: #ffeaea;
+  color: #000;
 }
 
 /* ===== Extras ===== */
@@ -266,22 +253,105 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 }
 
 /* ------------------------------------------------ */
-/* ===== Media Queries & Animaciones (sin cambios) ===== */
+/* ===== AJUSTES PARA EL DISEÑO DE DOBLE TARJETA (Del HTML modificado) ===== */
 /* ------------------------------------------------ */
 
-/* ===== Responsividad ===== */
+/* Contenedor Flex para las dos tarjetas */
+.promo-container-cards {
+    display: flex;
+    gap: 20px; /* Espacio horizontal entre las tarjetas */
+    justify-content: center;
+    width: 100%; /* Ocupa el 100% del espacio disponible en el overlay */
+}
+
+/* Reglas para las tarjetas dentro del contenedor de doble tarjeta */
+.promo-container-cards .promo-card {
+    /* Sobreescribe el max-width del promo-card original para que quepan dos */
+    max-width: 400px; /* Nuevo ancho máximo para cada tarjeta individual */
+    flex: 1 1 45%; /* Permite que cada tarjeta ocupe aproximadamente el 45% del espacio */
+    margin: 0; /* Asegura que no haya márgenes externos que causen desbordamiento */
+}
+
+/* Acciones Generales (Cerrar / No mostrar) debajo de las tarjetas */
+.promo-overall-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px; /* Espacio entre el botón Cerrar y el checkbox */
+    margin-top: 25px; /* Espacio entre las tarjetas y estos botones */
+    padding: 10px 0;
+}
+
+/* Estilo específico para el botón Cerrar general */
+.promo-overall-actions #closeBtn {
+    /* Le damos un estilo más de "enlace" o menos prominente que los CTAs */
+    padding: 8px 15px;
+    background: #f0f0f0;
+    color: var(--muted);
+    font-size: 14px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.promo-overall-actions #closeBtn:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+
+/* ------------------------------------------------ */
+/* ===== Media Queries & Animaciones ===== */
+/* ------------------------------------------------ */
+
+/* ===== Escritorio (Ajuste para Doble Tarjeta) ===== */
+@media (min-width: 900px) {
+    .promo-overlay {
+        /* Permite que el contenido (el contenedor de tarjetas) tenga más ancho */
+        padding: 50px 20px;
+    }
+    .promo-overlay > div { /* Apunta al promo-container-cards y promo-overall-actions */
+        max-width: 850px; /* Ancho máximo para el contenedor de doble tarjeta */
+    }
+    /* Modificación de la animación para las tarjetas dobles */
+    .promo-container-cards .promo-card {
+        animation: modalFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards !important;
+        transform: scale(0.85) translateY(40px); /* Restablece el estado inicial de la animación */
+    }
+    .promo-overlay.hide .promo-container-cards .promo-card {
+        animation: modalFadeOut 0.4s ease forwards !important;
+    }
+}
+
+
+/* ===== RESPONSIVIDAD (Ajuste Crítico para Móvil: Apilamiento) ===== */
+@media (max-width: 900px) {
+    /* En pantallas pequeñas, apilamos las tarjetas para evitar el desbordamiento */
+    .promo-container-cards {
+        flex-direction: column; /* Cambia a apilamiento vertical */
+        gap: 30px; /* Más espacio vertical entre las tarjetas apiladas */
+    }
+
+    /* Cada tarjeta ocupa el ancho máximo del contenedor en móvil */
+    .promo-container-cards .promo-card {
+        max-width: 450px; /* Limita el ancho para que no sea demasiado grande en tablets */
+        flex: none; /* Desactiva el crecimiento/encogimiento flexible */
+        margin: 0 auto; /* Centra la tarjeta */
+    }
+}
+
+/* Aseguramos que el resto de reglas para móvil (max-width: 720px) sigan funcionando */
 @media (max-width: 720px) {
-  .promo-card {
-    max-width: 90%;
-  }
+    .promo-container-cards .promo-card {
+        max-width: 90%; /* Ajusta al 90% del viewport en móviles muy pequeños */
+    }
 
-  .promo-side img {
-    max-height: 240px;
-  }
+    .promo-side img {
+      max-height: 240px;
+    }
 
-  .promo-title {
-    font-size: 20px;
-  }
+    .promo-title {
+      font-size: 20px;
+    }
 }
 
 /* ===== Animaciones ===== */
@@ -343,7 +413,6 @@ a[href="https://cookingourmet.q10.com/"]:hover {
   background-color: #d60036;
   transform: translateY(-50%) scale(1.05);
 }
-
 
 
 

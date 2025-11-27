@@ -24,54 +24,108 @@
 
   <!-- ===== SECCIÓN 10: PROMOCIÓN COOKING GOURMET ===== -->
 <section id="seccion10">
-  <div id="promoOverlay" class="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promoTitle" aria-describedby="promoDesc">
-    <div class="promo-card" role="document">
-      
-      <div class="promo-side" aria-hidden="true">
-        <img src="images/GASTRONOMIA-ALERTA.png" alt="Promoción especial Cena Navideña de Cooking Gourmet" />
-        <div class="small">Inscripciones abiertas</div>
-      </div>
-
-      <div class="promo-body">
-        <div class="promo-hint">🎄 Cena Navideña Exclusiva</div>
-
-        <h2 id="promoTitle" class="promo-title">¡Reserva tu lugar para la Cena Navideña!</h2>
-
-        <div id="promoDesc" class="promo-details">
-          <h3>Detalles del Curso</h3>
-          <ul>
-            <li><strong>Modalidad Práctica:</strong> 11 y 12 de diciembre. Vacantes: <span class="promo-amount">20</span></li>
-            <li><strong>Modalidad Demostrativa:</strong> 13 de diciembre. Vacantes: <span class="promo-amount">25</span></li>
-          </ul>
+  <div id="promoOverlay" class="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promoTitle promoTitlePizza" aria-describedby="promoDesc promoDescPizza">
+    <div class="promo-container-cards">
+      <div class="promo-card" role="document">
+        <div class="promo-side" aria-hidden="true">
+          <img src="images/GASTRONOMIA-ALERTA.png" alt="Promoción especial Cena Navideña de Cooking Gourmet" />
+          <div class="small">Inscripciones abiertas</div>
         </div>
-        
-        <p class="small">*Fechas de realización: 11 y 12 de diciembre.</p>
-        
-        <div class="promo-actions">
-          <a id="ctaEnroll" 
-            href="https://wa.me/51981377382?text=¡Hola! 👋 Vengo de la página web y me gustaría *reservar mi vacante* para el curso de *Cena Navideña* 🎄. ¡Espero su confirmación! 👨‍🍳" 
-            class="btn btn-primary" 
-            target="_blank"
-          >
-            Quiero mi Vacante
-          </a>
-          <button id="closeBtn" class="btn btn-ghost" type="button">Cerrar</button>
 
-          
-          <label class="no-show">
-            <input id="dontShow" type="checkbox" />
-            No mostrar por 7 días
-          </label>
+        <div class="promo-body">
+          <div class="promo-hint">🎄 Cena Navideña Exclusiva</div>
+          <h2 id="promoTitle" class="promo-title">¡Reserva tu lugar para la Cena Navideña!</h2>
+          <div id="promoDesc" class="promo-details">
+            <h3>Detalles del Curso</h3>
+            <ul>
+              <li><strong>Modalidad Práctica:</strong> 11 y 12 de diciembre. Vacantes: <span class="promo-amount">20</span></li>
+              <li><strong>Modalidad Demostrativa:</strong> 13 de diciembre. Vacantes: <span class="promo-amount">25</span></li>
+            </ul>
+          </div>
+          <p class="small">*Fechas de realización: 11 y 12 de diciembre.</p>
+          <div class="promo-actions">
+            <a id="ctaEnrollNavidad"
+              href="https://wa.me/51981377382?text=¡Hola! 👋 Vengo de la página web y me gustaría *reservar mi vacante* para el curso de *Cena Navideña* 🎄. ¡Espero su confirmación! 👨‍🍳"
+              class="btn btn-primary"
+              target="_blank"
+            >
+              Quiero mi Vacante
+            </a>
+          </div>
         </div>
       </div>
+
+      <div class="promo-card" role="document">
+        <div class="promo-side" aria-hidden="true">
+          <img src="images/PIZZA-ALERTA.png" alt="Promoción especial Taller de Pizza 100% Práctico" />
+          <div class="small">Inscripciones abiertas</div>
+        </div>
+
+        <div class="promo-body">
+          <div class="promo-hint">🍕 Taller de Pizza Artesanal</div>
+          <h2 id="promoTitlePizza" class="promo-title">Festibal de Pizzass!</h2>
+          <div id="promoDescPizza" class="promo-details">
+            <h3>Detalles del Curso</h3>
+            <ul>
+              <li><strong>Modalidad Práctica:</strong> Inicio 5 de diciembre. Vacantes: <span class="promo-amount">5</span></li>
+            </ul>
+          </div>
+          <p class="small">*Grupos reducidos para máxima práctica.</p>
+          <div class="promo-actions">
+            <a id="ctaEnrollPizza"
+              href="https://wa.me/51981377382?text=¡Hola! 👋 Vengo de la página web y me gustaría *reservar mi vacante* para el curso de *Pizza Artesanal* 🍕. ¡Espero su confirmación! 👨‍🍳"
+              class="btn btn-primary"
+              target="_blank">¡Inscríbete Ahora!
+            </a>
+
+    
+
+          </div>
+        </div>
+      </div>
+              <div class="promo-overall-actions">
+                <button id="closeBtn" class="btn btn-ghost" type="button">Cerrar</button>
+                <label class="no-show">
+                  <input id="dontShow" type="checkbox" />
+                  No mostrar por 7 días
+                </label>
+              </div>
 
     </div>
+    
+
   </div>
 
   <div id="miniPromo">
-    <span>🎄 Taller Navideño 🎄</span>
+    <span>🎄 Taller Fin de Año🎄</span>
   </div>
 </section>
+
+<style>
+  /* Nuevo contenedor para las tarjetas */
+.promo-container-cards {
+  display: flex; /* Esto hará que los elementos hijos se coloquen en fila */
+  flex-wrap: wrap; /* Permite que las tarjetas se envuelvan si no hay suficiente espacio */
+  gap: 20px; /* Espacio entre las tarjetas */
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  margin-bottom: 20px; /* Espacio antes de los botones generales */
+}
+
+/* Estilos para las tarjetas individuales (quizás necesites ajustar tamaños) */
+.promo-card {
+  flex: 1 1 45%; /* Esto permite que las tarjetas crezcan y se encojan, ocupando casi la mitad del espacio disponible */
+  min-width: 300px; /* Un tamaño mínimo para que no se hagan demasiado pequeñas */
+  /* Asegúrate de que tus estilos existentes para promo-card sean compatibles */
+}
+
+/* Estilos para los botones generales */
+.promo-overall-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Espacio entre los botones */
+  margin-top: 20px;
+}
+</style>
 
 
 
@@ -150,11 +204,12 @@
   <!-- ======== SLIDER ======== -->
   <div class="slider" id="slider">
     <div class="slides">
-      <div class="slide"><img src="slider/slider.png" alt="Imagen 1"></div>
+      <div class="slide"><img src="slider/slider6.png" alt="Imagen 1"></div>
       <div class="slide"><img src="slider/slider2.png" alt="Imagen 2"></div>
       <div class="slide"><img src="slider/slider3.png" alt="Imagen 3"></div>
       <div class="slide"><img src="slider/slider4.png" alt="Imagen 4"></div>
       <div class="slide"><img src="slider/slider5.png" alt="Imagen 5"></div>
+      <div class="slide"><img src="slider/slider.png" alt="Imagen 6"></div>
     </div>
 
     <button class="slider-btn prev" id="prev">❮</button>
