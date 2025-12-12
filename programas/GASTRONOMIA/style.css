@@ -239,6 +239,37 @@ nav a:hover {
 
 
 
+
+.whatsapp-button {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 20px; /* distancia desde abajo */
+  right: 20px;  /* distancia desde la derecha */
+  background-color: #25d366;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-button:hover {
+  background-color: #20b957;
+  transform: scale(1.1);
+  color: white;
+}
+
+
+
+
+
+
 /* ===== HERO SECTION ===== */
 .hero {
   display: flex;
@@ -1424,3 +1455,378 @@ nav a:hover {
     gap: 20px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* --- Chat Toggle Button --- */
+.chat-toggle {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    background: #dc3545; /* Rojo vibrante */
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex; /* Para centrar el contenido */
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Sombra más pronunciada */
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out; /* Transición suave para hover */
+    -webkit-user-select: none; /* Evita selección de texto */
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1) rotate(5deg); /* Efecto más dinámico al pasar el ratón */
+}
+
+/* --- Chat Alert (Notification Image) --- */
+.chat-alert {
+   position: absolute;
+   top: -45px;
+   right: -45px;
+   width: 90px; /* Ajusta el tamaño según tu imagen */
+   height: 90px; /* Ajusta el tamaño según tu imagen */
+   border-radius: 50%; /* Para hacerlo circular si la imagen lo permite o deseas */
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 2px; /* Opcional: si quieres un poco de espacio alrededor de la imagen */
+   box-sizing: border-box;
+   animation: pulse-image 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+   border: 1px solid rgba(255, 255, 255, 0.171);
+   box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
+   overflow: hidden; /* Asegura que la imagen respete el border-radius */
+}
+
+.chat-alert img {
+   display: block; /* Evita espacios extra debajo de la imagen */
+   width: 100%;
+   height: 100%;
+   object-fit: cover; /* Ajusta la imagen al contenedor manteniendo la proporción */
+}
+
+/* --- Animación de pulso para la imagen --- */
+@keyframes pulse-image {
+   0% {
+       transform: scale(0.9);
+       opacity: 0.8;
+   }
+   50% {
+       transform: scale(1.1);
+       opacity: 1;
+   }
+   100% {
+       transform: scale(0.9);
+       opacity: 0.8;
+   }
+}
+
+/* --- Chat Box Container --- */
+.chat-box {
+    position: fixed;
+    bottom: 110px;
+    left: 20px;
+    width: 320px;
+    max-height: 480px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    z-index: 1001;
+    overflow: hidden;
+    transform-origin: bottom left; /* Punto de origen para la escala */
+
+    /* ESTILOS INICIALES PARA LA ANIMACIÓN (cuando está oculto) */
+    opacity: 0; /* Totalmente transparente */
+    transform: scale(0.5); /* Empezará pequeño */
+    pointer-events: none; /* No interactuable cuando está oculto */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Transición suave para ambos */
+}
+
+/* CLASE QUE JS APLICARÁ CUANDO EL CHAT ESTÉ ABIERTO */
+.chat-box.is-open {
+    opacity: 1; /* Totalmente visible */
+    transform: scale(1); /* Tamaño normal */
+    pointer-events: auto; /* Interactuable */
+}
+
+/* --- Chat Header --- */
+.chat-header {
+    background: #dc3545; /* Rojo vibrante */
+    color: white;
+    padding: 12px 15px; /* Un poco más de padding */
+    font-weight: bold;
+    font-size: 16px; /* Tamaño de fuente ligeramente mayor */
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil debajo del header */
+}
+
+/* --- Chat Body (Messages Area) --- */
+.chat-body {
+    padding: 15px; /* Más padding para los mensajes */
+    flex-grow: 1;
+    overflow-y: auto; /* Scroll para los mensajes */
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Espacio entre mensajes */
+    background-color: #fcfcfc; /* Fondo blanco casi puro */
+    /* Estilo de scrollbar más limpio para navegadores basados en WebKit */
+    scrollbar-width: thin;
+    scrollbar-color: #dc3545 #f1f1f1;
+}
+
+.chat-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: #dc3545;
+    border-radius: 10px;
+    border: 2px solid #fcfcfc;
+}
+
+
+/* --- Chat Footer (Input and Send Button) --- */
+.chat-footer {
+    display: flex;
+    flex-direction: column; /* Permite que las opciones y el input estén en líneas separadas */
+    padding: 10px 15px; /* Padding consistente */
+    border-top: 1px solid #e0e0e0; /* Borde más claro */
+    background-color: #ffffff;
+    gap: 10px; /* Espacio entre el input/botón y las opciones */
+}
+
+.chat-footer .input-area { /* Contenedor para input y botón de envío */
+    display: flex;
+    width: 100%;
+    gap: 5px; /* Espacio entre input y botón */
+}
+
+.chat-footer input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 25px; /* Más redondeado */
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-footer input[type="text"]:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Sombra de enfoque de color rojo */
+}
+
+.chat-footer button {
+    padding: 10px 20px; /* Más padding para el botón */
+    background: #dc3545; /* Rojo vibrante */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Más redondeado */
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.chat-footer button:hover {
+    background: #c82333; /* Rojo más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Ligero levantamiento */
+}
+
+.chat-footer button:disabled {
+    background-color: #e9ecef; /* Gris claro cuando está deshabilitado */
+    color: #6c757d; /* Texto gris oscuro */
+    cursor: not-allowed;
+}
+
+/* --- Message Bubbles --- */
+.bot-message, .user-message {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    position: relative; /* Importante para posicionar los iconos */
+    display: flex; /* Para alinear el texto y el icono */
+    align-items: flex-end; /* Alinea los elementos al fondo, si el icono es más bajo que el texto */
+    gap: 8px; /* Espacio entre el icono y el texto */
+}
+
+.bot-message {
+    background: #e9ecef;
+    color: #212529;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    padding-left: 45px; /* Más padding para el icono del bot */
+    flex-direction: row-reverse; /* El icono del bot irá a la izquierda visualmente */
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.user-message {
+    background: #dc3545;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    padding-right: 45px; /* Más padding para el icono del usuario y el status */
+    /* Ya tienes padding-right: 30px; en tu CSS, lo he aumentado a 45px */
+    flex-direction: row; /* El icono del usuario irá a la derecha visualmente */
+    text-align: right; /* Alinea el texto a la derecha */
+}
+
+
+
+/* --- Estilos para los nuevos iconos en las burbujas de chat --- */
+.message-icon {
+    width: 30px; /* Tamaño del icono */
+    height: 30px;
+    border-radius: 50%; /* Para hacerlos circulares */
+    object-fit: cover; /* Asegura que la imagen cubra el área */
+    position: absolute;
+    bottom: 5px; /* Alineación vertical */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* Sombra sutil para darle profundidad */
+}
+
+
+/* Posición del icono del bot */
+.bot-message .message-icon {
+    left: 5px; /* Al lado izquierdo del mensaje del bot */
+}
+
+/* Posición del icono del usuario */
+.user-message .message-icon {
+    right: 5px; /* Al lado derecho del mensaje del usuario */
+    /* Ajustamos esto para que no colisione con el status-indicator */
+}
+
+/* Ajuste del status-indicator para el mensaje del usuario */
+.user-message .message-status {
+    position: absolute; /* Ya es absoluto */
+    bottom: 5px; /* Mantener la misma altura */
+    right: 8px; /* Era 8px, asegúrate de que no colisione con el icono */
+    /* Si el icono es de 30px y el padding-right es 45px, el status debería quedar bien */
+}
+
+
+/* --- Message Status Indicator (Ticks) --- */
+.message-status {
+    font-size: 0.7em; /* Más pequeño que el texto del mensaje */
+    color: #888; /* Gris por defecto (enviado) */
+    position: absolute;
+    bottom: 5px; /* Ajusta la posición vertical */
+    right: 8px; /* Ajusta la posición horizontal */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Transición para el cambio de estado */
+}
+
+/* Estilo para el estado "visto" o "leído" */
+.message-status.seen {
+    color: #34b7f1; /* Azul (similar a WhatsApp) */
+    /* transform: scale(1.1); /* Opcional: efecto al cambiar de estado */
+}
+
+/* --- Typing Indicator --- */
+.typing-indicator {
+    font-style: italic;
+    color: #6c757d; /* Gris más oscuro */
+    animation: typingPulse 1.5s infinite steps(3, start); /* Animación más suave de puntos */
+    align-self: flex-start;
+    padding-left: 10px; /* Alineación con los mensajes del bot */
+}
+
+@keyframes typingPulse {
+    0%, 80%, 100% { opacity: 0.8; }
+    40% { opacity: 0.3; }
+}
+
+
+/* --- Chat Options Container (for buttons/chips) --- */
+.chat-options {
+    width: 100%;
+    display: none; /* Por defecto oculto, JS lo mostrará */
+    flex-wrap: wrap; /* Envuelve los botones si no caben */
+    gap: 8px; /* Espacio entre los botones */
+    margin-bottom: 10px; /* Espacio por debajo de los botones */
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
+}
+
+.chat-option-button {
+    background-color: #6c757d; /* Gris oscuro para las opciones */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px; /* Más padding para los botones */
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0; /* Evita que los botones se encojan en exceso */
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chat-option-button:hover {
+    background-color: #5a6268; /* Gris más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Ligero levantamiento */
+}
+
+.chat-option-button:active {
+    transform: translateY(0); /* Vuelve a su posición original al hacer clic */
+    background-color: #495057; /* Un poco más oscuro para feedback de click */
+}
+
+
+
+
+
+
+/* Estilo para el enlace de descarga del PDF */
+.pdf-link {
+    color: #007bff; /* Un color de enlace estándar, puedes ajustarlo */
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espacio entre el texto y el icono */
+}
+
+.pdf-link:hover {
+    text-decoration: underline;
+}
+
+.pdf-link i {
+    font-size: 1.2em; /* Tamaño del icono */
+    color: #dc3545; /* Color del icono, similar al de tu marca */
+}
+
+
+
+
+

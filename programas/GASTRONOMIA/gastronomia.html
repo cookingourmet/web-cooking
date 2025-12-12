@@ -69,6 +69,55 @@
 
 
 
+<a href="https://wa.me/51981377382?text=¡Hola! 👋 Vengo de la página web y me gustaría *reservar mi vacante* para el inicio de clases enero 2026* 🎄. ¡Espero su confirmación! 👨‍🍳" target="_blank" class="whatsapp-button">
+  <i class="bi bi-whatsapp"></i>
+</a>
+
+
+
+
+
+
+
+
+
+<!-- Botón flotante -->
+<div id="chat-toggle" class="chat-toggle">
+  💬
+  <div id="chat-alert" class="chat-alert">
+    <img src="../../icono.png" alt="Alerta">
+  </div>
+</div>
+
+<!-- Caja del chat -->
+<div id="chat-box" class="chat-box">
+  <div class="chat-header">Cookito 🤖</div>
+  <div id="chat-body" class="chat-body"></div>
+  <div class="chat-footer">
+    <div id="chat-options" class="chat-options"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+      <button id="send-button">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Formulario oculto -->
+    <form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
+        <input type="text" name="Nombre">
+        <input type="email" name="Correo">
+        <input type="text" name="Celular">
+        <input type="text" name="Programa de Estudio">
+        <input type="text" name="Mensaje">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://www.cookingourmet.edu.pe/">
+    </form>
+
+
+
+
+
+
 
 
 
@@ -628,5 +677,325 @@ function startTyping() {
 
   
 </script>
+
+
+
+
+
+<script>
+// ======== CHATBOT COOKITO (ajustado) ========
+
+const chatToggle = document.getElementById('chat-toggle');
+const chatBox = document.getElementById('chat-box');
+const chatBody = document.getElementById('chat-body');
+const chatAlert = document.getElementById('chat-alert');
+const userInput = document.getElementById('user-input');
+const sendButton = document.getElementById('send-button');
+const chatOptionsContainer = document.getElementById('chat-options');
+
+const messageSound = new Audio('audio/mensaje.mp3'); 
+
+const CookitoChatbot = {
+    step: 0,
+    formData: {},
+    isTyping: false,
+
+    chatFlow: [
+        {
+            id: 1,
+            question: "Hola espero que estés muy bien 😊 ¿Podrías dictarme tu nombre?",
+            response: "Gracias, [nombre_usuario].",
+            type: "text",
+            field: "nombre"
+        },
+        {
+            id: 2,
+            question: "¿Podrías brindarme tu correo electrónico?",
+            response: "Perfecto, [nombre_usuario].",
+            type: "text",
+            field: "correo",
+            validate: (email) => CookitoChatbot.isValidEmail(email) ? true : "Por favor, ingresa un correo electrónico válido."
+        },
+        {
+            id: 3,
+            question: "¿Cuál es tu número de celular?",
+            response: "Muy bien, [nombre_usuario].",
+            type: "text",
+            field: "celular",
+            validate: (phone) => CookitoChatbot.isValidPhoneNumber(phone) ? true : "Por favor, ingresa un número de celular válido (9 dígitos y empieza con 9)."
+        },
+        {
+            id: 4,
+            question: "¿Qué programa de estudio te interesa?",
+            response: "Genial, [nombre_usuario].",
+            type: "options",
+            field: "programa",
+            options: [
+                "Gastronomía",
+                "Pastelería",
+                "Bar Profesional",
+                "Barismo Profesional",
+                "Sommelier",
+                "Otros Programas"
+            ]
+        },
+        {
+            id: 5,
+            question: "¿Quieres dejar algún mensaje adicional?",
+            response: "✅ ¡Gracias, [nombre_usuario]! Pronto nos pondremos en contacto contigo. 😊",
+            type: "text",
+            field: "mensaje"
+        }
+    ],
+
+    init: function() {
+        window.addEventListener('load', () => {
+            chatAlert.style.display = 'inline';
+        });
+
+        chatToggle.addEventListener('click', this.handleChatToggle.bind(this));
+        sendButton.addEventListener('click', this.sendMessage.bind(this));
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendMessage();
+        });
+
+        chatOptionsContainer.addEventListener('click', this.handleOptionClick.bind(this));
+
+        // Chat oculto por defecto
+        chatBox.style.display = 'none';
+    },
+
+    handleChatToggle: function() {
+        const isOpen = chatBox.classList.contains('is-open');
+        chatBox.classList.toggle('is-open');
+
+        if (!isOpen) {
+            chatBox.style.display = 'flex';
+            if (this.step === 0) {
+                this.playMessageSound(); 
+                chatAlert.style.display = 'none';
+                this.sendBotMessage("Bienvenido 👋, soy el asistente virtual de *Cooking Gourmet*, me llamo *Cookito*.");
+                setTimeout(() => this.displayNextQuestion(), 1000);
+            }
+        } else {
+            chatBox.style.display = 'none';
+            if (this.step < this.chatFlow.length) chatAlert.style.display = 'inline';
+        }
+    },
+
+    playMessageSound: function() {
+        messageSound.currentTime = 0;
+        messageSound.play().catch(e => console.log("Error al reproducir sonido:", e.message));
+    },
+
+    sendBotMessage: function(message) {
+        this.playMessageSound();
+        const msg = document.createElement('div');
+        msg.className = 'bot-message';
+        msg.innerHTML = `
+            <img src="icono2.png" alt="Bot" class="message-icon">
+            <span>${message.replace(/\*(.*?)\*/g, '<strong>$1</strong>')}</span>
+        `;
+        chatBody.appendChild(msg);
+        setTimeout(() => {
+            chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
+    },
+
+    sendUserMessage: function(message) {
+        const userMsg = document.createElement('div');
+        userMsg.className = 'user-message';
+        userMsg.innerHTML = `
+            <span>${message}</span>
+            <span class="message-status">&#10003;</span>
+            <img src="icono3.png" alt="Usuario" class="message-icon">
+        `;
+        chatBody.appendChild(userMsg);
+        setTimeout(() => {
+            chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
+    },
+
+    showTypingIndicator: function() {
+        const typing = document.createElement('div');
+        typing.className = 'bot-message typing-indicator';
+        typing.id = 'typing-indicator';
+        typing.textContent = "Cookito está escribiendo...";
+        chatBody.appendChild(typing);
+        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        this.isTyping = true;
+    },
+
+    removeTypingIndicator: function() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) typingIndicator.remove();
+        this.isTyping = false;
+
+        const lastUserMessage = chatBody.querySelector('.user-message:last-child');
+        if (lastUserMessage) {
+            const status = lastUserMessage.querySelector('.message-status');
+            if (status) {
+                status.innerHTML = '&#10003;&#10003;';
+                status.classList.add('seen');
+            }
+        }
+    },
+
+    displayNextQuestion: function() {
+        if (this.step >= this.chatFlow.length) return;
+
+        const q = this.chatFlow[this.step];
+        this.showTypingIndicator();
+        this.disableUserInput(true);
+        this.clearOptions();
+
+        setTimeout(() => {
+            this.removeTypingIndicator();
+            this.sendBotMessage(q.question);
+            if (q.type === "options") {
+                this.renderOptions(q.options);
+            } else {
+                this.disableUserInput(false);
+                userInput.focus();
+            }
+        }, 1200);
+    },
+
+    sendMessage: function(optionMsg) {
+        if (this.isTyping) return;
+
+        let message = typeof optionMsg === 'string' ? optionMsg : userInput.value.trim();
+        if (!message) return;
+
+        this.sendUserMessage(message);
+        userInput.value = '';
+
+        const current = this.chatFlow[this.step];
+
+        if (current.validate) {
+            const valid = current.validate(message);
+            if (valid !== true) {
+                this.sendBotMessage(valid);
+                this.disableUserInput(false);
+                userInput.focus();
+                return;
+            }
+        }
+
+        if (current.field) this.formData[current.field] = message;
+
+        let reply = current.response || '';
+        reply = reply.replace('[nombre_usuario]', this.formData.nombre || '');
+        this.sendBotMessage(reply);
+
+        this.step++;
+
+        if (this.step >= this.chatFlow.length) {
+            this.disableUserInput(true);
+            if (this.formData.programa) {
+                this.sendBotMessage("¡Gracias por tu interés! Aquí tienes el PDF del programa:");
+                setTimeout(() => {
+                    this.sendPdfLink(this.formData.programa);
+                    setTimeout(() => this.enviarFormularioAsincrono(), 1500);
+                }, 1000);
+            } else {
+                this.enviarFormularioAsincrono();
+            }
+        } else {
+            setTimeout(() => this.displayNextQuestion(), 600);
+        }
+    },
+
+    renderOptions: function(options) {
+        chatOptionsContainer.innerHTML = '';
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'chat-option-button';
+            btn.textContent = opt;
+            btn.dataset.value = opt;
+            chatOptionsContainer.appendChild(btn);
+        });
+        chatOptionsContainer.style.display = 'flex';
+        userInput.style.display = 'none';
+        sendButton.style.display = 'none';
+    },
+
+    clearOptions: function() {
+        chatOptionsContainer.innerHTML = '';
+        chatOptionsContainer.style.display = 'none';
+        userInput.style.display = 'block';
+        sendButton.style.display = 'block';
+    },
+
+    handleOptionClick: function(e) {
+        if (e.target.classList.contains('chat-option-button')) {
+            this.sendMessage(e.target.dataset.value);
+        }
+    },
+
+    sendPdfLink: function(programName) {
+        const fileName = programName.replace(/\s+/g, '_').toLowerCase() + '.pdf';
+        const pdfPath = `pdf/${fileName}`;
+        const msg = document.createElement('div');
+        msg.className = 'bot-message';
+        msg.innerHTML = `<a href="${pdfPath}" target="_blank" class="pdf-link">Descargar PDF de ${programName} <i class="bi bi-file-earmark-pdf-fill"></i></a>`;
+        chatBody.appendChild(msg);
+        setTimeout(() => {
+            chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
+    },
+
+    disableUserInput: function(disable) {
+        userInput.disabled = disable;
+        sendButton.disabled = disable;
+        userInput.style.cursor = disable ? 'not-allowed' : 'text';
+        sendButton.style.cursor = disable ? 'not-allowed' : 'pointer';
+    },
+
+    isValidEmail: function(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    },
+
+    isValidPhoneNumber: function(phone) {
+        return /^9\d{8}$/.test(phone);
+    },
+
+    enviarFormularioAsincrono: async function() {
+        const form = document.getElementById('cuquito-form');
+        if (!form) {
+            this.sendBotMessage("Error: No se encontró el formulario para enviar los datos.");
+            return;
+        }
+
+        const url = form.action;
+        if (!url) {
+            this.sendBotMessage("Error: No hay URL de destino para el formulario.");
+            return;
+        }
+
+        form.elements["Nombre"].value = this.formData.nombre || '';
+        form.elements["Correo"].value = this.formData.correo || '';
+        form.elements["Celular"].value = this.formData.celular || '';
+        form.elements["Programa de Estudio"].value = this.formData.programa || '';
+        form.elements["Mensaje"].value = this.formData.mensaje || '';
+
+        try {
+            const formDataToSend = new FormData(form);
+            const res = await fetch(url, { method: 'POST', body: formDataToSend });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            this.sendBotMessage("¡Listo! Tu información ha sido enviada correctamente. 🎉");
+        } catch (e) {
+            console.error(e);
+            this.sendBotMessage("Hubo un problema al enviar tu información 😢. Por favor, intenta de nuevo.");
+        }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    CookitoChatbot.init();
+});
+</script>
+
+
 </body>
 </html>
