@@ -10,8 +10,8 @@ body {
 
 a[href="https://cookingourmet.q10.com/"] {
     display: inline-block;
-    background-color: #ff0040; /* Rojo intenso */
-    color: #fff; /* Texto blanco */
+    background-color: #ff0040; 
+    color: #fff; 
     font-weight: 600;
     text-decoration: none;
     padding: 10px 20px;
@@ -22,7 +22,7 @@ a[href="https://cookingourmet.q10.com/"] {
 }
 
 a[href="https://cookingourmet.q10.com/"]:hover {
-    background-color: #cc0033; /* Rojo más oscuro al pasar el mouse */
+    background-color: #cc0033; 
     transform: scale(1.05);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
 }
@@ -32,7 +32,7 @@ a[href="https://cookingourmet.q10.com/"]:hover {
 
 
 
-/* ======== NAV PRINCIPAL ======== */
+
 nav {
   background-color: #111;
   display: flex;
@@ -73,7 +73,7 @@ nav a:hover {
   color: #fff;
 }
 
-/* ======== DROPDOWN ======== */
+
 .dropdown {
   position: relative;
 }
@@ -90,7 +90,7 @@ nav a:hover {
   min-width: 180px;
   opacity: 0;
   transition: all 0.25s ease;
-  z-index: 9999; /* asegura visibilidad sobre todo */
+  z-index: 9999; 
 }
 
 .dropdown-content a {
@@ -112,7 +112,7 @@ nav a:hover {
   opacity: 1;
 }
 
-/* ======== MENU HAMBURGUESA ======== */
+
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -139,7 +139,7 @@ nav a:hover {
   transition: 0.3s;
 }
 
-/* ======== RESPONSIVE ======== */
+
 @media (max-width: 768px) {
   nav {
     justify-content: space-between;
@@ -178,7 +178,7 @@ nav a:hover {
     border-bottom: none;
   }
 
-  /* Submenú móvil */
+
   .dropdown-content {
     position: static;
     display: none;
@@ -212,23 +212,23 @@ nav a:hover {
 
 
 
-/* ==== Redes Sociales ==== */
+
 .social-icons {
   display: flex;
   align-items: center;
-  gap: 15px; /* separación entre íconos */
-  margin-left: 20px; /* espacio antes de las redes */
+  gap: 15px; 
+  margin-left: 20px; 
 }
 
 .social-icons a i {
-  font-size: 1.4rem; /* tamaño un poco más grande */
+  font-size: 1.4rem; 
   transition: transform 0.2s ease, color 0.3s ease;
-  color: #f5f5f5; /* color base */
+  color: #f5f5f5; 
 }
 
 .social-icons a:hover i {
-  transform: scale(1.2); /* agranda al pasar el mouse */
-  color: #ff004c; /* color al pasar el mouse (puedes cambiarlo) */
+  transform: scale(1.2); 
+  color: #ff004c; 
 }
 
 
@@ -244,8 +244,8 @@ nav a:hover {
   position: fixed;
   width: 60px;
   height: 60px;
-  bottom: 20px; /* distancia desde abajo */
-  right: 20px;  /* distancia desde la derecha */
+  bottom: 20px; 
+  right: 20px;  
   background-color: #25d366;
   color: white;
   border-radius: 50%;
@@ -336,14 +336,14 @@ nav a:hover {
   transform: translateY(-4px);
 }
 
-/* ===== IMAGEN DE PORTADA ===== */
+
 .hero-image {
   flex: 1 1 600px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   position: relative;
-  margin-bottom: -10px; /* 🔽 Pega completamente al borde inferior */
+  margin-bottom: -10px; 
 }
 
 .hero-image img {
@@ -383,7 +383,7 @@ nav a:hover {
 
 /* ===== RESPONSIVE ===== */
 
-/* Tablets */
+
 @media (max-width: 1024px) {
   .hero {
     flex-direction: column-reverse;
@@ -397,7 +397,7 @@ nav a:hover {
   }
 
   .hero-image {
-    margin-bottom: -12px; /* 🔽 Pega aún más */
+    margin-bottom: -12px; 
   }
 
   .hero-image img {
@@ -405,16 +405,16 @@ nav a:hover {
   }
 }
 
-/* Móviles */
+
 @media (max-width: 600px) {
   .hero {
     flex-direction: column-reverse;
-    padding: 10px 6% 0; /* 🔽 casi sin espacio inferior */
+    padding: 10px 6% 0; 
     gap: 0;
   }
 
   .hero-image {
-    margin-bottom: -14px; /* 🔽 se pega completamente al siguiente bloque */
+    margin-bottom: -14px; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -426,7 +426,7 @@ nav a:hover {
   }
 
   .hero-content {
-    margin-top: 0; /* 🔽 junta texto con imagen */
+    margin-top: 0; 
     padding: 0;
     text-align: center;
     line-height: 1.15;
@@ -457,7 +457,7 @@ nav a:hover {
 
 
 
-/* ===== BOTONES SECUNDARIOS ===== */
+
 .secondary-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -465,7 +465,7 @@ nav a:hover {
   margin-top: 18px;
 }
 
-/* ===== BOTONES SECUNDARIOS ===== */
+
 .btn-secondary {
   display: inline-block;
   margin-top: 10px;
@@ -479,7 +479,7 @@ nav a:hover {
   font-size: clamp(0.9rem, 2vw, 1rem);
   text-decoration: none;
   transition: all 0.3s ease;
-    min-width: 180px; /* ancho fijo mínimo */
+    min-width: 180px; 
   text-align: center;
 }
 
@@ -489,18 +489,18 @@ nav a:hover {
   transform: translateY(-3px);
 }
 
-/* ===== INFO SECTION (Horarios y Requisitos) ===== */
+
 .info-section {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
   gap: 16px;
   margin-top: 20px;
-  flex-wrap: nowrap; /* 🔹 Fuerza que estén lado a lado */
+  flex-wrap: nowrap; 
 }
 
 .info-box {
-  flex: 1; /* 🔹 Ambos ocupan el mismo ancho */
+  flex: 1; 
   background-color: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 0, 64, 0.3);
   border-radius: 10px;
@@ -508,7 +508,7 @@ nav a:hover {
   color: #fff;
   box-shadow: 0 0 10px rgba(255, 0, 64, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-width: 250px; /* 🔹 Evita que se rompa antes de tiempo */
+  min-width: 250px; 
 }
 
 .info-box:hover {
@@ -519,7 +519,7 @@ nav a:hover {
 .info-box h3 {
   color: #ff0040;
   margin-bottom: 8px;
-  font-size: 1rem; /* 🔹 Más pequeño */
+  font-size: 1rem; 
 }
 
 .info-box ul {
@@ -527,7 +527,7 @@ nav a:hover {
   margin: 0;
   padding: 0;
   color: #ccc;
-  font-size: 0.85rem; /* 🔹 Texto más pequeño */
+  font-size: 0.85rem; 
   line-height: 1.4;
 }
 
@@ -535,12 +535,12 @@ nav a:hover {
   margin-bottom: 4px;
 }
 
-/* ===== RESPONSIVE ===== */
+
 @media (max-width: 768px) {
   .info-section {
     flex-direction: column;
     gap: 14px;
-    margin-bottom: 24px; /* 🔹 Margen inferior para separación */
+    margin-bottom: 24px;
   }
 
   .info-box {
@@ -564,7 +564,7 @@ nav a:hover {
 
 
 
-/* ===== MODAL ESTILO ===== */
+
 .modal {
   display: none;
   position: fixed;
@@ -618,7 +618,7 @@ nav a:hover {
   color: #fff;
 }
 
-/* ===== CONTENIDO ===== */
+
 .modal-content h2 {
   text-align: center;
   color: #ff0040;
@@ -675,7 +675,7 @@ nav a:hover {
   padding: 12px 14px;
   margin-top: 12px;
   transition: all 0.3s ease;
-  min-height: 150px; /* 🔹 Tamaño uniforme */
+  min-height: 150px; 
 }
 
 .nivel:hover {
@@ -761,24 +761,24 @@ nav a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px; /* 🔹 Más cerca entre texto e imagen */
+  gap: 5px; 
   width: 100%;
-  max-width: 900px; /* 🔹 Un poco más estrecho */
+  max-width: 900px; 
   margin: 0 auto;
   flex-wrap: wrap;
 }
 
-/* ===== LADO IZQUIERDO ===== */
+
 .uniforme-lista {
   flex: 1;
   display: flex;
-  justify-content: flex-end; /* 🔹 Empuja el texto más a la derecha */
+  justify-content: flex-end; 
   align-items: flex-start;
   min-width: 230px;
-  padding-right: 10px; /* 🔹 Espacio hacia la imagen */
+  padding-right: 10px; 
 }
 
-/* Caja del texto */
+
 .uniforme-box {
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 0, 64, 0.3);
@@ -813,18 +813,18 @@ nav a:hover {
   color: #ff0040;
 }
 
-/* ===== LADO DERECHO ===== */
+
 .uniforme-imagen {
   flex: 1;
   display: flex;
-  justify-content: flex-start; /* 🔹 Mueve la imagen hacia la izquierda */
+  justify-content: flex-start; 
   align-items: center;
   min-width: 230px;
-  padding-left: 10px; /* 🔹 Un poco de espacio desde el borde */
+  padding-left: 10px; 
 }
 
 .uniforme-imagen img {
-  max-width: 55%; /* 🔹 Tamaño ajustado */
+  max-width: 55%;
   height: auto;
   display: block;
   border-radius: 8px;
@@ -837,7 +837,7 @@ nav a:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
-/* ===== RESPONSIVE ===== */
+
 @media (max-width: 768px) {
   .uniforme-container {
     flex-direction: column;
@@ -895,11 +895,11 @@ nav a:hover {
 
 /* === AJUSTES DE POSICIÓN === */
 .about-left {
-  margin-left: 40px;   /* 🔹 Mueve ligeramente hacia la derecha */
+  margin-left: 40px;
 }
 
 .about-right {
-  margin-right: 40px;  /* 🔹 Mueve ligeramente hacia la izquierda */
+  margin-right: 40px;
 }
 
 /* === LADO IZQUIERDO === */
@@ -949,15 +949,15 @@ nav a:hover {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 15px; /* Menor separación entre tarjetas */
+  gap: 15px;
 }
 
 .stats-card {
   background-color: #1a1a1a;
   border: 2px solid #ff0040;
   border-radius: 12px;
-  padding: 18px 20px; /* Tarjeta más compacta */
-  min-width: 120px;   /* Tamaño reducido */
+  padding: 18px 20px;
+  min-width: 120px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -968,14 +968,14 @@ nav a:hover {
 }
 
 .stats-number {
-  font-size: 1.5rem;  /* Número más pequeño y legible */
+  font-size: 1.5rem;
   font-weight: bold;
   color: #fff;
   margin-bottom: 6px;
 }
 
 .stats-title {
-  font-size: 0.95rem; /* Título más compacto */
+  font-size: 0.95rem;
   color: #ccc;
 }
 
@@ -1046,7 +1046,7 @@ nav a:hover {
 
   .about-left,
   .about-right {
-    margin: 0 auto; /* 🔹 Centra ambas columnas en móviles */
+    margin: 0 auto;
   }
 
   .about-right .career-info {
@@ -1107,7 +1107,7 @@ nav a:hover {
   background-color: #ffffff;
   color: #fff;
   flex-wrap: wrap;
-  gap: 0; /* Sin separación entre columnas */
+  gap: 0;
   padding: 0;
 }
 
@@ -1119,21 +1119,21 @@ nav a:hover {
 .manage-left img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Mantiene proporción y cubre la columna */
+  object-fit: cover;
   display: block;
 }
 
 .manage-right {
   flex: 1 1 50%;
   max-width: 50%;
-  padding: 60px; /* Espacio interno para el eslogan */
+  padding: 60px;
   box-sizing: border-box;
 }
 
 .manage-right h2 {
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.3;
-  margin: 0 0 15px 0; /* Separación entre líneas */
+  margin: 0 0 15px 0;
   color: #222222;
 }
 
@@ -1141,7 +1141,7 @@ nav a:hover {
 .manage-right h3 {
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.3;
-  margin: 0 0 15px 0; /* Separación entre líneas */
+  margin: 0 0 15px 0;
   color: #ffffff;
 }
 

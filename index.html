@@ -26,7 +26,7 @@
 
 <nav>
   <div class="logo">
-  <a href="index.html"> <!-- Aquí pones la URL a donde quieres dirigir -->
+  <a href="index.html"> 
     <img src="logo/logo.png" alt="Logo de mi sitio">
   </a>
 </div>
@@ -77,10 +77,9 @@
 
 
 
-  <!-- ======== SECCIÓN DE INICIO DE CLASES ======== -->
 <section class="inicio-clases">
     <div class="contenido">
-        <h1>Inicio: 12 de Enero 2026</h1>
+        <h1>Inicio: 16 de Marzo 2026</h1>
         <h2>Cooking Gourmet - Huancayo</h2>
         <div class="botones">
             <a href="https://cookingourmet.q10.com/Preinscripcion" class="btn btn-principal">Matricularme</a>
@@ -95,15 +94,15 @@
 </a>
 
 
-  <!-- ======== SLIDER ======== -->
+
   <div class="slider" id="slider">
     <div class="slides">
-      <div class="slide"><img src="slider/slider6.png" alt="Imagen 1"></div>
+      <div class="slide"><img src="slider/slider.png" alt="Imagen 6"></div>
       <div class="slide"><img src="slider/slider2.png" alt="Imagen 2"></div>
       <div class="slide"><img src="slider/slider3.png" alt="Imagen 3"></div>
       <div class="slide"><img src="slider/slider4.png" alt="Imagen 4"></div>
       <div class="slide"><img src="slider/slider5.png" alt="Imagen 5"></div>
-      <div class="slide"><img src="slider/slider.png" alt="Imagen 6"></div>
+
     </div>
 
     <button class="slider-btn prev" id="prev">❮</button>
@@ -138,7 +137,7 @@
   <h2>Nuestros Programas de Estudio</h2>
   <div class="carrusel-wrapper">
     <div class="carrusel">
-      <!-- 🔹 Primera serie -->
+   
       <div class="programa">
         <img src="images/gastronomia.png" alt="Gastronomía">
         <h3>Gastronomía</h3>
@@ -181,7 +180,7 @@
         <button onclick="location.href='programas/GASTRONOMIA/bar.html'">Ver más</button>
       </div>
 
-      <!-- 🔁 Segunda serie duplicada (para bucle perfecto) -->
+  
       <div class="programa">
         <img src="images/carrusel.png" alt="Gastronomía">
         <h3>Gastronomía</h3>
@@ -229,7 +228,7 @@
 
 
 
-<!-- Botón flotante -->
+
 <div id="chat-toggle" class="chat-toggle">
   💬
   <div id="chat-alert" class="chat-alert">
@@ -237,7 +236,6 @@
   </div>
 </div>
 
-<!-- Caja del chat -->
 <div id="chat-box" class="chat-box">
   <div class="chat-header">Cookito 🤖</div>
   <div id="chat-body" class="chat-body"></div>
@@ -250,7 +248,7 @@
   </div>
 </div>
 
-<!-- Formulario oculto -->
+
     <form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
         <input type="text" name="Nombre">
         <input type="email" name="Correo">
@@ -352,7 +350,7 @@
 
 
 
-<!-- SECCIÓN 7: VIDEO INSTITUCIONAL -->
+
 <section class="video-section" id="video">
   <div class="video-container">
     <video id="videoInstitucional" muted playsinline preload="metadata">
@@ -360,7 +358,7 @@
       Tu navegador no soporta el video HTML5.
     </video>
 
-    <!-- Controles personalizados -->
+  
     <div class="video-controls">
       <button id="playPauseBtn" class="control-btn">
         ▶
@@ -377,7 +375,7 @@
 
 
 
-<!-- SECCIÓN 8: EVENTOS Y PROGRAMAS ACELERADOS -->
+
 <section class="eventos-section" id="eventos">
   <div class="eventos-contenido">
     <h2>Eventos y <span>Programas Acelerados</span></h2>
@@ -414,11 +412,11 @@
 
 <footer class="section5">
   <div class="footer-container">
-    <!-- Logo -->
+
     <div class="footer-logo">
       <img src="images/logos/logo.png" alt="Cooking Gourmet Logo">
     </div>
-    <!-- Navegación -->
+
     <div class="footer-nav">
       <h4>Navegación</h4>
       <ul>
@@ -437,7 +435,7 @@
         <li><a href="#estudiantes">Estudiantes</a></li>
       </ul>
     </div>
-    <!-- Redes sociales -->
+   
     <div class="footer-social">
       <h4>Redes Sociales</h4>
       <ul>
@@ -446,7 +444,7 @@
         <li><a href="https://wa.me/51981377382"><img src="images/logos/ws.png" alt="whatsapp"></a></li>
       </ul>
     </div>
-    <!-- Libro de reclamos -->
+
     <div class="footer-claims">
       <h4>Libro de Reclamos</h4>
       <p>Si tienes alguna consulta o reclamo, visita nuestro <br> <a href="libro_de_reclamos/index.html">libro de reclamos</a>.</p>
@@ -482,7 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!video) return;
 
-  // Reproducción automática con scroll (mantiene tu funcionalidad)
+  
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -494,7 +492,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.6 });
   observer.observe(video);
 
-  // --- Controles personalizados ---
+
   playPauseBtn.addEventListener("click", () => {
     if (video.paused) {
       video.play();
@@ -510,19 +508,19 @@ document.addEventListener("DOMContentLoaded", () => {
     muteBtn.textContent = video.muted ? "🔇" : "🔊";
   });
 
-  // Actualizar barra de progreso
+
   video.addEventListener("timeupdate", () => {
     const progress = (video.currentTime / video.duration) * 100;
     progressBar.value = progress;
   });
 
-  // Permitir saltar con la barra
+
   progressBar.addEventListener("input", () => {
     const newTime = (progressBar.value / 100) * video.duration;
     video.currentTime = newTime;
   });
 
-  // Cambiar ícono al iniciar o pausar
+
   video.addEventListener("play", () => playPauseBtn.textContent = "⏸");
   video.addEventListener("pause", () => playPauseBtn.textContent = "▶");
 });
@@ -532,14 +530,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <script>
-// ======== SCRIPT DE MODALES (ajustado) ========
 
-// Seleccionar solo los botones que abren modales
+
+
 const modalButtons = document.querySelectorAll(".modal-btn");
 const modals = document.querySelectorAll(".modal");
 const closeButtons = document.querySelectorAll(".close");
 
-// Mostrar el modal al hacer clic
+
 modalButtons.forEach((button) => {
     button.addEventListener("click", () => {
         const modalId = button.getAttribute("data-modal");
@@ -548,7 +546,7 @@ modalButtons.forEach((button) => {
     });
 });
 
-// Cerrar modal al hacer clic en la "X"
+
 closeButtons.forEach((close) => {
     close.addEventListener("click", () => {
         const modalId = close.getAttribute("data-close");
@@ -557,7 +555,7 @@ closeButtons.forEach((close) => {
     });
 });
 
-// Cerrar modal al hacer clic fuera del contenido
+
 window.addEventListener("click", (event) => {
     modals.forEach((modal) => {
         if (event.target === modal) {
@@ -569,7 +567,6 @@ window.addEventListener("click", (event) => {
 
 
 <script>
-// ======== CHATBOT COOKITO (ajustado) ========
 
 const chatToggle = document.getElementById('chat-toggle');
 const chatBox = document.getElementById('chat-box');
@@ -647,7 +644,7 @@ const CookitoChatbot = {
 
         chatOptionsContainer.addEventListener('click', this.handleOptionClick.bind(this));
 
-        // Chat oculto por defecto
+      
         chatBox.style.display = 'none';
     },
 
@@ -888,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
 <script>
-  // ======== MENÚ RESPONSIVE ========
+
   const menuToggle = document.getElementById("menu-toggle");
   const menuItems = document.getElementById("menu-items");
   const dropdown = document.getElementById("dropdown");
@@ -905,18 +902,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ======== SLIDER INFINITO ========
+
   const slidesContainer = document.querySelector(".slides");
   const slides = document.querySelectorAll(".slide");
   const dotsContainer = document.getElementById("dots");
   const nextBtn = document.getElementById("next");
   const prevBtn = document.getElementById("prev");
 
-  let index = 1; // empezamos en 1 porque clonaremos la primera y última
+  let index = 1; 
   let autoSlideTimer;
   const AUTO_INTERVAL = 5000;
 
-  // Clonar primera y última slide
+ 
   const firstClone = slides[0].cloneNode(true);
   const lastClone = slides[slides.length - 1].cloneNode(true);
   slidesContainer.appendChild(firstClone);
@@ -925,44 +922,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const allSlides = document.querySelectorAll(".slide");
   const totalSlides = allSlides.length;
 
-  // Ajustar ancho dinámicamente
+
   slidesContainer.style.width = `${totalSlides * 100}%`;
   allSlides.forEach(slide => {
     slide.style.width = `${100 / totalSlides}%`;
   });
 
-  // Crear puntos
   function createDots() {
     dotsContainer.innerHTML = "";
     for (let i = 0; i < slides.length; i++) {
       const dot = document.createElement("div");
       dot.classList.add("dot");
       if (i === 0) dot.classList.add("active");
-      dot.addEventListener("click", () => goToSlide(i + 1)); // +1 por el clon inicial
+      dot.addEventListener("click", () => goToSlide(i + 1)); 
       dotsContainer.appendChild(dot);
     }
   }
   createDots();
   const dots = document.querySelectorAll(".dot");
 
-  // Mostrar slide
+ 
   function showSlide(i, smooth = true) {
     slidesContainer.style.transition = smooth ? "transform 0.6s ease-in-out" : "none";
     slidesContainer.style.transform = `translateX(-${i * (100 / totalSlides)}%)`;
 
-    // Actualizar puntos
+    
     dots.forEach(dot => dot.classList.remove("active"));
     const dotIndex = (i - 1 + slides.length) % slides.length;
     dots[dotIndex].classList.add("active");
 
-    // Efecto zoom
+    
     allSlides.forEach(slide => slide.classList.remove("active"));
     allSlides[i].classList.add("active");
 
     index = i;
   }
 
-  // Funciones de navegación
+  
   function nextSlide() {
     if (index >= totalSlides - 1) return;
     showSlide(index + 1);
@@ -978,7 +974,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetAutoSlide();
   }
 
-  // Transición infinita (cuando termina el desplazamiento)
+  
   slidesContainer.addEventListener("transitionend", () => {
     if (allSlides[index].isSameNode(firstClone)) {
       showSlide(1, false);
@@ -987,7 +983,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Botones
+ 
   nextBtn.addEventListener("click", () => {
     nextSlide();
     resetAutoSlide();
@@ -997,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetAutoSlide();
   });
 
-  // Auto Slide
+  
   function startAutoSlide() {
     autoSlideTimer = setInterval(nextSlide, AUTO_INTERVAL);
   }
@@ -1006,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoSlide();
   }
 
-  // Iniciar
+ 
   showSlide(index, false);
   startAutoSlide();
 
@@ -1018,7 +1014,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  //carrusel
+
 
 
 

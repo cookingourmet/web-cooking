@@ -18,7 +18,7 @@
 
     <nav>
  <div class="logo">
-  <a href="../../index.html"> <!-- Aquí pones la URL a donde quieres dirigir -->
+  <a href="../../index.html"> 
     <img src="../logo/logo.png" alt="Logo de mi sitio">
   </a>
 </div>
@@ -49,7 +49,7 @@
     <a href="https://site3.q10.com/OfertaLaboral/Crear?aplentId=fc29f47b-275b-4cdd-8f45-3fb3cb677900">Bolsa de Trabajo</a>
     <a href="https://cookingourmet.q10.com/">Aula Virtual</a>
 
-    <!-- Redes sociales a la derecha -->
+    
     <div class="social-icons ms-3">
       <a href="https://www.facebook.com/Cooking.Gourmet" target="_blank" class="text-decoration-none text-light me-2">
         <i class="bi bi-facebook"></i>
@@ -75,9 +75,6 @@
 </a>
 
 
-
-
-<!-- Botón flotante -->
 <div id="chat-toggle" class="chat-toggle">
   💬
   <div id="chat-alert" class="chat-alert">
@@ -85,7 +82,6 @@
   </div>
 </div>
 
-<!-- Caja del chat -->
 <div id="chat-box" class="chat-box">
   <div class="chat-header">Cookito 🤖</div>
   <div id="chat-body" class="chat-body"></div>
@@ -98,7 +94,7 @@
   </div>
 </div>
 
-<!-- Formulario oculto -->
+
     <form id="cuquito-form" action="https://formsubmit.co/ventas@cookingourmet.edu.pe" method="POST" style="display:none;">
         <input type="text" name="Nombre">
         <input type="email" name="Correo">
@@ -138,7 +134,7 @@
 </div>
 
 
-    <!-- 🔹 Nueva sección de horarios y requisitos -->
+  
     <div class="info-section fade-in-up delay4">
   <div class="info-box">
     <h3>🕒 Horarios</h3>
@@ -168,7 +164,7 @@
 </section>
 
 
-<!-- 🔹 Modal de Malla Curricular -->
+
 <div id="mallaModal" class="modal">
   <div class="modal-content">
     <span class="close-btn" id="closeMalla">&times;</span>
@@ -253,17 +249,12 @@
 
 
 
-
-
-
-<!-- ===== MODAL UNIFORME ===== -->
 <div id="uniformeModal" class="modal">
   <div class="modal-content uniforme-modal">
     <span class="close-btn" id="closeUniforme">&times;</span>
     <h2>Uniforme Correcto - Gastronomía</h2>
 
     <div class="uniforme-container">
-      <!-- Lado Izquierdo: Lista de prendas -->
       <div class="uniforme-lista">
         <div class="uniforme-box">
           <ul>
@@ -276,7 +267,7 @@
         </div>
       </div>
 
-      <!-- Lado Derecho: Imagen -->
+     
       <div class="uniforme-imagen">
         <img src="../images/chef3.png" alt="Uniforme correcto de gastronomía">
       </div>
@@ -389,11 +380,11 @@
     <div class="gallery-item"><img src="../galeria/2.png" alt="Gastronomía"></div>
     <div class="gallery-item"><img src="../galeria/3.jpg" alt="Gastronomía"></div>
     
-    <!-- más imágenes -->
+  
   </div>
 </section>
 
-<!-- Lightbox -->
+
 <div id="lightbox" class="lightbox">
   <span class="close">&times;</span>
   <img class="lightbox-img" src="">
@@ -407,12 +398,12 @@
 <footer class="site-footer">
   <div class="footer-container">
 
-    <!-- LOGO -->
+   
     <div class="footer-logo">
       <img src="../logo/logo.png" alt="Logo" />
     </div>
 
-    <!-- MENÚ FOOTER -->
+   
     <div class="footer-menu">
       <h4>Enlaces</h4>
       <ul>
@@ -426,7 +417,7 @@
       </ul>
     </div>
 
-    <!-- REDES SOCIALES -->
+  
     <div class="footer-social">
       <h4>Síguenos</h4>
       <div class="social-icons">
@@ -437,7 +428,6 @@
       </div>
     </div>
 
-    <!-- QR CODES -->
     <div class="footer-qr">
       <h4>Escanea nuestros QR</h4>
       <div class="qr-codes">
@@ -465,12 +455,12 @@
     const dropdown = document.getElementById("dropdown");
     const dropdownBtn = dropdown.querySelector(".dropdown-btn");
 
-    // Mostrar / ocultar menú principal
+   
     menuToggle.addEventListener("click", () => {
       menuItems.classList.toggle("active");
     });
 
-    // Activar el submenú (dropdown) solo en pantallas pequeñas
+  
     dropdownBtn.addEventListener("click", (e) => {
       if (window.innerWidth <= 768) {
         e.preventDefault();
@@ -482,7 +472,7 @@
 
 
 <script>
-  // ====== Modal Malla Curricular ======
+
   const mallaBtn = document.querySelector('.btn-malla');
   const mallaModal = document.getElementById('mallaModal');
   const closeMalla = document.getElementById('closeMalla');
@@ -504,7 +494,7 @@
     });
   }
 
-  // ====== Modal Uniforme Correcto ======
+  
   const uniformeBtn = document.querySelector('.btn-uniforme');
   const uniformeModal = document.getElementById('uniformeModal');
   const closeUniforme = document.getElementById('closeUniforme');
@@ -531,15 +521,15 @@
 
 <script>
 
-  // ===== Contador animado con "+" al inicio =====
+  
 document.addEventListener("DOMContentLoaded", () => {
   const counters = document.querySelectorAll(".stats-number");
-  const speed = 200; // Más alto = más lento
+  const speed = 200; 
 
   counters.forEach(counter => {
     const animate = () => {
       const target = +counter.getAttribute("data-target");
-      const current = +counter.innerText.replace(/\D/g, ""); // Elimina cualquier caracter no numérico
+      const current = +counter.innerText.replace(/\D/g, ""); 
       const increment = target / speed;
 
       if (current < target) {
@@ -550,12 +540,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    // Detecta si el contador está visible en pantalla
+   
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           animate();
-          observer.unobserve(counter); // Se anima solo una vez
+          observer.unobserve(counter); 
         }
       });
     }, { threshold: 0.5 });
@@ -572,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <script>
-// ===== ANIMACIÓN AL SCROLL =====
+
 const fadeElements = document.querySelectorAll('.fade-in');
 
 const observer = new IntersectionObserver(entries => {
@@ -580,13 +570,13 @@ const observer = new IntersectionObserver(entries => {
     if(entry.isIntersecting) {
       entry.target.classList.add('visible');
 
-      // animar cada imagen del grid si hay
+    
       const images = entry.target.querySelectorAll('.gallery-item img');
       images.forEach(img => {
         img.style.animation = `zoomRandom ${Math.random() * 5 + 5}s ease-in-out infinite alternate`;
       });
 
-      // Iniciar máquina de escribir solo cuando se vea la sección
+      
       if(entry.target.querySelector("#dynamic-text") && !entry.target.querySelector("#dynamic-text").dataset.started){
         entry.target.querySelector("#dynamic-text").dataset.started = true;
         startTyping();
@@ -597,7 +587,7 @@ const observer = new IntersectionObserver(entries => {
 
 fadeElements.forEach(el => observer.observe(el));
 
-// ===== ZOOM ALEATORIO CONTINUO =====
+
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes zoomRandom {
@@ -608,7 +598,7 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-// ===== LIGHTBOX =====
+
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.querySelector(".lightbox-img");
 const closeBtn = document.querySelector(".lightbox .close");
@@ -628,15 +618,15 @@ lightbox.addEventListener("click", (e) => {
   if(e.target === lightbox) lightbox.classList.remove('show');
 });
 
-// ===== TAMAÑOS ALEATORIOS POR CADA IMAGEN =====
+
 document.querySelectorAll(".gallery-item").forEach(item => {
-  const rowSpan = Math.floor(Math.random() * 2) + 1; // 1 o 2 filas
-  const colSpan = Math.floor(Math.random() * 2) + 1; // 1 o 2 columnas
+  const rowSpan = Math.floor(Math.random() * 2) + 1; 
+  const colSpan = Math.floor(Math.random() * 2) + 1; 
   item.style.gridRowEnd = `span ${rowSpan}`;
   item.style.gridColumnEnd = `span ${colSpan}`;
 });
 
-// ===== MÁQUINA DE ESCRIBIR =====
+
 const texts = ["tu empresa", "tu vida", "tu futuro", "tu profesión"];
 let index = 0;
 const dynamicText = document.getElementById("dynamic-text");
