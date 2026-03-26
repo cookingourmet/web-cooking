@@ -42,7 +42,7 @@ export function renderWorkshopWindow() {
         </div>
 
         <h3 class="hero-workshop-window__title">
-          Panes<br />hojaldrados
+          Panes<br>hojaldrados
         </h3>
 
         <p class="hero-workshop-window__text">

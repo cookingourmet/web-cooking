@@ -538,12 +538,20 @@ export function initAssistantWindow() {
 
     if (!toggleBtn || !closeBtn || !sendBtn || !input || !chat || !panel || !bubble) return;
 
+    const safeToggleBtn = toggleBtn;
+    const safeCloseBtn = closeBtn;
+    const safeSendBtn = sendBtn;
+    const safeInput = input;
+    const safeChat = chat;
+    const safePanel = panel;
+    const safeBubble = bubble;
+
     const state = createInitialState();
     let bubbleTimer: number | null = null;
     let typingTimer: number | null = null;
 
     function updateLauncherBubble() {
-      bubble.textContent = LAUNCHER_BUBBLES[state.bubbleIndex] ?? LAUNCHER_BUBBLES[0];
+      safeBubble.textContent = LAUNCHER_BUBBLES[state.bubbleIndex] ?? LAUNCHER_BUBBLES[0];
     }
 
     function startBubbleRotation() {
@@ -589,7 +597,7 @@ export function initAssistantWindow() {
     }
 
     function renderMessages() {
-      chat.innerHTML = `
+      safeChat.innerHTML = `
         ${state.messages
           .map((message) => {
             const roleClass =
@@ -610,7 +618,7 @@ export function initAssistantWindow() {
       `;
 
       attachChipEvents();
-      chat.scrollTop = chat.scrollHeight;
+      safeChat.scrollTop = safeChat.scrollHeight;
     }
 
     function addBotMessage(text: string) {
@@ -662,7 +670,7 @@ export function initAssistantWindow() {
 
     function attachChipEvents() {
       const chips = Array.from(
-        chat.querySelectorAll<HTMLButtonElement>("[data-assistant-chip]")
+        safeChat.querySelectorAll<HTMLButtonElement>("[data-assistant-chip]")
       );
 
       chips.forEach((chip) => {
@@ -797,7 +805,7 @@ export function initAssistantWindow() {
       if (!value) return;
 
       addUserMessage(value);
-      input.value = "";
+      safeInput.value = "";
 
       if (state.step === "welcome") {
         state.step = "intent";
@@ -935,20 +943,20 @@ export function initAssistantWindow() {
 
     function openAssistant() {
       windowEl.classList.add("is-open");
-      toggleBtn.setAttribute("aria-expanded", "true");
-      panel.setAttribute("aria-hidden", "false");
+      safeToggleBtn.setAttribute("aria-expanded", "true");
+      safePanel.setAttribute("aria-hidden", "false");
       stopBubbleRotation();
       startConversation();
 
       window.setTimeout(() => {
-        input.focus();
+        safeInput.focus();
       }, 120);
     }
 
     function closeAssistant() {
       windowEl.classList.remove("is-open");
-      toggleBtn.setAttribute("aria-expanded", "false");
-      panel.setAttribute("aria-hidden", "true");
+      safeToggleBtn.setAttribute("aria-expanded", "false");
+      safePanel.setAttribute("aria-hidden", "true");
       clearTypingTimer();
       setTyping(false);
       startBubbleRotation();
@@ -962,29 +970,29 @@ export function initAssistantWindow() {
       }
     }
 
-    toggleBtn.addEventListener("click", (event) => {
+    safeToggleBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       toggleAssistant();
     });
 
-    closeBtn.addEventListener("click", (event) => {
+    safeCloseBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       closeAssistant();
     });
 
-    sendBtn.addEventListener("click", (event) => {
+    safeSendBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      handleUserMessage(input.value);
+      handleUserMessage(safeInput.value);
     });
 
-    input.addEventListener("keydown", (event) => {
+    safeInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
         event.stopPropagation();
-        handleUserMessage(input.value);
+        handleUserMessage(safeInput.value);
       }
 
       if (event.key === "Escape") {
