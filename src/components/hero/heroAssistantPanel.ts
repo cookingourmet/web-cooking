@@ -51,6 +51,8 @@ type AssistantState = {
   lead: LeadData;
   isTyping: boolean;
   bubbleIndex: number;
+  lockedChips: boolean;
+  pendingQueueToken: number;
 };
 
 type ProgramInfo = {
@@ -143,6 +145,8 @@ function createInitialState(): AssistantState {
     messages: [],
     isTyping: false,
     bubbleIndex: 0,
+    lockedChips: false,
+    pendingQueueToken: 0,
     lead: {
       fullName: "",
       phone: "",
@@ -159,6 +163,18 @@ function createInitialState(): AssistantState {
 
 function createMessageId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function getMessageDelay(text: string, min = 2000, max = 5000) {
+  const cleanLength = text.trim().length;
+  const calculated = 1600 + cleanLength * 18;
+  return Math.max(min, Math.min(max, calculated));
+}
+
+function wait(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
 }
 
 function escapeHtml(text: string) {
@@ -309,10 +325,11 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
             (key) => `
               <button
                 type="button"
-                class="hero-assistant-window__chip"
+                class="hero-assistant-window__chip${state.lockedChips ? " is-disabled" : ""}"
                 data-assistant-chip
                 data-chip-type="intent"
                 data-chip-value="${key}"
+                ${state.lockedChips ? "disabled" : ""}
               >
                 ${QUICK_ACTIONS[key]}
               </button>
@@ -332,10 +349,11 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
             return `
               <button
                 type="button"
-                class="hero-assistant-window__chip"
+                class="hero-assistant-window__chip${state.lockedChips ? " is-disabled" : ""}"
                 data-assistant-chip
                 data-chip-type="program"
                 data-chip-value="${item.key}"
+                ${state.lockedChips ? "disabled" : ""}
               >
                 ${item.label}
               </button>
@@ -351,10 +369,11 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
       <div class="hero-assistant-window__quick-actions">
         <button
           type="button"
-          class="hero-assistant-window__chip"
+          class="hero-assistant-window__chip${state.lockedChips ? " is-disabled" : ""}"
           data-assistant-chip
           data-chip-type="dni_optional"
           data-chip-value="skip"
+          ${state.lockedChips ? "disabled" : ""}
         >
           Omitir por ahora
         </button>
@@ -488,7 +507,7 @@ export function renderAssistantWindow() {
             <input
               type="text"
               class="hero-assistant-window__input"
-              placeholder="Escribe tu respuesta..."
+              placeholder="Escribe tu respuesta."
               aria-label="Escribe tu respuesta"
             />
             <button
@@ -578,6 +597,13 @@ export function initAssistantWindow() {
       }
     }
 
+    function setInteractionLocked(locked: boolean) {
+      state.lockedChips = locked;
+      safeInput.disabled = locked;
+      safeSendBtn.disabled = locked;
+      renderMessages();
+    }
+
     function renderTypingIndicator() {
       if (!state.isTyping) return "";
 
@@ -644,28 +670,32 @@ export function initAssistantWindow() {
       renderMessages();
     }
 
-    function queueBotMessage(text: string, delay = 520) {
-      setTyping(true);
-      clearTypingTimer();
+    async function queueBotMessage(text: string, delay?: number, token?: number) {
+      const activeToken = token ?? state.pendingQueueToken;
+      const finalDelay = delay ?? getMessageDelay(text);
 
-      typingTimer = window.setTimeout(() => {
-        typingTimer = null;
-        setTyping(false);
-        addBotMessage(text);
-      }, delay);
+      setInteractionLocked(true);
+      setTyping(true);
+
+      await wait(finalDelay);
+
+      if (activeToken !== state.pendingQueueToken) return;
+
+      setTyping(false);
+      addBotMessage(text);
+      setInteractionLocked(false);
     }
 
-    function queueBotMessages(messages: Array<{ text: string; delay?: number }>) {
-      let accumulatedDelay = 0;
+    async function queueBotMessages(messages: Array<{ text: string; delay?: number }>) {
+      const token = ++state.pendingQueueToken;
 
-      messages.forEach((item, index) => {
-        const messageDelay = item.delay ?? (index === 0 ? 520 : 720);
-        accumulatedDelay += messageDelay;
+      for (const item of messages) {
+        await queueBotMessage(item.text, item.delay, token);
 
-        window.setTimeout(() => {
-          queueBotMessage(item.text, 520);
-        }, accumulatedDelay);
-      });
+        if (token !== state.pendingQueueToken) {
+          return;
+        }
+      }
     }
 
     function attachChipEvents() {
@@ -677,6 +707,11 @@ export function initAssistantWindow() {
         chip.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
+
+          if (state.lockedChips || state.isTyping) return;
+
+          state.lockedChips = true;
+          renderMessages();
 
           const chipType = chip.dataset.chipType;
           const chipValue = chip.dataset.chipValue ?? "";
@@ -708,33 +743,35 @@ export function initAssistantWindow() {
       if (state.started) return;
       state.started = true;
       state.messages = [];
+      state.lockedChips = false;
 
       addBotMessage("Hola 👋, soy Cookito, tu asistente virtual de Cooking Gourmet.");
-      queueBotMessages([
+      state.step = "intent";
+      renderMessages();
+
+      void queueBotMessages([
         {
           text: "Puedo ayudarte con programas de estudio, costos, horarios e inscripciones.",
-          delay: 280,
+          delay: 2300,
         },
         {
           text: "¿Qué te gustaría conocer hoy?",
-          delay: 560,
+          delay: 2600,
         },
       ]);
-
-      state.step = "intent";
-      renderMessages();
     }
 
     function handleIntentSelection(intent: QuickActionKey) {
       state.lead.selectedIntent = intent;
       state.step = "program";
+      state.lockedChips = false;
       renderMessages();
 
-      queueBotMessages([
-        { text: getIntentReply(intent), delay: 160 },
+      void queueBotMessages([
+        { text: getIntentReply(intent), delay: 2200 },
         {
           text: "Cuéntame, ¿sobre qué programa te gustaría recibir información?",
-          delay: 620,
+          delay: 2800,
         },
       ]);
     }
@@ -744,20 +781,21 @@ export function initAssistantWindow() {
       state.lead.selectedProgram = programKey;
       state.lead.recommendedPrograms = getRecommendedPrograms(programKey);
       state.step = "ask_name";
+      state.lockedChips = false;
       renderMessages();
 
-      queueBotMessages([
+      void queueBotMessages([
         {
           text: `Excelente elección. ${program.label} es ${program.shortDescription}`,
-          delay: 180,
+          delay: 2400,
         },
         {
           text: "Para enviarte la información completa del programa y brindarte una mejor atención, te pediré unos datos rápidos.",
-          delay: 760,
+          delay: 3600,
         },
         {
           text: "Primero, ¿cuál es tu nombre completo?",
-          delay: 760,
+          delay: 2600,
         },
       ]);
     }
@@ -765,6 +803,7 @@ export function initAssistantWindow() {
     function finishLeadFlow(skippedDni = false) {
       state.step = "completed";
       state.lead.brochureSent = true;
+      state.lockedChips = false;
       renderMessages();
 
       const program = getProgramInfo(state.lead.selectedProgram);
@@ -774,20 +813,20 @@ export function initAssistantWindow() {
         .map((key) => PROGRAMS[key].label)
         .slice(0, 2);
 
-      queueBotMessages([
+      void queueBotMessages([
         {
           text: `Listo, ${state.lead.fullName.split(" ")[0] || "gracias"} ✅ Ya registré tu interés en ${program.label}.`,
-          delay: 180,
+          delay: 2400,
         },
         {
           text: skippedDni
             ? "Continuaremos sin DNI por ahora, no te preocupes."
             : "Tu registro quedó más completo para una atención más rápida.",
-          delay: 700,
+          delay: 2600,
         },
         {
           text: "Ahora puedes continuar por WhatsApp, enviar tu solicitud por correo o revisar el brochure del programa.",
-          delay: 700,
+          delay: 3000,
         },
         {
           text: `Además, te recomiendo revisar ${
@@ -795,7 +834,7 @@ export function initAssistantWindow() {
           }${
             recommendedLabels[1] ? ` y ${recommendedLabels[1]}` : ""
           } si quieres complementar tu perfil.`,
-          delay: 700,
+          delay: 3200,
         },
       ]);
     }
@@ -804,13 +843,19 @@ export function initAssistantWindow() {
       const value = rawValue.trim();
       if (!value) return;
 
+      state.pendingQueueToken++;
+      clearTypingTimer();
+      setTyping(false);
+      state.lockedChips = true;
+
       addUserMessage(value);
       safeInput.value = "";
 
       if (state.step === "welcome") {
         state.step = "intent";
+        state.lockedChips = false;
         renderMessages();
-        queueBotMessage("¿Qué te gustaría conocer hoy?", 440);
+        void queueBotMessage("¿Qué te gustaría conocer hoy?", 2400);
         return;
       }
 
@@ -840,9 +885,9 @@ export function initAssistantWindow() {
         const detectedProgram = detectProgramFromText(value);
 
         if (!detectedProgram) {
-          queueBotMessage(
+          void queueBotMessage(
             "Puedo ayudarte con Gastronomía Profesional, Pastelería Profesional, Bar Profesional, Barismo, Sommelier o Cursos Cortos. ¿Cuál te interesa?",
-            560
+            2600
           );
           return;
         }
@@ -853,70 +898,74 @@ export function initAssistantWindow() {
 
       if (state.step === "ask_name") {
         if (value.length < 3) {
-          queueBotMessage(
+          void queueBotMessage(
             "Tu nombre parece muy corto. ¿Podrías escribirlo completo, por favor?",
-            520
+            2200
           );
           return;
         }
 
         state.lead.fullName = value;
         state.step = "ask_phone";
+        state.lockedChips = false;
         renderMessages();
 
-        queueBotMessage(
+        void queueBotMessage(
           `Mucho gusto, ${value.split(" ")[0]}. Ahora compárteme tu número de celular, por favor.`,
-          520
+          2400
         );
         return;
       }
 
       if (state.step === "ask_phone") {
         if (!isValidPhone(value)) {
-          queueBotMessage(
+          void queueBotMessage(
             "Ese número parece inválido. Envíamelo nuevamente con 9 dígitos o formato correcto, por favor.",
-            520
+            2200
           );
           return;
         }
 
         state.lead.phone = normalizePhone(value);
         state.step = "ask_email";
+        state.lockedChips = false;
         renderMessages();
 
-        queueBotMessage(
+        void queueBotMessage(
           "Perfecto. Ahora dime tu correo electrónico para enviarte el brochure en PDF.",
-          520
+          2400
         );
         return;
       }
 
       if (state.step === "ask_email") {
         if (!isValidEmail(value)) {
-          queueBotMessage(
+          void queueBotMessage(
             "Creo que ese correo no está completo. ¿Podrías revisarlo y enviarlo nuevamente?",
-            520
+            2200
           );
           return;
         }
 
         state.lead.email = value.trim();
         state.step = "ask_dni_optional";
+        state.lockedChips = false;
         renderMessages();
 
-        queueBotMessage(
+        void queueBotMessage(
           "Gracias. Si deseas dejar tu registro más completo, también puedes compartirme tu DNI. Este paso es opcional por ahora.",
-          520
+          2600
         );
         return;
       }
 
       if (state.step === "ask_dni_optional") {
         if (!isValidDni(value)) {
+          state.lockedChips = false;
           renderMessages();
-          queueBotMessage(
+          void queueBotMessage(
             "El DNI debe tener 8 números. Si deseas, puedes volver a escribirlo o tocar “Omitir por ahora”.",
-            520
+            2400
           );
           return;
         }
@@ -934,9 +983,9 @@ export function initAssistantWindow() {
           return;
         }
 
-        queueBotMessage(
+        void queueBotMessage(
           "Puedo ayudarte a revisar otro programa o continuar con un asesor. ¿Qué prefieres?",
-          500
+          2400
         );
       }
     }
@@ -958,7 +1007,12 @@ export function initAssistantWindow() {
       safeToggleBtn.setAttribute("aria-expanded", "false");
       safePanel.setAttribute("aria-hidden", "true");
       clearTypingTimer();
+      state.pendingQueueToken++;
       setTyping(false);
+      state.lockedChips = false;
+      safeInput.disabled = false;
+      safeSendBtn.disabled = false;
+      renderMessages();
       startBubbleRotation();
     }
 
@@ -985,6 +1039,7 @@ export function initAssistantWindow() {
     safeSendBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
+      if (state.isTyping) return;
       handleUserMessage(safeInput.value);
     });
 
@@ -992,6 +1047,7 @@ export function initAssistantWindow() {
       if (event.key === "Enter") {
         event.preventDefault();
         event.stopPropagation();
+        if (state.isTyping) return;
         handleUserMessage(safeInput.value);
       }
 
