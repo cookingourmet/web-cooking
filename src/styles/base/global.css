@@ -1,0 +1,21 @@
+body {
+  background:
+    radial-gradient(circle at top center, rgba(255, 15, 77, 0.08), transparent 24%),
+    radial-gradient(circle at 20% 20%, rgba(217, 177, 111, 0.08), transparent 20%),
+    linear-gradient(180deg, #040507 0%, #0a0b10 100%);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+#app,
+.site-shell {
+  min-height: 100vh;
+}
