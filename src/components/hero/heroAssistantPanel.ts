@@ -563,6 +563,13 @@ export function initAssistantWindow() {
       }
     }
 
+    function clearTypingTimer() {
+      if (typingTimer !== null) {
+        window.clearTimeout(typingTimer);
+        typingTimer = null;
+      }
+    }
+
     function renderTypingIndicator() {
       if (!state.isTyping) return "";
 
@@ -631,12 +638,10 @@ export function initAssistantWindow() {
 
     function queueBotMessage(text: string, delay = 520) {
       setTyping(true);
-
-      if (typingTimer !== null) {
-        window.clearTimeout(typingTimer);
-      }
+      clearTypingTimer();
 
       typingTimer = window.setTimeout(() => {
+        typingTimer = null;
         setTyping(false);
         addBotMessage(text);
       }, delay);
@@ -773,7 +778,7 @@ export function initAssistantWindow() {
           delay: 700,
         },
         {
-          text: `Ahora puedes continuar por WhatsApp, enviar tu solicitud por correo o revisar el brochure del programa.`,
+          text: "Ahora puedes continuar por WhatsApp, enviar tu solicitud por correo o revisar el brochure del programa.",
           delay: 700,
         },
         {
@@ -932,6 +937,7 @@ export function initAssistantWindow() {
       windowEl.classList.add("is-open");
       toggleBtn.setAttribute("aria-expanded", "true");
       panel.setAttribute("aria-hidden", "false");
+      stopBubbleRotation();
       startConversation();
 
       window.setTimeout(() => {
@@ -943,7 +949,9 @@ export function initAssistantWindow() {
       windowEl.classList.remove("is-open");
       toggleBtn.setAttribute("aria-expanded", "false");
       panel.setAttribute("aria-hidden", "true");
+      clearTypingTimer();
       setTyping(false);
+      startBubbleRotation();
     }
 
     function toggleAssistant() {
