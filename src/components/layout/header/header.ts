@@ -11,11 +11,6 @@ export function renderHeader() {
           <div class="brand__mark">
             <img src="/images/logo.png" alt="Cooking Gourmet" />
           </div>
-
-          <div class="brand__text">
-            <span class="brand__title">Cooking Gourmet</span>
-            <span class="brand__subtitle">Formación Gastronómica</span>
-          </div>
         </a>
 
         <div class="topbar__quick">
