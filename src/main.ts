@@ -26,6 +26,7 @@ import { renderBarProfesionalPage } from "./pages/programs/bar-profesional";
 import { renderBarismoPage } from "./pages/programs/barismo";
 import { renderSommelierPage } from "./pages/programs/sommelier";
 import { renderCocinaPage } from "./pages/programs/cocina";
+import { initProgramPageEffects } from "./utils/program-effects";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -80,6 +81,7 @@ function renderRoute() {
       break;
   }
 
+  initProgramPageEffects();
   window.scrollTo(0, 0);
 }
 

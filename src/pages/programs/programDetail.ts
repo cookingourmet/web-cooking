@@ -1,43 +1,190 @@
-import type { ProgramData } from "../../data/programs.data";
+import type { ProgramData, ProgramModule } from "../../data/programs.data";
 
-function renderHeroHighlights(program: ProgramData) {
-  const highlights = [
-    program.modality ? `Modalidad ${program.modality}` : "",
-    program.duration ? `Duración ${program.duration}` : "",
-    program.schedule ? `Horarios ${program.schedule}` : "",
-  ].filter(Boolean);
+type ProgramCopy = {
+  eyebrow: string;
+  heroTitle: string;
+  heroDescription: string;
+  aboutTag: string;
+  aboutTitle: string;
+  aboutText: string;
+  curriculumTag: string;
+  curriculumTitle: string;
+  curriculumSubtitle: string;
+  featuresTag: string;
+  featuresTitle: string;
+  darkTag: string;
+  darkTitle: string;
+  admissionTag: string;
+  admissionTitle: string;
+  investmentTitle: string;
+  ctaTitle: string;
+  ctaText: string;
+  primaryAction: string;
+  secondaryAction: string;
+  brochureAction: string;
+  floatingBadge: string;
+};
 
-  if (!highlights.length) return "";
+function escapeHtml(value: string | number | null | undefined) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
+function stripProfessionalTitle(title: string) {
+  return title.replace(/\s+profesional$/i, "").trim();
+}
+
+function buildWhatsAppUrl(program: ProgramData) {
+  return `https://wa.me/${program.whatsappNumber ?? "51981377382"}?text=${encodeURIComponent(
+    program.whatsappMessage
+  )}`;
+}
+
+function normalizeModules(modules: ProgramData["modules"]): ProgramModule[] {
+  return modules.map((module, index) => {
+    if (typeof module === "string") {
+      return {
+        title: `Módulo ${String(index + 1).padStart(2, "0")}`,
+        items: [module],
+      };
+    }
+
+    return module as ProgramModule;
+  });
+}
+
+function getProgramCopy(program: ProgramData): ProgramCopy {
+  const cleanTitle = stripProfessionalTitle(program.title);
+
+  if (program.slug === "gastronomia") {
+    return {
+      eyebrow: "Excelencia culinaria",
+      heroTitle: cleanTitle,
+      heroDescription:
+        "Transforma tu pasión por la cocina en una carrera con visión internacional, práctica intensiva y proyección laboral real.",
+      aboutTag: "Nosotros",
+      aboutTitle: "Formamos talento culinario para escenarios reales",
+      aboutText:
+        "Desarrollamos profesionales con técnica, creatividad y disciplina, preparados para destacar en restaurantes, hoteles, catering y emprendimientos gastronómicos de alto nivel.",
+      curriculumTag: "Malla curricular",
+      curriculumTitle: "Plan de estudios especializado",
+      curriculumSubtitle:
+        "Un recorrido académico diseñado para construir dominio técnico, criterio gastronómico y experiencia práctica.",
+      featuresTag: "Formación diferenciada",
+      featuresTitle: "Una experiencia de aprendizaje más completa",
+      darkTag: "Ruta de ingreso",
+      darkTitle: "Requisitos para comenzar",
+      admissionTag: "Admisión",
+      admissionTitle: "Documentos y beneficios",
+      investmentTitle: "Inversión académica",
+      ctaTitle: "Da el siguiente paso hacia tu futuro gastronómico",
+      ctaText:
+        "Recibe asesoría personalizada sobre horarios, costos, matrícula e inicio de clases y asegura tu vacante.",
+      primaryAction: "Solicitar informes",
+      secondaryAction: "Explorar malla",
+      brochureAction: program.brochureLabel ?? "Ver brochure",
+      floatingBadge: "Cocina, técnica y proyección profesional",
+    };
+  }
+
+  return {
+    eyebrow: "Programa especializado",
+    heroTitle: cleanTitle,
+    heroDescription: program.subtitle,
+    aboutTag: "Presentación",
+    aboutTitle: `Especialízate con ${program.title}`,
+    aboutText: program.description,
+    curriculumTag: "Plan académico",
+    curriculumTitle: "Plan de estudios",
+    curriculumSubtitle:
+      "Contenido estructurado para desarrollar habilidades prácticas y criterio profesional.",
+    featuresTag: "Ventajas",
+    featuresTitle: "¿Por qué elegir este programa?",
+    darkTag: "Perfil recomendado",
+    darkTitle: "¿A quién va dirigido?",
+    admissionTag: "Admisión",
+    admissionTitle: "Requisitos e inversión",
+    investmentTitle: "Inversión académica",
+    ctaTitle: `Impulsa tu crecimiento con ${program.title}`,
+    ctaText:
+      "Solicita información personalizada sobre horarios, matrícula, inversión e inicio de clases.",
+    primaryAction: "Solicitar información",
+    secondaryAction: "Ver malla",
+    brochureAction: program.brochureLabel ?? "Ver brochure",
+    floatingBadge: program.heroBadge ?? "Formación práctica aplicada",
+  };
+}
+
+function renderHero(program: ProgramData, copy: ProgramCopy, whatsappUrl: string) {
   return `
-    <div class="program-hero-highlights">
-      ${highlights
-        .map(
-          (item) => `
-            <div class="program-hero-highlight">
-              <span class="program-hero-highlight__dot"></span>
-              <span>${item}</span>
-            </div>
-          `
-        )
-        .join("")}
-    </div>
+    <section class="program-landing-hero">
+      <div class="program-landing-hero__bg">
+        <img src="${escapeHtml(program.image)}" alt="${escapeHtml(program.title)}" />
+      </div>
+
+      <div class="program-landing-hero__overlay"></div>
+
+      <div class="container program-landing-hero__content">
+        <div class="program-landing-hero__text">
+          <span class="program-landing-hero__eyebrow">${escapeHtml(copy.eyebrow)}</span>
+          <h1>${escapeHtml(copy.heroTitle)}</h1>
+          <p class="program-landing-hero__lead">${escapeHtml(copy.heroDescription)}</p>
+
+          <div class="program-landing-hero__actions">
+            <a
+              class="program-landing-btn program-landing-btn--primary"
+              href="${whatsappUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ${escapeHtml(copy.primaryAction)}
+            </a>
+
+            <a
+              class="program-landing-btn program-landing-btn--ghost"
+              href="#program-curriculum"
+            >
+              ${escapeHtml(copy.secondaryAction)}
+            </a>
+
+            ${
+              program.brochure
+                ? `
+                  <a
+                    class="program-landing-btn program-landing-btn--ghost"
+                    href="${escapeHtml(program.brochure)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ${escapeHtml(copy.brochureAction)}
+                  </a>
+                `
+                : ""
+            }
+          </div>
+        </div>
+      </div>
+    </section>
   `;
 }
 
-function renderStatCards(program: ProgramData) {
+function renderStats(program: ProgramData) {
   if (!program.stats?.length) return "";
 
   return `
-    <section class="program-stats">
+    <section class="program-landing-stats">
       <div class="container">
-        <div class="program-stats__grid">
+        <div class="program-landing-stats__grid">
           ${program.stats
             .map(
               (stat) => `
-                <article class="program-stat-card">
-                  <strong>${stat.value}</strong>
-                  <span>${stat.label}</span>
+                <article class="program-landing-stat">
+                  <strong>${escapeHtml(stat.value)}</strong>
+                  <span>${escapeHtml(stat.label)}</span>
                 </article>
               `
             )
@@ -48,429 +195,335 @@ function renderStatCards(program: ProgramData) {
   `;
 }
 
-function renderBenefits(program: ProgramData) {
-  if (!program.benefits?.length) return "";
+function renderAbout(program: ProgramData, copy: ProgramCopy) {
+  const bullets = [
+    ...(program.benefits?.slice(0, 2) ?? []),
+    ...(program.methodology ? [program.methodology] : []),
+  ].slice(0, 3);
 
   return `
-    <section class="program-section program-section--soft">
+    <section class="program-landing-section program-landing-section--light">
       <div class="container">
-        <div class="program-section__heading">
-          <span class="program-section__tag">Ventajas</span>
-          <h2>¿Por qué estudiar ${program.title}?</h2>
-          <p>Una formación diseñada para prepararte con visión práctica, competitiva y profesional.</p>
-        </div>
-
-        <div class="program-benefits-grid">
-          ${program.benefits
-            .map(
-              (item) => `
-                <article class="program-benefit-card">
-                  <div class="program-benefit-card__icon">✓</div>
-                  <p>${item}</p>
-                </article>
-              `
-            )
-            .join("")}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function renderModules(program: ProgramData) {
-  if (!program.modules?.length) return "";
-
-  const hasStructuredModules =
-    typeof program.modules[0] === "object" &&
-    program.modules[0] !== null &&
-    "title" in (program.modules[0] as object);
-
-  if (hasStructuredModules) {
-    return `
-      <section class="program-section">
-        <div class="container">
-          <div class="program-section__heading">
-            <span class="program-section__tag">Malla curricular</span>
-            <h2>Formación por módulos</h2>
-            <p>Contenido organizado para desarrollar técnica, criterio y dominio profesional paso a paso.</p>
-          </div>
-
-          <div class="program-modules-grid">
-            ${(program.modules as Array<{ title: string; items: string[] }>)
-              .map(
-                (module) => `
-                  <article class="program-module-card">
-                    <div class="program-module-card__top">
-                      <span class="program-module-card__badge">${module.title}</span>
-                    </div>
-                    <ul>
-                      ${module.items.map((item) => `<li>${item}</li>`).join("")}
-                    </ul>
-                  </article>
-                `
-              )
-              .join("")}
-          </div>
-        </div>
-      </section>
-    `;
-  }
-
-  return `
-    <section class="program-section">
-      <div class="container">
-        <div class="program-section__heading">
-          <span class="program-section__tag">Plan de estudio</span>
-          <h2>Contenidos principales</h2>
-          <p>Una ruta formativa enfocada en competencias reales para el mundo laboral.</p>
-        </div>
-
-        <article class="program-card">
-          <ul class="program-list program-list--columns">
-            ${(program.modules as string[]).map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </article>
-      </div>
-    </section>
-  `;
-}
-
-function renderProfile(program: ProgramData) {
-  if (!program.profile?.length) return "";
-
-  return `
-    <section class="program-section">
-      <div class="container program-two-columns">
-        <article class="program-card program-card--glass">
-          <span class="program-section__tag">Perfil del estudiante</span>
-          <h2>¿A quién va dirigido?</h2>
-          <ul class="program-list">
-            ${program.profile.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </article>
-
-        <article class="program-card">
-          <span class="program-section__tag">Enfoque</span>
-          <h2>Una formación con visión profesional</h2>
-          <p>${program.audience ?? "Programa orientado a quienes buscan formación práctica y oportunidades reales de crecimiento profesional."}</p>
-          ${
-            program.methodology
-              ? `<p>${program.methodology}</p>`
-              : ""
-          }
-        </article>
-      </div>
-    </section>
-  `;
-}
-
-function renderInvestment(program: ProgramData) {
-  if (!program.investment && !program.requirements?.length && !program.uniform?.length) return "";
-
-  return `
-    <section class="program-section program-section--soft">
-      <div class="container program-three-columns">
-        ${
-          program.investment
-            ? `
-          <article class="program-card">
-            <span class="program-section__tag">Inversión</span>
-            <h2>Costos del programa</h2>
-
-            <div class="program-price-list">
-              <div><span>Inscripción</span><strong>${program.investment.inscription}</strong></div>
-              <div><span>Matrícula</span><strong>${program.investment.enrollment}</strong></div>
-              <div><span>Mensualidad</span><strong>${program.investment.monthly}</strong></div>
-              <div><span>Uniforme</span><strong>${program.investment.uniform}</strong></div>
+        <div class="program-landing-about">
+          <div class="program-landing-about__media">
+            <div class="program-landing-about__image-wrap">
+              <img
+                src="${escapeHtml(program.image)}"
+                alt="${escapeHtml(program.title)}"
+                class="program-landing-about__image"
+              />
+              <div class="program-landing-about__badge">
+                ${escapeHtml(copy.floatingBadge)}
+              </div>
             </div>
-          </article>
-        `
-            : ""
-        }
-
-        ${
-          program.requirements?.length
-            ? `
-          <article class="program-card">
-            <span class="program-section__tag">Requisitos</span>
-            <h2>Documentos necesarios</h2>
-            <ul class="program-list">
-              ${program.requirements.map((item) => `<li>${item}</li>`).join("")}
-            </ul>
-          </article>
-        `
-            : ""
-        }
-
-        ${
-          program.uniform?.length
-            ? `
-          <article class="program-card">
-            <span class="program-section__tag">Uniforme</span>
-            <h2>Implementos incluidos</h2>
-            <ul class="program-list">
-              ${program.uniform.map((item) => `<li>${item}</li>`).join("")}
-            </ul>
-          </article>
-        `
-            : ""
-        }
-      </div>
-    </section>
-  `;
-}
-
-function renderSchedules(program: ProgramData) {
-  if (!program.schedules?.length) return "";
-
-  return `
-    <section class="program-section">
-      <div class="container">
-        <div class="program-section__heading">
-          <span class="program-section__tag">Horarios</span>
-          <h2>Turnos disponibles</h2>
-          <p>Elige el horario que mejor se adapte a tu ritmo y disponibilidad.</p>
-        </div>
-
-        <div class="program-schedule-grid">
-          ${program.schedules
-            .map(
-              (slot) => `
-                <article class="program-schedule-card">
-                  <span class="program-schedule-card__code">${slot.code}</span>
-                  <h3>${slot.label}</h3>
-                  <p>${slot.time}</p>
-                </article>
-              `
-            )
-            .join("")}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function renderOpportunities(program: ProgramData) {
-  if (!program.opportunities?.length) return "";
-
-  return `
-    <section class="program-section">
-      <div class="container">
-        <article class="program-card">
-          <div class="program-section__heading program-section__heading--compact">
-            <span class="program-section__tag">Campo laboral</span>
-            <h2>Oportunidades para tu futuro</h2>
-            <p>Prepárate para ingresar con seguridad a un mercado con alta demanda y múltiples caminos de crecimiento.</p>
           </div>
 
-          <div class="program-opportunity-grid">
-            ${program.opportunities
-              .map(
-                (item) => `
-                  <div class="program-opportunity-chip">${item}</div>
-                `
-              )
-              .join("")}
-          </div>
-        </article>
-      </div>
-    </section>
-  `;
-}
-
-function renderTrustBand(program: ProgramData, whatsappUrl: string) {
-  return `
-    <section class="program-section">
-      <div class="container">
-        <article class="program-trust-band">
-          <div class="program-trust-band__content">
-            <span class="program-section__tag">Impulsa tu futuro</span>
-            <h2>Da el siguiente paso con ${program.title}</h2>
-            <p>
-              Recibe orientación personalizada sobre inversión, horarios, matrícula,
-              inicio de clases y todo lo necesario para comenzar con seguridad.
-            </p>
-          </div>
-
-          <div class="program-trust-band__actions">
-            <a class="program-btn program-btn--primary" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">
-              Solicitar informes
-            </a>
+          <div class="program-landing-about__content">
+            <span class="program-landing-tag">${escapeHtml(copy.aboutTag)}</span>
+            <h2>${escapeHtml(copy.aboutTitle)}</h2>
+            <p>${escapeHtml(copy.aboutText)}</p>
             ${
-              program.brochure
-                ? `<a class="program-btn program-btn--secondary" href="${program.brochure}" target="_blank" rel="noopener noreferrer">
-                    Descargar brochure
-                  </a>`
+              program.audience
+                ? `<p>${escapeHtml(program.audience)}</p>`
+                : ""
+            }
+
+            ${
+              bullets.length
+                ? `
+                  <ul class="program-landing-bullets">
+                    ${bullets
+                      .map((item) => `<li>${escapeHtml(item)}</li>`)
+                      .join("")}
+                  </ul>
+                `
                 : ""
             }
           </div>
-        </article>
+        </div>
       </div>
     </section>
   `;
 }
 
-function renderContact(program: ProgramData, whatsappUrl: string) {
+function renderCurriculum(program: ProgramData, copy: ProgramCopy) {
+  const modules = normalizeModules(program.modules);
+
+  if (!modules.length) return "";
+
   return `
-    <section class="program-section">
-      <div class="container program-two-columns">
-        <article class="program-card program-card--accent">
-          <span class="program-section__tag">Contacto</span>
-          <h2>Solicita más información</h2>
+    <section class="program-landing-section program-landing-section--soft" id="program-curriculum">
+      <div class="container">
+        <div class="program-landing-heading program-landing-heading--center">
+          <span class="program-landing-tag">${escapeHtml(copy.curriculumTag)}</span>
+          <h2>${escapeHtml(copy.curriculumTitle)}</h2>
+          <p>${escapeHtml(copy.curriculumSubtitle)}</p>
+        </div>
+
+        <div class="program-landing-curriculum">
+          ${modules
+            .map(
+              (module, index) => `
+                <article class="program-landing-module-card">
+                  <div class="program-landing-module-card__number">
+                    ${String(index + 1).padStart(2, "0")}
+                  </div>
+                  <h3>${escapeHtml(module.title)}</h3>
+                  <ul>
+                    ${module.items
+                      .slice(0, 4)
+                      .map((item) => `<li>${escapeHtml(item)}</li>`)
+                      .join("")}
+                  </ul>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
+  const jobPreview = program.opportunities?.slice(0, 3).join(", ").toLowerCase();
+
+  const cards = [
+    {
+      icon: "✦",
+      title: "Formación intensiva",
+      text:
+        program.methodology ??
+        "Aprendizaje práctico con acompañamiento cercano, enfoque técnico y preparación aplicada al trabajo real.",
+    },
+    {
+      icon: "◈",
+      title: "Salida laboral",
+      text: jobPreview
+        ? `Proyección en ${jobPreview} y otros espacios del sector gastronómico.`
+        : "Proyección laboral en negocios, restaurantes y espacios especializados del rubro.",
+    },
+    {
+      icon: "◉",
+      title: "Horarios flexibles",
+      text: program.schedule
+        ? `Disponibilidad en ${program.schedule.toLowerCase()} para adaptarse a tu ritmo.`
+        : "Horarios pensados para compatibilizar estudio, trabajo y crecimiento profesional.",
+    },
+  ];
+
+  return `
+    <section class="program-landing-section program-landing-section--light">
+      <div class="container">
+        <div class="program-landing-heading">
+          <span class="program-landing-tag">${escapeHtml(copy.featuresTag)}</span>
+          <h2>${escapeHtml(copy.featuresTitle)}</h2>
           <p>
-            Recibe asesoría personalizada sobre matrícula, inversión, turnos disponibles,
-            inicio de clases y todo lo que necesitas para comenzar.
+            Una propuesta académica diseñada para brindarte técnica, experiencia,
+            empleabilidad y una formación más competitiva.
           </p>
+        </div>
 
-          <div class="program-contact-list">
+        <div class="program-landing-feature-grid">
+          ${cards
+            .map(
+              (card) => `
+                <article class="program-landing-feature-card">
+                  <div class="program-landing-feature-card__icon">${card.icon}</div>
+                  <h3>${escapeHtml(card.title)}</h3>
+                  <p>${escapeHtml(card.text)}</p>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderDarkPanel(program: ProgramData, copy: ProgramCopy) {
+  const items = (
+    program.requirements?.length ? program.requirements : program.profile ?? []
+  ).slice(0, 3);
+
+  if (!items.length) return "";
+
+  return `
+    <section class="program-landing-section program-landing-section--dark">
+      <div class="container">
+        <div class="program-landing-dark-panel">
+          <span class="program-landing-dark-panel__eyebrow">${escapeHtml(copy.darkTag)}</span>
+          <h2>${escapeHtml(copy.darkTitle)}</h2>
+
+          <ul>
+            ${items
+              .map(
+                (item, index) => `
+                  <li>
+                    <strong>0${index + 1}.</strong>
+                    <span>${escapeHtml(item)}</span>
+                  </li>
+                `
+              )
+              .join("")}
+          </ul>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: string) {
+  const investment = program.investment;
+  const opportunities = program.opportunities?.slice(0, 4) ?? [];
+
+  return `
+    <section class="program-landing-section program-landing-section--white">
+      <div class="container">
+        <div class="program-landing-admission">
+          <div class="program-landing-admission__left">
+            <span class="program-landing-tag">${escapeHtml(copy.admissionTag)}</span>
+            <h2>${escapeHtml(copy.admissionTitle)}</h2>
+
             ${
-              program.contactPhone
-                ? `<div><span>Central</span><strong>${program.contactPhone}</strong></div>`
+              program.requirements?.length
+                ? `
+                  <div class="program-landing-requirements">
+                    ${program.requirements
+                      .map(
+                        (item) => `
+                          <article class="program-landing-requirement-item">
+                            <div class="program-landing-requirement-item__icon">•</div>
+                            <div>
+                              <strong>${escapeHtml(item)}</strong>
+                            </div>
+                          </article>
+                        `
+                      )
+                      .join("")}
+                  </div>
+                `
                 : ""
             }
-            <div><span>WhatsApp</span><strong>${(program.whatsappNumber ?? "51981377382").replace(/^51/, "")}</strong></div>
-            <div><span>Modalidad</span><strong>${program.modality}</strong></div>
+
+            ${
+              opportunities.length
+                ? `
+                  <div class="program-landing-jobs">
+                    <h3>Bolsa de trabajo</h3>
+                    <div class="program-landing-jobs__grid">
+                      ${opportunities
+                        .map((item) => `<span>${escapeHtml(item)}</span>`)
+                        .join("")}
+                    </div>
+                  </div>
+                `
+                : ""
+            }
           </div>
 
-          <div class="program-premium-hero__actions">
-            <a class="program-btn program-btn--primary" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">
-              Pedir informes
+          <aside class="program-landing-investment">
+            <span class="program-landing-investment__ribbon">Matrícula abierta</span>
+            <h3>${escapeHtml(copy.investmentTitle)}</h3>
+
+            <div class="program-landing-investment__list">
+              <div>
+                <span>Inscripción única</span>
+                <strong>${escapeHtml(investment?.inscription ?? "Consultar")}</strong>
+              </div>
+              <div>
+                <span>Matrícula</span>
+                <strong>${escapeHtml(investment?.enrollment ?? "Consultar")}</strong>
+              </div>
+              <div>
+                <span>Mensualidad</span>
+                <strong>${escapeHtml(investment?.monthly ?? "Consultar")}</strong>
+              </div>
+              ${
+                investment?.uniform
+                  ? `
+                    <div>
+                      <span>Uniforme</span>
+                      <strong>${escapeHtml(investment.uniform)}</strong>
+                    </div>
+                  `
+                  : ""
+              }
+            </div>
+
+            <p class="program-landing-investment__note">
+              *Incluye orientación personalizada sobre horarios, matrícula y proceso de inscripción.
+            </p>
+
+            <a
+              class="program-landing-btn program-landing-btn--primary"
+              href="${whatsappUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Solicitar información
             </a>
+          </aside>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderCta(program: ProgramData, copy: ProgramCopy, whatsappUrl: string) {
+  return `
+    <section class="program-landing-section program-landing-section--cta">
+      <div class="container">
+        <div class="program-landing-cta">
+          <div>
+            <h2>${escapeHtml(copy.ctaTitle)}</h2>
+            <p>${escapeHtml(copy.ctaText)}</p>
+          </div>
+
+          <div class="program-landing-cta__actions">
+            <a
+              class="program-landing-btn program-landing-btn--primary"
+              href="${whatsappUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ${escapeHtml(copy.primaryAction)}
+            </a>
+
             ${
               program.brochure
-                ? `<a class="program-btn program-btn--secondary" href="${program.brochure}" target="_blank" rel="noopener noreferrer">
-                    Descargar brochure
-                  </a>`
+                ? `
+                  <a
+                    class="program-landing-btn program-landing-btn--ghost"
+                    href="${escapeHtml(program.brochure)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ${escapeHtml(copy.brochureAction)}
+                  </a>
+                `
                 : ""
             }
           </div>
-        </article>
-
-        ${
-          program.campuses?.length
-            ? `
-          <article class="program-card">
-            <span class="program-section__tag">Sedes</span>
-            <h2>Encuéntranos aquí</h2>
-            <ul class="program-list">
-              ${program.campuses.map((item) => `<li>${item}</li>`).join("")}
-            </ul>
-          </article>
-        `
-            : `
-          <article class="program-card">
-            <span class="program-section__tag">Asesoría</span>
-            <h2>Atención rápida y personalizada</h2>
-            <p>
-              Nuestro equipo puede orientarte sobre el programa, costos, horarios y
-              proceso de inscripción para que tomes una decisión segura.
-            </p>
-            <div class="program-inline-actions">
-              <a class="program-btn program-btn--primary" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">
-                Hablar con asesor
-              </a>
-            </div>
-          </article>
-        `
-        }
+        </div>
       </div>
     </section>
   `;
 }
 
 export function renderProgramDetail(program: ProgramData) {
-  const whatsappUrl = `https://wa.me/${program.whatsappNumber ?? "51981377382"}?text=${encodeURIComponent(
-    program.whatsappMessage
-  )}`;
+  const copy = getProgramCopy(program);
+  const whatsappUrl = buildWhatsAppUrl(program);
 
   return `
-    <section class="program-premium-hero">
-      <div class="container program-premium-hero__grid">
-        <div class="program-premium-hero__content">
-          <span class="program-premium-hero__eyebrow">Programa Premium</span>
-          <h1 class="program-premium-hero__title">${program.title}</h1>
-          <p class="program-premium-hero__subtitle">${program.subtitle}</p>
-
-          ${renderHeroHighlights(program)}
-
-          <div class="program-premium-hero__meta">
-            <div class="program-meta-box">
-              <span>Modalidad</span>
-              <strong>${program.modality}</strong>
-            </div>
-            <div class="program-meta-box">
-              <span>Duración</span>
-              <strong>${program.duration}</strong>
-            </div>
-            <div class="program-meta-box">
-              <span>Horarios</span>
-              <strong>${program.schedule}</strong>
-            </div>
-          </div>
-
-          <div class="program-premium-hero__actions">
-            <a class="program-btn program-btn--primary" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">
-              Solicitar informes
-            </a>
-            ${
-              program.brochure
-                ? `<a class="program-btn program-btn--secondary" href="${program.brochure}" target="_blank" rel="noopener noreferrer">
-                    ${program.brochureLabel ?? "Ver brochure"}
-                  </a>`
-                : ""
-            }
-          </div>
-        </div>
-
-        <div class="program-premium-hero__visual">
-          <div class="program-premium-hero__image-wrap">
-            <img src="${program.image}" alt="${program.title}" class="program-premium-hero__image" />
-            ${
-              program.heroBadge
-                ? `<div class="program-premium-hero__badge">${program.heroBadge}</div>`
-                : ""
-            }
-          </div>
-        </div>
-      </div>
-    </section>
-
-    ${renderStatCards(program)}
-
-    <section class="program-section">
-      <div class="container program-two-columns">
-        <article class="program-card program-card--glass">
-          <span class="program-section__tag">Presentación</span>
-          <h2>Forma tu perfil profesional</h2>
-          <p>${program.description}</p>
-          ${
-            program.methodology
-              ? `<p>${program.methodology}</p>`
-              : ""
-          }
-        </article>
-
-        <article class="program-card program-card--highlight">
-          <span class="program-section__tag">Dirigido a</span>
-          <h2>Una carrera pensada para crecer</h2>
-          <p>${program.audience ?? "Programa dirigido a estudiantes, emprendedores y personas que desean una formación sólida, moderna y con salida laboral."}</p>
-
-          <div class="program-inline-actions">
-            <a class="program-btn program-btn--primary" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">
-              Hablar con asesor
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    ${renderBenefits(program)}
-    ${renderModules(program)}
-    ${renderProfile(program)}
-    ${renderInvestment(program)}
-    ${renderSchedules(program)}
-    ${renderOpportunities(program)}
-    ${renderTrustBand(program, whatsappUrl)}
-    ${renderContact(program, whatsappUrl)}
+    ${renderHero(program, copy, whatsappUrl)}
+    ${renderStats(program)}
+    ${renderAbout(program, copy)}
+    ${renderCurriculum(program, copy)}
+    ${renderFeatureCards(program, copy)}
+    ${renderDarkPanel(program, copy)}
+    ${renderAdmission(program, copy, whatsappUrl)}
+    ${renderCta(program, copy, whatsappUrl)}
   `;
 }
