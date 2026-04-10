@@ -59,8 +59,9 @@ function normalizeModules(modules: ProgramData["modules"]): ProgramModule[] {
 
 function getProgramCopy(program: ProgramData): ProgramCopy {
   const cleanTitle = stripProfessionalTitle(program.title);
+  const slug = program.slug?.toLowerCase?.() ?? "";
 
-  if (program.slug === "gastronomia") {
+  if (slug === "gastronomia") {
     return {
       eyebrow: "Excelencia culinaria",
       heroTitle: cleanTitle,
@@ -88,6 +89,134 @@ function getProgramCopy(program: ProgramData): ProgramCopy {
       secondaryAction: "Explorar malla",
       brochureAction: program.brochureLabel ?? "Ver brochure",
       floatingBadge: "Cocina, técnica y proyección profesional",
+    };
+  }
+
+  if (slug === "pasteleria") {
+    return {
+      eyebrow: "Potencia tu crecimiento",
+      heroTitle: "Pastelería",
+      heroDescription:
+        "Emprende tu camino con una formación práctica, precisa y creativa para destacar en el mundo de la pastelería profesional.",
+      aboutTag: "Nosotros",
+      aboutTitle: "Formamos profesionales en pastelería con visión real de negocio",
+      aboutText:
+        "Destacamos en la formación de especialistas en pastelería con dominio técnico, creatividad y precisión. Nuestra propuesta académica desarrolla bases sólidas para la elaboración de creaciones sofisticadas, decoración, chocolatería, postres de vanguardia y gestión emprendedora.",
+      curriculumTag: "Malla curricular",
+      curriculumTitle: "Plan de estudios en pastelería",
+      curriculumSubtitle:
+        "Una formación progresiva para dominar técnicas fundamentales, pastelería avanzada, panadería, chocolatería y desarrollo profesional.",
+      featuresTag: "Formación diferenciada",
+      featuresTitle: "Aprende, crea y construye tu propio camino",
+      darkTag: "Perfil recomendado",
+      darkTitle: "¿A quién va dirigido?",
+      admissionTag: "Admisión",
+      admissionTitle: "Requisitos, horarios e inversión",
+      investmentTitle: "Inversión académica",
+      ctaTitle: "Inicia y construye tu negocio pastelero",
+      ctaText:
+        "Solicita información sobre horarios, matrícula, inversión e inicio de clases y prepárate para convertir tu talento en una oportunidad profesional.",
+      primaryAction: "Solicitar informes",
+      secondaryAction: "Ver malla",
+      brochureAction: program.brochureLabel ?? "Ver brochure",
+      floatingBadge: "Precisión, técnica y creatividad pastelera",
+    };
+  }
+
+  if (slug === "barismo") {
+    return {
+      eyebrow: "Especialización cafetera",
+      heroTitle: "Barismo",
+      heroDescription:
+        "Domina el café desde el origen hasta la taza y conviértete en un profesional capaz de extraer, analizar y servir experiencias memorables.",
+      aboutTag: "Especialización",
+      aboutTitle: "Conviértete en especialista del café",
+      aboutText:
+        "Este programa está diseñado para desarrollar competencias técnicas en espresso, leche y espuma, métodos de preparación, cata, tueste y sourcing coffee. Aprenderás a comprender el café de forma integral, desde su origen y perfil sensorial hasta su servicio profesional.",
+      curriculumTag: "Plan de estudio",
+      curriculumTitle: "Malla curricular de barismo",
+      curriculumSubtitle:
+        "Una ruta académica enfocada en extracción, análisis sensorial, preparación avanzada y dominio profesional del café.",
+      featuresTag: "Ventajas",
+      featuresTitle: "Una formación especializada y competitiva",
+      darkTag: "Perfil recomendado",
+      darkTitle: "¿A quién va dirigido?",
+      admissionTag: "Admisión",
+      admissionTitle: "Requisitos, uniforme y horarios",
+      investmentTitle: "Inversión académica",
+      ctaTitle: "Impulsa tu perfil en el mundo del café",
+      ctaText:
+        "Recibe asesoría sobre matrícula, horarios, costos e inicio de clases y prepárate para destacar en cafeterías, barras de especialidad y emprendimientos del rubro.",
+      primaryAction: "Solicitar informes",
+      secondaryAction: "Ver plan de estudio",
+      brochureAction: program.brochureLabel ?? "Ver brochure",
+      floatingBadge: "Café, técnica, análisis y servicio profesional",
+    };
+  }
+
+  if (slug === "sommelier") {
+    return {
+      eyebrow: "Sabores, aromas y texturas",
+      heroTitle: "Sommelier",
+      heroDescription:
+        "Desarrolla sensibilidad sensorial, criterio técnico y dominio del vino para sobresalir en servicio, cata, maridaje y asesoría especializada.",
+      aboutTag: "Nosotros",
+      aboutTitle: "Formamos sommeliers con enfoque técnico y sensorial",
+      aboutText:
+        "Nuestra formación combina ciencia de la enología y arte de la cata para que el estudiante comprenda el vino en todas sus dimensiones. Se fortalecen habilidades en análisis sensorial, servicio, maridaje y selección de etiquetas con una mirada profesional y actual.",
+      curriculumTag: "Malla curricular",
+      curriculumTitle: "Plan de estudios en sommelier",
+      curriculumSubtitle:
+        "Un programa pensado para dominar viticultura, cata, servicio del vino, maridaje, cava y evaluación sensorial.",
+      featuresTag: "Formación diferenciada",
+      featuresTitle: "Especialización para destacar en el universo del vino",
+      darkTag: "Perfil recomendado",
+      darkTitle: "¿A quién va dirigido?",
+      admissionTag: "Admisión",
+      admissionTitle: "Requisitos, certificación e inversión",
+      investmentTitle: "Inversión académica",
+      ctaTitle: "Especialízate ahora como sommelier profesional",
+      ctaText:
+        "Solicita información sobre matrícula, horarios, costos y certificación para comenzar tu crecimiento en restaurantes, bodegas, asesoría o proyectos propios.",
+      primaryAction: "Solicitar informes",
+      secondaryAction: "Explorar malla",
+      brochureAction: program.brochureLabel ?? "Ver brochure",
+      floatingBadge: "Cata, servicio, maridaje y cultura del vino",
+    };
+  }
+
+  if (
+    slug === "bar-profesional" ||
+    slug === "bar_profesional" ||
+    slug === "bar"
+  ) {
+    return {
+      eyebrow: "Mejora tu destreza",
+      heroTitle: "Bar Profesional",
+      heroDescription:
+        "Estudia en tiempo récord y desarrolla habilidades en coctelería, mixología, destilados y gestión de bar con enfoque práctico.",
+      aboutTag: "Nosotros",
+      aboutTitle: "Formación dinámica para dominar la barra profesional",
+      aboutText:
+        "Somos una escuela orientada a formar bartenders creativos, versátiles y competitivos. Nuestro enfoque práctico permite que cada estudiante domine la preparación de cócteles, el uso de destilados, las técnicas de servicio y la gestión eficiente de barra.",
+      curriculumTag: "Malla curricular",
+      curriculumTitle: "Plan de estudios de bar profesional",
+      curriculumSubtitle:
+        "Aprende desde las bases del bartender hasta coctelería avanzada, mixología, costo y rentabilidad del bar.",
+      featuresTag: "Formación diferenciada",
+      featuresTitle: "Aprendizaje ágil, práctico y orientado al mercado",
+      darkTag: "Perfil recomendado",
+      darkTitle: "¿A quién va dirigido?",
+      admissionTag: "Admisión",
+      admissionTitle: "Requisitos, uniforme y horarios",
+      investmentTitle: "Inversión académica",
+      ctaTitle: "Conviértete en experto en corto tiempo",
+      ctaText:
+        "Solicita información personalizada sobre horarios, matrícula, inversión e inicio de clases para dar el siguiente paso en coctelería y servicio de bar.",
+      primaryAction: "Solicitar informes",
+      secondaryAction: "Ver malla",
+      brochureAction: program.brochureLabel ?? "Ver brochure",
+      floatingBadge: "Coctelería, mixología y servicio profesional",
     };
   }
 
@@ -271,7 +400,6 @@ function renderCurriculum(program: ProgramData, copy: ProgramCopy) {
                   <h3>${escapeHtml(module.title)}</h3>
                   <ul>
                     ${module.items
-                      .slice(0, 4)
                       .map((item) => `<li>${escapeHtml(item)}</li>`)
                       .join("")}
                   </ul>
@@ -286,7 +414,7 @@ function renderCurriculum(program: ProgramData, copy: ProgramCopy) {
 }
 
 function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
-  const jobPreview = program.opportunities?.slice(0, 3).join(", ").toLowerCase();
+  const jobPreview = program.opportunities?.slice(0, 3).join(", ");
 
   const cards = [
     {
@@ -300,14 +428,14 @@ function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
       icon: "◈",
       title: "Salida laboral",
       text: jobPreview
-        ? `Proyección en ${jobPreview} y otros espacios del sector gastronómico.`
+        ? `Proyección en ${jobPreview} y otros espacios del sector.`
         : "Proyección laboral en negocios, restaurantes y espacios especializados del rubro.",
     },
     {
       icon: "◉",
       title: "Horarios flexibles",
       text: program.schedule
-        ? `Disponibilidad en ${program.schedule.toLowerCase()} para adaptarse a tu ritmo.`
+        ? `Disponibilidad en ${program.schedule} para adaptarse a tu ritmo.`
         : "Horarios pensados para compatibilizar estudio, trabajo y crecimiento profesional.",
     },
   ];
@@ -344,7 +472,7 @@ function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
 
 function renderDarkPanel(program: ProgramData, copy: ProgramCopy) {
   const items = (
-    program.requirements?.length ? program.requirements : program.profile ?? []
+    program.profile?.length ? program.profile : program.requirements ?? []
   ).slice(0, 3);
 
   if (!items.length) return "";
@@ -462,7 +590,7 @@ function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: s
               target="_blank"
               rel="noopener noreferrer"
             >
-              Solicitar información
+              ${escapeHtml(copy.primaryAction)}
             </a>
           </aside>
         </div>

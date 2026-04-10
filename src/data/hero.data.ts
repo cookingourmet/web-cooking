@@ -9,7 +9,7 @@ export type HeroSlide = {
 
 export const heroSlides: HeroSlide[] = [
   {
-    title: "Gastronomía Profesional",
+    title: "Gastronomía",
     subtitle: "Domina técnicas culinarias con formación práctica y visión profesional.",
     description:
       "Aprende cocina nacional e internacional, presentación de platos, mise en place y producción gastronómica en una experiencia formativa moderna.",
@@ -18,7 +18,7 @@ export const heroSlides: HeroSlide[] = [
     cta: "Ver Gastronomía",
   },
   {
-    title: "Pastelería Profesional",
+    title: "Pastelería",
     subtitle: "Creatividad, técnica y precisión en cada preparación.",
     description:
       "Desarrolla habilidades en repostería, decoración, masas, postres modernos y técnicas profesionales para destacar en el mundo dulce.",
