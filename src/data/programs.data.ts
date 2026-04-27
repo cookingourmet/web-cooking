@@ -91,7 +91,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     ],
     modules: [
       {
-        title: "Fundamentos Culinarios",
+        title: "Módulo 1",
         items: [
           "Técnicas de corte y manejo de cuchillos",
           "Higiene y manipulación alimentaria",
@@ -100,7 +100,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
         ],
       },
       {
-        title: "Cocina del Mundo",
+        title: "Módulo 2",
         items: [
           "Cocina mediterránea",
           "Gastronomía asiática",
@@ -109,7 +109,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
         ],
       },
       {
-        title: "Alta Gastronomía",
+        title: "Módulo 3",
         items: [
           "Cocina de autor",
           "Repostería fina",
@@ -118,7 +118,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
         ],
       },
       {
-        title: "Cocina Peruana Avanzada",
+        title: "Módulo 4",
         items: [
           "Cocina peruana contemporánea",
           "Pescados y mariscos",
@@ -127,7 +127,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
         ],
       },
       {
-        title: "Producción y Servicio",
+        title: "Módulo 5",
         items: [
           "Técnicas de comedor y servicio",
           "Bar y coctelería",
@@ -136,7 +136,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
         ],
       },
       {
-        title: "Especialización Profesional",
+        title: "Módulo 6",
         items: [
           "Cocina de vanguardia",
           "Cocina saludable",
@@ -421,7 +421,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     ],
     modules: [
       {
-        title: "Plan de estudio",
+        title: "Módulo 1",
         items: [
           "Introducción al café",
           "Procesos de cultivo",
@@ -578,12 +578,30 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Docentes especializados",
     ],
     modules: [
-      "Introducción a cocina",
-      "Cortes y técnicas",
-      "Fondos y salsas",
-      "Cocina caliente",
-      "Cocina fría",
-      "Higiene y manipulación",
+      {
+        title: "Módulo 1",
+        items: ["Introducción a cocina"],
+      },
+      {
+        title: "Módulo 2",
+        items: ["Cortes y técnicas"],
+      },
+      {
+        title: "Módulo 3",
+        items: ["Fondos y salsas"],
+      },
+      {
+        title: "Módulo 4",
+        items: ["Cocina caliente"],
+      },
+      {
+        title: "Módulo 5",
+        items: ["Cocina fría"],
+      },
+      {
+        title: "Módulo 6",
+        items: ["Higiene y manipulación"],
+      },
     ],
     profile: [
       "Personas que desean empezar en cocina",

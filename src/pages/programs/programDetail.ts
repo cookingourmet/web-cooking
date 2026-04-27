@@ -1,3 +1,5 @@
+import { renderHeader, initHeader } from "../../components/layout/header/header";
+import { renderFooter } from "../../components/layout/footer/footer";
 import type { ProgramData, ProgramModule } from "../../data/programs.data";
 
 type ProgramCopy = {
@@ -24,7 +26,6 @@ type ProgramCopy = {
   brochureAction: string;
   floatingBadge: string;
 };
-
 function escapeHtml(value: string | number | null | undefined) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -645,13 +646,25 @@ export function renderProgramDetail(program: ProgramData) {
   const whatsappUrl = buildWhatsAppUrl(program);
 
   return `
-    ${renderHero(program, copy, whatsappUrl)}
-    ${renderStats(program)}
-    ${renderAbout(program, copy)}
-    ${renderCurriculum(program, copy)}
-    ${renderFeatureCards(program, copy)}
-    ${renderDarkPanel(program, copy)}
-    ${renderAdmission(program, copy, whatsappUrl)}
-    ${renderCta(program, copy, whatsappUrl)}
+    <div class="site-shell">
+      ${renderHeader()}
+
+      <main class="page-program-detail">
+        ${renderHero(program, copy, whatsappUrl)}
+        ${renderStats(program)}
+        ${renderAbout(program, copy)}
+        ${renderCurriculum(program, copy)}
+        ${renderFeatureCards(program, copy)}
+        ${renderDarkPanel(program, copy)}
+        ${renderAdmission(program, copy, whatsappUrl)}
+        ${renderCta(program, copy, whatsappUrl)}
+      </main>
+
+      ${renderFooter()}
+    </div>
   `;
+}
+
+export function initProgramDetail() {
+  initHeader();
 }

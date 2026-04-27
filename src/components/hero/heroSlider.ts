@@ -3,7 +3,6 @@ import { restartProgressAnimation } from "./heroProgress";
 import { mountAssistantWindow } from "./heroAssistantPanel";
 
 const AUTO_TIME = 5500;
-const WORKSHOP_TARGET_SLIDE = 5;
 
 const HERO_PROGRESS_META = [
   {
@@ -108,38 +107,6 @@ function renderStartWindow() {
   `;
 }
 
-function renderWorkshopWindow() {
-  return `
-    <a
-      href="#"
-      class="hero-workshop-window"
-      data-go-slide="${WORKSHOP_TARGET_SLIDE}"
-      aria-label="Ir al programa de Cocina"
-    >
-      <span class="hero-workshop-window__fire hero-workshop-window__fire--pink"></span>
-      <span class="hero-workshop-window__fire hero-workshop-window__fire--red"></span>
-      <span class="hero-workshop-window__fire hero-workshop-window__fire--gold"></span>
-      <span class="hero-workshop-window__sparks"></span>
-
-      <div class="hero-workshop-window__frame">
-        <div class="hero-workshop-window__topline">
-          <span class="hero-workshop-window__overline">INICIO: 13 DE ABRIL</span>
-          <span class="hero-workshop-window__live"></span>
-        </div>
-
-        <div class="hero-workshop-window__center">
-          <span class="hero-workshop-window__program">TALLER</span>
-          <h3 class="hero-workshop-window__title">HOJALDRES Y MASAS LAMINADAS</h3>
-        </div>
-
-        <div class="hero-workshop-window__action">
-          <span class="hero-workshop-window__action-label">UNIRME AL TALLER</span>
-        </div>
-      </div>
-    </a>
-  `;
-}
-
 export function renderHeroSlider() {
   return `
     <section class="hero-slider" aria-label="Programas destacados">
@@ -147,37 +114,36 @@ export function renderHeroSlider() {
         ${heroSlides
           .map(
             (slide, index) => `
-          <article class="hero-slide ${index === 0 ? "is-active" : ""}" data-index="${index}">
-            <div class="hero-slide__bg">
-              <img src="${slide.image}" alt="${slide.title}">
-            </div>
-
-            <div class="hero-slide__overlay"></div>
-            <div class="hero-slide__grid"></div>
-            <div class="hero-slide__glow"></div>
-
-            <div class="hero-slide__content container">
-              <div class="hero-slide__left">
-                <span class="hero-badge">${slide.badge}</span>
-                <h1>${slide.title}</h1>
-                <h2>${slide.subtitle}</h2>
-                <p>${slide.description}</p>
-
-                <div class="hero-actions">
-                  <a href="#" class="hero-btn hero-btn--primary">${slide.cta}</a>
-                  <a href="#" class="hero-btn hero-btn--ghost">Solicitar información</a>
+              <article class="hero-slide ${index === 0 ? "is-active" : ""}" data-index="${index}">
+                <div class="hero-slide__bg">
+                  <img src="${slide.image}" alt="${slide.title}">
                 </div>
-              </div>
 
-              <div class="hero-slide__right">
-                <div class="hero-floating-stack">
-                  ${renderWorkshopWindow()}
-                  ${renderStartWindow()}
+                <div class="hero-slide__overlay"></div>
+                <div class="hero-slide__grid"></div>
+                <div class="hero-slide__glow"></div>
+
+                <div class="hero-slide__content container">
+                  <div class="hero-slide__left">
+                    <span class="hero-badge">${slide.badge}</span>
+                    <h1>${slide.title}</h1>
+                    <h2>${slide.subtitle}</h2>
+                    <p>${slide.description}</p>
+
+                    <div class="hero-actions">
+                      <a href="#" class="hero-btn hero-btn--primary">${slide.cta}</a>
+                      <a href="#" class="hero-btn hero-btn--ghost">Solicitar información</a>
+                    </div>
+                  </div>
+
+                  <div class="hero-slide__right">
+                    <div class="hero-floating-stack">
+                      ${renderStartWindow()}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </article>
-        `
+              </article>
+            `
           )
           .join("")}
       </div>
@@ -217,10 +183,6 @@ export function initHeroSlider() {
 
   const heroProgressItems = Array.from(
     document.querySelectorAll<HTMLButtonElement>(".hero-progress__item")
-  );
-
-  const heroWorkshopLinks = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>(".hero-workshop-window[data-go-slide]")
   );
 
   const heroSlider = document.querySelector<HTMLElement>(".hero-slider");
@@ -274,20 +236,6 @@ export function initHeroSlider() {
     });
   });
 
-  heroWorkshopLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-
-      const rawIndex = Number(link.dataset.goSlide);
-      const targetIndex = Number.isFinite(rawIndex)
-        ? Math.max(0, Math.min(rawIndex, heroSlidesEls.length - 1))
-        : heroSlidesEls.length - 1;
-
-      updateHeroSlider(targetIndex);
-      resetAutoPlay();
-    });
-  });
-
   function updateGridGlow(event: MouseEvent) {
     if (!heroSlider) return;
 
@@ -305,14 +253,17 @@ export function initHeroSlider() {
   }
 
   heroSlider?.addEventListener("mousemove", updateGridGlow);
+
   heroSlider?.addEventListener("mouseenter", (event) => {
     stopAutoPlay();
     updateGridGlow(event as MouseEvent);
   });
+
   heroSlider?.addEventListener("mouseleave", () => {
     clearGridGlow();
     startAutoPlay();
   });
+
   heroSlider?.addEventListener("focusin", stopAutoPlay);
   heroSlider?.addEventListener("focusout", startAutoPlay);
 
@@ -324,6 +275,5 @@ export function initHeroSlider() {
   updateHeroSlider(0);
   startAutoPlay();
 
-  // Monta el asistente UNA SOLA VEZ fuera de los slides
   mountAssistantWindow();
 }
