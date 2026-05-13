@@ -89,10 +89,9 @@ function renderStartWindow() {
       </div>
 
       <div class="hero-start-window__date-wrap">
-        <strong class="hero-start-window__day">11</strong>
-        <span class="hero-start-window__month">de mayo</span>
+        <strong class="hero-start-window__day">17</strong>
+        <span class="hero-start-window__month">de Agosto</span>
       </div>
-
       <p class="hero-start-window__text">
         Matrículas abiertas. Reserva tu vacante y prepárate para empezar con formación práctica desde el primer día.
       </p>
