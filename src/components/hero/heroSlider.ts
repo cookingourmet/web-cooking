@@ -92,6 +92,7 @@ function renderStartWindow() {
         <strong class="hero-start-window__day">17</strong>
         <span class="hero-start-window__month">de Agosto</span>
       </div>
+
       <p class="hero-start-window__text">
         Matrículas abiertas. Reserva tu vacante y prepárate para empezar con formación práctica desde el primer día.
       </p>
@@ -115,7 +116,13 @@ export function renderHeroSlider() {
             (slide, index) => `
               <article class="hero-slide ${index === 0 ? "is-active" : ""}" data-index="${index}">
                 <div class="hero-slide__bg">
-                  <img src="${slide.image}" alt="${slide.title}">
+                  <picture>
+                    <source
+                      media="(max-width: 768px)"
+                      srcset="${slide.mobileImage ?? slide.image}"
+                    />
+                    <img src="${slide.image}" alt="${slide.title}">
+                  </picture>
                 </div>
 
                 <div class="hero-slide__overlay"></div>

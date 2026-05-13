@@ -3,6 +3,7 @@ export type HeroSlide = {
   subtitle: string;
   description: string;
   image: string;
+  mobileImage?: string;
   badge: string;
   cta: string;
 };
@@ -14,6 +15,7 @@ export const heroSlides: HeroSlide[] = [
     description:
       "Aprende cocina nacional e internacional, presentación de platos, mise en place y producción gastronómica en una experiencia formativa moderna.",
     image: "/images/portada/gastronomia.jpg",
+    mobileImage: "/images/portada/gastronomia2.jpg",
     badge: "Carrera destacada",
     cta: "Ver Gastronomía",
   },
@@ -23,6 +25,7 @@ export const heroSlides: HeroSlide[] = [
     description:
       "Desarrolla habilidades en repostería, decoración, masas, postres modernos y técnicas profesionales para destacar en el mundo dulce.",
     image: "/images/portada/pasteleria.jpg",
+    mobileImage: "/images/portada/pasteleria2.jpg",
     badge: "Alta demanda",
     cta: "Ver Pastelería",
   },
@@ -32,6 +35,7 @@ export const heroSlides: HeroSlide[] = [
     description:
       "Aprende preparación de bebidas, mixología, atención al cliente y dominio del servicio con enfoque práctico y actual.",
     image: "/images/portada/bar-profesional.jpg",
+    mobileImage: "/images/portada/bar-profesional2.jpg",
     badge: "Experiencia real",
     cta: "Ver Bar Profesional",
   },
@@ -41,6 +45,7 @@ export const heroSlides: HeroSlide[] = [
     description:
       "Conoce extracción, latte art, métodos de filtrado, calidad del grano y presentación profesional para destacar como barista.",
     image: "/images/portada/barismo.jpg",
+    mobileImage: "/images/portada/barismo2.jpg",
     badge: "Técnica + arte",
     cta: "Ver Barismo",
   },
@@ -50,6 +55,7 @@ export const heroSlides: HeroSlide[] = [
     description:
       "Desarrolla criterio sensorial, maridaje, servicio y conocimientos de bebidas para una formación elegante y especializada.",
     image: "/images/portada/sommelier.jpg",
+    mobileImage: "/images/portada/sommelier2.jpg",
     badge: "Perfil especializado",
     cta: "Ver Sommelier",
   },
@@ -59,6 +65,7 @@ export const heroSlides: HeroSlide[] = [
     description:
       "Un programa dinámico para quienes buscan ingresar al mundo culinario con bases sólidas, práctica intensiva y aprendizaje aplicado.",
     image: "/images/portada/cocina.jpg",
+    mobileImage: "/images/portada/cocina2.jpg",
     badge: "Aprendizaje intensivo",
     cta: "Ver Cocina",
   },

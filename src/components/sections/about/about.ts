@@ -1,84 +1,255 @@
 import "./about.css";
 
+type AboutIcon = "fire" | "chef" | "star" | "growth" | "team" | "service";
+
+const values: Array<{
+  icon: AboutIcon;
+  title: string;
+  text: string;
+}> = [
+  {
+    icon: "star",
+    title: "Excelencia",
+    text: "Cuidamos cada detalle del aprendizaje, la técnica y la práctica profesional.",
+  },
+  {
+    icon: "chef",
+    title: "Disciplina",
+    text: "Formamos estudiantes constantes, responsables y preparados para cocinas reales.",
+  },
+  {
+    icon: "fire",
+    title: "Pasión",
+    text: "Impulsamos el amor por la gastronomía desde la práctica y la creatividad.",
+  },
+  {
+    icon: "growth",
+    title: "Innovación",
+    text: "Promovemos nuevas ideas, tendencias y visión emprendedora.",
+  },
+  {
+    icon: "team",
+    title: "Trabajo en equipo",
+    text: "Fortalecemos la comunicación, la colaboración y el crecimiento conjunto.",
+  },
+  {
+    icon: "service",
+    title: "Vocación de servicio",
+    text: "Formamos profesionales con actitud humana y enfoque en la experiencia del cliente.",
+  },
+];
+
+function renderIcon(icon: AboutIcon) {
+  const icons: Record<AboutIcon, string> = {
+    fire: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 22c4.2 0 7-2.8 7-6.8 0-2.8-1.7-5.3-3.4-7.2-.5 2.6-1.8 3.8-3 4.4.3-3.6-1.7-6.6-4.4-9.4.1 4-2.2 6.1-3.1 8.1-.7 1.3-1.1 2.6-1.1 4.1C5 19.2 7.8 22 12 22z"/>
+      </svg>
+    `,
+    chef: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.5 11.2C4.6 10.8 3 9.3 3 7.3 3 5.1 4.8 3.5 6.9 3.5c.8 0 1.5.2 2.1.6A4.3 4.3 0 0 1 12 3a4.3 4.3 0 0 1 3 1.1c.6-.4 1.3-.6 2.1-.6 2.1 0 3.9 1.6 3.9 3.8 0 2-1.6 3.5-3.5 3.9"/>
+        <path d="M6.5 11v7.2c0 1.1.9 1.8 1.9 1.8h7.2c1 0 1.9-.7 1.9-1.8V11"/>
+        <path d="M9 15h6"/>
+      </svg>
+    `,
+    star: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3z"/>
+      </svg>
+    `,
+    growth: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 19h16"/>
+        <path d="M6 16l4-4 3 3 5-7"/>
+        <path d="M15 8h3v3"/>
+      </svg>
+    `,
+    team: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        <path d="M17 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+        <path d="M3.5 20c.7-3.2 2.7-5 5.5-5s4.8 1.8 5.5 5"/>
+        <path d="M14 17c.8-1 1.8-1.5 3-1.5 2 0 3.3 1.2 3.8 3.5"/>
+      </svg>
+    `,
+    service: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s-7-4.3-7-10a4.2 4.2 0 0 1 7-3.1A4.2 4.2 0 0 1 19 11c0 5.7-7 10-7 10z"/>
+        <path d="M9 12h6"/>
+      </svg>
+    `,
+  };
+
+  return icons[icon];
+}
+
+function renderValues() {
+  return values
+    .map(
+      (value) => `
+        <article class="cg-about-value">
+          <div class="cg-about-value__icon">
+            ${renderIcon(value.icon)}
+          </div>
+          <h4>${value.title}</h4>
+          <p>${value.text}</p>
+        </article>
+      `
+    )
+    .join("");
+}
+
 export function renderAboutSection() {
   return `
     <section class="cg-about" id="nosotros">
       <div class="cg-about__bg"></div>
-      <div class="cg-about__grid"></div>
+      <div class="cg-about__shape cg-about__shape--one"></div>
+      <div class="cg-about__shape cg-about__shape--two"></div>
 
       <div class="cg-about__container">
-        <div class="cg-about__header" data-cg-about-reveal="up">
-          <span class="cg-about__eyebrow">Nosotros</span>
-          <h2 class="cg-about__title">
-            18 años formando profesionales con pasión, técnica y visión gastronómica
-          </h2>
-          <p class="cg-about__lead">
-            Cooking Gourmet Escuela de Alta Cocina celebra en 2026 sus 18 años de trayectoria,
-            consolidándose como un espacio de formación donde la disciplina, la creatividad y la
-            experiencia real se unen para preparar a los nuevos talentos de la gastronomía.
-          </p>
+        <div class="cg-about-hero">
+          <div class="cg-about-hero__content" data-cg-about-reveal="left">
+            <span class="cg-about__eyebrow">Nosotros</span>
+
+            <h2 class="cg-about__title">
+              18 años formando profesionales
+            </h2>
+
+            <p class="cg-about__lead">
+              Cooking Gourmet es una escuela de alta cocina donde la práctica, la creatividad
+              y la disciplina se combinan para preparar estudiantes capaces de destacar en el
+              mundo gastronómico real.
+            </p>
+
+            <div class="cg-about-hero__actions">
+              <a href="#programas" class="cg-about-btn cg-about-btn--primary">
+                Ver programas
+              </a>
+              <a href="#contacto" class="cg-about-btn cg-about-btn--ghost">
+                Solicitar información
+              </a>
+            </div>
+          </div>
+
+          <div class="cg-about-hero__visual" data-cg-about-reveal="right">
+            <div class="cg-about-photo-card cg-about-photo-card--chef">
+              <img
+                src="/images/about/chef.png"
+                alt="Chef instructor de Cooking Gourmet"
+              />
+
+              <div class="cg-about-photo-card__content">
+                <span>Formación práctica</span>
+                <strong>Aprende con experiencia real</strong>
+              </div>
+            </div>
+
+            <div class="cg-about-years">
+              <span class="cg-about-years__label">Desde 2008</span>
+              <strong>18</strong>
+              <span>Años de trayectoria</span>
+            </div>
+
+            <div class="cg-about-mini-card cg-about-mini-card--top">
+              <strong>2026</strong>
+              <span>Celebramos nuestra experiencia</span>
+            </div>
+
+            <div class="cg-about-mini-card cg-about-mini-card--bottom">
+              <strong>Práctica real</strong>
+              <span>Aprendizaje desde el primer día</span>
+            </div>
+          </div>
         </div>
 
         <div class="cg-about__main">
-          <article class="cg-about-story" data-cg-about-reveal="left">
-            <div class="cg-about-story__glow"></div>
-
+          <article class="cg-about-story" data-cg-about-reveal="up">
             <div class="cg-about-story__top">
-              <span class="cg-about-story__badge">Desde 2008</span>
-              <span class="cg-about-story__years">18 años · 2026</span>
+              <span class="cg-about-story__badge">Nuestra historia</span>
+              <span class="cg-about-story__years">2008 — 2026</span>
             </div>
 
-            <h3 class="cg-about-story__title">Nuestra historia</h3>
+            <h3 class="cg-about-story__title">
+              Formamos profesionales para la cocina real.
+            </h3>
 
             <p class="cg-about-story__text">
-              Cooking Gourmet nació con el propósito de impulsar una formación gastronómica más
-              cercana a la realidad profesional, combinando técnica, práctica constante y una
-              enseñanza inspirada en la excelencia.
+              Nacimos con el propósito de brindar una formación gastronómica cercana,
+              práctica y exigente. Hoy seguimos impulsando estudiantes que desean convertir
+              su vocación en una carrera con identidad, nivel y oportunidades.
             </p>
 
-            <p class="cg-about-story__text">
-              A lo largo de estos años, hemos acompañado a cientos de estudiantes en su crecimiento
-              académico y humano, ayudándolos a convertir su vocación en una carrera con identidad,
-              nivel y proyección.
-            </p>
+            <div class="cg-about-infra">
+              <img
+                src="/images/about/infraestructura.png"
+                alt="Infraestructura de Cooking Gourmet"
+              />
 
-            <div class="cg-about-story__stats">
-              <div class="cg-about-stat">
-                <strong>18</strong>
-                <span>Años de trayectoria</span>
+              <div class="cg-about-infra__content">
+                <span>Infraestructura profesional</span>
+                <strong>Ambientes preparados para aprender haciendo</strong>
+              </div>
+            </div>
+
+            <div class="cg-about-timeline">
+              <div class="cg-about-timeline__item">
+                <span>2008</span>
+                <p>Inicio de una propuesta educativa enfocada en técnica y práctica.</p>
               </div>
 
-              <div class="cg-about-stat">
-                <strong>Alta</strong>
-                <span>Formación práctica</span>
+              <div class="cg-about-timeline__item">
+                <span>Trayectoria</span>
+                <p>Cientos de estudiantes formados con disciplina, creatividad y pasión.</p>
               </div>
 
-              <div class="cg-about-stat">
-                <strong>Real</strong>
-                <span>Experiencia aplicada</span>
+              <div class="cg-about-timeline__item">
+                <span>2026</span>
+                <p>18 años fortaleciendo el talento gastronómico de nuevas generaciones.</p>
               </div>
             </div>
           </article>
 
           <div class="cg-about__side">
             <article class="cg-about-card" data-cg-about-reveal="right">
-              <span class="cg-about-card__tag">Misión</span>
-              <h3 class="cg-about-card__title">Formar profesionales íntegros y competitivos</h3>
+              <span class="cg-about-card__tag">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8" />
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 2v3" />
+                  <path d="M12 19v3" />
+                  <path d="M2 12h3" />
+                  <path d="M19 12h3" />
+                </svg>
+                Misión
+              </span>
+
+              <h3 class="cg-about-card__title">
+                Formar expertos competitivos
+              </h3>
+
               <p class="cg-about-card__text">
-                Brindar una formación gastronómica de alta calidad, centrada en el desarrollo de
-                competencias técnicas, creatividad, disciplina y vocación de servicio, preparando
-                estudiantes capaces de destacar en cocinas, pastelerías, barras y emprendimientos
-                del sector gastronómico.
+                Ofrecemos formación práctica y creativa en cocina, pastelería y barras,
+                impulsando el éxito de futuros profesionales y emprendedores.
               </p>
             </article>
 
             <article class="cg-about-card cg-about-card--accent" data-cg-about-reveal="right">
-              <span class="cg-about-card__tag">Visión</span>
-              <h3 class="cg-about-card__title">Ser una escuela referente en formación gastronómica</h3>
+              <span class="cg-about-card__tag">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                Visión
+              </span>
+
+              <h3 class="cg-about-card__title">
+                Liderar la educación gastronómica
+              </h3>
+
               <p class="cg-about-card__text">
-                Ser reconocidos como una institución líder en educación culinaria, innovadora,
-                inspiradora y conectada con las exigencias del mundo gastronómico actual, formando
-                profesionales capaces de transformar su talento en oportunidades reales.
+                Ser la institución referente e innovadora, conectada con las
+                tendencias y exigencias actuales del sector global.
               </p>
             </article>
           </div>
@@ -87,45 +258,13 @@ export function renderAboutSection() {
         <div class="cg-about-values" data-cg-about-reveal="up">
           <div class="cg-about-values__header">
             <span class="cg-about__eyebrow">Nuestros valores</span>
-            <h3 class="cg-about-values__title">La esencia que guía nuestra formación</h3>
+            <h3 class="cg-about-values__title">
+              La esencia que guía nuestra formación
+            </h3>
           </div>
 
           <div class="cg-about-values__grid">
-            <article class="cg-about-value">
-              <div class="cg-about-value__icon">01</div>
-              <h4>Excelencia</h4>
-              <p>Buscamos calidad en cada detalle del aprendizaje y la práctica profesional.</p>
-            </article>
-
-            <article class="cg-about-value">
-              <div class="cg-about-value__icon">02</div>
-              <h4>Disciplina</h4>
-              <p>Fomentamos constancia, responsabilidad y respeto por el proceso de formación.</p>
-            </article>
-
-            <article class="cg-about-value">
-              <div class="cg-about-value__icon">03</div>
-              <h4>Pasión</h4>
-              <p>Creemos en una enseñanza que impulse el amor auténtico por la gastronomía.</p>
-            </article>
-
-            <article class="cg-about-value">
-              <div class="cg-about-value__icon">04</div>
-              <h4>Innovación</h4>
-              <p>Promovemos ideas nuevas, creatividad y adaptación a las tendencias del sector.</p>
-            </article>
-
-            <article class="cg-about-value">
-              <div class="cg-about-value__icon">05</div>
-              <h4>Trabajo en equipo</h4>
-              <p>Valoramos la colaboración, la comunicación y el crecimiento conjunto.</p>
-            </article>
-
-            <article class="cg-about-value">
-              <div class="cg-about-value__icon">06</div>
-              <h4>Vocación de servicio</h4>
-              <p>Formamos profesionales con actitud humana, compromiso y enfoque en la experiencia.</p>
-            </article>
+            ${renderValues()}
           </div>
         </div>
       </div>

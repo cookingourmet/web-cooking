@@ -1668,3 +1668,313 @@
 
 
 
+
+/* =========================================
+   HERO MOBILE LIMPIO
+   Orden: Carrera / Inicio de clases / Botones
+   ========================================= */
+
+@media (max-width: 768px) {
+  .hero-slider,
+  .hero-slider__viewport,
+  .hero-slide,
+  .hero-slide__content {
+    min-height: 100svh;
+  }
+
+  .hero-slide__overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(3, 4, 7, 0.18) 0%,
+        rgba(3, 4, 7, 0.52) 38%,
+        rgba(3, 4, 7, 0.9) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(3, 4, 7, 0.84) 0%,
+        rgba(3, 4, 7, 0.48) 58%,
+        rgba(3, 4, 7, 0.2) 100%
+      );
+  }
+
+  .hero-slide__bg img {
+    object-position: center;
+    filter: saturate(1.05) contrast(1.04) brightness(0.9);
+  }
+
+  .hero-slide__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 92px 18px 112px;
+    text-align: left;
+  }
+
+  /* Permite ordenar h1, inicio de clases y botones sin tocar TS */
+  .hero-slide__left {
+    display: contents;
+  }
+
+  .hero-badge,
+  .hero-slide__left h2,
+  .hero-slide__left p {
+    display: none !important;
+  }
+
+  /* 1. Nombre de la carrera */
+  .hero-slide__left h1 {
+    order: 1;
+    width: min(100%, 430px);
+    margin: 0;
+    font-size: clamp(2rem, 10.5vw, 3.35rem);
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+    color: #ffffff;
+    text-align: left;
+    text-wrap: balance;
+    text-shadow:
+      0 16px 34px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(254, 0, 62, 0.14);
+  }
+
+  /* 2. Inicio de clases */
+  .hero-slide__right {
+    order: 2;
+    width: min(100%, 430px);
+    justify-content: flex-start;
+  }
+
+  .hero-floating-stack {
+    width: 100%;
+    max-width: 360px;
+    align-items: flex-start;
+    gap: 0;
+    transform: none;
+  }
+
+  .hero-start-window {
+    width: 100%;
+    max-width: 360px;
+    padding: 13px 14px;
+    border-radius: 18px;
+    background:
+      linear-gradient(145deg, rgba(16, 12, 14, 0.78), rgba(8, 8, 10, 0.66));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 16px 38px rgba(0, 0, 0, 0.3),
+      0 0 24px rgba(254, 0, 62, 0.08);
+    backdrop-filter: blur(14px);
+  }
+
+  .hero-start-window::before,
+  .hero-start-window::after {
+    opacity: 0.45;
+  }
+
+  .hero-start-window__top {
+    margin-bottom: 8px;
+  }
+
+  .hero-start-window__eyebrow {
+    min-height: 26px;
+    padding: 0 10px;
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+  }
+
+  .hero-start-window__pulse {
+    width: 9px;
+    height: 9px;
+  }
+
+  .hero-start-window__date-wrap {
+    gap: 8px;
+    margin-bottom: 0;
+  }
+
+  .hero-start-window__day {
+    font-size: clamp(2.6rem, 13vw, 3.7rem);
+    line-height: 0.88;
+  }
+
+  .hero-start-window__month {
+    padding-bottom: 5px;
+    font-size: 0.86rem;
+  }
+
+  .hero-start-window__text,
+  .hero-start-window__footer {
+    display: none !important;
+  }
+
+  /* 3. Botones en una sola línea */
+  .hero-actions {
+    order: 3;
+    width: min(100%, 430px);
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 0;
+  }
+
+  .hero-btn,
+  .hero-btn--primary,
+  .hero-btn--ghost {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    line-height: 1;
+    white-space: nowrap;
+    justify-content: center;
+  }
+
+  .hero-btn--primary {
+    box-shadow:
+      0 14px 28px rgba(254, 0, 62, 0.24),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  .hero-btn--ghost {
+    display: inline-flex !important;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(12px);
+  }
+
+  .hero-progress {
+    bottom: 22px;
+    width: calc(100% - 24px);
+    padding: 8px 10px;
+    gap: 7px;
+    border-radius: 18px;
+    background: rgba(8, 8, 10, 0.38);
+    backdrop-filter: blur(14px);
+  }
+
+  .hero-progress__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+  }
+
+  .hero-progress__icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero-progress__track {
+    width: 25px;
+    height: 4px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-slide__content {
+    padding: 84px 14px 106px;
+    gap: 12px;
+  }
+
+  .hero-slide__left h1 {
+    font-size: clamp(1.85rem, 11vw, 2.55rem);
+    width: 100%;
+  }
+
+  .hero-floating-stack,
+  .hero-start-window,
+  .hero-actions {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hero-start-window {
+    padding: 12px 13px;
+  }
+
+  .hero-start-window__day {
+    font-size: clamp(2.45rem, 14vw, 3.25rem);
+  }
+
+  .hero-start-window__month {
+    font-size: 0.8rem;
+  }
+
+  .hero-btn,
+  .hero-btn--primary,
+  .hero-btn--ghost {
+    min-height: 42px;
+    padding: 0 8px;
+    font-size: 0.7rem;
+  }
+
+  .hero-progress {
+    bottom: 18px;
+    width: calc(100% - 18px);
+    gap: 6px;
+    padding: 8px 8px;
+  }
+
+  .hero-progress__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hero-progress__track {
+    width: 22px;
+  }
+}
+
+
+/* =========================================
+   AJUSTE EXTRA: subir 3 veces más el contenido mobile
+   ========================================= */
+
+@media (max-width: 768px) {
+  .hero-slide__content {
+    padding: 58px 18px 320px !important;
+    gap: 9px !important;
+  }
+
+  .hero-slide__left h1 {
+    font-size: clamp(1.9rem, 9.8vw, 2.85rem) !important;
+    margin-bottom: 0 !important;
+  }
+
+  .hero-start-window {
+    margin-top: 0 !important;
+  }
+
+  .hero-actions {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-slide__content {
+    padding: 54px 14px 300px !important;
+    gap: 8px !important;
+  }
+
+  .hero-slide__left h1 {
+    font-size: clamp(1.75rem, 10vw, 2.25rem) !important;
+  }
+}
+
+
+.hero-slide__bg picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-slide__bg picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}

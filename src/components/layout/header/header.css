@@ -801,3 +801,386 @@
     flex-basis: 38px;
   }
 }
+
+/* =========================================
+   NAV ORDENADO / LIMPIO / RESPONSIVE PRO
+   Actualización final
+   ========================================= */
+
+/* Escritorio: navbar centrado, limpio y sin amontonarse */
+.topbar {
+  padding: 10px 18px !important;
+}
+
+.topbar__inner {
+  width: min(1380px, 100%) !important;
+  min-height: 68px !important;
+  padding: 0 14px !important;
+  gap: 14px !important;
+  flex-wrap: nowrap !important;
+}
+
+.brand {
+  flex: 0 0 220px !important;
+  max-width: 220px !important;
+}
+
+.brand__mark {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 13px !important;
+}
+
+.brand__title {
+  font-size: 0.9rem !important;
+}
+
+.brand__subtitle {
+  font-size: 0.6rem !important;
+}
+
+.navbar {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.navbar__center {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.nav-links {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
+}
+
+.nav-link,
+.nav-link--dropdown {
+  min-height: 40px !important;
+  padding: 0 10px !important;
+  border-radius: 13px !important;
+  font-size: 0.8rem !important;
+  gap: 7px !important;
+}
+
+.nav-link__icon {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.nav-actions {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.btn-virtual {
+  min-height: 40px !important;
+  padding: 0 16px !important;
+  border-radius: 14px !important;
+  font-size: 0.82rem !important;
+}
+
+.nav-link--icon {
+  min-height: 40px !important;
+  padding: 0 10px !important;
+  font-size: 0.8rem !important;
+}
+
+.socials {
+  gap: 6px !important;
+}
+
+.socials a {
+  width: 34px !important;
+  height: 34px !important;
+  flex: 0 0 34px !important;
+}
+
+/* Escritorio mediano: compacta sin romper el diseño */
+@media (max-width: 1320px) {
+  .topbar__inner {
+    min-height: 64px !important;
+  }
+
+  .brand {
+    flex-basis: 200px !important;
+    max-width: 200px !important;
+  }
+
+  .brand__subtitle {
+    display: none !important;
+  }
+
+  .nav-link,
+  .nav-link--dropdown {
+    padding: 0 8px !important;
+    font-size: 0.76rem !important;
+  }
+
+  .btn-virtual {
+    padding: 0 13px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .nav-link--icon {
+    font-size: 0.76rem !important;
+  }
+
+  .socials a {
+    width: 32px !important;
+    height: 32px !important;
+    flex-basis: 32px !important;
+  }
+}
+
+/* Tablet y mobile: logo + Aula Virtual + menú en una sola fila */
+@media (max-width: 1180px) {
+  .topbar {
+    padding: 10px !important;
+  }
+
+  .topbar__inner {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 10px !important;
+    border-radius: 18px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: initial !important;
+  }
+
+  .brand {
+    grid-column: 1 !important;
+    flex: none !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .brand__mark {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+  }
+
+  .brand__title {
+    font-size: 0.86rem !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .brand__subtitle {
+    display: none !important;
+  }
+
+  .topbar__quick {
+    grid-column: 2 !important;
+    display: flex !important;
+    margin-left: 0 !important;
+    align-items: center !important;
+  }
+
+  .btn-virtual--top {
+    min-height: 40px !important;
+    padding: 0 14px !important;
+    border-radius: 14px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .menu-toggle {
+    grid-column: 3 !important;
+    display: inline-flex !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .navbar {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    display: none !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    padding-top: 12px !important;
+    margin-top: 2px !important;
+    border-top: 1px solid rgba(254, 0, 62, 0.12) !important;
+  }
+
+  .navbar.is-open {
+    display: flex !important;
+    animation: mobileMenuFade 0.22s ease !important;
+  }
+
+  .navbar__center {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .nav-links {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .nav-item {
+    width: 100% !important;
+  }
+
+  .nav-link,
+  .nav-link--dropdown,
+  .nav-link--icon {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 0 14px !important;
+    border-radius: 15px !important;
+    font-size: 0.9rem !important;
+    justify-content: space-between !important;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018)) !important;
+    border: 1px solid rgba(254, 0, 62, 0.11) !important;
+  }
+
+  .nav-link span:last-child,
+  .nav-link--dropdown span:nth-child(2) {
+    margin-right: auto !important;
+  }
+
+  .nav-link__icon {
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  .dropdown-menu {
+    position: static !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    margin-top: 8px !important;
+    padding: 8px !important;
+    border-radius: 15px !important;
+    display: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    box-shadow: none !important;
+    background:
+      linear-gradient(180deg, rgba(254, 0, 62, 0.06), rgba(255, 255, 255, 0.018)) !important;
+  }
+
+  .nav-item--dropdown.is-open .dropdown-menu {
+    display: grid !important;
+    gap: 6px !important;
+  }
+
+  .dropdown-menu a {
+    min-height: 42px !important;
+    padding: 0 12px !important;
+    border-radius: 12px !important;
+    font-size: 0.86rem !important;
+  }
+
+  .nav-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .nav-actions .btn-virtual {
+    display: none !important;
+  }
+
+  .nav-actions .nav-link--icon {
+    justify-content: center !important;
+  }
+
+  .socials {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    padding-top: 4px !important;
+  }
+
+  .socials a {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px !important;
+  }
+}
+
+/* Mobile pequeño: más compacto */
+@media (max-width: 520px) {
+  .topbar {
+    padding: 8px !important;
+  }
+
+  .topbar__inner {
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    padding: 9px !important;
+    gap: 8px !important;
+    border-radius: 16px !important;
+  }
+
+  .brand {
+    gap: 8px !important;
+  }
+
+  .brand__mark {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 11px !important;
+  }
+
+  .brand__title {
+    font-size: 0.78rem !important;
+    max-width: 128px !important;
+  }
+
+  .btn-virtual--top {
+    min-height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 13px !important;
+    font-size: 0.74rem !important;
+  }
+
+  .menu-toggle {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 13px !important;
+  }
+
+  .nav-link,
+  .nav-link--dropdown,
+  .nav-link--icon {
+    min-height: 46px !important;
+    font-size: 0.86rem !important;
+    border-radius: 14px !important;
+  }
+
+  .dropdown-menu a {
+    min-height: 40px !important;
+    font-size: 0.84rem !important;
+  }
+
+  .socials a {
+    width: 38px !important;
+    height: 38px !important;
+    flex-basis: 38px !important;
+  }
+}
+

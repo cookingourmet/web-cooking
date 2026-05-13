@@ -1,5 +1,12 @@
 import { mainMenu, programMenu } from "../../../data/menu.data";
 
+const HIDDEN_MAIN_MENU_LABELS = new Set([
+  "Estudiantes",
+  "Rutas",
+  "Inscripción",
+  "Inscripciones",
+]);
+
 function getProgramIcon(label: string) {
   const icons: Record<string, string> = {
     "Gastronomía": `
@@ -73,25 +80,6 @@ function getMainIcon(label: string) {
         <rect x="4" y="5" width="16" height="15" rx="3" />
       </svg>
     `,
-    Estudiantes: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 9l9-4 9 4-9 4-9-4z" />
-        <path d="M7 11v4c0 1.8 2.2 3 5 3s5-1.2 5-3v-4" />
-      </svg>
-    `,
-    Rutas: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="6" cy="18" r="2" />
-        <circle cx="18" cy="6" r="2" />
-        <path d="M8 18c6 0 2-10 8-10" />
-      </svg>
-    `,
-    Inscripción: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M14 4h3a2 2 0 0 1 2 2v14l-5-3-5 3V6a2 2 0 0 1 2-2h3" />
-        <path d="M9 4h6" />
-      </svg>
-    `,
     "Bolsa laboral": `
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3" y="7" width="18" height="12" rx="2" />
@@ -142,6 +130,10 @@ function getSocialIcon(type: "facebook" | "instagram" | "tiktok" | "whatsapp") {
 }
 
 export function renderNavbar() {
+  const visibleMainMenu = mainMenu.filter(
+    (item) => !HIDDEN_MAIN_MENU_LABELS.has(item.label)
+  );
+
   return `
     <nav class="navbar" id="navbar">
       <div class="navbar__center">
@@ -181,7 +173,7 @@ export function renderNavbar() {
             </div>
           </li>
 
-          ${mainMenu
+          ${visibleMainMenu
             .map(
               (item) => `
                 <li>
@@ -216,31 +208,32 @@ export function renderNavbar() {
 
         <div class="socials">
           <a
-              href="https://www.facebook.com/Cooking.Gourmet"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-            >
-              ${getSocialIcon("facebook")}
-            </a>
+            href="https://www.facebook.com/Cooking.Gourmet"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            ${getSocialIcon("facebook")}
+          </a>
 
-            <a
-              href="https://www.instagram.com/cooking_gourmet/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              ${getSocialIcon("instagram")}
-            </a>
+          <a
+            href="https://www.instagram.com/cooking_gourmet/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            ${getSocialIcon("instagram")}
+          </a>
 
-            <a
-              href="https://www.tiktok.com/@cooking.gourmet.oficial"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="TikTok"
-            >
-              ${getSocialIcon("tiktok")}
-            </a>
+          <a
+            href="https://www.tiktok.com/@cooking.gourmet.oficial"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok"
+          >
+            ${getSocialIcon("tiktok")}
+          </a>
+
           <a
             href="https://wa.me/51981377382?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n"
             target="_blank"
