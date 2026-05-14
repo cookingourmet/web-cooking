@@ -68,18 +68,13 @@ type ProgramInfo = {
 const SALES_EMAIL = "ventas@cookingourmet.edu.pe";
 const SALES_WHATSAPP = "51981377382";
 
-/*
-  IMPORTANTE:
-  Reemplaza TU_CODIGO_FORMSPREE por tu código real.
-  Ejemplo:
-  const LEAD_ENDPOINT = "https://formspree.io/f/xabcdxyz";
-*/
-const LEAD_ENDPOINT = "https://formspree.io/f/TU_CODIGO_FORMSPREE";
+const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
+const WEB3FORMS_ACCESS_KEY = "c70db5c3-9654-4b15-b598-091a9ffa909a";
 
 const LAUNCHER_BUBBLES = [
   "¿Buscas un programa?",
-  "Te ayudamos al instante",
-  "Consulta costos y horarios",
+  "Consulta rápida",
+  "Costos y horarios",
   "Habla con Cookito",
 ];
 
@@ -87,8 +82,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   gastronomia: {
     key: "gastronomia",
     label: "Gastronomía Profesional",
-    shortDescription:
-      "ideal si buscas una formación completa, práctica y con proyección laboral en cocina profesional.",
+    shortDescription: "formación completa en cocina profesional.",
     brochureUrl: "/brochures/gastronomia.pdf",
     brochureLabel: "Ver brochure de Gastronomía",
     recommended: ["pasteleria", "cocina_corta"],
@@ -96,8 +90,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   pasteleria: {
     key: "pasteleria",
     label: "Pastelería Profesional",
-    shortDescription:
-      "perfecta si te interesa desarrollar técnica, creatividad y especialización en postres y repostería.",
+    shortDescription: "técnica, creatividad y repostería profesional.",
     brochureUrl: "/brochures/pasteleria.pdf",
     brochureLabel: "Ver brochure de Pastelería",
     recommended: ["gastronomia", "cocina_corta"],
@@ -105,8 +98,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   bar_profesional: {
     key: "bar_profesional",
     label: "Bar Profesional",
-    shortDescription:
-      "muy buena opción si buscas una formación práctica en coctelería, servicio y técnica de barra.",
+    shortDescription: "coctelería, servicio y técnica de barra.",
     brochureUrl: "/brochures/bar-profesional.pdf",
     brochureLabel: "Ver brochure de Bar Profesional",
     recommended: ["sommelier", "barismo"],
@@ -114,8 +106,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   barismo: {
     key: "barismo",
     label: "Barismo",
-    shortDescription:
-      "ideal si te apasiona el café y quieres dominar preparación, extracción y experiencia de servicio.",
+    shortDescription: "preparación, extracción y servicio de café.",
     brochureUrl: "/brochures/barismo.pdf",
     brochureLabel: "Ver brochure de Barismo",
     recommended: ["bar_profesional", "sommelier"],
@@ -123,8 +114,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   sommelier: {
     key: "sommelier",
     label: "Sommelier",
-    shortDescription:
-      "recomendado si te interesa el mundo del vino, cata, maridaje y servicio especializado.",
+    shortDescription: "vino, cata, maridaje y servicio especializado.",
     brochureUrl: "/brochures/sommelier.pdf",
     brochureLabel: "Ver brochure de Sommelier",
     recommended: ["bar_profesional", "barismo"],
@@ -132,8 +122,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   cocina_corta: {
     key: "cocina_corta",
     label: "Cursos y Talleres Cortos",
-    shortDescription:
-      "ideal si buscas una opción rápida, práctica y enfocada en habilidades concretas.",
+    shortDescription: "cursos prácticos y rápidos para especializarte.",
     brochureUrl: "/brochures/cursos-cortos.pdf",
     brochureLabel: "Ver brochure de Cursos Cortos",
     recommended: ["gastronomia", "pasteleria"],
@@ -142,7 +131,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
 
 const QUICK_ACTIONS: Record<QuickActionKey, string> = {
   programas: "Ver programas",
-  costos: "Costos y matrículas",
+  costos: "Costos",
   horarios: "Horarios",
   matricula: "Inscripción",
 };
@@ -177,9 +166,9 @@ function createMessageId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function getMessageDelay(text: string, min = 1200, max = 3600) {
+function getMessageDelay(text: string, min = 700, max = 1700) {
   const cleanLength = text.trim().length;
-  const calculated = 1000 + cleanLength * 14;
+  const calculated = 650 + cleanLength * 8;
   return Math.max(min, Math.min(max, calculated));
 }
 
@@ -275,7 +264,8 @@ function detectProgramFromText(rawValue: string): ProgramKey | null {
     value.includes("taller") ||
     value.includes("talleres") ||
     value.includes("curso rápido") ||
-    value.includes("curso rapido")
+    value.includes("curso rapido"
+    )
   ) {
     return "cocina_corta";
   }
@@ -290,13 +280,13 @@ function getRecommendedPrograms(programKey: ProgramKey): ProgramKey[] {
 function getIntentReply(intent: QuickActionKey) {
   switch (intent) {
     case "programas":
-      return "Perfecto. Te ayudaré a encontrar el programa que mejor encaje contigo.";
+      return "Perfecto. Elige un programa.";
     case "costos":
-      return "Claro. Primero te orientaré con el programa y luego podrás continuar con un asesor para costos y matrícula.";
+      return "Claro. Primero elige el programa.";
     case "horarios":
-      return "Excelente. Revisemos primero qué programa te interesa y luego continúas con horarios.";
+      return "Listo. Elige el programa.";
     case "matricula":
-      return "Muy bien. Te ayudaré a identificar el programa ideal y dejar tu solicitud lista.";
+      return "Muy bien. Elige el programa.";
     default:
       return "Perfecto. Continuemos.";
   }
@@ -306,7 +296,7 @@ function buildLeadSummary(state: AssistantState) {
   const program = getProgramInfo(state.lead.selectedProgram);
 
   return [
-    "Nueva solicitud desde Cookito",
+    "Nuevo lead Cookito",
     `Programa: ${program?.label ?? "-"}`,
     `Nombre: ${state.lead.fullName || "-"}`,
     `Celular: ${state.lead.phone || "-"}`,
@@ -340,21 +330,16 @@ function buildMailtoUrl(state: AssistantState) {
 async function sendLeadToSales(state: AssistantState) {
   const program = getProgramInfo(state.lead.selectedProgram);
 
-  if (LEAD_ENDPOINT.includes("TU_CODIGO_FORMSPREE")) {
-    throw new Error("Falta configurar el endpoint de Formspree.");
-  }
-
   const formData = new FormData();
 
-  formData.append(
-    "_subject",
-    `Nuevo lead Cookito - ${program?.label ?? "Programa"}`
-  );
+  formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+  formData.append("subject", `Nuevo lead Cookito - ${program?.label ?? "Programa"}`);
 
-  formData.append("_replyto", state.lead.email);
+  formData.append("from_name", "Cookito - Cooking Gourmet");
   formData.append("email", state.lead.email);
-  formData.append("destino", SALES_EMAIL);
+  formData.append("replyto", state.lead.email);
 
+  formData.append("destino", SALES_EMAIL);
   formData.append("programa", program?.label ?? "-");
   formData.append("nombre", state.lead.fullName || "-");
   formData.append("celular", state.lead.phone || "-");
@@ -373,13 +358,10 @@ async function sendLeadToSales(state: AssistantState) {
 
   const response = await fetch(LEAD_ENDPOINT, {
     method: "POST",
-    headers: {
-      Accept: "application/json",
-    },
     body: formData,
   });
 
-  let data: unknown = null;
+  let data: { success?: boolean; message?: string } | null = null;
 
   try {
     data = await response.json();
@@ -387,8 +369,8 @@ async function sendLeadToSales(state: AssistantState) {
     data = null;
   }
 
-  if (!response.ok) {
-    throw new Error("No se pudo enviar la solicitud a ventas.");
+  if (!response.ok || data?.success === false) {
+    throw new Error(data?.message || "No se pudo enviar la solicitud.");
   }
 
   return data;
@@ -400,7 +382,7 @@ function renderLeadSubmitStatus(state: AssistantState) {
   if (state.leadSubmitStatus === "sending") {
     return `
       <div class="hero-assistant-window__send-status is-sending">
-        Enviando solicitud a ventas...
+        Enviando solicitud...
       </div>
     `;
   }
@@ -408,14 +390,14 @@ function renderLeadSubmitStatus(state: AssistantState) {
   if (state.leadSubmitStatus === "sent") {
     return `
       <div class="hero-assistant-window__send-status is-sent">
-        Solicitud enviada a ventas@cookingourmet.edu.pe
+        Solicitud enviada correctamente.
       </div>
     `;
   }
 
   return `
     <div class="hero-assistant-window__send-status is-error">
-      No se pudo enviar automáticamente. Puedes reenviar o continuar por WhatsApp.
+      No se pudo enviar. Puedes reenviar o escribir por WhatsApp.
     </div>
   `;
 }
@@ -486,7 +468,7 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
           data-chip-value="skip"
           ${state.lockedChips ? "disabled" : ""}
         >
-          Omitir por ahora
+          Omitir DNI
         </button>
       </div>
     `;
@@ -494,10 +476,6 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
 
   if (step === "completed") {
     const selectedProgram = getProgramInfo(state.lead.selectedProgram);
-    const recommended = state.lead.recommendedPrograms
-      .map((key) => PROGRAMS[key])
-      .slice(0, 2);
-
     const whatsappUrl = buildWhatsAppUrl(state);
     const mailtoUrl = buildMailtoUrl(state);
 
@@ -515,8 +493,15 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
                 data-chip-type="resend_lead"
                 data-chip-value="resend"
               >
-                Reenviar a ventas
+                Reenviar solicitud
               </button>
+
+              <a
+                href="${mailtoUrl}"
+                class="hero-assistant-window__chip hero-assistant-window__chip--link"
+              >
+                Enviar por correo
+              </a>
             `
             : ""
         }
@@ -528,13 +513,6 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
           rel="noreferrer"
         >
           Continuar por WhatsApp
-        </a>
-
-        <a
-          href="${mailtoUrl}"
-          class="hero-assistant-window__chip hero-assistant-window__chip--link"
-        >
-          Enviar por correo manual
         </a>
 
         ${
@@ -551,22 +529,6 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
             `
             : ""
         }
-
-        ${recommended
-          .map(
-            (item) => `
-              <button
-                type="button"
-                class="hero-assistant-window__chip"
-                data-assistant-chip
-                data-chip-type="program"
-                data-chip-value="${item.key}"
-              >
-                Ver también ${item.label}
-              </button>
-            `
-          )
-          .join("")}
       </div>
     `;
   }
@@ -615,7 +577,7 @@ export function renderAssistantWindow() {
             <span class="hero-assistant-window__eyebrow">Asistente virtual</span>
             <h3 class="hero-assistant-window__title">Cookito</h3>
             <p class="hero-assistant-window__subtitle">
-              Te ayudo con programas, costos, horarios e inscripciones.
+              Consulta programas, costos, horarios e inscripción.
             </p>
           </div>
 
@@ -636,7 +598,7 @@ export function renderAssistantWindow() {
             <input
               type="text"
               class="hero-assistant-window__input"
-              placeholder="Escribe tu respuesta..."
+              placeholder="Escribe aquí..."
               aria-label="Escribe tu respuesta"
             />
             <button
@@ -650,7 +612,7 @@ export function renderAssistantWindow() {
           </div>
 
           <p class="hero-assistant-window__note">
-            Tus datos se usarán solo para brindarte información del programa.
+            Tus datos serán enviados al área de ventas.
           </p>
         </div>
       </div>
@@ -756,7 +718,7 @@ export function initAssistantWindow() {
         <div class="hero-assistant-window__typing" aria-live="polite">
           <span class="hero-assistant-window__typing-avatar">C</span>
           <div class="hero-assistant-window__typing-bubble">
-            <span class="hero-assistant-window__typing-label">Cookito está escribiendo</span>
+            <span class="hero-assistant-window__typing-label">Cookito escribe</span>
             <span class="hero-assistant-window__typing-dots">
               <span></span>
               <span></span>
@@ -813,47 +775,30 @@ export function initAssistantWindow() {
     }
 
     async function queueBotMessage(text: string, delay?: number, token?: number) {
-      await queueBotMessages([{ text, delay }], token);
-    }
-
-    async function queueBotMessages(
-      messages: Array<{ text: string; delay?: number }>,
-      externalToken?: number
-    ) {
-      const token = externalToken ?? ++state.pendingQueueToken;
+      const activeToken = token ?? ++state.pendingQueueToken;
+      const finalDelay = delay ?? getMessageDelay(text);
 
       state.quickRepliesVisible = false;
       setInteractionLocked(true);
+      state.isTyping = true;
       renderMessages();
 
-      for (const item of messages) {
-        const finalDelay = item.delay ?? getMessageDelay(item.text);
+      await wait(finalDelay);
 
-        state.isTyping = true;
-        renderMessages();
-
-        await wait(finalDelay);
-
-        if (token !== state.pendingQueueToken) {
-          state.isTyping = false;
-          state.quickRepliesVisible = false;
-          setInteractionLocked(false);
-          renderMessages();
-          return;
-        }
-
+      if (activeToken !== state.pendingQueueToken) {
         state.isTyping = false;
-
-        state.messages.push({
-          id: createMessageId(),
-          role: "bot",
-          text: item.text,
-        });
-
+        setInteractionLocked(false);
         renderMessages();
-
-        await wait(280);
+        return;
       }
+
+      state.isTyping = false;
+
+      state.messages.push({
+        id: createMessageId(),
+        role: "bot",
+        text,
+      });
 
       state.quickRepliesVisible = true;
       setInteractionLocked(false);
@@ -916,13 +861,13 @@ export function initAssistantWindow() {
           }
 
           if (chipType === "dni_optional" && chipValue === "skip") {
-            addUserMessage("Omitir por ahora");
+            addUserMessage("Omitir DNI");
             finishLeadFlow(true);
             return;
           }
 
           if (chipType === "resend_lead") {
-            addUserMessage("Reenviar solicitud a ventas");
+            addUserMessage("Reenviar solicitud");
             void submitLeadToSales();
             return;
           }
@@ -940,26 +885,9 @@ export function initAssistantWindow() {
       state.messages = [];
       state.lockedChips = false;
       state.quickRepliesVisible = false;
-
-      state.messages.push({
-        id: createMessageId(),
-        role: "bot",
-        text: "Hola 👋, soy Cookito, tu asistente virtual de Cooking Gourmet.",
-      });
-
       state.step = "intent";
-      renderMessages();
 
-      void queueBotMessages([
-        {
-          text: "Puedo ayudarte con programas de estudio, costos, horarios e inscripciones.",
-          delay: 1600,
-        },
-        {
-          text: "¿Qué te gustaría conocer hoy?",
-          delay: 1800,
-        },
-      ]);
+      void queueBotMessage("Hola 👋 Soy Cookito. ¿Qué deseas consultar?", 900);
     }
 
     function handleIntentSelection(intent: QuickActionKey) {
@@ -969,16 +897,7 @@ export function initAssistantWindow() {
       state.lockedChips = false;
       renderMessages();
 
-      void queueBotMessages([
-        {
-          text: getIntentReply(intent),
-          delay: 1500,
-        },
-        {
-          text: "Cuéntame, ¿sobre qué programa te gustaría recibir información?",
-          delay: 1800,
-        },
-      ]);
+      void queueBotMessage(getIntentReply(intent), 900);
     }
 
     function handleProgramSelection(programKey: ProgramKey) {
@@ -995,20 +914,10 @@ export function initAssistantWindow() {
 
       renderMessages();
 
-      void queueBotMessages([
-        {
-          text: `Excelente elección. ${program.label} es ${program.shortDescription}`,
-          delay: 1800,
-        },
-        {
-          text: "Para enviarte la información completa y darte una atención más rápida, necesito unos datos.",
-          delay: 2200,
-        },
-        {
-          text: "Primero, ¿cuál es tu nombre completo?",
-          delay: 1600,
-        },
-      ]);
+      void queueBotMessage(
+        `${program.label}: ${program.shortDescription} ¿Tu nombre completo?`,
+        1100
+      );
     }
 
     function finishLeadFlow(skippedDni = false) {
@@ -1024,36 +933,13 @@ export function initAssistantWindow() {
 
       void submitLeadToSales();
 
-      const recommendedLabels = state.lead.recommendedPrograms
-        .map((key) => PROGRAMS[key].label)
-        .slice(0, 2);
+      const firstName = state.lead.fullName.split(" ")[0] || "gracias";
+      const dniText = skippedDni ? " sin DNI" : "";
 
-      void queueBotMessages([
-        {
-          text: `Listo, ${
-            state.lead.fullName.split(" ")[0] || "gracias"
-          } ✅ Ya registré tu interés en ${program.label}.`,
-          delay: 1700,
-        },
-        {
-          text: skippedDni
-            ? "Continuaremos sin DNI por ahora, no te preocupes."
-            : "Tu registro quedó más completo para una atención más rápida.",
-          delay: 1800,
-        },
-        {
-          text: "Estoy enviando tu solicitud al área de ventas. También puedes continuar por WhatsApp o revisar el brochure.",
-          delay: 2100,
-        },
-        {
-          text: `Además, te recomiendo revisar ${
-            recommendedLabels[0] ?? "otro programa relacionado"
-          }${
-            recommendedLabels[1] ? ` y ${recommendedLabels[1]}` : ""
-          } si quieres complementar tu perfil.`,
-          delay: 2200,
-        },
-      ]);
+      void queueBotMessage(
+        `Listo, ${firstName} ✅ Registré tu solicitud${dniText}. Un asesor te contactará pronto.`,
+        1200
+      );
     }
 
     function handleUserMessage(rawValue: string) {
@@ -1075,7 +961,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage("¿Qué te gustaría conocer hoy?", 1600);
+        void queueBotMessage("¿Qué deseas consultar?", 800);
         return;
       }
 
@@ -1110,8 +996,8 @@ export function initAssistantWindow() {
           renderMessages();
 
           void queueBotMessage(
-            "Puedo ayudarte con Gastronomía Profesional, Pastelería Profesional, Bar Profesional, Barismo, Sommelier o Cursos Cortos. ¿Cuál te interesa?",
-            1800
+            "Elige: Gastronomía, Pastelería, Bar, Barismo, Sommelier o Cursos Cortos.",
+            1000
           );
 
           return;
@@ -1127,11 +1013,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage(
-            "Tu nombre parece muy corto. ¿Podrías escribirlo completo, por favor?",
-            1500
-          );
-
+          void queueBotMessage("Escribe tu nombre completo, por favor.", 900);
           return;
         }
 
@@ -1141,13 +1023,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage(
-          `Mucho gusto, ${
-            value.split(" ")[0]
-          }. Ahora compárteme tu número de celular, por favor.`,
-          1600
-        );
-
+        void queueBotMessage("Gracias. ¿Tu número de celular?", 900);
         return;
       }
 
@@ -1157,11 +1033,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage(
-            "Ese número parece inválido. Envíamelo nuevamente con 9 dígitos o formato correcto, por favor.",
-            1500
-          );
-
+          void queueBotMessage("El celular debe tener 9 dígitos o formato válido.", 900);
           return;
         }
 
@@ -1171,11 +1043,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage(
-          "Perfecto. Ahora dime tu correo electrónico para enviarte la información del programa.",
-          1600
-        );
-
+        void queueBotMessage("Perfecto. ¿Tu correo electrónico?", 900);
         return;
       }
 
@@ -1185,11 +1053,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage(
-            "Creo que ese correo no está completo. ¿Podrías revisarlo y enviarlo nuevamente?",
-            1500
-          );
-
+          void queueBotMessage("Revisa tu correo y escríbelo nuevamente.", 900);
           return;
         }
 
@@ -1199,11 +1063,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage(
-          "Gracias. Si deseas dejar tu registro más completo, también puedes compartirme tu DNI. Este paso es opcional.",
-          1700
-        );
-
+        void queueBotMessage("DNI opcional. Escríbelo o toca Omitir DNI.", 900);
         return;
       }
 
@@ -1213,11 +1073,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage(
-            "El DNI debe tener 8 números. Si deseas, puedes volver a escribirlo o tocar “Omitir por ahora”.",
-            1600
-          );
-
+          void queueBotMessage("El DNI debe tener 8 números o puedes omitirlo.", 900);
           return;
         }
 
@@ -1238,10 +1094,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage(
-          "Puedo ayudarte a revisar otro programa o continuar con un asesor. ¿Qué prefieres?",
-          1600
-        );
+        void queueBotMessage("Puedes continuar por WhatsApp o elegir otro programa.", 900);
       }
     }
 
