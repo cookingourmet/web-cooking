@@ -25,25 +25,33 @@
 .hero-assistant-window__dock {
   display: flex;
   align-items: flex-end;
-  gap: 12px;
+  gap: 10px;
 }
 
+/* GIF / MASCOTA LIBRE */
 .hero-assistant-window__character {
-  width: 74px;
-  height: 74px;
-  border-radius: 999px;
-  padding: 5px;
-  background: linear-gradient(135deg, #ff4775, var(--cookito-primary));
-  box-shadow: 0 16px 36px rgba(255, 0, 64, 0.34);
+  width: 108px;
+  height: 108px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+  animation: cookitoMascotFloat 3.4s ease-in-out infinite;
 }
 
 .hero-assistant-window__character-image {
   width: 100%;
   height: 100%;
   display: block;
-  border-radius: 999px;
-  object-fit: cover;
-  background: #ffffff;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: center bottom;
+  background: transparent;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.24));
 }
 
 .hero-assistant-window__launcher-group {
@@ -51,6 +59,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
+  margin-bottom: 10px;
 }
 
 .hero-assistant-window__bubble {
@@ -88,7 +97,7 @@
 .hero-assistant-window__panel {
   position: absolute;
   right: 0;
-  bottom: 94px;
+  bottom: 112px;
   width: min(390px, calc(100vw - 32px));
   overflow: hidden;
   border-radius: 28px;
@@ -469,6 +478,17 @@
   }
 }
 
+@keyframes cookitoMascotFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+}
+
 @keyframes cookitoTyping {
   0%,
   80%,
@@ -521,14 +541,18 @@
 
 @media (max-width: 640px) {
   .hero-assistant-window {
-    right: 14px;
-    bottom: 14px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .hero-assistant-window__dock {
+    gap: 6px;
   }
 
   .hero-assistant-window__panel {
     right: 0;
-    bottom: 86px;
-    width: calc(100vw - 28px);
+    bottom: 98px;
+    width: calc(100vw - 24px);
     border-radius: 24px;
   }
 
@@ -537,8 +561,12 @@
   }
 
   .hero-assistant-window__character {
-    width: 64px;
-    height: 64px;
+    width: 84px;
+    height: 84px;
+  }
+
+  .hero-assistant-window__launcher-group {
+    margin-bottom: 8px;
   }
 
   .hero-assistant-window__bubble {
