@@ -67,7 +67,14 @@ type ProgramInfo = {
 
 const SALES_EMAIL = "ventas@cookingourmet.edu.pe";
 const SALES_WHATSAPP = "51981377382";
-const LEAD_ENDPOINT = "/api/send-cookito-lead";
+
+/*
+  IMPORTANTE:
+  Reemplaza TU_CODIGO_FORMSPREE por tu código real.
+  Ejemplo:
+  const LEAD_ENDPOINT = "https://formspree.io/f/xabcdxyz";
+*/
+const LEAD_ENDPOINT = "https://formspree.io/f/TU_CODIGO_FORMSPREE";
 
 const LAUNCHER_BUBBLES = [
   "¿Buscas un programa?",
@@ -309,6 +316,7 @@ function buildLeadSummary(state: AssistantState) {
       state.lead.selectedIntent ? QUICK_ACTIONS[state.lead.selectedIntent] : "-"
     }`,
     `Origen: ${state.lead.source}`,
+    `Página: ${window.location.href}`,
   ].join("\n");
 }
 
@@ -329,35 +337,46 @@ function buildMailtoUrl(state: AssistantState) {
   )}&body=${encodeURIComponent(body)}`;
 }
 
-function buildLeadPayload(state: AssistantState) {
+async function sendLeadToSales(state: AssistantState) {
   const program = getProgramInfo(state.lead.selectedProgram);
 
-  return {
-    to: SALES_EMAIL,
-    subject: `Nuevo lead Cookito - ${program?.label ?? "Programa"}`,
-    fullName: state.lead.fullName,
-    phone: state.lead.phone,
-    email: state.lead.email,
-    dni: state.lead.dni || "No compartido",
-    programKey: state.lead.selectedProgram,
-    programLabel: program?.label ?? "-",
-    intent: state.lead.selectedIntent
-      ? QUICK_ACTIONS[state.lead.selectedIntent]
-      : "-",
-    source: state.lead.source,
-    pageUrl: window.location.href,
-    createdAt: new Date().toISOString(),
-    message: buildLeadSummary(state),
-  };
-}
+  if (LEAD_ENDPOINT.includes("TU_CODIGO_FORMSPREE")) {
+    throw new Error("Falta configurar el endpoint de Formspree.");
+  }
 
-async function sendLeadToSales(state: AssistantState) {
+  const formData = new FormData();
+
+  formData.append(
+    "_subject",
+    `Nuevo lead Cookito - ${program?.label ?? "Programa"}`
+  );
+
+  formData.append("_replyto", state.lead.email);
+  formData.append("email", state.lead.email);
+  formData.append("destino", SALES_EMAIL);
+
+  formData.append("programa", program?.label ?? "-");
+  formData.append("nombre", state.lead.fullName || "-");
+  formData.append("celular", state.lead.phone || "-");
+  formData.append("correo", state.lead.email || "-");
+  formData.append("dni", state.lead.dni || "No compartido");
+
+  formData.append(
+    "interes",
+    state.lead.selectedIntent ? QUICK_ACTIONS[state.lead.selectedIntent] : "-"
+  );
+
+  formData.append("origen", state.lead.source);
+  formData.append("pagina", window.location.href);
+  formData.append("fecha", new Date().toLocaleString("es-PE"));
+  formData.append("resumen", buildLeadSummary(state));
+
   const response = await fetch(LEAD_ENDPOINT, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      Accept: "application/json",
     },
-    body: JSON.stringify(buildLeadPayload(state)),
+    body: formData,
   });
 
   let data: unknown = null;
@@ -778,16 +797,6 @@ export function initAssistantWindow() {
       safeChat.scrollTop = safeChat.scrollHeight;
     }
 
-    function addBotMessage(text: string) {
-      state.messages.push({
-        id: createMessageId(),
-        role: "bot",
-        text,
-      });
-
-      renderMessages();
-    }
-
     function addUserMessage(text: string) {
       state.messages.push({
         id: createMessageId(),
@@ -932,7 +941,11 @@ export function initAssistantWindow() {
       state.lockedChips = false;
       state.quickRepliesVisible = false;
 
-      addBotMessage("Hola 👋, soy Cookito, tu asistente virtual de Cooking Gourmet.");
+      state.messages.push({
+        id: createMessageId(),
+        role: "bot",
+        text: "Hola 👋, soy Cookito, tu asistente virtual de Cooking Gourmet.",
+      });
 
       state.step = "intent";
       renderMessages();
