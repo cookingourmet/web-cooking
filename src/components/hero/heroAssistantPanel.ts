@@ -72,8 +72,8 @@ const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_ACCESS_KEY = "c70db5c3-9654-4b15-b598-091a9ffa909a";
 
 const LAUNCHER_BUBBLES = [
-  "¿Buscas un programa?",
-  "Consulta rápida",
+  "¿Te ayudo a elegir?",
+  "Estoy aquí para ayudarte",
   "Costos y horarios",
   "Habla con Cookito",
 ];
@@ -82,7 +82,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   gastronomia: {
     key: "gastronomia",
     label: "Gastronomía Profesional",
-    shortDescription: "formación completa en cocina profesional.",
+    shortDescription: "aprender cocina profesional desde cero y con práctica real.",
     brochureUrl: "/brochures/gastronomia.pdf",
     brochureLabel: "Ver brochure de Gastronomía",
     recommended: ["pasteleria", "cocina_corta"],
@@ -90,7 +90,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   pasteleria: {
     key: "pasteleria",
     label: "Pastelería Profesional",
-    shortDescription: "técnica, creatividad y repostería profesional.",
+    shortDescription: "crear postres, tortas y productos de repostería profesional.",
     brochureUrl: "/brochures/pasteleria.pdf",
     brochureLabel: "Ver brochure de Pastelería",
     recommended: ["gastronomia", "cocina_corta"],
@@ -98,7 +98,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   bar_profesional: {
     key: "bar_profesional",
     label: "Bar Profesional",
-    shortDescription: "coctelería, servicio y técnica de barra.",
+    shortDescription: "dominar coctelería, barra y atención de servicio.",
     brochureUrl: "/brochures/bar-profesional.pdf",
     brochureLabel: "Ver brochure de Bar Profesional",
     recommended: ["sommelier", "barismo"],
@@ -106,7 +106,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   barismo: {
     key: "barismo",
     label: "Barismo",
-    shortDescription: "preparación, extracción y servicio de café.",
+    shortDescription: "preparar café de especialidad y mejorar tu técnica de servicio.",
     brochureUrl: "/brochures/barismo.pdf",
     brochureLabel: "Ver brochure de Barismo",
     recommended: ["bar_profesional", "sommelier"],
@@ -114,7 +114,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   sommelier: {
     key: "sommelier",
     label: "Sommelier",
-    shortDescription: "vino, cata, maridaje y servicio especializado.",
+    shortDescription: "aprender sobre vinos, cata, maridaje y servicio especializado.",
     brochureUrl: "/brochures/sommelier.pdf",
     brochureLabel: "Ver brochure de Sommelier",
     recommended: ["bar_profesional", "barismo"],
@@ -122,7 +122,7 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
   cocina_corta: {
     key: "cocina_corta",
     label: "Cursos y Talleres Cortos",
-    shortDescription: "cursos prácticos y rápidos para especializarte.",
+    shortDescription: "capacitarte rápido en habilidades prácticas de cocina.",
     brochureUrl: "/brochures/cursos-cortos.pdf",
     brochureLabel: "Ver brochure de Cursos Cortos",
     recommended: ["gastronomia", "pasteleria"],
@@ -130,10 +130,10 @@ const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
 };
 
 const QUICK_ACTIONS: Record<QuickActionKey, string> = {
-  programas: "Ver programas",
-  costos: "Costos",
-  horarios: "Horarios",
-  matricula: "Inscripción",
+  programas: "Quiero información",
+  costos: "Consultar costos",
+  horarios: "Ver horarios",
+  matricula: "Inscribirme",
 };
 
 function createInitialState(): AssistantState {
@@ -166,9 +166,9 @@ function createMessageId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function getMessageDelay(text: string, min = 700, max = 1700) {
+function getMessageDelay(text: string, min = 650, max = 1500) {
   const cleanLength = text.trim().length;
-  const calculated = 650 + cleanLength * 8;
+  const calculated = 600 + cleanLength * 7;
   return Math.max(min, Math.min(max, calculated));
 }
 
@@ -189,6 +189,10 @@ function escapeHtml(text: string) {
 
 function normalizeText(value: string) {
   return value.trim().toLowerCase();
+}
+
+function getFirstName(value: string) {
+  return value.trim().split(/\s+/)[0] || "gracias";
 }
 
 function isValidPhone(value: string) {
@@ -264,8 +268,7 @@ function detectProgramFromText(rawValue: string): ProgramKey | null {
     value.includes("taller") ||
     value.includes("talleres") ||
     value.includes("curso rápido") ||
-    value.includes("curso rapido"
-    )
+    value.includes("curso rapido")
   ) {
     return "cocina_corta";
   }
@@ -280,15 +283,15 @@ function getRecommendedPrograms(programKey: ProgramKey): ProgramKey[] {
 function getIntentReply(intent: QuickActionKey) {
   switch (intent) {
     case "programas":
-      return "Perfecto. Elige un programa.";
+      return "Genial 😊 Te ayudo a elegir el programa ideal.";
     case "costos":
-      return "Claro. Primero elige el programa.";
+      return "Claro 😊 Primero dime qué programa te interesa.";
     case "horarios":
-      return "Listo. Elige el programa.";
+      return "Perfecto 😊 Elige el programa y un asesor te pasará los horarios.";
     case "matricula":
-      return "Muy bien. Elige el programa.";
+      return "Excelente 🙌 Dejemos tu solicitud lista.";
     default:
-      return "Perfecto. Continuemos.";
+      return "Perfecto 😊 Continuemos.";
   }
 }
 
@@ -552,7 +555,7 @@ export function renderAssistantWindow() {
 
         <div class="hero-assistant-window__launcher-group">
           <div class="hero-assistant-window__bubble" data-assistant-bubble>
-            ¿Buscas un programa?
+            ¿Te ayudo a elegir?
           </div>
 
           <button
@@ -577,7 +580,7 @@ export function renderAssistantWindow() {
             <span class="hero-assistant-window__eyebrow">Asistente virtual</span>
             <h3 class="hero-assistant-window__title">Cookito</h3>
             <p class="hero-assistant-window__subtitle">
-              Consulta programas, costos, horarios e inscripción.
+              Te ayudo con programas, costos, horarios e inscripción.
             </p>
           </div>
 
@@ -718,7 +721,7 @@ export function initAssistantWindow() {
         <div class="hero-assistant-window__typing" aria-live="polite">
           <span class="hero-assistant-window__typing-avatar">C</span>
           <div class="hero-assistant-window__typing-bubble">
-            <span class="hero-assistant-window__typing-label">Cookito escribe</span>
+            <span class="hero-assistant-window__typing-label">Cookito está escribiendo</span>
             <span class="hero-assistant-window__typing-dots">
               <span></span>
               <span></span>
@@ -887,7 +890,10 @@ export function initAssistantWindow() {
       state.quickRepliesVisible = false;
       state.step = "intent";
 
-      void queueBotMessage("Hola 👋 Soy Cookito. ¿Qué deseas consultar?", 900);
+      void queueBotMessage(
+        "¡Hola! Soy Cookito 👋 Estoy aquí para ayudarte. ¿Qué te gustaría consultar?",
+        900
+      );
     }
 
     function handleIntentSelection(intent: QuickActionKey) {
@@ -915,7 +921,7 @@ export function initAssistantWindow() {
       renderMessages();
 
       void queueBotMessage(
-        `${program.label}: ${program.shortDescription} ¿Tu nombre completo?`,
+        `¡Buena elección! ${program.label} es una excelente opción para ${program.shortDescription} ¿Me dices tu nombre completo?`,
         1100
       );
     }
@@ -933,11 +939,11 @@ export function initAssistantWindow() {
 
       void submitLeadToSales();
 
-      const firstName = state.lead.fullName.split(" ")[0] || "gracias";
+      const firstName = getFirstName(state.lead.fullName);
       const dniText = skippedDni ? " sin DNI" : "";
 
       void queueBotMessage(
-        `Listo, ${firstName} ✅ Registré tu solicitud${dniText}. Un asesor te contactará pronto.`,
+        `¡Gracias, ${firstName}! ✅ Ya envié tu solicitud${dniText}. Un asesor de Cooking Gourmet te escribirá pronto.`,
         1200
       );
     }
@@ -961,7 +967,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage("¿Qué deseas consultar?", 800);
+        void queueBotMessage("¿Qué te gustaría consultar?", 800);
         return;
       }
 
@@ -996,7 +1002,7 @@ export function initAssistantWindow() {
           renderMessages();
 
           void queueBotMessage(
-            "Elige: Gastronomía, Pastelería, Bar, Barismo, Sommelier o Cursos Cortos.",
+            "Puedes elegir Gastronomía, Pastelería, Bar, Barismo, Sommelier o Cursos Cortos 😊",
             1000
           );
 
@@ -1013,7 +1019,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage("Escribe tu nombre completo, por favor.", 900);
+          void queueBotMessage("¿Me escribes tu nombre completo, por favor?", 900);
           return;
         }
 
@@ -1023,7 +1029,10 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage("Gracias. ¿Tu número de celular?", 900);
+        void queueBotMessage(
+          `Mucho gusto, ${getFirstName(value)} 😊 ¿A qué número podemos escribirte?`,
+          900
+        );
         return;
       }
 
@@ -1033,7 +1042,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage("El celular debe tener 9 dígitos o formato válido.", 900);
+          void queueBotMessage("Creo que falta algún número. Escríbelo nuevamente, por favor.", 900);
           return;
         }
 
@@ -1043,7 +1052,10 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage("Perfecto. ¿Tu correo electrónico?", 900);
+        void queueBotMessage(
+          "Gracias 🙌 Ahora déjame tu correo para enviarte la información.",
+          900
+        );
         return;
       }
 
@@ -1053,7 +1065,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage("Revisa tu correo y escríbelo nuevamente.", 900);
+          void queueBotMessage("Parece que el correo no está completo. Revísalo, por favor.", 900);
           return;
         }
 
@@ -1063,7 +1075,10 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage("DNI opcional. Escríbelo o toca Omitir DNI.", 900);
+        void queueBotMessage(
+          "Listo 😊 El DNI es opcional. Puedes escribirlo o tocar “Omitir DNI”.",
+          900
+        );
         return;
       }
 
@@ -1073,7 +1088,7 @@ export function initAssistantWindow() {
           state.quickRepliesVisible = false;
           renderMessages();
 
-          void queueBotMessage("El DNI debe tener 8 números o puedes omitirlo.", 900);
+          void queueBotMessage("El DNI debe tener 8 números. También puedes omitirlo.", 900);
           return;
         }
 
@@ -1094,7 +1109,7 @@ export function initAssistantWindow() {
         state.quickRepliesVisible = false;
         renderMessages();
 
-        void queueBotMessage("Puedes continuar por WhatsApp o elegir otro programa.", 900);
+        void queueBotMessage("Puedes continuar por WhatsApp o elegir otro programa 😊", 900);
       }
     }
 
