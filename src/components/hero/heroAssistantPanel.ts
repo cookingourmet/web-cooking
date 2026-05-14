@@ -8,11 +8,7 @@ type ProgramKey =
   | "sommelier"
   | "cocina_corta";
 
-type QuickActionKey =
-  | "programas"
-  | "costos"
-  | "horarios"
-  | "matricula";
+type QuickActionKey = "programas" | "costos" | "horarios" | "matricula";
 
 type ChatStep =
   | "welcome"
@@ -31,6 +27,8 @@ type ChatMessage = {
   role: ChatRole;
   text: string;
 };
+
+type LeadSubmitStatus = "idle" | "sending" | "sent" | "error";
 
 type LeadData = {
   fullName: string;
@@ -53,6 +51,9 @@ type AssistantState = {
   bubbleIndex: number;
   lockedChips: boolean;
   pendingQueueToken: number;
+  leadSubmitStatus: LeadSubmitStatus;
+  leadSubmitError: string;
+  quickRepliesVisible: boolean;
 };
 
 type ProgramInfo = {
@@ -66,6 +67,7 @@ type ProgramInfo = {
 
 const SALES_EMAIL = "ventas@cookingourmet.edu.pe";
 const SALES_WHATSAPP = "51981377382";
+const LEAD_ENDPOINT = "/api/send-cookito-lead";
 
 const LAUNCHER_BUBBLES = [
   "¿Buscas un programa?",
@@ -147,6 +149,9 @@ function createInitialState(): AssistantState {
     bubbleIndex: 0,
     lockedChips: false,
     pendingQueueToken: 0,
+    leadSubmitStatus: "idle",
+    leadSubmitError: "",
+    quickRepliesVisible: false,
     lead: {
       fullName: "",
       phone: "",
@@ -165,9 +170,9 @@ function createMessageId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function getMessageDelay(text: string, min = 2000, max = 5000) {
+function getMessageDelay(text: string, min = 1200, max = 3600) {
   const cleanLength = text.trim().length;
-  const calculated = 1600 + cleanLength * 18;
+  const calculated = 1000 + cleanLength * 14;
   return Math.max(min, Math.min(max, calculated));
 }
 
@@ -241,11 +246,19 @@ function detectProgramFromText(rawValue: string): ProgramKey | null {
     return "bar_profesional";
   }
 
-  if (value.includes("barismo") || value.includes("café") || value.includes("cafe")) {
+  if (
+    value.includes("barismo") ||
+    value.includes("café") ||
+    value.includes("cafe")
+  ) {
     return "barismo";
   }
 
-  if (value.includes("sommelier") || value.includes("vino") || value.includes("vinos")) {
+  if (
+    value.includes("sommelier") ||
+    value.includes("vino") ||
+    value.includes("vinos")
+  ) {
     return "sommelier";
   }
 
@@ -272,7 +285,7 @@ function getIntentReply(intent: QuickActionKey) {
     case "programas":
       return "Perfecto. Te ayudaré a encontrar el programa que mejor encaje contigo.";
     case "costos":
-      return "Claro. Primero te orientaré con el programa y luego podrás continuar por WhatsApp para costos y matrícula.";
+      return "Claro. Primero te orientaré con el programa y luego podrás continuar con un asesor para costos y matrícula.";
     case "horarios":
       return "Excelente. Revisemos primero qué programa te interesa y luego continúas con horarios.";
     case "matricula":
@@ -316,6 +329,78 @@ function buildMailtoUrl(state: AssistantState) {
   )}&body=${encodeURIComponent(body)}`;
 }
 
+function buildLeadPayload(state: AssistantState) {
+  const program = getProgramInfo(state.lead.selectedProgram);
+
+  return {
+    to: SALES_EMAIL,
+    subject: `Nuevo lead Cookito - ${program?.label ?? "Programa"}`,
+    fullName: state.lead.fullName,
+    phone: state.lead.phone,
+    email: state.lead.email,
+    dni: state.lead.dni || "No compartido",
+    programKey: state.lead.selectedProgram,
+    programLabel: program?.label ?? "-",
+    intent: state.lead.selectedIntent
+      ? QUICK_ACTIONS[state.lead.selectedIntent]
+      : "-",
+    source: state.lead.source,
+    pageUrl: window.location.href,
+    createdAt: new Date().toISOString(),
+    message: buildLeadSummary(state),
+  };
+}
+
+async function sendLeadToSales(state: AssistantState) {
+  const response = await fetch(LEAD_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(buildLeadPayload(state)),
+  });
+
+  let data: unknown = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    throw new Error("No se pudo enviar la solicitud a ventas.");
+  }
+
+  return data;
+}
+
+function renderLeadSubmitStatus(state: AssistantState) {
+  if (state.leadSubmitStatus === "idle") return "";
+
+  if (state.leadSubmitStatus === "sending") {
+    return `
+      <div class="hero-assistant-window__send-status is-sending">
+        Enviando solicitud a ventas...
+      </div>
+    `;
+  }
+
+  if (state.leadSubmitStatus === "sent") {
+    return `
+      <div class="hero-assistant-window__send-status is-sent">
+        Solicitud enviada a ventas@cookingourmet.edu.pe
+      </div>
+    `;
+  }
+
+  return `
+    <div class="hero-assistant-window__send-status is-error">
+      No se pudo enviar automáticamente. Puedes reenviar o continuar por WhatsApp.
+    </div>
+  `;
+}
+
 function renderQuickReplies(step: ChatStep, state: AssistantState) {
   if (step === "intent") {
     return `
@@ -325,7 +410,9 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
             (key) => `
               <button
                 type="button"
-                class="hero-assistant-window__chip${state.lockedChips ? " is-disabled" : ""}"
+                class="hero-assistant-window__chip${
+                  state.lockedChips ? " is-disabled" : ""
+                }"
                 data-assistant-chip
                 data-chip-type="intent"
                 data-chip-value="${key}"
@@ -346,10 +433,13 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
         ${(Object.keys(PROGRAMS) as ProgramKey[])
           .map((key) => {
             const item = PROGRAMS[key];
+
             return `
               <button
                 type="button"
-                class="hero-assistant-window__chip${state.lockedChips ? " is-disabled" : ""}"
+                class="hero-assistant-window__chip${
+                  state.lockedChips ? " is-disabled" : ""
+                }"
                 data-assistant-chip
                 data-chip-type="program"
                 data-chip-value="${item.key}"
@@ -369,7 +459,9 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
       <div class="hero-assistant-window__quick-actions">
         <button
           type="button"
-          class="hero-assistant-window__chip${state.lockedChips ? " is-disabled" : ""}"
+          class="hero-assistant-window__chip${
+            state.lockedChips ? " is-disabled" : ""
+          }"
           data-assistant-chip
           data-chip-type="dni_optional"
           data-chip-value="skip"
@@ -392,6 +484,24 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
 
     return `
       <div class="hero-assistant-window__quick-actions hero-assistant-window__quick-actions--stacked">
+        ${renderLeadSubmitStatus(state)}
+
+        ${
+          state.leadSubmitStatus === "error"
+            ? `
+              <button
+                type="button"
+                class="hero-assistant-window__chip hero-assistant-window__chip--primary"
+                data-assistant-chip
+                data-chip-type="resend_lead"
+                data-chip-value="resend"
+              >
+                Reenviar a ventas
+              </button>
+            `
+            : ""
+        }
+
         <a
           href="${whatsappUrl}"
           class="hero-assistant-window__chip hero-assistant-window__chip--link hero-assistant-window__chip--primary"
@@ -405,7 +515,7 @@ function renderQuickReplies(step: ChatStep, state: AssistantState) {
           href="${mailtoUrl}"
           class="hero-assistant-window__chip hero-assistant-window__chip--link"
         >
-          Enviar solicitud por correo
+          Enviar por correo manual
         </a>
 
         ${
@@ -507,7 +617,7 @@ export function renderAssistantWindow() {
             <input
               type="text"
               class="hero-assistant-window__input"
-              placeholder="Escribe tu respuesta."
+              placeholder="Escribe tu respuesta..."
               aria-label="Escribe tu respuesta"
             />
             <button
@@ -531,6 +641,7 @@ export function renderAssistantWindow() {
 
 export function mountAssistantWindow() {
   const existing = document.querySelector("[data-assistant-window]");
+
   if (!existing) {
     document.body.insertAdjacentHTML("beforeend", renderAssistantWindow());
   }
@@ -545,17 +656,30 @@ export function initAssistantWindow() {
 
   windows.forEach((windowEl) => {
     if (windowEl.dataset.assistantInitialized === "true") return;
+
     windowEl.dataset.assistantInitialized = "true";
 
-    const toggleBtn = windowEl.querySelector<HTMLButtonElement>("[data-assistant-toggle]");
-    const closeBtn = windowEl.querySelector<HTMLButtonElement>("[data-assistant-close]");
-    const sendBtn = windowEl.querySelector<HTMLButtonElement>("[data-assistant-send]");
-    const input = windowEl.querySelector<HTMLInputElement>(".hero-assistant-window__input");
+    const toggleBtn = windowEl.querySelector<HTMLButtonElement>(
+      "[data-assistant-toggle]"
+    );
+    const closeBtn = windowEl.querySelector<HTMLButtonElement>(
+      "[data-assistant-close]"
+    );
+    const sendBtn = windowEl.querySelector<HTMLButtonElement>(
+      "[data-assistant-send]"
+    );
+    const input = windowEl.querySelector<HTMLInputElement>(
+      ".hero-assistant-window__input"
+    );
     const chat = windowEl.querySelector<HTMLElement>("[data-assistant-chat]");
     const panel = windowEl.querySelector<HTMLElement>("[data-assistant-panel]");
-    const bubble = windowEl.querySelector<HTMLElement>("[data-assistant-bubble]");
+    const bubble = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-bubble]"
+    );
 
-    if (!toggleBtn || !closeBtn || !sendBtn || !input || !chat || !panel || !bubble) return;
+    if (!toggleBtn || !closeBtn || !sendBtn || !input || !chat || !panel || !bubble) {
+      return;
+    }
 
     const safeToggleBtn = toggleBtn;
     const safeCloseBtn = closeBtn;
@@ -566,11 +690,13 @@ export function initAssistantWindow() {
     const safeBubble = bubble;
 
     const state = createInitialState();
+
     let bubbleTimer: number | null = null;
     let typingTimer: number | null = null;
 
     function updateLauncherBubble() {
-      safeBubble.textContent = LAUNCHER_BUBBLES[state.bubbleIndex] ?? LAUNCHER_BUBBLES[0];
+      safeBubble.textContent =
+        LAUNCHER_BUBBLES[state.bubbleIndex] ?? LAUNCHER_BUBBLES[0];
     }
 
     function startBubbleRotation() {
@@ -578,6 +704,7 @@ export function initAssistantWindow() {
 
       bubbleTimer = window.setInterval(() => {
         if (windowEl.classList.contains("is-open")) return;
+
         state.bubbleIndex = (state.bubbleIndex + 1) % LAUNCHER_BUBBLES.length;
         updateLauncherBubble();
       }, 3200);
@@ -601,7 +728,6 @@ export function initAssistantWindow() {
       state.lockedChips = locked;
       safeInput.disabled = locked;
       safeSendBtn.disabled = locked;
-      renderMessages();
     }
 
     function renderTypingIndicator() {
@@ -623,6 +749,9 @@ export function initAssistantWindow() {
     }
 
     function renderMessages() {
+      const shouldShowQuickReplies =
+        state.quickRepliesVisible && !state.isTyping && !state.lockedChips;
+
       safeChat.innerHTML = `
         ${state.messages
           .map((message) => {
@@ -633,14 +762,16 @@ export function initAssistantWindow() {
 
             return `
               <div class="hero-assistant-window__message ${roleClass}">
-                <p class="hero-assistant-window__text">${escapeHtml(message.text)}</p>
+                <p class="hero-assistant-window__text">${escapeHtml(
+                  message.text
+                )}</p>
               </div>
             `;
           })
           .join("")}
 
         ${renderTypingIndicator()}
-        ${renderQuickReplies(state.step, state)}
+        ${shouldShowQuickReplies ? renderQuickReplies(state.step, state) : ""}
       `;
 
       attachChipEvents();
@@ -653,6 +784,7 @@ export function initAssistantWindow() {
         role: "bot",
         text,
       });
+
       renderMessages();
     }
 
@@ -662,6 +794,7 @@ export function initAssistantWindow() {
         role: "user",
         text,
       });
+
       renderMessages();
     }
 
@@ -671,30 +804,69 @@ export function initAssistantWindow() {
     }
 
     async function queueBotMessage(text: string, delay?: number, token?: number) {
-      const activeToken = token ?? state.pendingQueueToken;
-      const finalDelay = delay ?? getMessageDelay(text);
-
-      setInteractionLocked(true);
-      setTyping(true);
-
-      await wait(finalDelay);
-
-      if (activeToken !== state.pendingQueueToken) return;
-
-      setTyping(false);
-      addBotMessage(text);
-      setInteractionLocked(false);
+      await queueBotMessages([{ text, delay }], token);
     }
 
-    async function queueBotMessages(messages: Array<{ text: string; delay?: number }>) {
-      const token = ++state.pendingQueueToken;
+    async function queueBotMessages(
+      messages: Array<{ text: string; delay?: number }>,
+      externalToken?: number
+    ) {
+      const token = externalToken ?? ++state.pendingQueueToken;
+
+      state.quickRepliesVisible = false;
+      setInteractionLocked(true);
+      renderMessages();
 
       for (const item of messages) {
-        await queueBotMessage(item.text, item.delay, token);
+        const finalDelay = item.delay ?? getMessageDelay(item.text);
+
+        state.isTyping = true;
+        renderMessages();
+
+        await wait(finalDelay);
 
         if (token !== state.pendingQueueToken) {
+          state.isTyping = false;
+          state.quickRepliesVisible = false;
+          setInteractionLocked(false);
+          renderMessages();
           return;
         }
+
+        state.isTyping = false;
+
+        state.messages.push({
+          id: createMessageId(),
+          role: "bot",
+          text: item.text,
+        });
+
+        renderMessages();
+
+        await wait(280);
+      }
+
+      state.quickRepliesVisible = true;
+      setInteractionLocked(false);
+      renderMessages();
+    }
+
+    async function submitLeadToSales() {
+      if (state.leadSubmitStatus === "sending") return;
+
+      state.leadSubmitStatus = "sending";
+      state.leadSubmitError = "";
+      renderMessages();
+
+      try {
+        await sendLeadToSales(state);
+        state.leadSubmitStatus = "sent";
+      } catch (error) {
+        state.leadSubmitStatus = "error";
+        state.leadSubmitError =
+          error instanceof Error ? error.message : "Error desconocido";
+      } finally {
+        renderMessages();
       }
     }
 
@@ -711,6 +883,7 @@ export function initAssistantWindow() {
           if (state.lockedChips || state.isTyping) return;
 
           state.lockedChips = true;
+          state.quickRepliesVisible = false;
           renderMessages();
 
           const chipType = chip.dataset.chipType;
@@ -718,6 +891,7 @@ export function initAssistantWindow() {
 
           if (chipType === "intent") {
             const intent = chipValue as QuickActionKey;
+
             addUserMessage(QUICK_ACTIONS[intent]);
             handleIntentSelection(intent);
             return;
@@ -726,6 +900,7 @@ export function initAssistantWindow() {
           if (chipType === "program") {
             const program = chipValue as ProgramKey;
             const item = PROGRAMS[program];
+
             addUserMessage(item.label);
             handleProgramSelection(program);
             return;
@@ -734,29 +909,42 @@ export function initAssistantWindow() {
           if (chipType === "dni_optional" && chipValue === "skip") {
             addUserMessage("Omitir por ahora");
             finishLeadFlow(true);
+            return;
           }
+
+          if (chipType === "resend_lead") {
+            addUserMessage("Reenviar solicitud a ventas");
+            void submitLeadToSales();
+            return;
+          }
+
+          state.lockedChips = false;
+          renderMessages();
         });
       });
     }
 
     function startConversation() {
       if (state.started) return;
+
       state.started = true;
       state.messages = [];
       state.lockedChips = false;
+      state.quickRepliesVisible = false;
 
       addBotMessage("Hola 👋, soy Cookito, tu asistente virtual de Cooking Gourmet.");
+
       state.step = "intent";
       renderMessages();
 
       void queueBotMessages([
         {
           text: "Puedo ayudarte con programas de estudio, costos, horarios e inscripciones.",
-          delay: 2300,
+          delay: 1600,
         },
         {
           text: "¿Qué te gustaría conocer hoy?",
-          delay: 2600,
+          delay: 1800,
         },
       ]);
     }
@@ -764,38 +952,48 @@ export function initAssistantWindow() {
     function handleIntentSelection(intent: QuickActionKey) {
       state.lead.selectedIntent = intent;
       state.step = "program";
+      state.quickRepliesVisible = false;
       state.lockedChips = false;
       renderMessages();
 
       void queueBotMessages([
-        { text: getIntentReply(intent), delay: 2200 },
+        {
+          text: getIntentReply(intent),
+          delay: 1500,
+        },
         {
           text: "Cuéntame, ¿sobre qué programa te gustaría recibir información?",
-          delay: 2800,
+          delay: 1800,
         },
       ]);
     }
 
     function handleProgramSelection(programKey: ProgramKey) {
       const program = PROGRAMS[programKey];
+
       state.lead.selectedProgram = programKey;
       state.lead.recommendedPrograms = getRecommendedPrograms(programKey);
+      state.lead.brochureSent = false;
+      state.leadSubmitStatus = "idle";
+      state.leadSubmitError = "";
       state.step = "ask_name";
+      state.quickRepliesVisible = false;
       state.lockedChips = false;
+
       renderMessages();
 
       void queueBotMessages([
         {
           text: `Excelente elección. ${program.label} es ${program.shortDescription}`,
-          delay: 2400,
+          delay: 1800,
         },
         {
-          text: "Para enviarte la información completa del programa y brindarte una mejor atención, te pediré unos datos rápidos.",
-          delay: 3600,
+          text: "Para enviarte la información completa y darte una atención más rápida, necesito unos datos.",
+          delay: 2200,
         },
         {
           text: "Primero, ¿cuál es tu nombre completo?",
-          delay: 2600,
+          delay: 1600,
         },
       ]);
     }
@@ -804,10 +1002,14 @@ export function initAssistantWindow() {
       state.step = "completed";
       state.lead.brochureSent = true;
       state.lockedChips = false;
+      state.quickRepliesVisible = false;
+
       renderMessages();
 
       const program = getProgramInfo(state.lead.selectedProgram);
       if (!program) return;
+
+      void submitLeadToSales();
 
       const recommendedLabels = state.lead.recommendedPrograms
         .map((key) => PROGRAMS[key].label)
@@ -815,18 +1017,20 @@ export function initAssistantWindow() {
 
       void queueBotMessages([
         {
-          text: `Listo, ${state.lead.fullName.split(" ")[0] || "gracias"} ✅ Ya registré tu interés en ${program.label}.`,
-          delay: 2400,
+          text: `Listo, ${
+            state.lead.fullName.split(" ")[0] || "gracias"
+          } ✅ Ya registré tu interés en ${program.label}.`,
+          delay: 1700,
         },
         {
           text: skippedDni
             ? "Continuaremos sin DNI por ahora, no te preocupes."
             : "Tu registro quedó más completo para una atención más rápida.",
-          delay: 2600,
+          delay: 1800,
         },
         {
-          text: "Ahora puedes continuar por WhatsApp, enviar tu solicitud por correo o revisar el brochure del programa.",
-          delay: 3000,
+          text: "Estoy enviando tu solicitud al área de ventas. También puedes continuar por WhatsApp o revisar el brochure.",
+          delay: 2100,
         },
         {
           text: `Además, te recomiendo revisar ${
@@ -834,7 +1038,7 @@ export function initAssistantWindow() {
           }${
             recommendedLabels[1] ? ` y ${recommendedLabels[1]}` : ""
           } si quieres complementar tu perfil.`,
-          delay: 3200,
+          delay: 2200,
         },
       ]);
     }
@@ -847,6 +1051,7 @@ export function initAssistantWindow() {
       clearTypingTimer();
       setTyping(false);
       state.lockedChips = true;
+      state.quickRepliesVisible = false;
 
       addUserMessage(value);
       safeInput.value = "";
@@ -854,8 +1059,10 @@ export function initAssistantWindow() {
       if (state.step === "welcome") {
         state.step = "intent";
         state.lockedChips = false;
+        state.quickRepliesVisible = false;
         renderMessages();
-        void queueBotMessage("¿Qué te gustaría conocer hoy?", 2400);
+
+        void queueBotMessage("¿Qué te gustaría conocer hoy?", 1600);
         return;
       }
 
@@ -885,10 +1092,15 @@ export function initAssistantWindow() {
         const detectedProgram = detectProgramFromText(value);
 
         if (!detectedProgram) {
+          state.lockedChips = false;
+          state.quickRepliesVisible = false;
+          renderMessages();
+
           void queueBotMessage(
             "Puedo ayudarte con Gastronomía Profesional, Pastelería Profesional, Bar Profesional, Barismo, Sommelier o Cursos Cortos. ¿Cuál te interesa?",
-            2600
+            1800
           );
+
           return;
         }
 
@@ -898,75 +1110,101 @@ export function initAssistantWindow() {
 
       if (state.step === "ask_name") {
         if (value.length < 3) {
+          state.lockedChips = false;
+          state.quickRepliesVisible = false;
+          renderMessages();
+
           void queueBotMessage(
             "Tu nombre parece muy corto. ¿Podrías escribirlo completo, por favor?",
-            2200
+            1500
           );
+
           return;
         }
 
         state.lead.fullName = value;
         state.step = "ask_phone";
         state.lockedChips = false;
+        state.quickRepliesVisible = false;
         renderMessages();
 
         void queueBotMessage(
-          `Mucho gusto, ${value.split(" ")[0]}. Ahora compárteme tu número de celular, por favor.`,
-          2400
+          `Mucho gusto, ${
+            value.split(" ")[0]
+          }. Ahora compárteme tu número de celular, por favor.`,
+          1600
         );
+
         return;
       }
 
       if (state.step === "ask_phone") {
         if (!isValidPhone(value)) {
+          state.lockedChips = false;
+          state.quickRepliesVisible = false;
+          renderMessages();
+
           void queueBotMessage(
             "Ese número parece inválido. Envíamelo nuevamente con 9 dígitos o formato correcto, por favor.",
-            2200
+            1500
           );
+
           return;
         }
 
         state.lead.phone = normalizePhone(value);
         state.step = "ask_email";
         state.lockedChips = false;
+        state.quickRepliesVisible = false;
         renderMessages();
 
         void queueBotMessage(
-          "Perfecto. Ahora dime tu correo electrónico para enviarte el brochure en PDF.",
-          2400
+          "Perfecto. Ahora dime tu correo electrónico para enviarte la información del programa.",
+          1600
         );
+
         return;
       }
 
       if (state.step === "ask_email") {
         if (!isValidEmail(value)) {
+          state.lockedChips = false;
+          state.quickRepliesVisible = false;
+          renderMessages();
+
           void queueBotMessage(
             "Creo que ese correo no está completo. ¿Podrías revisarlo y enviarlo nuevamente?",
-            2200
+            1500
           );
+
           return;
         }
 
         state.lead.email = value.trim();
         state.step = "ask_dni_optional";
         state.lockedChips = false;
+        state.quickRepliesVisible = false;
         renderMessages();
 
         void queueBotMessage(
-          "Gracias. Si deseas dejar tu registro más completo, también puedes compartirme tu DNI. Este paso es opcional por ahora.",
-          2600
+          "Gracias. Si deseas dejar tu registro más completo, también puedes compartirme tu DNI. Este paso es opcional.",
+          1700
         );
+
         return;
       }
 
       if (state.step === "ask_dni_optional") {
         if (!isValidDni(value)) {
           state.lockedChips = false;
+          state.quickRepliesVisible = false;
           renderMessages();
+
           void queueBotMessage(
             "El DNI debe tener 8 números. Si deseas, puedes volver a escribirlo o tocar “Omitir por ahora”.",
-            2400
+            1600
           );
+
           return;
         }
 
@@ -983,9 +1221,13 @@ export function initAssistantWindow() {
           return;
         }
 
+        state.lockedChips = false;
+        state.quickRepliesVisible = false;
+        renderMessages();
+
         void queueBotMessage(
           "Puedo ayudarte a revisar otro programa o continuar con un asesor. ¿Qué prefieres?",
-          2400
+          1600
         );
       }
     }
@@ -994,6 +1236,7 @@ export function initAssistantWindow() {
       windowEl.classList.add("is-open");
       safeToggleBtn.setAttribute("aria-expanded", "true");
       safePanel.setAttribute("aria-hidden", "false");
+
       stopBubbleRotation();
       startConversation();
 
@@ -1006,12 +1249,14 @@ export function initAssistantWindow() {
       windowEl.classList.remove("is-open");
       safeToggleBtn.setAttribute("aria-expanded", "false");
       safePanel.setAttribute("aria-hidden", "true");
+
       clearTypingTimer();
+
       state.pendingQueueToken++;
+      state.quickRepliesVisible = false;
       setTyping(false);
-      state.lockedChips = false;
-      safeInput.disabled = false;
-      safeSendBtn.disabled = false;
+      setInteractionLocked(false);
+
       renderMessages();
       startBubbleRotation();
     }
@@ -1039,7 +1284,9 @@ export function initAssistantWindow() {
     safeSendBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
+
       if (state.isTyping) return;
+
       handleUserMessage(safeInput.value);
     });
 
@@ -1047,7 +1294,9 @@ export function initAssistantWindow() {
       if (event.key === "Enter") {
         event.preventDefault();
         event.stopPropagation();
+
         if (state.isTyping) return;
+
         handleUserMessage(safeInput.value);
       }
 
