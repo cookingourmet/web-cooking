@@ -333,31 +333,64 @@ function buildMailtoUrl(state: AssistantState) {
 async function sendLeadToSales(state: AssistantState) {
   const program = getProgramInfo(state.lead.selectedProgram);
 
+  const subject = `Nuevo lead Cookito - ${program?.label ?? "Programa"}`;
+
+  const message = `
+🍳 NUEVA SOLICITUD DESDE COOKITO
+
+Hola equipo de ventas,
+
+Un nuevo interesado dejó sus datos desde el asistente virtual de la web.
+
+━━━━━━━━━━━━━━━━━━━━
+👤 DATOS DEL INTERESADO
+━━━━━━━━━━━━━━━━━━━━
+
+Nombre:
+${state.lead.fullName || "-"}
+
+Celular:
+${state.lead.phone || "-"}
+
+Correo:
+${state.lead.email || "-"}
+
+DNI:
+${state.lead.dni || "No compartido"}
+
+━━━━━━━━━━━━━━━━━━━━
+🎓 PROGRAMA DE INTERÉS
+━━━━━━━━━━━━━━━━━━━━
+
+Programa:
+${program?.label ?? "-"}
+
+Consulta:
+${state.lead.selectedIntent ? QUICK_ACTIONS[state.lead.selectedIntent] : "-"}
+
+Página:
+${window.location.href}
+
+Fecha:
+${new Date().toLocaleString("es-PE")}
+
+━━━━━━━━━━━━━━━━━━━━
+✅ ACCIÓN RECOMENDADA
+━━━━━━━━━━━━━━━━━━━━
+
+Contactar al interesado por WhatsApp o llamada lo antes posible.
+`.trim();
+
   const formData = new FormData();
 
   formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-  formData.append("subject", `Nuevo lead Cookito - ${program?.label ?? "Programa"}`);
-
+  formData.append("subject", subject);
   formData.append("from_name", "Cookito - Cooking Gourmet");
+
+  formData.append("name", state.lead.fullName || "Cliente Cookito");
   formData.append("email", state.lead.email);
-  formData.append("replyto", state.lead.email);
-
-  formData.append("destino", SALES_EMAIL);
-  formData.append("programa", program?.label ?? "-");
-  formData.append("nombre", state.lead.fullName || "-");
-  formData.append("celular", state.lead.phone || "-");
-  formData.append("correo", state.lead.email || "-");
-  formData.append("dni", state.lead.dni || "No compartido");
-
-  formData.append(
-    "interes",
-    state.lead.selectedIntent ? QUICK_ACTIONS[state.lead.selectedIntent] : "-"
-  );
-
-  formData.append("origen", state.lead.source);
-  formData.append("pagina", window.location.href);
-  formData.append("fecha", new Date().toLocaleString("es-PE"));
-  formData.append("resumen", buildLeadSummary(state));
+  formData.append("phone", state.lead.phone || "-");
+  formData.append("message", message);
 
   const response = await fetch(LEAD_ENDPOINT, {
     method: "POST",
