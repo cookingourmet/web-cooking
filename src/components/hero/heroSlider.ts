@@ -1,285 +1,491 @@
-import { heroSlides } from "./heroData";
-import { restartProgressAnimation } from "./heroProgress";
+import "./heroSlider.css";
+
+import {
+  heroSlides,
+  type HeroAction,
+  type HeroCardsSlide,
+  type HeroSingleSlide,
+  type HeroSlide,
+} from "./heroData";
+import { bindSliderControls } from "./heroControls";
+import {
+  restartProgressAnimation,
+  setHeroProgressDuration,
+} from "./heroProgress";
 import { mountAssistantWindow } from "./heroAssistantPanel";
 
 const AUTO_TIME = 5500;
 
-const HERO_PROGRESS_META = [
-  {
-    icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 3v7" />
-        <path d="M5 3v4" />
-        <path d="M9 3v4" />
-        <path d="M7 10v11" />
-        <path d="M16 3c-1.8 1.8-2.4 4-2.4 6.2V21" />
-        <path d="M16 3c1.8 1.8 2.4 4 2.4 6.2" />
-      </svg>
-    `,
-  },
-  {
-    icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 12c0-2.2 1.7-4 3.9-4 .9 0 1.7.3 2.3.8.6-.5 1.4-.8 2.3-.8 2.2 0 3.9 1.8 3.9 4" />
-        <path d="M4 12h16" />
-        <path d="M6 12v2.3c0 3 2.4 5.4 5.4 5.4h1.2c3 0 5.4-2.4 5.4-5.4V12" />
-        <path d="M12 5.2V8" />
-      </svg>
-    `,
-  },
-  {
-    icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M6 4h12l-4.8 6.4v4.2l2.6 2.4H8.2l2.6-2.4v-4.2L6 4z" />
-        <path d="M9 20h6" />
-      </svg>
-    `,
-  },
-  {
-    icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M6 9h9a0 0 0 0 1 0 0v4.2A4.8 4.8 0 0 1 10.2 18H10A4 4 0 0 1 6 14v-5a0 0 0 0 1 0 0z" />
-        <path d="M15 10h1.3A2.7 2.7 0 0 1 19 12.7v0A2.3 2.3 0 0 1 16.7 15H15" />
-        <path d="M8.3 4.2c-.7.8-.8 1.7-.1 2.5" />
-        <path d="M11.3 3.7c-.9 1-.9 2 .1 3" />
-        <path d="M14.2 4.2c-.7.8-.8 1.7-.1 2.5" />
-        <path d="M5 20h14" />
-      </svg>
-    `,
-  },
-  {
-    icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8 3h8v4.5A4 4 0 0 1 12 11.5A4 4 0 0 1 8 7.5V3z" />
-        <path d="M12 11.5V18" />
-        <path d="M9 21h6" />
-      </svg>
-    `,
-  },
-  {
-    icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 10h12a2 2 0 0 1 2 2v4H3v-4a2 2 0 0 1 2-2z" />
-        <path d="M7 10V8a5 5 0 0 1 10 0" />
-        <path d="M19 12h1a1 1 0 0 1 1 1v2" />
-        <path d="M6 19h10" />
-      </svg>
-    `,
-  },
-];
-
-function getProgressMeta(index: number) {
-  return (
-    HERO_PROGRESS_META[index] ?? {
-      icon: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="6" />
-        </svg>
-      `,
-    }
-  );
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-function renderStartWindow() {
+function escapeAttribute(value: string) {
+  return escapeHtml(value);
+}
+
+function renderAction(
+  action: HeroAction,
+  variant: "primary" | "secondary"
+) {
+  const externalAttributes = action.external
+    ? ' target="_blank" rel="noreferrer"'
+    : "";
+
   return `
-    <div class="hero-start-window">
-      <div class="hero-start-window__top">
-        <span class="hero-start-window__eyebrow">Inicio de clases</span>
-        <span class="hero-start-window__pulse"></span>
-      </div>
+    <a
+      class="hero-action hero-action--${variant}"
+      href="${escapeAttribute(action.href)}"
+      ${externalAttributes}
+    >
+      ${escapeHtml(action.label)}
+      ${
+        variant === "secondary"
+          ? '<span aria-hidden="true">→</span>'
+          : ""
+      }
+    </a>
+  `;
+}
 
-      <div class="hero-start-window__date-wrap">
-        <strong class="hero-start-window__day">17</strong>
-        <span class="hero-start-window__month">de Agosto</span>
-      </div>
+function renderStartDate(slide: HeroSingleSlide) {
+  if (!slide.startDate) return "";
 
-      <p class="hero-start-window__text">
-        Matrículas abiertas. Reserva tu vacante y prepárate para empezar con formación práctica desde el primer día.
-      </p>
+  return `
+    <div class="hero-start-date" aria-label="${escapeAttribute(
+      `${slide.startDate.label}: ${slide.startDate.day} de ${slide.startDate.month}`
+    )}">
+      <span class="hero-start-date__label">
+        ${escapeHtml(slide.startDate.label)}
+      </span>
 
-      <div class="hero-start-window__footer">
-        <span class="hero-start-window__status">
-          <span class="hero-start-window__status-dot"></span>
-          Vacantes disponibles
-        </span>
-      </div>
+      <span class="hero-start-date__value">
+        <strong>${escapeHtml(slide.startDate.day)}</strong>
+        <span>${escapeHtml(slide.startDate.month)}</span>
+      </span>
     </div>
+  `;
+}
+
+function renderSingleSlide(slide: HeroSingleSlide, index: number) {
+  const sideClass =
+    slide.mediaSide === "left"
+      ? "hero-slide--media-left"
+      : "hero-slide--media-right";
+
+  const imageScale = slide.imageScale ?? 1;
+
+  return `
+    <article
+      class="hero-slide hero-slide--single ${sideClass} ${
+        index === 0 ? "is-active" : ""
+      }"
+      data-index="${index}"
+      data-slide-id="${escapeAttribute(slide.id)}"
+      aria-hidden="${index === 0 ? "false" : "true"}"
+    >
+      <div class="hero-single hero-shell">
+        <div class="hero-single__content">
+          ${
+            slide.eyebrow
+              ? `
+                <span class="hero-eyebrow">
+                  ${escapeHtml(slide.eyebrow)}
+                </span>
+              `
+              : ""
+          }
+
+          <h1>${escapeHtml(slide.title)}</h1>
+
+          <p class="hero-single__subtitle">
+            ${escapeHtml(slide.subtitle)}
+          </p>
+
+          <div class="hero-single__bottom">
+            <div class="hero-actions">
+              ${renderAction(slide.primaryAction, "primary")}
+              ${
+                slide.secondaryAction
+                  ? renderAction(slide.secondaryAction, "secondary")
+                  : ""
+              }
+            </div>
+
+            ${renderStartDate(slide)}
+          </div>
+        </div>
+
+        <div
+          class="hero-single__media"
+          style="
+            --hero-image-position: ${escapeAttribute(
+              slide.objectPosition ?? "center"
+            )};
+            --hero-image-position-mobile: ${escapeAttribute(
+              slide.mobileObjectPosition ??
+                slide.objectPosition ??
+                "center"
+            )};
+            --hero-image-scale: ${imageScale};
+          "
+        >
+          <div class="hero-single__media-shape" aria-hidden="true"></div>
+
+          <picture>
+            ${
+              slide.mobileImage
+                ? `
+                  <source
+                    media="(max-width: 768px)"
+                    srcset="${escapeAttribute(slide.mobileImage)}"
+                  />
+                `
+                : ""
+            }
+
+            <img
+              src="${escapeAttribute(slide.image)}"
+              alt="${escapeAttribute(slide.imageAlt)}"
+              ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}
+              decoding="async"
+            />
+          </picture>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderWorkshopCard(
+  card: HeroCardsSlide["cards"][number]
+) {
+  return `
+    <a
+      class="hero-workshop-card"
+      href="${escapeAttribute(card.href)}"
+      aria-label="${escapeAttribute(
+        `${card.title}, inicia el ${card.day} de ${card.month}`
+      )}"
+    >
+      <img
+        src="${escapeAttribute(card.image)}"
+        alt="${escapeAttribute(card.imageAlt)}"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <span class="hero-workshop-card__overlay" aria-hidden="true"></span>
+
+      <span class="hero-workshop-card__date">
+        <small>Inicio</small>
+        <strong>${escapeHtml(card.day)}</strong>
+        <span>${escapeHtml(card.month)}</span>
+      </span>
+
+      <span class="hero-workshop-card__content">
+        <strong>${escapeHtml(card.title)}</strong>
+        ${
+          card.subtitle
+            ? `<small>${escapeHtml(card.subtitle)}</small>`
+            : ""
+        }
+      </span>
+    </a>
+  `;
+}
+
+function renderCardsSlide(slide: HeroCardsSlide, index: number) {
+  return `
+    <article
+      class="hero-slide hero-slide--cards ${
+        index === 0 ? "is-active" : ""
+      }"
+      data-index="${index}"
+      data-slide-id="${escapeAttribute(slide.id)}"
+      aria-hidden="${index === 0 ? "false" : "true"}"
+    >
+      <div class="hero-cards hero-shell">
+        <div class="hero-cards__intro">
+          ${
+            slide.eyebrow
+              ? `
+                <span class="hero-eyebrow">
+                  ${escapeHtml(slide.eyebrow)}
+                </span>
+              `
+              : ""
+          }
+
+          <h1>${escapeHtml(slide.title)}</h1>
+
+          <p>${escapeHtml(slide.subtitle)}</p>
+
+          ${
+            slide.primaryAction
+              ? `
+                <div class="hero-actions">
+                  ${renderAction(slide.primaryAction, "primary")}
+                </div>
+              `
+              : ""
+          }
+        </div>
+
+        <div class="hero-cards__grid">
+          ${slide.cards.map(renderWorkshopCard).join("")}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderSlide(slide: HeroSlide, index: number) {
+  return slide.layout === "single"
+    ? renderSingleSlide(slide, index)
+    : renderCardsSlide(slide, index);
+}
+
+function renderProgressItem(slide: HeroSlide, index: number) {
+  return `
+    <button
+      class="hero-progress__item ${index === 0 ? "is-active" : ""}"
+      type="button"
+      data-progress="${index}"
+      aria-label="Ir a ${escapeAttribute(slide.shortLabel)}"
+      aria-current="${index === 0 ? "true" : "false"}"
+    >
+      <span class="hero-progress__number" aria-hidden="true">
+        ${String(index + 1).padStart(2, "0")}
+      </span>
+
+      <span class="hero-progress__track" aria-hidden="true">
+        <span class="hero-progress__fill"></span>
+      </span>
+
+      <span class="hero-progress__label">
+        ${escapeHtml(slide.shortLabel)}
+      </span>
+    </button>
   `;
 }
 
 export function renderHeroSlider() {
   return `
-    <section class="hero-slider" aria-label="Programas destacados">
+    <section
+      class="hero-slider"
+      id="heroSlider"
+      aria-label="Programas y talleres destacados"
+    >
       <div class="hero-slider__viewport" id="heroViewport">
-        ${heroSlides
-          .map(
-            (slide, index) => `
-              <article class="hero-slide ${index === 0 ? "is-active" : ""}" data-index="${index}">
-                <div class="hero-slide__bg">
-                  <picture>
-                    <source
-                      media="(max-width: 768px)"
-                      srcset="${slide.mobileImage ?? slide.image}"
-                    />
-                    <img src="${slide.image}" alt="${slide.title}">
-                  </picture>
-                </div>
-
-                <div class="hero-slide__overlay"></div>
-                <div class="hero-slide__grid"></div>
-                <div class="hero-slide__glow"></div>
-
-                <div class="hero-slide__content container">
-                  <div class="hero-slide__left">
-                    <span class="hero-badge">${slide.badge}</span>
-                    <h1>${slide.title}</h1>
-                    <h2>${slide.subtitle}</h2>
-                    <p>${slide.description}</p>
-
-                    <div class="hero-actions">
-                      <a href="#" class="hero-btn hero-btn--primary">${slide.cta}</a>
-                      <a href="#" class="hero-btn hero-btn--ghost">Solicitar información</a>
-                    </div>
-                  </div>
-
-                  <div class="hero-slide__right">
-                    <div class="hero-floating-stack">
-                      ${renderStartWindow()}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            `
-          )
-          .join("")}
+        ${heroSlides.map(renderSlide).join("")}
       </div>
 
-      <div class="hero-progress" id="heroProgress">
-        ${heroSlides
-          .map((_, index) => {
-            const meta = getProgressMeta(index);
+      <div class="hero-slider__navigation hero-shell">
+        <button
+          class="hero-arrow"
+          type="button"
+          data-hero-prev
+          aria-label="Ver slide anterior"
+        >
+          <span aria-hidden="true">←</span>
+        </button>
 
-            return `
-              <button
-                class="hero-progress__item ${index === 0 ? "is-active" : ""}"
-                type="button"
-                aria-label="Ir al slide ${index + 1}"
-                data-progress="${index}"
-              >
-                <span class="hero-progress__icon" aria-hidden="true">
-                  ${meta.icon}
-                </span>
+        <div class="hero-progress" id="heroProgress">
+          ${heroSlides.map(renderProgressItem).join("")}
+        </div>
 
-                <span class="hero-progress__track">
-                  <span class="hero-progress__fill"></span>
-                </span>
-              </button>
-            `;
-          })
-          .join("")}
+        <button
+          class="hero-arrow"
+          type="button"
+          data-hero-next
+          aria-label="Ver siguiente slide"
+        >
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
     </section>
   `;
 }
 
 export function initHeroSlider() {
-  const heroSlidesEls = Array.from(
-    document.querySelectorAll<HTMLElement>(".hero-slide")
+  const heroSlider =
+    document.querySelector<HTMLElement>("#heroSlider");
+
+  if (!heroSlider) {
+    mountAssistantWindow();
+    return;
+  }
+
+  if (heroSlider.dataset.heroInitialized === "true") {
+    mountAssistantWindow();
+    return;
+  }
+
+  heroSlider.dataset.heroInitialized = "true";
+  setHeroProgressDuration(heroSlider, AUTO_TIME);
+
+  const slideElements = Array.from(
+    heroSlider.querySelectorAll<HTMLElement>(".hero-slide")
   );
 
-  const heroProgressItems = Array.from(
-    document.querySelectorAll<HTMLButtonElement>(".hero-progress__item")
+  const progressItems = Array.from(
+    heroSlider.querySelectorAll<HTMLButtonElement>(
+      ".hero-progress__item"
+    )
   );
 
-  const heroSlider = document.querySelector<HTMLElement>(".hero-slider");
+  const prevButton =
+    heroSlider.querySelector<HTMLButtonElement>("[data-hero-prev]");
 
-  if (!heroSlidesEls.length) return;
+  const nextButton =
+    heroSlider.querySelector<HTMLButtonElement>("[data-hero-next]");
+
+  if (!slideElements.length) {
+    mountAssistantWindow();
+    return;
+  }
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   let currentSlide = 0;
   let autoPlayId: number | null = null;
+  let autoPlayStartedAt = 0;
+  let remainingTime = AUTO_TIME;
 
-  function updateHeroSlider(index: number) {
-    currentSlide = index;
+  const pauseReasons = new Set<string>();
 
-    heroSlidesEls.forEach((slide, i) => {
-      slide.classList.toggle("is-active", i === index);
-    });
-
-    heroProgressItems.forEach((item, i) => {
-      item.classList.toggle("is-active", i === index);
-      restartProgressAnimation(item);
-    });
+  function normalizeIndex(index: number) {
+    return (
+      (index % slideElements.length) +
+      slideElements.length
+    ) % slideElements.length;
   }
 
-  function goToNextSlide() {
-    const nextIndex = (currentSlide + 1) % heroSlidesEls.length;
-    updateHeroSlider(nextIndex);
-  }
+  function clearAutoPlay(adjustRemainingTime = false) {
+    if (autoPlayId === null) return;
 
-  function stopAutoPlay() {
-    if (autoPlayId !== null) {
-      window.clearInterval(autoPlayId);
-      autoPlayId = null;
+    if (adjustRemainingTime) {
+      const elapsed = performance.now() - autoPlayStartedAt;
+      remainingTime = Math.max(0, remainingTime - elapsed);
     }
+
+    window.clearTimeout(autoPlayId);
+    autoPlayId = null;
   }
 
-  function startAutoPlay() {
-    stopAutoPlay();
+  function scheduleAutoPlay() {
+    if (
+      reducedMotion ||
+      document.hidden ||
+      pauseReasons.size > 0 ||
+      slideElements.length <= 1
+    ) {
+      return;
+    }
 
-    autoPlayId = window.setInterval(() => {
+    clearAutoPlay(false);
+
+    if (remainingTime <= 0) {
+      remainingTime = AUTO_TIME;
+    }
+
+    autoPlayStartedAt = performance.now();
+
+    autoPlayId = window.setTimeout(() => {
+      autoPlayId = null;
+      remainingTime = AUTO_TIME;
       goToNextSlide();
-    }, AUTO_TIME);
+      scheduleAutoPlay();
+    }, remainingTime);
   }
 
   function resetAutoPlay() {
-    startAutoPlay();
+    clearAutoPlay(false);
+    remainingTime = AUTO_TIME;
+    scheduleAutoPlay();
   }
 
-  heroProgressItems.forEach((item, index) => {
-    item.addEventListener("click", () => {
-      updateHeroSlider(index);
-      resetAutoPlay();
+  function setPaused(reason: string, paused: boolean) {
+    if (paused) {
+      const wasEmpty = pauseReasons.size === 0;
+      pauseReasons.add(reason);
+
+      if (wasEmpty) {
+        clearAutoPlay(true);
+      }
+    } else {
+      pauseReasons.delete(reason);
+
+      if (pauseReasons.size === 0) {
+        scheduleAutoPlay();
+      }
+    }
+
+    heroSlider.classList.toggle(
+      "is-paused",
+      pauseReasons.size > 0 || document.hidden
+    );
+  }
+
+  function updateHeroSlider(index: number) {
+    const normalizedIndex = normalizeIndex(index);
+    currentSlide = normalizedIndex;
+
+    slideElements.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === normalizedIndex;
+
+      slide.classList.toggle("is-active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
     });
-  });
 
-  function updateGridGlow(event: MouseEvent) {
-    if (!heroSlider) return;
+    progressItems.forEach((item, itemIndex) => {
+      const isActive = itemIndex === normalizedIndex;
 
-    const rect = heroSlider.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-current", String(isActive));
 
-    heroSlider.style.setProperty("--hero-mouse-x", `${x}px`);
-    heroSlider.style.setProperty("--hero-mouse-y", `${y}px`);
-    heroSlider.classList.add("is-hovering");
+      if (isActive) {
+        restartProgressAnimation(item);
+      }
+    });
   }
 
-  function clearGridGlow() {
-    heroSlider?.classList.remove("is-hovering");
+  function goToPreviousSlide() {
+    updateHeroSlider(currentSlide - 1);
   }
 
-  heroSlider?.addEventListener("mousemove", updateGridGlow);
+  function goToNextSlide() {
+    updateHeroSlider(currentSlide + 1);
+  }
 
-  heroSlider?.addEventListener("mouseenter", (event) => {
-    stopAutoPlay();
-    updateGridGlow(event as MouseEvent);
+  bindSliderControls({
+    root: heroSlider,
+    progressItems,
+    prev: prevButton,
+    next: nextButton,
+    onSelect: updateHeroSlider,
+    onPrev: goToPreviousSlide,
+    onNext: goToNextSlide,
+    onReset: resetAutoPlay,
   });
 
-  heroSlider?.addEventListener("mouseleave", () => {
-    clearGridGlow();
-    startAutoPlay();
-  });
-
-  heroSlider?.addEventListener("focusin", stopAutoPlay);
-  heroSlider?.addEventListener("focusout", startAutoPlay);
+  // En escritorio no pausamos el autoplay por hover o foco.
+  // El hero ocupa gran parte de la pantalla y el cursor suele permanecer
+  // encima, lo que detenía el slider de forma permanente.
 
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stopAutoPlay();
-    else startAutoPlay();
+    setPaused("visibility", document.hidden);
   });
 
   updateHeroSlider(0);
-  startAutoPlay();
-
+  resetAutoPlay();
   mountAssistantWindow();
 }

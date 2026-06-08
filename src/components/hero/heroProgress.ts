@@ -6,3 +6,10 @@ export function restartProgressAnimation(item: HTMLButtonElement) {
   void fill.offsetHeight;
   fill.style.animation = "";
 }
+
+export function setHeroProgressDuration(
+  slider: HTMLElement,
+  durationMs: number
+) {
+  slider.style.setProperty("--hero-auto-time", `${durationMs}ms`);
+}
