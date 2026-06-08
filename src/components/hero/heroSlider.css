@@ -237,14 +237,54 @@
   object-fit: cover;
   object-position: var(--hero-image-position, center);
   transform: scale(var(--hero-image-scale, 1));
-  transition:
-    transform 6.5s ease,
-    filter 0.7s ease;
-  filter: saturate(1.02) contrast(1.02);
+  transform-origin: center center;
+  filter: saturate(1.02) contrast(1.02) brightness(1.01);
+  will-change: transform, filter;
 }
 
-.hero-slide.is-active .hero-single__media img {
-  transform: scale(calc(var(--hero-image-scale, 1) + 0.018));
+/*
+  Zoom cinematográfico:
+  la animación solo existe mientras el slide está activo.
+  Cuando el slide sale y vuelve a entrar, comienza nuevamente.
+*/
+.hero-slide.is-active.hero-slide--media-right .hero-single__media img {
+  animation: heroSingleImageZoomRight 6.4s cubic-bezier(0.2, 0.68, 0.24, 1) both;
+}
+
+.hero-slide.is-active.hero-slide--media-left .hero-single__media img {
+  animation: heroSingleImageZoomLeft 6.4s cubic-bezier(0.2, 0.68, 0.24, 1) both;
+}
+
+@keyframes heroSingleImageZoomRight {
+  0% {
+    transform:
+      scale(var(--hero-image-scale, 1))
+      translate3d(-0.8%, 0, 0);
+    filter: saturate(1.01) contrast(1.01) brightness(1);
+  }
+
+  100% {
+    transform:
+      scale(calc(var(--hero-image-scale, 1) + 0.075))
+      translate3d(1.15%, -0.45%, 0);
+    filter: saturate(1.055) contrast(1.035) brightness(1.025);
+  }
+}
+
+@keyframes heroSingleImageZoomLeft {
+  0% {
+    transform:
+      scale(var(--hero-image-scale, 1))
+      translate3d(0.8%, 0, 0);
+    filter: saturate(1.01) contrast(1.01) brightness(1);
+  }
+
+  100% {
+    transform:
+      scale(calc(var(--hero-image-scale, 1) + 0.075))
+      translate3d(-1.15%, -0.45%, 0);
+    filter: saturate(1.055) contrast(1.035) brightness(1.025);
+  }
 }
 
 .hero-single__media::after {
@@ -413,11 +453,37 @@
   height: 100%;
   display: block;
   object-fit: cover;
-  transition: transform 0.7s ease;
+  transform: scale(1.012);
+  transform-origin: center center;
+  filter: saturate(1.01) contrast(1.01);
+  will-change: transform, filter;
+}
+
+.hero-slide.is-active .hero-workshop-card img {
+  animation: heroWorkshopImageZoom 6.2s cubic-bezier(0.2, 0.68, 0.24, 1) both;
+}
+
+.hero-slide.is-active .hero-workshop-card:nth-child(2) img {
+  animation-delay: 0.08s;
+}
+
+.hero-slide.is-active .hero-workshop-card:nth-child(3) img {
+  animation-delay: 0.16s;
 }
 
 .hero-workshop-card:hover img {
-  transform: scale(1.045);
+  animation-play-state: paused;
+  filter: saturate(1.08) contrast(1.035) brightness(1.025);
+}
+
+@keyframes heroWorkshopImageZoom {
+  0% {
+    transform: scale(1.012) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.095) translate3d(0, -0.8%, 0);
+  }
 }
 
 .hero-workshop-card__overlay {
@@ -679,7 +745,7 @@
 
 @media (max-width: 1120px) {
   .hero-shell {
-    width: min(100% - 40px, 1000px);
+    width: min(calc(100% - 40px), 1000px);
   }
 
   .hero-single {
