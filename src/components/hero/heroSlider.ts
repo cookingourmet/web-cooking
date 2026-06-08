@@ -429,7 +429,7 @@ export function initHeroSlider() {
       }
     }
 
-    heroSlider.classList.toggle(
+    heroSlider?.classList.toggle(
       "is-paused",
       pauseReasons.size > 0 || document.hidden
     );
