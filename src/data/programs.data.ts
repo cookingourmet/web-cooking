@@ -22,11 +22,17 @@ export type ProgramInvestment = {
   enrollment: string;
   monthly: string;
   uniform: string;
+  supplies?: string;
 };
 
 export type ProgramStat = {
   value: string;
   label: string;
+};
+
+export type ProgramFaq = {
+  question: string;
+  answer: string;
 };
 
 export type ProgramData = {
@@ -36,6 +42,12 @@ export type ProgramData = {
   duration: string;
   modality: string;
   schedule: string;
+  startDate?: string;
+  frequency?: string;
+  location?: string;
+  path?: string;
+  seoTitle?: string;
+  seoDescription?: string;
   image: string;
   brochure?: string;
   brochureLabel?: string;
@@ -58,6 +70,7 @@ export type ProgramData = {
   uniform?: string[];
   schedules?: ProgramSchedule[];
   campuses?: string[];
+  faqs?: ProgramFaq[];
 };
 
 export const programsData: Record<ProgramKey, ProgramData> = {
@@ -66,9 +79,16 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     title: "Gastronomía Profesional",
     subtitle:
       "Transforma tu pasión por la cocina en una carrera de alto nivel, con enfoque práctico, proyección laboral y formación culinaria de excelencia.",
-    duration: "6 módulos académicos",
+    duration: "18 meses",
     modality: "100% presencial",
-    schedule: "mañana, media mañana, tarde y noche",
+    schedule: "mañana, media mañana y noche",
+    startDate: "16 de marzo",
+    frequency: "Lunes a viernes",
+    location: "Huancayo, Junín",
+    path: "/programas/gastronomia",
+    seoTitle: "Gastronomía Profesional en Huancayo | Cooking Gourmet",
+    seoDescription:
+      "Estudia Gastronomía Profesional en Huancayo. Formación presencial de 18 meses, clases prácticas, chefs expertos y horarios de mañana y noche.",
     image: "/images/portada/gastronomia.jpg",
     brochure: "/pdf/programas/gastronomia.pdf",
     brochureLabel: "Explorar brochure",
@@ -93,54 +113,59 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       {
         title: "Módulo 1",
         items: [
-          "Técnicas de corte y manejo de cuchillos",
-          "Higiene y manipulación alimentaria",
-          "Bases de cocina fría",
-          "Química de alimentos",
+          "Reconocimiento de mercadería y materias primas",
+          "Buenas prácticas de manipulación de alimentos",
+          "Técnicas y bases de la pastelería",
+          "Técnicas de Cocina I",
+          "Habilidades comunicativas",
         ],
       },
       {
         title: "Módulo 2",
         items: [
-          "Cocina mediterránea",
-          "Gastronomía asiática",
-          "Panadería básica",
-          "Costos y presupuestos",
+          "Técnicas de bar y coctelería",
+          "Cocina Peruana I",
+          "Técnicas de Cocina II",
+          "Técnicas de comedor y servicio",
+          "Gestión administrativa",
         ],
       },
       {
         title: "Módulo 3",
         items: [
-          "Cocina de autor",
-          "Repostería fina",
-          "Enología y maridaje",
-          "Gestión de restaurantes",
+          "Cocina Peruana II",
+          "Gestión de restaurantes y emprendimiento",
+          "Cocina italiana",
+          "Pescados y mariscos",
+          "Técnicas de Cocina III",
         ],
       },
       {
         title: "Módulo 4",
         items: [
-          "Cocina peruana contemporánea",
-          "Pescados y mariscos",
+          "Gestión del talento humano",
           "Cocina regional",
+          "Cocina china",
           "Postres peruanos",
+          "Industrialización de alimentos",
         ],
       },
       {
         title: "Módulo 5",
         items: [
-          "Técnicas de comedor y servicio",
-          "Bar y coctelería",
-          "Gestión administrativa",
-          "Industrialización de alimentos",
+          "Cocina latinoamericana",
+          "Parrillas y carbones",
+          "Cata de vinos y maridaje",
+          "Técnicas y bases de la panadería",
+          "Prácticas preprofesionales",
         ],
       },
       {
         title: "Módulo 6",
         items: [
-          "Cocina de vanguardia",
-          "Cocina saludable",
-          "Prácticas preprofesionales",
+          "Cocina asiática",
+          "Cocina de vanguardia y autor",
+          "Cocina saludable y hospitalaria",
           "Prácticas profesionales",
         ],
       },
@@ -177,8 +202,8 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       uniform: "S/ 180.00",
     },
     requirements: [
-      "Certificado de 1ro a 5to de secundaria",
-      "Fotocopia de DNI",
+      "Certificado de secundaria",
+      "Copia de DNI",
       "Recibo de agua o luz",
     ],
     uniform: [
@@ -191,12 +216,33 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     schedules: [
       { code: "M", label: "Turno mañana", time: "7:00 a.m. - 10:00 a.m." },
       { code: "MM", label: "Media mañana", time: "10:30 a.m. - 1:30 p.m." },
-      { code: "T", label: "Turno tarde", time: "2:00 p.m. - 5:00 p.m." },
       { code: "N", label: "Turno noche", time: "5:30 p.m. - 8:30 p.m." },
     ],
     campuses: [
       "Sede central: Av. Ferrocarril 587 - Huancayo",
       "Sucursal: Los Andes N° 376, Psje. Manchego Muñoz - El Tambo",
+    ],
+    faqs: [
+      {
+        question: "¿Cuánto dura Gastronomía Profesional?",
+        answer:
+          "El programa tiene una duración de 18 meses y se desarrolla de lunes a viernes.",
+      },
+      {
+        question: "¿Cuánto cuesta estudiar Gastronomía?",
+        answer:
+          "La inscripción cuesta S/ 180, la matrícula S/ 120, la mensualidad S/ 250 y el uniforme S/ 180.",
+      },
+      {
+        question: "¿Qué horarios tiene Gastronomía?",
+        answer:
+          "Los horarios disponibles son de 7:00 a.m. a 10:00 a.m., de 10:30 a.m. a 1:30 p.m. y de 5:30 p.m. a 8:30 p.m.",
+      },
+      {
+        question: "¿Las clases son presenciales?",
+        answer:
+          "Sí. El programa se desarrolla de forma 100% presencial en Cooking Gourmet, Huancayo.",
+      },
     ],
   },
 
@@ -205,9 +251,16 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     title: "Pastelería",
     subtitle:
       "Emprende tu camino con una formación práctica y creativa en pastelería, panadería y decoración profesional.",
-    duration: "4 módulos académicos",
+    duration: "1 año",
     modality: "100% presencial",
     schedule: "media mañana y noche",
+    startDate: "16 de marzo",
+    frequency: "Lunes a viernes",
+    location: "Huancayo, Junín",
+    path: "/programas/pasteleria",
+    seoTitle: "Pastelería Profesional en Huancayo | Cooking Gourmet",
+    seoDescription:
+      "Estudia Panadería y Pastelería Profesional en Huancayo. Formación presencial de un año, clases prácticas y horarios de media mañana y noche.",
     image: "/images/portada/pasteleria.jpg",
     brochure: "/pdf/programas/pasteleria.pdf",
     brochureLabel: "Ver brochure",
@@ -309,9 +362,16 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     title: "Bar Profesional",
     subtitle:
       "Aprende coctelería, técnicas de barra y servicio profesional con una formación intensiva y práctica.",
-    duration: "3 módulos académicos",
+    duration: "6 meses",
     modality: "100% presencial",
     schedule: "media mañana y tarde",
+    startDate: "17 de agosto",
+    frequency: "2 veces por semana",
+    location: "Huancayo, Junín",
+    path: "/programas/bar-profesional",
+    seoTitle: "Bar Profesional en Huancayo | Cooking Gourmet",
+    seoDescription:
+      "Estudia Bar Profesional en Huancayo. Formación presencial de 6 meses en coctelería, mixología, destilados y servicio profesional de barra.",
     image: "/images/portada/bar-profesional.jpg",
     brochure: "/pdf/programas/bar-profesional.pdf",
     brochureLabel: "Ver brochure",
@@ -385,7 +445,11 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       monthly: "S/ 200.00",
       uniform: "S/ 95.00",
     },
-    requirements: ["Fotocopia de DNI", "Recibo de agua o luz"],
+    requirements: [
+      "Copia de DNI",
+      "Recibo de agua o luz",
+      "Foto tamaño carnet",
+    ],
     uniform: ["01 polo camisa", "01 delantal"],
     schedules: [
       { code: "MM", label: "Media mañana", time: "10:30 a.m. - 1:30 p.m." },
@@ -398,9 +462,16 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     title: "Barismo",
     subtitle:
       "Especialízate en café, extracción, cata, latte art y operación de cafetería con enfoque técnico y práctico.",
-    duration: "1 semestre",
+    duration: "3 meses",
     modality: "100% presencial",
     schedule: "media mañana y tarde",
+    startDate: "17 de agosto",
+    frequency: "2 veces por semana",
+    location: "Huancayo, Junín",
+    path: "/programas/barismo",
+    seoTitle: "Barismo Profesional en Huancayo | Cooking Gourmet",
+    seoDescription:
+      "Estudia Barismo Profesional en Huancayo. Formación presencial de 3 meses en café, extracción, cata, latte art y operación de cafetería.",
     image: "/images/portada/barismo.jpg",
     brochure: "/pdf/programas/barismo.pdf",
     brochureLabel: "Ver brochure",
@@ -460,8 +531,9 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       enrollment: "S/ 200.00",
       monthly: "S/ 400.00",
       uniform: "S/ 95.00",
+      supplies: "100% incluidos",
     },
-    requirements: ["Fotocopia de DNI", "Recibo de Agua o Luz"],
+    requirements: ["Copia de DNI", "Foto tamaño carnet"],
     uniform: ["01 camisa", "01 delantal"],
     schedules: [
       { code: "MM", label: "Media mañana", time: "10:30 a.m. - 12:30 p.m." },
@@ -474,9 +546,16 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     title: "Sommelier",
     subtitle:
       "Descubre el arte del vino, la cata, el maridaje y el servicio especializado con enfoque técnico y sensorial.",
-    duration: "2 módulos académicos",
+    duration: "6 meses",
     modality: "100% presencial",
     schedule: "media mañana",
+    startDate: "17 de agosto",
+    frequency: "3 veces por semana",
+    location: "Huancayo, Junín",
+    path: "/programas/sommelier",
+    seoTitle: "Sommelier Profesional en Huancayo | Cooking Gourmet",
+    seoDescription:
+      "Estudia Sommelier Profesional en Huancayo. Formación presencial de 6 meses en cata, maridaje, servicio del vino y cultura vitivinícola.",
     image: "/images/portada/sommelier.jpg",
     brochure: "/pdf/programas/sommelier.pdf",
     brochureLabel: "Ver brochure",
@@ -543,8 +622,9 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       enrollment: "S/ 100.00",
       monthly: "S/ 550.00",
       uniform: "S/ 90.00",
+      supplies: "100% incluidos",
     },
-    requirements: ["Fotocopia de DNI", "Recibo de Agua o Luz"],
+    requirements: ["Copia de DNI", "Foto tamaño carnet"],
     uniform: ["01 camisa blanca", "01 uniforme institucional"],
     schedules: [
       { code: "MM", label: "Media mañana", time: "10:30 a.m. - 1:30 p.m." },
@@ -553,20 +633,27 @@ export const programsData: Record<ProgramKey, ProgramData> = {
 
   cocina: {
     slug: "cocina",
-    title: "Cocina",
+    title: "Cocina Acelerada",
     subtitle:
-      "Formación práctica para dominar bases culinarias y producción gastronómica.",
-    duration: "8 meses",
-    modality: "Presencial",
-    schedule: "Horarios flexibles",
+      "De principiante a experto con una formación práctica, intensiva y orientada al trabajo real.",
+    duration: "6 meses",
+    modality: "100% presencial",
+    schedule: "media mañana y tarde",
+    startDate: "17 de agosto",
+    frequency: "2 días por semana",
+    location: "Huancayo, Junín",
+    path: "/programas/cocina-acelerada",
+    seoTitle: "Cocina Acelerada en Huancayo | Cooking Gourmet",
+    seoDescription:
+      "Estudia Cocina Acelerada en Huancayo. Aprende técnicas culinarias profesionales en 6 meses mediante formación práctica e intensiva.",
     image: "/images/portada/cocina.jpg",
     brochure: "/pdf/programas/cocina.pdf",
     brochureLabel: "Ver brochure",
-    price: "Consulta por promoción",
+    price: "Inscripción S/120 · Matrícula S/100 · Mensualidad S/150",
     enrollment: "Vacantes abiertas",
-    heroBadge: "Formación intensiva",
+    heroBadge: "Formación acelerada · práctica intensiva",
     description:
-      "El programa de Cocina brinda una formación sólida en preparación de alimentos, técnicas base, organización de cocina y producción culinaria.",
+      "El programa de Cocina Acelerada está diseñado para que aprendas técnicas profesionales en poco tiempo, con práctica constante, bases culinarias sólidas y preparación para desenvolverte en cocinas reales.",
     methodology:
       "Aprendizaje práctico con bases sólidas de cocina, técnicas de producción y preparación para trabajo real.",
     audience:
@@ -614,7 +701,18 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Hoteles",
       "Negocio propio",
     ],
-    whatsappMessage: "Hola, quiero información del programa de Cocina",
+    whatsappMessage:
+      "Hola, quiero información del programa de Cocina Acelerada: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
+    investment: {
+      inscription: "S/ 120.00",
+      enrollment: "S/ 100.00",
+      monthly: "S/ 150.00",
+      uniform: "S/ 180.00",
+    },
+    schedules: [
+      { code: "MM", label: "Media mañana", time: "10:30 a.m. - 1:30 p.m." },
+      { code: "T", label: "Turno tarde", time: "2:00 p.m. - 5:00 p.m." },
+    ],
   },
 };
