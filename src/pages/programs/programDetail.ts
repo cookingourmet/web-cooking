@@ -1,6 +1,11 @@
 import { renderHeader, initHeader } from "../../components/layout/header/header";
 import { renderFooter } from "../../components/layout/footer/footer";
-import type { ProgramData, ProgramModule } from "../../data/programs.data";
+import {
+  programsData,
+  type ProgramData,
+  type ProgramKey,
+  type ProgramModule,
+} from "../../data/programs.data";
 
 type ProgramCopy = {
   eyebrow: string;
@@ -26,6 +31,43 @@ type ProgramCopy = {
   brochureAction: string;
   floatingBadge: string;
 };
+
+type ProgramFaq = {
+  question: string;
+  answer: string;
+};
+
+type ProgramDataExtended = ProgramData & {
+  seoTitle?: string;
+  seoDescription?: string;
+  startDate?: string;
+  frequency?: string;
+  location?: string;
+  faqs?: ProgramFaq[];
+};
+
+type ProgramFact = {
+  label: string;
+  value: string;
+};
+
+const PROGRAM_ROUTES: Record<ProgramKey, string> = {
+  gastronomia: "/programas/gastronomia",
+  pasteleria: "/programas/pasteleria",
+  "bar-profesional": "/programas/bar-profesional",
+  barismo: "/programas/barismo",
+  sommelier: "/programas/sommelier",
+  cocina: "/programas/cocina-acelerada",
+};
+
+const PROGRAM_HEADINGS: Record<ProgramKey, string> = {
+  gastronomia: "Gastronomía Profesional en Huancayo",
+  pasteleria: "Panadería y Pastelería Profesional en Huancayo",
+  "bar-profesional": "Bar Profesional en Huancayo",
+  barismo: "Barismo Profesional en Huancayo",
+  sommelier: "Sommelier Profesional en Huancayo",
+  cocina: "Cocina Acelerada en Huancayo",
+};
 function escapeHtml(value: string | number | null | undefined) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -37,6 +79,243 @@ function escapeHtml(value: string | number | null | undefined) {
 
 function stripProfessionalTitle(title: string) {
   return title.replace(/\s+profesional$/i, "").trim();
+}
+
+function getProgramRoute(program: ProgramData) {
+  return PROGRAM_ROUTES[program.slug];
+}
+
+function getProgramHeading(program: ProgramData) {
+  return PROGRAM_HEADINGS[program.slug];
+}
+
+function getExtendedProgram(program: ProgramData): ProgramDataExtended {
+  return program;
+}
+
+function getProgramSeoTitle(program: ProgramDataExtended) {
+  return program.seoTitle ?? `${getProgramHeading(program)} | Cooking Gourmet`;
+}
+
+function getProgramSeoDescription(program: ProgramDataExtended) {
+  return (
+    program.seoDescription ??
+    `${program.description} Modalidad ${program.modality.toLowerCase()} en Huancayo.`
+  );
+}
+
+function buildCallUrl(program: ProgramData) {
+  const digits = (program.whatsappNumber ?? "51981377382").replace(/\D/g, "");
+  const internationalNumber = digits.startsWith("51") ? digits : `51${digits}`;
+
+  return `tel:+${internationalNumber}`;
+}
+
+function getProgramFacts(program: ProgramDataExtended): ProgramFact[] {
+  const facts: ProgramFact[] = [
+    { label: "Duración", value: program.duration },
+    { label: "Modalidad", value: program.modality },
+    { label: "Horarios", value: program.schedule },
+  ];
+
+  if (program.frequency) {
+    facts.push({ label: "Frecuencia", value: program.frequency });
+  }
+
+  if (program.startDate) {
+    facts.push({ label: "Próximo inicio", value: program.startDate });
+  }
+
+  return facts.slice(0, 4);
+}
+
+function getProgramFaqs(program: ProgramDataExtended): ProgramFaq[] {
+  if (program.faqs?.length) {
+    return program.faqs;
+  }
+
+  const investment = program.investment;
+  const scheduleText = program.schedules?.length
+    ? program.schedules.map((item) => item.time).join(", ")
+    : program.schedule;
+
+  const faqs: ProgramFaq[] = [
+    {
+      question: `¿Cuánto dura ${program.title}?`,
+      answer: `El programa tiene una duración de ${program.duration} y se desarrolla en modalidad ${program.modality.toLowerCase()}.`,
+    },
+    {
+      question: `¿Qué horarios tiene ${program.title}?`,
+      answer: `Los horarios disponibles son ${scheduleText}. La disponibilidad final depende del grupo y las vacantes vigentes.`,
+    },
+  ];
+
+  if (investment) {
+    faqs.push({
+      question: `¿Cuánto cuesta estudiar ${program.title}?`,
+      answer: `La inscripción es ${investment.inscription}, la matrícula ${investment.enrollment}, la mensualidad ${investment.monthly}${
+        investment.uniform ? ` y el uniforme ${investment.uniform}` : ""
+      }.`,
+    });
+  }
+
+  if (program.requirements?.length) {
+    faqs.push({
+      question: `¿Qué requisitos necesito para inscribirme?`,
+      answer: `Necesitas ${program.requirements.join(", ")}.`,
+    });
+  }
+
+  return faqs.slice(0, 4);
+}
+
+function getProgramFromCurrentPath() {
+  const currentPath =
+    window.location.pathname === "/"
+      ? "/"
+      : window.location.pathname.replace(/\/+$/, "");
+
+  return Object.values(programsData).find(
+    (program) => getProgramRoute(program) === currentPath
+  );
+}
+
+function setMetaContent(selector: string, content: string) {
+  let meta = document.head.querySelector<HTMLMetaElement>(selector);
+
+  if (!meta) {
+    meta = document.createElement("meta");
+
+    if (selector.includes('property="')) {
+      const property = selector.match(/property="([^"]+)"/)?.[1];
+      if (property) meta.setAttribute("property", property);
+    } else {
+      const name = selector.match(/name="([^"]+)"/)?.[1];
+      if (name) meta.setAttribute("name", name);
+    }
+
+    document.head.appendChild(meta);
+  }
+
+  meta.content = content;
+}
+
+function setCanonical(url: string) {
+  let canonical = document.head.querySelector<HTMLLinkElement>(
+    'link[rel="canonical"]'
+  );
+
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
+  }
+
+  canonical.href = url;
+}
+
+function applyProgramSeo(program: ProgramDataExtended) {
+  const baseUrl = "https://www.cookingourmet.edu.pe";
+  const route = getProgramRoute(program);
+  const canonicalUrl = `${baseUrl}${route}`;
+  const imageUrl = `${baseUrl}${program.image}`;
+  const title = getProgramSeoTitle(program);
+  const description = getProgramSeoDescription(program);
+  const faqs = getProgramFaqs(program);
+
+  document.title = title;
+  setMetaContent('meta[name="description"]', description);
+  setMetaContent('meta[property="og:title"]', title);
+  setMetaContent('meta[property="og:description"]', description);
+  setMetaContent('meta[property="og:url"]', canonicalUrl);
+  setMetaContent('meta[property="og:image"]', imageUrl);
+  setMetaContent('meta[name="twitter:title"]', title);
+  setMetaContent('meta[name="twitter:description"]', description);
+  setMetaContent('meta[name="twitter:image"]', imageUrl);
+  setCanonical(canonicalUrl);
+
+  document.getElementById("program-detail-schema")?.remove();
+
+  const schema = document.createElement("script");
+  schema.id = "program-detail-schema";
+  schema.type = "application/ld+json";
+  schema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Course",
+        "@id": `${canonicalUrl}#course`,
+        name: program.title,
+        description,
+        url: canonicalUrl,
+        image: imageUrl,
+        inLanguage: "es-PE",
+        provider: {
+          "@type": "EducationalOrganization",
+          "@id": `${baseUrl}/#organization`,
+          name: "Cooking Gourmet",
+          url: `${baseUrl}/`,
+          telephone: "+51 981 377 382",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Huancayo",
+            addressRegion: "Junín",
+            addressCountry: "PE",
+          },
+        },
+        hasCourseInstance: {
+          "@type": "CourseInstance",
+          courseMode: program.modality,
+          location: {
+            "@type": "Place",
+            name: program.location ?? "Cooking Gourmet - Huancayo",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Huancayo",
+              addressRegion: "Junín",
+              addressCountry: "PE",
+            },
+          },
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Inicio",
+            item: `${baseUrl}/`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Programas",
+            item: `${baseUrl}/#programas`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: program.title,
+            item: canonicalUrl,
+          },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      },
+    ],
+  });
+
+  document.head.appendChild(schema);
 }
 
 function buildWhatsAppUrl(program: ProgramData) {
@@ -249,20 +528,62 @@ function getProgramCopy(program: ProgramData): ProgramCopy {
   };
 }
 
-function renderHero(program: ProgramData, copy: ProgramCopy, whatsappUrl: string) {
+function renderBreadcrumb(program: ProgramData) {
+  return `
+    <nav class="program-landing-breadcrumb" aria-label="Ruta de navegación">
+      <a href="/">Inicio</a>
+      <span aria-hidden="true">/</span>
+      <a href="/#programas">Programas</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">${escapeHtml(program.title)}</span>
+    </nav>
+  `;
+}
+
+function renderHero(
+  program: ProgramDataExtended,
+  copy: ProgramCopy,
+  whatsappUrl: string
+) {
+  const facts = getProgramFacts(program);
+
   return `
     <section class="program-landing-hero">
       <div class="program-landing-hero__bg">
-        <img src="${escapeHtml(program.image)}" alt="${escapeHtml(program.title)}" />
+        <img
+          src="${escapeHtml(program.image)}"
+          alt="Estudiantes del programa ${escapeHtml(program.title)} en Cooking Gourmet Huancayo"
+        />
       </div>
 
       <div class="program-landing-hero__overlay"></div>
 
       <div class="container program-landing-hero__content">
         <div class="program-landing-hero__text">
-          <span class="program-landing-hero__eyebrow">${escapeHtml(copy.eyebrow)}</span>
-          <h1>${escapeHtml(copy.heroTitle)}</h1>
-          <p class="program-landing-hero__lead">${escapeHtml(copy.heroDescription)}</p>
+          ${renderBreadcrumb(program)}
+
+          <span class="program-landing-hero__eyebrow">${escapeHtml(
+            copy.eyebrow
+          )}</span>
+
+          <h1>${escapeHtml(getProgramHeading(program))}</h1>
+
+          <p class="program-landing-hero__lead">${escapeHtml(
+            copy.heroDescription
+          )}</p>
+
+          <div class="program-landing-hero__facts" aria-label="Información principal del programa">
+            ${facts
+              .map(
+                (fact) => `
+                  <article class="program-landing-hero__fact">
+                    <span>${escapeHtml(fact.label)}</span>
+                    <strong>${escapeHtml(fact.value)}</strong>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
 
           <div class="program-landing-hero__actions">
             <a
@@ -414,6 +735,49 @@ function renderCurriculum(program: ProgramData, copy: ProgramCopy) {
   `;
 }
 
+function renderSchedules(program: ProgramDataExtended) {
+  if (!program.schedules?.length) return "";
+
+  return `
+    <section class="program-landing-section program-landing-section--light" id="program-schedules">
+      <div class="container">
+        <div class="program-landing-heading program-landing-heading--center">
+          <span class="program-landing-tag">Horarios</span>
+          <h2>Turnos disponibles</h2>
+          <p>
+            Elige el horario que mejor se adapte a tu rutina. Las vacantes se
+            confirman durante el proceso de admisión.
+          </p>
+        </div>
+
+        <div class="program-landing-feature-grid">
+          ${program.schedules
+            .map(
+              (schedule) => `
+                <article class="program-landing-feature-card">
+                  <div class="program-landing-feature-card__icon">${escapeHtml(
+                    schedule.code
+                  )}</div>
+                  <h3>${escapeHtml(schedule.label)}</h3>
+                  <p>${escapeHtml(schedule.time)}</p>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+
+        ${
+          program.frequency
+            ? `<p class="program-landing-schedule-note"><strong>Frecuencia:</strong> ${escapeHtml(
+                program.frequency
+              )}</p>`
+            : ""
+        }
+      </div>
+    </section>
+  `;
+}
+
 function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
   const jobPreview = program.opportunities?.slice(0, 3).join(", ");
 
@@ -472,9 +836,17 @@ function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
 }
 
 function renderDarkPanel(program: ProgramData, copy: ProgramCopy) {
-  const items = (
-    program.profile?.length ? program.profile : program.requirements ?? []
-  ).slice(0, 3);
+  const shouldShowRequirements = /requis|ingreso/i.test(
+    `${copy.darkTag} ${copy.darkTitle}`
+  );
+
+  const sourceItems = shouldShowRequirements
+    ? program.requirements ?? program.profile ?? []
+    : program.profile?.length
+      ? program.profile
+      : program.requirements ?? [];
+
+  const items = sourceItems.slice(0, 3);
 
   if (!items.length) return "";
 
@@ -503,16 +875,23 @@ function renderDarkPanel(program: ProgramData, copy: ProgramCopy) {
   `;
 }
 
-function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: string) {
+function renderAdmission(
+  program: ProgramData,
+  copy: ProgramCopy,
+  whatsappUrl: string
+) {
   const investment = program.investment;
   const opportunities = program.opportunities?.slice(0, 4) ?? [];
+  const callUrl = buildCallUrl(program);
 
   return `
-    <section class="program-landing-section program-landing-section--white">
+    <section class="program-landing-section program-landing-section--white" id="program-admission">
       <div class="container">
         <div class="program-landing-admission">
           <div class="program-landing-admission__left">
-            <span class="program-landing-tag">${escapeHtml(copy.admissionTag)}</span>
+            <span class="program-landing-tag">${escapeHtml(
+              copy.admissionTag
+            )}</span>
             <h2>${escapeHtml(copy.admissionTitle)}</h2>
 
             ${
@@ -523,7 +902,7 @@ function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: s
                       .map(
                         (item) => `
                           <article class="program-landing-requirement-item">
-                            <div class="program-landing-requirement-item__icon">•</div>
+                            <div class="program-landing-requirement-item__icon">✓</div>
                             <div>
                               <strong>${escapeHtml(item)}</strong>
                             </div>
@@ -537,10 +916,25 @@ function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: s
             }
 
             ${
+              program.uniform?.length
+                ? `
+                  <div class="program-landing-jobs">
+                    <h3>Uniforme del programa</h3>
+                    <div class="program-landing-jobs__grid">
+                      ${program.uniform
+                        .map((item) => `<span>${escapeHtml(item)}</span>`)
+                        .join("")}
+                    </div>
+                  </div>
+                `
+                : ""
+            }
+
+            ${
               opportunities.length
                 ? `
                   <div class="program-landing-jobs">
-                    <h3>Bolsa de trabajo</h3>
+                    <h3>Oportunidades laborales</h3>
                     <div class="program-landing-jobs__grid">
                       ${opportunities
                         .map((item) => `<span>${escapeHtml(item)}</span>`)
@@ -553,21 +947,29 @@ function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: s
           </div>
 
           <aside class="program-landing-investment">
-            <span class="program-landing-investment__ribbon">Matrícula abierta</span>
+            <span class="program-landing-investment__ribbon">${escapeHtml(
+              program.enrollment ?? "Matrícula abierta"
+            )}</span>
             <h3>${escapeHtml(copy.investmentTitle)}</h3>
 
             <div class="program-landing-investment__list">
               <div>
-                <span>Inscripción única</span>
-                <strong>${escapeHtml(investment?.inscription ?? "Consultar")}</strong>
+                <span>Inscripción</span>
+                <strong>${escapeHtml(
+                  investment?.inscription ?? "Consultar"
+                )}</strong>
               </div>
               <div>
                 <span>Matrícula</span>
-                <strong>${escapeHtml(investment?.enrollment ?? "Consultar")}</strong>
+                <strong>${escapeHtml(
+                  investment?.enrollment ?? "Consultar"
+                )}</strong>
               </div>
               <div>
                 <span>Mensualidad</span>
-                <strong>${escapeHtml(investment?.monthly ?? "Consultar")}</strong>
+                <strong>${escapeHtml(
+                  investment?.monthly ?? "Consultar"
+                )}</strong>
               </div>
               ${
                 investment?.uniform
@@ -582,18 +984,101 @@ function renderAdmission(program: ProgramData, copy: ProgramCopy, whatsappUrl: s
             </div>
 
             <p class="program-landing-investment__note">
-              *Incluye orientación personalizada sobre horarios, matrícula y proceso de inscripción.
+              *Los horarios y vacantes se confirman con el área de admisión.
             </p>
 
-            <a
-              class="program-landing-btn program-landing-btn--primary"
-              href="${whatsappUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ${escapeHtml(copy.primaryAction)}
-            </a>
+            <div class="program-landing-cta__actions">
+              <a
+                class="program-landing-btn program-landing-btn--primary"
+                href="${whatsappUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Escribir por WhatsApp
+              </a>
+
+              <a
+                class="program-landing-btn program-landing-btn--ghost"
+                href="${callUrl}"
+              >
+                Llamar ahora
+              </a>
+            </div>
           </aside>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderFaq(program: ProgramDataExtended) {
+  const faqs = getProgramFaqs(program);
+
+  if (!faqs.length) return "";
+
+  return `
+    <section class="program-landing-section program-landing-section--soft" id="program-faq">
+      <div class="container">
+        <div class="program-landing-heading program-landing-heading--center">
+          <span class="program-landing-tag">Preguntas frecuentes</span>
+          <h2>Resuelve tus dudas antes de inscribirte</h2>
+          <p>Información concreta sobre duración, horarios, inversión y requisitos.</p>
+        </div>
+
+        <div class="program-landing-curriculum program-landing-curriculum--faq">
+          ${faqs
+            .map(
+              (faq, index) => `
+                <article class="program-landing-module-card">
+                  <div class="program-landing-module-card__number">
+                    ${String(index + 1).padStart(2, "0")}
+                  </div>
+                  <h3>${escapeHtml(faq.question)}</h3>
+                  <p>${escapeHtml(faq.answer)}</p>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderRelatedPrograms(program: ProgramData) {
+  const relatedPrograms = Object.values(programsData)
+    .filter((item) => item.slug !== program.slug)
+    .slice(0, 3);
+
+  if (!relatedPrograms.length) return "";
+
+  return `
+    <section class="program-landing-section program-landing-section--light">
+      <div class="container">
+        <div class="program-landing-heading">
+          <span class="program-landing-tag">También puedes estudiar</span>
+          <h2>Conoce otros programas de Cooking Gourmet</h2>
+          <p>Explora otras alternativas de formación presencial en Huancayo.</p>
+        </div>
+
+        <div class="program-landing-feature-grid">
+          ${relatedPrograms
+            .map(
+              (related) => `
+                <article class="program-landing-feature-card">
+                  <div class="program-landing-feature-card__icon">✦</div>
+                  <h3>${escapeHtml(related.title)}</h3>
+                  <p>${escapeHtml(related.subtitle)}</p>
+                  <a
+                    class="program-landing-btn program-landing-btn--ghost"
+                    href="${getProgramRoute(related)}"
+                  >
+                    Conocer programa
+                  </a>
+                </article>
+              `
+            )
+            .join("")}
         </div>
       </div>
     </section>
@@ -642,6 +1127,7 @@ function renderCta(program: ProgramData, copy: ProgramCopy, whatsappUrl: string)
 }
 
 export function renderProgramDetail(program: ProgramData) {
+  const extendedProgram = getExtendedProgram(program);
   const copy = getProgramCopy(program);
   const whatsappUrl = buildWhatsAppUrl(program);
 
@@ -650,13 +1136,16 @@ export function renderProgramDetail(program: ProgramData) {
       ${renderHeader()}
 
       <main class="page-program-detail">
-        ${renderHero(program, copy, whatsappUrl)}
+        ${renderHero(extendedProgram, copy, whatsappUrl)}
         ${renderStats(program)}
         ${renderAbout(program, copy)}
         ${renderCurriculum(program, copy)}
+        ${renderSchedules(extendedProgram)}
         ${renderFeatureCards(program, copy)}
         ${renderDarkPanel(program, copy)}
         ${renderAdmission(program, copy, whatsappUrl)}
+        ${renderFaq(extendedProgram)}
+        ${renderRelatedPrograms(program)}
         ${renderCta(program, copy, whatsappUrl)}
       </main>
 
@@ -667,4 +1156,10 @@ export function renderProgramDetail(program: ProgramData) {
 
 export function initProgramDetail() {
   initHeader();
+
+  const program = getProgramFromCurrentPath();
+
+  if (program) {
+    applyProgramSeo(getExtendedProgram(program));
+  }
 }
