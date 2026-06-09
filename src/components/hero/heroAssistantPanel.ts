@@ -1020,22 +1020,6 @@ export function initAssistantWindow() {
       return false;
     }
 
-    function appendResumePromptIfNeeded(wasPaused: boolean) {
-      if (!wasPaused) return;
-
-      window.setTimeout(() => {
-        void sendBotSequence(
-          [
-            {
-              kind: "text",
-              text: "¿Retomamos tu solicitud? 😊",
-            },
-          ],
-          "resume_lead"
-        );
-      }, 250);
-    }
-
     function handleComparison(analysis: MessageAnalysis) {
       let keys = analysis.programs;
 
