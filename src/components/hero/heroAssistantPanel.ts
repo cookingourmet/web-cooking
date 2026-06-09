@@ -1,145 +1,54 @@
 import "./heroAssistantPanel.css";
 
 import {
+  BUBBLE_MESSAGES,
   LEAD_ENDPOINT,
   PROGRAM_KEYS,
   PROGRAMS,
   SALES_EMAIL,
+  SALES_PHONE_DISPLAY,
+  SALES_PHONE_LINK,
   SALES_WHATSAPP,
   WEB3FORMS_ACCESS_KEY,
-  type ProgramInfo,
-  type ProgramKey,
 } from "./heroAssistantData";
+import { CookitoAudio } from "./heroAssistantAudio";
+import {
+  analyzeMessage,
+  detectProgramFromPath,
+  normalizeText,
+  textHasTerm,
+} from "./heroAssistantNlp";
+import {
+  brochureSequence,
+  comparisonSequence,
+  costSequence,
+  faqSequence,
+  firstName,
+  programInfoSequence,
+  scheduleSequence,
+} from "./heroAssistantResponses";
+import {
+  loadAssistantState,
+  saveAssistantState,
+} from "./heroAssistantStorage";
+import type {
+  AssistantState,
+  BotSequenceItem,
+  ChatMessage,
+  CostDetail,
+  InfoTableMessage,
+  Intent,
+  LeadStep,
+  MessageAnalysis,
+  ProgramKey,
+  ReplyMode,
+  SchedulePreference,
+} from "./heroAssistantTypes";
 
-type ChatStep =
-  | "idle"
-  | "program"
-  | "confirm_enrollment"
-  | "ask_name"
-  | "ask_phone"
-  | "ask_email_optional"
-  | "ask_dni_optional"
-  | "completed";
-
-type Intent =
-  | "greeting"
-  | "programs"
-  | "info"
-  | "costs"
-  | "schedules"
-  | "enrollment"
-  | "brochure"
-  | "advisor"
-  | "duration"
-  | "requirements"
-  | "location"
-  | "thanks"
-  | "farewell"
-  | "unknown";
-
-type PendingAction =
-  | "info"
-  | "costs"
-  | "schedules"
-  | "enrollment"
-  | "brochure"
-  | "advisor";
-
-type ReplyMode =
-  | "none"
-  | "programs"
-  | "program_actions"
-  | "schedule_options"
-  | "confirmation"
-  | "skip_email"
-  | "skip_dni"
-  | "completed";
-
-type LeadStatus = "idle" | "sending" | "sent" | "error";
-type ConfirmationIntent = "yes" | "no" | "unknown";
-
-type TextMessage = {
-  id: string;
-  role: "bot" | "user";
-  kind: "text";
-  text: string;
-};
-
-type ProgramCardMessage = {
-  id: string;
-  role: "bot";
-  kind: "program_card";
-  programKey: ProgramKey;
-};
-
-type ChatMessage = TextMessage | ProgramCardMessage;
-
-type BotSequenceItem =
-  | {
-      kind: "text";
-      text: string;
-      delay?: number;
-    }
-  | {
-      kind: "program_card";
-      programKey: ProgramKey;
-      delay?: number;
-    };
-
-type State = {
-  step: ChatStep;
-  messages: ChatMessage[];
-  selectedProgram: ProgramKey | "";
-  pendingAction: PendingAction;
-  name: string;
-  phone: string;
-  email: string;
-  dni: string;
-  isTyping: boolean;
-  locked: boolean;
-  replyMode: ReplyMode;
-  queueToken: number;
-  leadStatus: LeadStatus;
-  leadError: string;
-  bubbleIndex: number;
-};
-
-const BUBBLES = [
-  "¿Conversamos? 😊",
-  "Pregúntame por una carrera",
-  "Te ayudo con costos",
-  "Pide tu brochure PDF",
-];
-
-function createInitialState(): State {
-  return {
-    step: "idle",
-    messages: [],
-    selectedProgram: "",
-    pendingAction: "info",
-    name: "",
-    phone: "",
-    email: "",
-    dni: "",
-    isTyping: false,
-    locked: false,
-    replyMode: "none",
-    queueToken: 0,
-    leadStatus: "idle",
-    leadError: "",
-    bubbleIndex: 0,
-  };
-}
-
-function normalize(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9ñ\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+const FIRST_RESPONSE_PAUSE = 440;
+const BETWEEN_MESSAGE_PAUSE = 420;
+const MIN_TYPING_DELAY = 900;
+const MAX_TYPING_DELAY = 2200;
 
 function escapeHtml(value: string) {
   return value
@@ -165,489 +74,164 @@ function wait(ms: number) {
 }
 
 function getTypingDelay(item: BotSequenceItem) {
-  if (item.delay !== undefined) {
-    return Math.max(3000, Math.min(5000, item.delay));
-  }
+  if (item.delay !== undefined) return item.delay;
+  if (item.kind === "program_card") return 1200;
+  if (item.kind === "info_table") return 1100;
 
-  if (item.kind === "program_card") {
-    return 3000;
-  }
-
-  const length = item.text.trim().length;
-
-  if (length <= 60) return 3000;
-  if (length <= 140) return 4000;
-  return 5000;
-}
-
-function editDistance(left: string, right: string) {
-  const rows = left.length + 1;
-  const columns = right.length + 1;
-
-  const matrix = Array.from({ length: rows }, () =>
-    Array<number>(columns).fill(0)
-  );
-
-  for (let row = 0; row < rows; row += 1) {
-    matrix[row][0] = row;
-  }
-
-  for (let column = 0; column < columns; column += 1) {
-    matrix[0][column] = column;
-  }
-
-  for (let row = 1; row < rows; row += 1) {
-    for (let column = 1; column < columns; column += 1) {
-      const cost = left[row - 1] === right[column - 1] ? 0 : 1;
-
-      matrix[row][column] = Math.min(
-        matrix[row - 1][column] + 1,
-        matrix[row][column - 1] + 1,
-        matrix[row - 1][column - 1] + cost
-      );
-    }
-  }
-
-  return matrix[left.length][right.length];
-}
-
-function similarWord(word: string, target: string) {
-  if (word === target) return true;
-
-  const allowedDistance =
-    target.length >= 10
-      ? 3
-      : target.length >= 7
-        ? 2
-        : target.length >= 5
-          ? 1
-          : 0;
-
-  return allowedDistance > 0 && editDistance(word, target) <= allowedDistance;
-}
-
-function hasTerm(rawText: string, rawTerm: string) {
-  const text = normalize(rawText);
-  const term = normalize(rawTerm);
-
-  if (!text || !term) return false;
-  if (text.includes(term)) return true;
-
-  const words = text.split(" ");
-  const termWords = term.split(" ");
-
-  return termWords.every((termWord) =>
-    words.some((word) => similarWord(word, termWord))
+  const words = item.text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(
+    MIN_TYPING_DELAY,
+    Math.min(MAX_TYPING_DELAY, 720 + words * 95)
   );
 }
 
-function hasAny(text: string, terms: string[]) {
-  return terms.some((term) => hasTerm(text, term));
+function getBetweenPause(item: BotSequenceItem) {
+  if (item.kind !== "text") return 520;
+  return Math.min(720, BETWEEN_MESSAGE_PAUSE + item.text.length * 1.6);
 }
 
-function detectConfirmation(text: string): ConfirmationIntent {
-  const value = normalize(text);
-
-  const affirmative = [
-    "si",
-    "claro",
-    "correcto",
-    "confirmo",
-    "confirmar",
-    "de acuerdo",
-    "esta bien",
-    "ok",
-    "okay",
-    "acepto",
-    "adelante",
-    "registrar",
-    "registralo",
-    "registrame",
-    "si por favor",
-    "por supuesto",
-    "dale",
-    "hagamoslo",
-    "quiero",
-  ];
-
-  const negative = [
-    "no",
-    "ahora no",
-    "no gracias",
-    "cancelar",
-    "cancela",
-    "despues",
-    "luego",
-    "todavia no",
-    "por ahora no",
-    "mejor no",
-  ];
-
-  if (
-    affirmative.some(
-      (answer) => value === answer || value.startsWith(`${answer} `)
-    )
-  ) {
-    return "yes";
-  }
-
-  if (
-    negative.some(
-      (answer) => value === answer || value.startsWith(`${answer} `)
-    )
-  ) {
-    return "no";
-  }
-
-  return "unknown";
-}
-
-function detectProgram(text: string): ProgramKey | null {
-  const normalized = normalize(text);
-
-  for (const key of PROGRAM_KEYS) {
-    const found = PROGRAMS[key].aliases.some((alias) => {
-      const normalizedAlias = normalize(alias);
-
-      if (normalizedAlias === "bar") {
-        return normalized.split(" ").includes("bar");
-      }
-
-      return hasTerm(normalized, normalizedAlias);
-    });
-
-    if (found) return key;
-  }
-
-  return null;
-}
-
-function detectIntent(text: string): Intent {
-  const value = normalize(text);
-
-  if (
-    hasAny(value, [
-      "cuanto cuesta",
-      "cuanto vale",
-      "precio",
-      "precios",
-      "costo",
-      "costos",
-      "mensualidad",
-      "pension",
-      "uniforme",
-      "cuanto es la inscripcion",
-      "cuanto es la matricula",
-      "precio de inscripcion",
-      "precio de matricula",
-      "costo de inscripcion",
-      "costo de matricula",
-      "inversion",
-      "cuanto pago",
-    ])
-  ) {
-    return "costs";
-  }
-
-  if (
-    hasAny(value, [
-      "pdf",
-      "brochure",
-      "brochur",
-      "folleto",
-      "malla curricular",
-      "plan de estudios",
-      "temario",
-      "mandame informacion",
-      "enviame informacion",
-      "quiero el documento",
-    ])
-  ) {
-    return "brochure";
-  }
-
-  if (
-    hasAny(value, [
-      "quiero matricularme",
-      "deseo matricularme",
-      "quiero inscribirme",
-      "deseo inscribirme",
-      "como me matriculo",
-      "como me inscribo",
-      "quiero estudiar",
-      "reservar vacante",
-      "separar vacante",
-      "iniciar inscripcion",
-      "matricularme",
-      "inscribirme",
-    ])
-  ) {
-    return "enrollment";
-  }
-
-  if (
-    hasAny(value, [
-      "horario",
-      "horarios",
-      "turno",
-      "turnos",
-      "hora de clase",
-      "manana",
-      "mañana",
-      "tarde",
-      "noche",
-      "sabado",
-      "domingo",
-      "fin de semana",
-    ])
-  ) {
-    return "schedules";
-  }
-
-  if (
-    hasAny(value, [
-      "asesor",
-      "asesora",
-      "persona",
-      "humano",
-      "hablar con alguien",
-      "whatsapp",
-      "wsp",
-      "llamada",
-      "llamar",
-    ])
-  ) {
-    return "advisor";
-  }
-
-  if (
-    hasAny(value, [
-      "duracion",
-      "cuanto dura",
-      "tiempo de estudio",
-      "meses dura",
-      "anos dura",
-      "años dura",
-    ])
-  ) {
-    return "duration";
-  }
-
-  if (
-    hasAny(value, [
-      "requisitos",
-      "que necesito",
-      "documentos",
-      "edad minima",
-      "certificado",
-    ])
-  ) {
-    return "requirements";
-  }
-
-  if (
-    hasAny(value, [
-      "direccion",
-      "ubicacion",
-      "donde queda",
-      "como llego",
-      "sede",
-      "local",
-    ])
-  ) {
-    return "location";
-  }
-
-  if (
-    hasAny(value, [
-      "que carreras tienen",
-      "que programas tienen",
-      "carreras disponibles",
-      "programas disponibles",
-      "que puedo estudiar",
-      "que enseñan",
-      "que ensenan",
-      "todos los programas",
-      "opciones de estudio",
-    ])
-  ) {
-    return "programs";
-  }
-
-  if (
-    hasAny(value, [
-      "informacion",
-      "informaicon",
-      "informacoens",
-      "informes",
-      "quiero saber",
-      "deseo saber",
-      "mas detalles",
-      "cuentame",
-      "de que trata",
-      "quiero conocer",
-    ])
-  ) {
-    return "info";
-  }
-
-  if (
-    hasAny(value, [
-      "gracias",
-      "muchas gracias",
-      "te agradezco",
-      "perfecto gracias",
-    ])
-  ) {
-    return "thanks";
-  }
-
-  if (
-    hasAny(value, [
-      "adios",
-      "chau",
-      "chao",
-      "hasta luego",
-      "nos vemos",
-      "hasta pronto",
-    ])
-  ) {
-    return "farewell";
-  }
-
-  if (
-    hasAny(value, [
-      "hola",
-      "ola",
-      "holaa",
-      "holi",
-      "buenas",
-      "buenos dias",
-      "buen dia",
-      "buenas tardes",
-      "buenas noches",
-      "hey",
-    ])
-  ) {
-    return "greeting";
-  }
-
-  return "unknown";
-}
-
-function detectSchedulePreference(text: string) {
-  if (hasAny(text, ["manana", "mañana", "temprano"])) {
-    return "mañana";
-  }
-
-  if (hasAny(text, ["tarde"])) {
-    return "tarde";
-  }
-
-  if (hasAny(text, ["noche", "nocturno"])) {
-    return "noche";
-  }
-
-  if (hasAny(text, ["sabado", "domingo", "fin de semana"])) {
-    return "fin de semana";
-  }
-
-  return null;
-}
-
-function money(value: number) {
-  return `S/ ${value.toFixed(0)}`;
-}
-
-function validPhone(value: string) {
+function isValidPhone(value: string) {
   const clean = value.replace(/\D/g, "");
   return clean.length >= 9 && clean.length <= 12;
 }
 
-function validEmail(value: string) {
+function normalizePhone(value: string) {
+  return value.replace(/\D/g, "");
+}
+
+function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-function validDni(value: string) {
+function isValidDni(value: string) {
   return /^\d{8}$/.test(value.trim());
 }
 
-function isSkip(value: string) {
-  return hasAny(value, [
+function isSkipValue(value: string) {
+  const normalized = normalizeText(value);
+  return [
     "omitir",
     "saltar",
     "no tengo",
     "no deseo",
     "prefiero no",
     "despues",
-    "luego",
-  ]);
+  ].some((term) => textHasTerm(normalized, term));
 }
 
-function getFirstName(value: string) {
-  return value.trim().split(/\s+/)[0] || "amigo";
+function friendlyName(state: AssistantState) {
+  return firstName(state.visitorName);
 }
 
-function buildWhatsAppUrl(state: State) {
+function buildLeadSummary(state: AssistantState) {
   const program = state.selectedProgram
     ? PROGRAMS[state.selectedProgram]
     : null;
 
-  const text = [
-    "Hola, deseo información de Cooking Gourmet.",
-    `Programa: ${program?.label ?? "Por definir"}`,
-    `Nombre: ${state.name || "-"}`,
-    `Celular: ${state.phone || "-"}`,
-  ].join("\n");
-
-  return `https://wa.me/${SALES_WHATSAPP}?text=${encodeURIComponent(text)}`;
-}
-
-async function sendLead(state: State) {
-  const program = state.selectedProgram
-    ? PROGRAMS[state.selectedProgram]
-    : null;
-
-  const message = [
-    "NUEVA SOLICITUD DESDE COOKITO",
-    "",
+  return [
+    "Nuevo lead Cookito",
     `Programa: ${program?.label ?? "-"}`,
-    `Nombre: ${state.name || "-"}`,
+    `Nombre: ${state.visitorName || "-"}`,
     `Celular: ${state.phone || "-"}`,
     `Correo: ${state.email || "No compartido"}`,
     `DNI: ${state.dni || "No compartido"}`,
+    `Interés: ${state.currentIntent}`,
+    `Turno: ${state.schedulePreference || "No indicado"}`,
     `Página: ${window.location.href}`,
-    `Fecha: ${new Date().toLocaleString("es-PE")}`,
   ].join("\n");
+}
+
+function buildWhatsAppUrl(state: AssistantState) {
+  const program = state.selectedProgram
+    ? PROGRAMS[state.selectedProgram]
+    : null;
+
+  const costDetailLabels: Record<CostDetail, string> = {
+    inscription: "la inscripción",
+    enrollment: "la matrícula",
+    monthly: "la mensualidad",
+    uniform: "el uniforme",
+    start: "el monto para comenzar",
+    all: "los costos completos",
+  };
+
+  const scheduleLabels: Partial<Record<SchedulePreference, string>> = {
+    morning: "mañana",
+    afternoon: "tarde",
+    night: "noche",
+    weekend: "fin de semana",
+  };
+
+  const intentLabels: Partial<Record<Intent, string>> = {
+    info: "información general",
+    costs: costDetailLabels[state.currentCostDetail],
+    schedules: state.schedulePreference
+      ? `horarios del turno ${scheduleLabels[state.schedulePreference] ?? state.schedulePreference}`
+      : "horarios",
+    enrollment: "inscripción y vacantes",
+    brochure: "el brochure PDF",
+    duration: "duración",
+    requirements: "requisitos",
+    start_date: "fecha de inicio",
+    frequency: "frecuencia de clases",
+    modality: "modalidad",
+    certification: "certificación",
+    advisor: "atención de un asesor",
+    compare: "comparación de programas",
+  };
+
+  const lines = [
+    "Hola, vengo desde la web de Cooking Gourmet.",
+    state.visitorName ? `Mi nombre es ${state.visitorName}.` : "",
+    program
+      ? `Quiero saber sobre ${program.label}.`
+      : "Quiero conocer sus programas.",
+    `Estaba consultando: ${intentLabels[state.currentIntent] ?? "información académica"}.`,
+    state.schedulePreference
+      ? `Turno de interés: ${state.schedulePreference}.`
+      : "",
+    "¿Podrían ayudarme, por favor?",
+  ].filter(Boolean);
+
+  return `https://wa.me/${SALES_WHATSAPP}?text=${encodeURIComponent(
+    lines.join("\n")
+  )}`;
+}
+
+async function sendLeadToSales(state: AssistantState) {
+  const program = state.selectedProgram
+    ? PROGRAMS[state.selectedProgram]
+    : null;
 
   const formData = new FormData();
-
   formData.append("access_key", WEB3FORMS_ACCESS_KEY);
   formData.append(
     "subject",
     `Nuevo lead Cookito - ${program?.label ?? "Programa"}`
   );
   formData.append("from_name", "Cookito - Cooking Gourmet");
-  formData.append("name", state.name || "Cliente Cookito");
+  formData.append("name", state.visitorName || "Cliente Cookito");
   formData.append("email", state.email || SALES_EMAIL);
   formData.append("phone", state.phone || "-");
-  formData.append("message", message);
+  formData.append("message", buildLeadSummary(state));
 
   const response = await fetch(LEAD_ENDPOINT, {
     method: "POST",
     body: formData,
   });
 
-  const data = (await response.json().catch(() => null)) as
-    | { success?: boolean; message?: string }
-    | null;
+  const data = (await response
+    .json()
+    .catch(() => null)) as { success?: boolean; message?: string } | null;
 
   if (!response.ok || data?.success === false) {
     throw new Error(data?.message || "No se pudo enviar la solicitud.");
   }
 }
 
-function renderProgramCard(program: ProgramInfo) {
+function renderProgramCard(programKey: ProgramKey) {
+  const program = PROGRAMS[programKey];
+
   return `
     <article class="hero-assistant-window__program-card">
       <div class="hero-assistant-window__program-media">
@@ -657,14 +241,11 @@ function renderProgramCard(program: ProgramInfo) {
           loading="lazy"
           decoding="async"
         />
-        <span class="hero-assistant-window__program-badge">
-          ${program.emoji} Programa
-        </span>
       </div>
 
       <div class="hero-assistant-window__program-body">
         <strong class="hero-assistant-window__program-title">
-          ${escapeHtml(program.label)}
+          ${program.emoji} ${escapeHtml(program.label)}
         </strong>
 
         <p class="hero-assistant-window__program-description">
@@ -672,20 +253,13 @@ function renderProgramCard(program: ProgramInfo) {
         </p>
 
         <div class="hero-assistant-window__program-links">
-          <a
-            href="${escapeHtml(program.brochureUrl)}"
-            class="hero-assistant-window__program-link hero-assistant-window__program-link--primary"
-            target="_blank"
-            rel="noreferrer"
-          >
-            📄 Ver brochure PDF
+          <a href="${escapeHtml(
+            program.brochureUrl
+          )}" target="_blank" rel="noreferrer">
+            📄 PDF
           </a>
-
-          <a
-            href="${escapeHtml(program.pageUrl)}"
-            class="hero-assistant-window__program-link"
-          >
-            🎓 Conocer programa
+          <a href="${escapeHtml(program.pageUrl)}">
+            Ver programa
           </a>
         </div>
       </div>
@@ -693,251 +267,89 @@ function renderProgramCard(program: ProgramInfo) {
   `;
 }
 
-function renderLeadStatus(state: State) {
-  if (state.leadStatus === "idle") return "";
-
-  if (state.leadStatus === "sending") {
-    return `
-      <div class="hero-assistant-window__send-status is-sending">
-        Enviando solicitud...
-      </div>
-    `;
-  }
-
-  if (state.leadStatus === "sent") {
-    return `
-      <div class="hero-assistant-window__send-status is-sent">
-        Solicitud enviada correctamente.
-      </div>
-    `;
-  }
+function renderInfoTable(message: InfoTableMessage) {
+  const icons: Record<InfoTableMessage["variant"], string> = {
+    costs: "💰",
+    schedules: "🕐",
+    comparison: "⚖️",
+    summary: "✅",
+  };
 
   return `
-    <div class="hero-assistant-window__send-status is-error">
-      No se pudo enviar. Puedes continuar por WhatsApp.
+    <section class="hero-assistant-window__info-table hero-assistant-window__info-table--${message.variant}">
+      <header class="hero-assistant-window__info-table-header">
+        <span>${icons[message.variant]}</span>
+        <div>
+          <strong>${escapeHtml(message.title)}</strong>
+          ${
+            message.subtitle
+              ? `<small>${escapeHtml(message.subtitle)}</small>`
+              : ""
+          }
+        </div>
+      </header>
+
+      <div class="hero-assistant-window__info-table-body">
+        ${message.rows
+          .map(
+            (row) => `
+              <div class="hero-assistant-window__info-table-row${
+                row.highlight ? " is-highlighted" : ""
+              }">
+                <span>${escapeHtml(row.label)}</span>
+                <strong>${escapeHtml(row.value)}</strong>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+
+      ${
+        message.footer
+          ? `<footer>${escapeHtml(message.footer)}</footer>`
+          : ""
+      }
+    </section>
+  `;
+}
+
+function renderMessage(message: ChatMessage) {
+  if (message.kind === "program_card") {
+    return `<div class="hero-assistant-window__message-shell" data-message-id="${message.id}">${renderProgramCard(
+      message.programKey
+    )}</div>`;
+  }
+
+  if (message.kind === "info_table") {
+    return `<div class="hero-assistant-window__message-shell" data-message-id="${message.id}">${renderInfoTable(
+      message
+    )}</div>`;
+  }
+
+  const roleClass =
+    message.role === "bot"
+      ? "hero-assistant-window__message--bot"
+      : "hero-assistant-window__message--user";
+
+  return `
+    <div class="hero-assistant-window__message ${roleClass}" data-message-id="${message.id}">
+      <p class="hero-assistant-window__text">${formatMessage(
+        message.text
+      )}</p>
     </div>
   `;
 }
 
-function renderReplies(state: State) {
-  const disabled = state.locked ? "disabled" : "";
-
-  if (state.replyMode === "programs") {
-    return `
-      <div class="hero-assistant-window__quick-actions hero-assistant-window__quick-actions--programs">
-        ${PROGRAM_KEYS.map(
-          (key) => `
-            <button
-              type="button"
-              class="hero-assistant-window__chip"
-              data-assistant-chip
-              data-chip-type="program"
-              data-chip-value="${key}"
-              ${disabled}
-            >
-              ${PROGRAMS[key].emoji} ${PROGRAMS[key].label}
-            </button>
-          `
-        ).join("")}
-      </div>
-    `;
-  }
-
-  if (state.replyMode === "program_actions" && state.selectedProgram) {
-    const program = PROGRAMS[state.selectedProgram];
-
-    return `
-      <div class="hero-assistant-window__quick-actions">
-        <button
-          type="button"
-          class="hero-assistant-window__chip"
-          data-assistant-chip
-          data-chip-type="action"
-          data-chip-value="costs"
-          ${disabled}
-        >
-          💰 Ver costos
-        </button>
-
-        <button
-          type="button"
-          class="hero-assistant-window__chip"
-          data-assistant-chip
-          data-chip-type="action"
-          data-chip-value="schedules"
-          ${disabled}
-        >
-          🕐 Ver horarios
-        </button>
-
-        <button
-          type="button"
-          class="hero-assistant-window__chip hero-assistant-window__chip--primary"
-          data-assistant-chip
-          data-chip-type="action"
-          data-chip-value="enrollment"
-          ${disabled}
-        >
-          ✅ Inscribirme
-        </button>
-
-        <a
-          href="${program.brochureUrl}"
-          class="hero-assistant-window__chip hero-assistant-window__chip--link"
-          target="_blank"
-          rel="noreferrer"
-        >
-          📄 Brochure PDF
-        </a>
-      </div>
-    `;
-  }
-
-  if (state.replyMode === "schedule_options" && state.selectedProgram) {
-    return `
-      <div class="hero-assistant-window__quick-actions">
-        <button type="button" class="hero-assistant-window__chip" data-assistant-chip data-chip-type="schedule" data-chip-value="mañana" ${disabled}>🌤️ Mañana</button>
-        <button type="button" class="hero-assistant-window__chip" data-assistant-chip data-chip-type="schedule" data-chip-value="tarde" ${disabled}>☀️ Tarde</button>
-        <button type="button" class="hero-assistant-window__chip" data-assistant-chip data-chip-type="schedule" data-chip-value="noche" ${disabled}>🌙 Noche</button>
-      </div>
-    `;
-  }
-
-  if (state.replyMode === "confirmation") {
-    return `
-      <div class="hero-assistant-window__quick-actions">
-        <button
-          type="button"
-          class="hero-assistant-window__chip hero-assistant-window__chip--primary"
-          data-assistant-chip
-          data-chip-type="confirmation"
-          data-chip-value="yes"
-          ${disabled}
-        >
-          ✅ Sí, registrar solicitud
-        </button>
-
-        <button
-          type="button"
-          class="hero-assistant-window__chip"
-          data-assistant-chip
-          data-chip-type="confirmation"
-          data-chip-value="no"
-          ${disabled}
-        >
-          Ahora no
-        </button>
-      </div>
-    `;
-  }
-
-  if (state.replyMode === "skip_email") {
-    return `
-      <div class="hero-assistant-window__quick-actions">
-        <button
-          type="button"
-          class="hero-assistant-window__chip"
-          data-assistant-chip
-          data-chip-type="skip_email"
-          data-chip-value="skip"
-          ${disabled}
-        >
-          Omitir correo
-        </button>
-      </div>
-    `;
-  }
-
-  if (state.replyMode === "skip_dni") {
-    return `
-      <div class="hero-assistant-window__quick-actions">
-        <button
-          type="button"
-          class="hero-assistant-window__chip"
-          data-assistant-chip
-          data-chip-type="skip_dni"
-          data-chip-value="skip"
-          ${disabled}
-        >
-          Omitir DNI
-        </button>
-      </div>
-    `;
-  }
-
-  if (state.replyMode === "completed") {
-    const program = state.selectedProgram
-      ? PROGRAMS[state.selectedProgram]
-      : null;
-
-    return `
-      <div class="hero-assistant-window__quick-actions hero-assistant-window__quick-actions--stacked">
-        ${renderLeadStatus(state)}
-
-        <a
-          href="${buildWhatsAppUrl(state)}"
-          class="hero-assistant-window__chip hero-assistant-window__chip--link hero-assistant-window__chip--primary"
-          target="_blank"
-          rel="noreferrer"
-        >
-          💬 Continuar por WhatsApp
-        </a>
-
-        ${
-          program
-            ? `
-              <a
-                href="${program.brochureUrl}"
-                class="hero-assistant-window__chip hero-assistant-window__chip--link"
-                target="_blank"
-                rel="noreferrer"
-              >
-                📄 Ver brochure PDF
-              </a>
-            `
-            : ""
-        }
-
-        <button
-          type="button"
-          class="hero-assistant-window__chip"
-          data-assistant-chip
-          data-chip-type="change_program"
-          data-chip-value="change"
-          ${disabled}
-        >
-          Consultar otro programa
-        </button>
-      </div>
-    `;
-  }
-
-  return "";
-}
-
-export function renderAssistantWindow() {
+function renderAssistantWindow() {
   return `
-    <aside
-      class="hero-assistant-window hero-assistant-window--light"
-      aria-label="Asistente virtual"
-      data-assistant-window
-    >
+    <aside class="hero-assistant-window" data-assistant-window aria-label="Asistente virtual Cookito">
       <div class="hero-assistant-window__dock">
         <div class="hero-assistant-window__character">
-          <img
-            class="hero-assistant-window__character-image"
-            src="/papa.gif"
-            alt="Asistente virtual Cookito"
-            loading="eager"
-            decoding="async"
-          />
+          <img src="/papa.gif" alt="Cookito" />
         </div>
 
         <div class="hero-assistant-window__launcher-group">
-          <div
-            class="hero-assistant-window__bubble"
-            data-assistant-bubble
-          >
+          <div class="hero-assistant-window__bubble" data-assistant-bubble>
             ¿Conversamos? 😊
           </div>
 
@@ -953,83 +365,58 @@ export function renderAssistantWindow() {
         </div>
       </div>
 
-      <div
-        class="hero-assistant-window__panel"
-        data-assistant-panel
-        aria-hidden="true"
-      >
-        <div class="hero-assistant-window__panel-header">
-          <div>
-            <span class="hero-assistant-window__eyebrow">
-              Asistente virtual
+      <section class="hero-assistant-window__panel" data-assistant-panel aria-hidden="true">
+        <header class="hero-assistant-window__panel-header">
+          <div class="hero-assistant-window__profile">
+            <span class="hero-assistant-window__profile-avatar">
+              <img src="/papa.gif" alt="" aria-hidden="true" />
+              <span class="hero-assistant-window__online-dot"></span>
             </span>
 
-            <h3 class="hero-assistant-window__title">Cookito</h3>
+            <div class="hero-assistant-window__profile-copy">
+              <h3 data-assistant-header-title>Cookito</h3>
+              <p data-assistant-header-status>En línea</p>
+            </div>
+          </div>
 
-            <p class="hero-assistant-window__subtitle">
-              Escríbeme con confianza, como si hablaras con una persona.
-            </p>
+          <div class="hero-assistant-window__header-actions">
+            <button type="button" data-assistant-mute aria-label="Silenciar sonidos" title="Sonidos">🔊</button>
+            <button type="button" data-assistant-close aria-label="Cerrar Cookito">×</button>
+          </div>
+        </header>
+
+        <div class="hero-assistant-window__panel-body">
+          <div class="hero-assistant-window__chat" data-assistant-chat>
+            <div data-assistant-messages></div>
+            <div data-assistant-live></div>
+            <div data-assistant-replies></div>
           </div>
 
           <button
             type="button"
-            class="hero-assistant-window__close"
-            data-assistant-close
-            aria-label="Cerrar Cookito"
-          >
-            ×
-          </button>
-        </div>
-
-        <div class="hero-assistant-window__panel-body">
-          <div
-            class="hero-assistant-window__chat"
-            data-assistant-chat
-          >
-            <div data-assistant-empty></div>
-            <div
-              class="hero-assistant-window__messages"
-              data-assistant-messages
-            ></div>
-            <div
-              class="hero-assistant-window__live"
-              data-assistant-live
-              aria-live="polite"
-            ></div>
-          </div>
+            class="hero-assistant-window__scroll-bottom"
+            data-assistant-scroll-bottom
+            aria-label="Ir al último mensaje"
+          >↓</button>
 
           <div class="hero-assistant-window__composer">
             <input
               type="text"
-              class="hero-assistant-window__input"
-              placeholder="Ej.: Hola, quiero información de Gastronomía"
-              aria-label="Escribe tu consulta"
+              data-assistant-input
+              placeholder="Escribe tu consulta..."
               autocomplete="off"
+              aria-label="Escribe tu consulta"
             />
-
-            <button
-              type="button"
-              class="hero-assistant-window__send"
-              data-assistant-send
-              aria-label="Enviar mensaje"
-            >
-              Enviar
-            </button>
+            <button type="button" data-assistant-send>Enviar</button>
           </div>
-
-          <p class="hero-assistant-window__note">
-            Cookito responderá cuando tú inicies la conversación.
-          </p>
         </div>
-      </div>
+      </section>
     </aside>
   `;
 }
 
 export function mountAssistantWindow() {
-  const existing = document.querySelector("[data-assistant-window]");
-
-  if (!existing) {
+  if (!document.querySelector("[data-assistant-window]")) {
     document.body.insertAdjacentHTML("beforeend", renderAssistantWindow());
   }
 
@@ -1042,934 +429,1389 @@ export function initAssistantWindow() {
   );
 
   windows.forEach((windowEl) => {
-    if (windowEl.dataset.assistantInitialized === "true") {
-      return;
-    }
-
+    if (windowEl.dataset.assistantInitialized === "true") return;
     windowEl.dataset.assistantInitialized = "true";
 
     const toggleButton = windowEl.querySelector<HTMLButtonElement>(
       "[data-assistant-toggle]"
     );
-
     const closeButton = windowEl.querySelector<HTMLButtonElement>(
       "[data-assistant-close]"
     );
-
+    const muteButton = windowEl.querySelector<HTMLButtonElement>(
+      "[data-assistant-mute]"
+    );
     const sendButton = windowEl.querySelector<HTMLButtonElement>(
       "[data-assistant-send]"
     );
-
     const input = windowEl.querySelector<HTMLInputElement>(
-      ".hero-assistant-window__input"
+      "[data-assistant-input]"
     );
-
+    const panel = windowEl.querySelector<HTMLElement>("[data-assistant-panel]");
     const chat = windowEl.querySelector<HTMLElement>("[data-assistant-chat]");
-
-    const emptyHost = windowEl.querySelector<HTMLElement>(
-      "[data-assistant-empty]"
-    );
-
     const messagesHost = windowEl.querySelector<HTMLElement>(
       "[data-assistant-messages]"
     );
-
     const liveHost = windowEl.querySelector<HTMLElement>(
       "[data-assistant-live]"
     );
-
-    const panel = windowEl.querySelector<HTMLElement>(
-      "[data-assistant-panel]"
+    const repliesHost = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-replies]"
     );
-
-    const bubble = windowEl.querySelector<HTMLElement>(
-      "[data-assistant-bubble]"
+    const bubble = windowEl.querySelector<HTMLElement>("[data-assistant-bubble]");
+    const headerTitle = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-header-title]"
+    );
+    const headerStatus = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-header-status]"
+    );
+    const scrollBottomButton = windowEl.querySelector<HTMLButtonElement>(
+      "[data-assistant-scroll-bottom]"
     );
 
     if (
       !toggleButton ||
       !closeButton ||
+      !muteButton ||
       !sendButton ||
       !input ||
+      !panel ||
       !chat ||
-      !emptyHost ||
       !messagesHost ||
       !liveHost ||
-      !panel ||
-      !bubble
+      !repliesHost ||
+      !bubble ||
+      !headerTitle ||
+      !headerStatus ||
+      !scrollBottomButton
     ) {
       return;
     }
 
     const safeToggleButton = toggleButton;
     const safeCloseButton = closeButton;
+    const safeMuteButton = muteButton;
     const safeSendButton = sendButton;
     const safeInput = input;
+    const safePanel = panel;
     const safeChat = chat;
-    const safeEmptyHost = emptyHost;
     const safeMessagesHost = messagesHost;
     const safeLiveHost = liveHost;
-    const safePanel = panel;
+    const safeRepliesHost = repliesHost;
     const safeBubble = bubble;
+    const safeHeaderTitle = headerTitle;
+    const safeHeaderStatus = headerStatus;
+    const safeScrollBottomButton = scrollBottomButton;
 
-    const state = createInitialState();
-    const renderedMessageIds = new Set<string>();
+    const state = loadAssistantState();
+    const audio = new CookitoAudio(state.muted);
+    const pageProgram = detectProgramFromPath();
+
+    let isTyping = false;
+    let locked = false;
+    let queueToken = 0;
     let bubbleTimer: number | null = null;
-    let scrollFrameId: number | null = null;
-    let lastLiveHtml = "";
+    let autoFollow = true;
+    let scrollFrame: number | null = null;
 
-    function lockInteraction(locked: boolean) {
-      state.locked = locked;
-      safeInput.disabled = locked;
-      safeSendButton.disabled = locked;
+    const persist = () => saveAssistantState(state);
+
+    function updateHeader() {
+      safeHeaderTitle.textContent = state.visitorName
+        ? `Cookito · ${firstName(state.visitorName)}`
+        : "Cookito";
+      safeHeaderStatus.textContent = isTyping ? "Escribiendo..." : "En línea";
+      safeMuteButton.textContent = state.muted ? "🔇" : "🔊";
+      safeMuteButton.setAttribute(
+        "aria-label",
+        state.muted ? "Activar sonidos" : "Silenciar sonidos"
+      );
     }
 
-    function renderTypingIndicator() {
-      if (!state.isTyping) return "";
+    function updatePlaceholder() {
+      switch (state.leadStep) {
+        case "ask_visitor_name":
+          safeInput.placeholder = "Escribe tu nombre...";
+          break;
+        case "ask_phone":
+          safeInput.placeholder = "Escribe tu celular...";
+          break;
+        case "ask_email_optional":
+          safeInput.placeholder = "Correo u “omitir”...";
+          break;
+        case "ask_dni_optional":
+          safeInput.placeholder = "DNI u “omitir”...";
+          break;
+        default:
+          safeInput.placeholder = "Ej.: mensualidad de Pastelería";
+      }
+    }
 
-      return `
-        <div
-          class="hero-assistant-window__typing"
-          aria-live="polite"
-        >
-          <span class="hero-assistant-window__typing-avatar">C</span>
+    function isNearBottom() {
+      return safeChat.scrollHeight - safeChat.scrollTop - safeChat.clientHeight <= 48;
+    }
 
-          <div class="hero-assistant-window__typing-bubble">
-            <span class="hero-assistant-window__typing-label">
-              Cookito está escribiendo
-            </span>
+    function stopScroll() {
+      if (scrollFrame !== null) {
+        window.cancelAnimationFrame(scrollFrame);
+        scrollFrame = null;
+      }
+    }
 
-            <span class="hero-assistant-window__typing-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
+    function updateScrollButton() {
+      safeScrollBottomButton.classList.toggle(
+        "is-visible",
+        !autoFollow && !isNearBottom()
+      );
+    }
+
+    function scrollToBottom(immediate = false) {
+      autoFollow = true;
+      stopScroll();
+
+      if (immediate) {
+        safeChat.scrollTop = safeChat.scrollHeight;
+        updateScrollButton();
+        return;
+      }
+
+      const animate = () => {
+        if (!autoFollow) {
+          scrollFrame = null;
+          updateScrollButton();
+          return;
+        }
+
+        const distance = safeChat.scrollHeight - safeChat.scrollTop;
+        if (Math.abs(distance) <= 1) {
+          safeChat.scrollTop = safeChat.scrollHeight;
+          scrollFrame = null;
+          updateScrollButton();
+          return;
+        }
+
+        safeChat.scrollTop += distance * 0.17;
+        scrollFrame = window.requestAnimationFrame(animate);
+      };
+
+      scrollFrame = window.requestAnimationFrame(animate);
+    }
+
+    function appendMessage(message: ChatMessage, forceScroll = false) {
+      safeMessagesHost.insertAdjacentHTML("beforeend", renderMessage(message));
+
+      const lastImage = safeMessagesHost.querySelector<HTMLImageElement>(
+        `[data-message-id="${message.id}"] img`
+      );
+
+      if (lastImage && !lastImage.complete) {
+        lastImage.addEventListener(
+          "load",
+          () => {
+            if (autoFollow) scrollToBottom();
+          },
+          { once: true }
+        );
+      }
+
+      if (forceScroll || autoFollow) scrollToBottom();
+      else updateScrollButton();
+    }
+
+    function renderStoredMessages() {
+      safeMessagesHost.innerHTML = state.messages.map(renderMessage).join("");
+      window.setTimeout(() => scrollToBottom(true), 0);
+    }
+
+    function renderTyping() {
+      safeLiveHost.innerHTML = isTyping
+        ? `
+          <div class="hero-assistant-window__typing">
+            <span>C</span>
+            <div>
+              <small>Cookito está escribiendo</small>
+              <i></i><i></i><i></i>
+            </div>
           </div>
-        </div>
+        `
+        : "";
+
+      updateHeader();
+      if (autoFollow) scrollToBottom();
+    }
+
+    function lockInteraction(value: boolean) {
+      locked = value;
+      safeInput.disabled = value;
+      safeSendButton.disabled = value;
+    }
+
+    function setReplyMode(mode: ReplyMode) {
+      state.replyMode = mode;
+      persist();
+      renderReplies();
+    }
+
+    function replyButton(
+      label: string,
+      type: string,
+      value: string,
+      primary = false
+    ) {
+      return `
+        <button
+          type="button"
+          class="hero-assistant-window__chip${
+            primary ? " hero-assistant-window__chip--primary" : ""
+          }"
+          data-reply-type="${type}"
+          data-reply-value="${value}"
+        >${label}</button>
       `;
     }
 
-    function renderEmptyState() {
-      if (state.messages.length > 0 || state.isTyping) return "";
+    function renderReplies() {
+      let html = "";
 
-      return `
-        <div class="hero-assistant-window__empty">
-          <span class="hero-assistant-window__empty-icon">💬</span>
-          <strong>Escríbeme para comenzar</strong>
-          <small>Carreras, costos, horarios o PDF.</small>
-        </div>
-      `;
-    }
+      if (state.replyMode === "main") {
+        html = [
+          replyButton("🎓 Programas", "intent", "programs"),
+          replyButton("💰 Costos", "intent", "costs"),
+          replyButton("🕐 Horarios", "intent", "schedules"),
+          replyButton("✅ Inscribirme", "intent", "enrollment", true),
+        ].join("");
+      }
 
-    function renderMessage(message: ChatMessage) {
-      if (message.kind === "program_card") {
-        return `
-          <div
-            class="hero-assistant-window__message-shell"
-            data-assistant-message-id="${message.id}"
-          >
-            ${renderProgramCard(PROGRAMS[message.programKey])}
-          </div>
+      if (state.replyMode === "programs") {
+        html = PROGRAM_KEYS.map((key) =>
+          replyButton(`${PROGRAMS[key].emoji} ${PROGRAMS[key].label}`, "program", key)
+        ).join("");
+      }
+
+      if (state.replyMode === "recommendation") {
+        html = [
+          replyButton("👨‍🍳 Cocina", "recommend", "gastronomia"),
+          replyButton("🎂 Postres", "recommend", "pasteleria"),
+          replyButton("🥃 Coctelería", "recommend", "bar_profesional"),
+          replyButton("☕ Café", "recommend", "barismo"),
+          replyButton("🍇 Vinos", "recommend", "sommelier"),
+          replyButton("🔥 Intensivo", "recommend", "cocina_corta"),
+        ].join("");
+      }
+
+      if (state.replyMode === "program_actions" && state.selectedProgram) {
+        html = [
+          replyButton("💰 Costos", "intent", "costs"),
+          replyButton("🕐 Horarios", "intent", "schedules"),
+          replyButton("📄 PDF", "intent", "brochure"),
+          replyButton("✅ Inscribirme", "intent", "enrollment", true),
+        ].join("");
+      }
+
+      if (state.replyMode === "schedule_options") {
+        html = [
+          replyButton("🌤️ Mañana", "schedule", "morning"),
+          replyButton("☀️ Tarde", "schedule", "afternoon"),
+          replyButton("🌙 Noche", "schedule", "night"),
+        ].join("");
+      }
+
+      if (state.replyMode === "contact") {
+        html = `
+          <a class="hero-assistant-window__chip hero-assistant-window__chip--call" href="tel:${SALES_PHONE_LINK}">📞 Llamar ${SALES_PHONE_DISPLAY}</a>
+          <a class="hero-assistant-window__chip hero-assistant-window__chip--primary" href="${buildWhatsAppUrl(
+            state
+          )}" target="_blank" rel="noreferrer">💬 WhatsApp</a>
         `;
       }
 
-      const roleClass =
-        message.role === "bot"
-          ? "hero-assistant-window__message--bot"
-          : "hero-assistant-window__message--user";
-
-      return `
-        <div
-          class="hero-assistant-window__message ${roleClass}"
-          data-assistant-message-id="${message.id}"
-        >
-          <p class="hero-assistant-window__text">
-            ${formatMessage(message.text)}
-          </p>
-        </div>
-      `;
-    }
-
-    function scrollChatToBottom(behavior: ScrollBehavior = "smooth") {
-      if (scrollFrameId !== null) {
-        window.cancelAnimationFrame(scrollFrameId);
+      if (state.replyMode === "skip_email") {
+        html = replyButton("Omitir correo", "skip", "email");
       }
 
-      scrollFrameId = window.requestAnimationFrame(() => {
-        safeChat.scrollTo({
-          top: safeChat.scrollHeight,
-          behavior,
-        });
-        scrollFrameId = null;
-      });
-    }
-
-    function bindImageScroll() {
-      const images = Array.from(
-        safeMessagesHost.querySelectorAll<HTMLImageElement>(
-          "img:not([data-assistant-scroll-bound])"
-        )
-      );
-
-      images.forEach((image) => {
-        image.dataset.assistantScrollBound = "true";
-
-        if (!image.complete) {
-          image.addEventListener(
-            "load",
-            () => scrollChatToBottom("smooth"),
-            { once: true }
-          );
-        }
-      });
-    }
-
-    function render() {
-      let addedMessage = false;
-
-      state.messages.forEach((message) => {
-        if (renderedMessageIds.has(message.id)) return;
-
-        safeMessagesHost.insertAdjacentHTML("beforeend", renderMessage(message));
-        renderedMessageIds.add(message.id);
-        addedMessage = true;
-      });
-
-      safeEmptyHost.innerHTML = renderEmptyState();
-
-      const liveHtml = `
-        ${renderTypingIndicator()}
-        ${!state.isTyping ? renderReplies(state) : ""}
-      `;
-
-      const liveChanged = liveHtml !== lastLiveHtml;
-
-      if (liveChanged) {
-        safeLiveHost.innerHTML = liveHtml;
-        lastLiveHtml = liveHtml;
-        bindReplyEvents();
+      if (state.replyMode === "skip_dni") {
+        html = replyButton("Omitir DNI", "skip", "dni");
       }
 
-      bindImageScroll();
-
-      if (addedMessage || liveChanged) {
-        scrollChatToBottom("smooth");
+      if (state.replyMode === "resume_lead") {
+        html = [
+          replyButton("Continuar solicitud", "resume", "yes", true),
+          replyButton("Seguir consultando", "resume", "no"),
+        ].join("");
       }
+
+      if (state.replyMode === "lead_review") {
+        html = [
+          replyButton("✅ Enviar solicitud", "lead_review", "send", true),
+          replyButton("✏️ Corregir celular", "lead_review", "phone"),
+          replyButton("Cancelar", "lead_review", "cancel"),
+        ].join("");
+      }
+
+      if (state.replyMode === "completed") {
+        html = `
+          <a class="hero-assistant-window__chip hero-assistant-window__chip--call" href="tel:${SALES_PHONE_LINK}">📞 Llamar</a>
+          <a class="hero-assistant-window__chip hero-assistant-window__chip--primary" href="${buildWhatsAppUrl(
+            state
+          )}" target="_blank" rel="noreferrer">💬 WhatsApp</a>
+          ${replyButton("Otra consulta", "reset", "consult")}
+        `;
+      }
+
+      if (
+        state.pausedLeadStep !== "idle" &&
+        state.replyMode !== "completed" &&
+        state.replyMode !== "resume_lead" &&
+        state.replyMode !== "lead_review"
+      ) {
+        html += replyButton(
+          "▶ Continuar solicitud",
+          "resume",
+          "yes",
+          true
+        );
+      }
+
+      safeRepliesHost.innerHTML = html
+        ? `<div class="hero-assistant-window__quick-actions">${html}</div>`
+        : "";
+
+      bindReplyEvents();
+      if (autoFollow) scrollToBottom();
     }
 
     function addUserMessage(text: string) {
-      state.messages.push({
+      const message: ChatMessage = {
         id: createMessageId(),
         role: "user",
         kind: "text",
         text,
-      });
+      };
 
-      render();
+      audio.playSend();
+      state.messages.push(message);
+      persist();
+      appendMessage(message, true);
+    }
+
+    function addBotItem(item: BotSequenceItem) {
+      let message: ChatMessage;
+
+      if (item.kind === "text") {
+        message = {
+          id: createMessageId(),
+          role: "bot",
+          kind: "text",
+          text: item.text,
+        };
+      } else if (item.kind === "program_card") {
+        message = {
+          id: createMessageId(),
+          role: "bot",
+          kind: "program_card",
+          programKey: item.programKey,
+        };
+      } else {
+        message = {
+          id: createMessageId(),
+          role: "bot",
+          kind: "info_table",
+          variant: item.variant,
+          title: item.title,
+          subtitle: item.subtitle,
+          rows: item.rows,
+          footer: item.footer,
+        };
+      }
+
+      state.messages.push(message);
+      persist();
+      audio.playReceive();
+      appendMessage(message);
     }
 
     async function sendBotSequence(
       items: BotSequenceItem[],
       replyMode: ReplyMode = "none"
     ) {
-      const token = ++state.queueToken;
-
-      state.replyMode = "none";
+      const token = ++queueToken;
+      setReplyMode("none");
       lockInteraction(true);
 
-      for (const item of items) {
-        state.isTyping = true;
-        render();
+      await wait(FIRST_RESPONSE_PAUSE);
 
-        await wait(getTypingDelay(item));
+      for (let index = 0; index < items.length; index += 1) {
+        if (token !== queueToken) return;
 
-        if (token !== state.queueToken) {
-          state.isTyping = false;
-          lockInteraction(false);
-          render();
+        isTyping = true;
+        audio.startTyping();
+        renderTyping();
+
+        await wait(getTypingDelay(items[index]));
+
+        if (token !== queueToken) {
+          audio.stopTyping();
+          isTyping = false;
+          renderTyping();
           return;
         }
 
-        state.isTyping = false;
+        audio.stopTyping();
+        isTyping = false;
+        renderTyping();
+        addBotItem(items[index]);
 
-        if (item.kind === "text") {
-          state.messages.push({
-            id: createMessageId(),
-            role: "bot",
-            kind: "text",
-            text: item.text,
-          });
-        } else {
-          state.messages.push({
-            id: createMessageId(),
-            role: "bot",
-            kind: "program_card",
-            programKey: item.programKey,
-          });
+        if (index < items.length - 1) {
+          await wait(getBetweenPause(items[index]));
         }
-
-        render();
-        await wait(150);
       }
 
-      if (token !== state.queueToken) return;
-
-      state.replyMode = replyMode;
       lockInteraction(false);
-      render();
-
-      window.setTimeout(() => {
-        safeInput.focus();
-      }, 80);
+      setReplyMode(replyMode);
+      safeInput.focus();
     }
 
     function selectProgram(programKey: ProgramKey) {
+      if (state.selectedProgram && state.selectedProgram !== programKey) {
+        state.previousProgram = state.selectedProgram;
+      }
+
       state.selectedProgram = programKey;
-      state.leadStatus = "idle";
-      state.leadError = "";
+      persist();
     }
 
-    function askForProgram(
-      action: PendingAction,
-      messages: BotSequenceItem[]
-    ) {
-      state.pendingAction = action;
-      state.step = "program";
-
-      void sendBotSequence(messages, "programs");
-    }
-
-    function showProgramInformation(programKey: ProgramKey) {
-      const program = PROGRAMS[programKey];
-
-      selectProgram(programKey);
-      state.step = "idle";
-      state.pendingAction = "info";
+    function programNeeded(intent: Intent) {
+      state.currentIntent = intent;
+      state.pendingQuestion = "choose_program";
+      persist();
 
       void sendBotSequence(
         [
           {
             kind: "text",
-            text: `¡Buena elección! ${program.emoji} Te cuento lo esencial de ${program.label}.`,
-          },
-          {
-            kind: "program_card",
-            programKey,
-          },
-          {
-            kind: "text",
-            text: "¿Vemos costos, horarios o inscripción? 😊",
+            text: `${friendlyName(state)}, ¿de qué programa deseas esa información?`,
           },
         ],
-        "program_actions"
+        "programs"
       );
     }
 
-    function showProgramCosts(programKey: ProgramKey) {
-      const program = PROGRAMS[programKey];
-      const pricing = program.pricing;
-
+    function answerCosts(programKey: ProgramKey, detail: CostDetail) {
       selectProgram(programKey);
-      state.step = "idle";
-      state.pendingAction = "costs";
-
-      if (
-        pricing.inscription === null ||
-        pricing.enrollment === null ||
-        pricing.monthly === null ||
-        pricing.uniform === null
-      ) {
-        void sendBotSequence(
-          [
-            {
-              kind: "text",
-              text: `Claro 😊 El costo de ${program.label} cambia según el taller.`,
-            },
-            {
-              kind: "text",
-              text:
-                pricing.note ??
-                "Dime cuál te interesa y te ayudo a confirmarlo.",
-            },
-          ],
-          "program_actions"
-        );
-        return;
-      }
-
-      const entryPayment =
-        pricing.inscription + pricing.enrollment + pricing.uniform;
+      state.currentIntent = "costs";
+      state.currentCostDetail = detail;
+      state.pendingQuestion = "";
+      persist();
 
       void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: `Estos son los costos de ${program.label} 😊`,
-          },
-          {
-            kind: "text",
-            text: `Inscripción: ${money(pricing.inscription)}\nMatrícula: ${money(pricing.enrollment)}\nMensualidad: ${money(pricing.monthly)}\nUniforme: ${money(pricing.uniform)}\n\nInicio referencial: ${money(entryPayment)}.`,
-          },
-          {
-            kind: "text",
-            text: "¿Revisamos horarios o dejamos tu solicitud lista? 🙌",
-          },
-        ],
+        costSequence(PROGRAMS[programKey], detail, state.visitorName),
         "program_actions"
       );
     }
 
-    function showProgramSchedules(
+    function answerSchedules(
       programKey: ProgramKey,
-      preference?: string | null
+      preference: SchedulePreference
     ) {
-      const program = PROGRAMS[programKey];
-
       selectProgram(programKey);
-      state.pendingAction = "schedules";
-
-      if (!preference) {
-        state.step = "idle";
-
-        void sendBotSequence(
-          [
-            {
-              kind: "text",
-              text: `Claro 🕐 ¿Qué turno buscas para ${program.label}?`,
-            },
-            {
-              kind: "text",
-              text: "Mañana, tarde o noche.",
-            },
-          ],
-          "schedule_options"
-        );
-        return;
-      }
-
-      state.step = "confirm_enrollment";
-      state.pendingAction = "enrollment";
+      state.currentIntent = "schedules";
+      state.schedulePreference = preference;
+      state.pendingQuestion = preference ? "" : "choose_schedule";
+      persist();
 
       void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: `Perfecto 😊 Buscas turno de ${preference}.`,
-          },
-          {
-            kind: "text",
-            text: "Un asesor confirmará el horario y las vacantes. ¿Registramos tu solicitud?",
-          },
-        ],
-        "confirmation"
+        scheduleSequence(PROGRAMS[programKey], preference, state.visitorName),
+        preference ? "program_actions" : "schedule_options"
       );
     }
 
-    function showProgramBrochure(programKey: ProgramKey) {
-      const program = PROGRAMS[programKey];
-
+    function answerInfo(programKey: ProgramKey) {
       selectProgram(programKey);
-      state.step = "idle";
-      state.pendingAction = "brochure";
+      state.currentIntent = "info";
+      state.pendingQuestion = "";
+      persist();
 
       void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: `Aquí tienes la información de ${program.label} 📄`,
-          },
-          {
-            kind: "program_card",
-            programKey,
-          },
-        ],
+        programInfoSequence(PROGRAMS[programKey], state.visitorName),
+        "program_actions"
+      );
+    }
+
+    function answerBrochure(programKey: ProgramKey) {
+      selectProgram(programKey);
+      state.currentIntent = "brochure";
+      state.pendingQuestion = "";
+      persist();
+
+      void sendBotSequence(
+        brochureSequence(PROGRAMS[programKey], state.visitorName),
         "program_actions"
       );
     }
 
     function startEnrollment(programKey: ProgramKey) {
-      const program = PROGRAMS[programKey];
-
       selectProgram(programKey);
-      state.step = "ask_name";
-      state.pendingAction = "enrollment";
-      state.replyMode = "none";
-      state.name = "";
-      state.phone = "";
-      state.email = "";
-      state.dni = "";
+      state.currentIntent = "enrollment";
+      state.leadStep = "ask_phone";
+      state.pausedLeadStep = "idle";
+      state.pendingQuestion = "";
+      persist();
+      updatePlaceholder();
 
       void sendBotSequence([
         {
           kind: "text",
-          text: `¡Excelente! 🙌 Iniciemos tu solicitud para ${program.label}.`,
+          text: `¡Excelente, ${friendlyName(state)}! 🙌 Iniciaremos tu solicitud para ${PROGRAMS[programKey].label}.`,
         },
         {
           kind: "text",
-          text: "¿Cuál es tu nombre? 😊",
+          text: "¿Cuál es tu número de celular?",
         },
       ]);
     }
 
-    function cancelEnrollmentConfirmation() {
-      state.step = "idle";
-      state.pendingAction = "info";
-      state.replyMode = "none";
+    function resumeLead() {
+      const step =
+        state.pausedLeadStep !== "idle"
+          ? state.pausedLeadStep
+          : state.leadStep;
+
+      state.leadStep = step;
+      state.pausedLeadStep = "idle";
+      state.pendingQuestion = "";
+      persist();
+      updatePlaceholder();
+
+      const prompts: Partial<Record<LeadStep, string>> = {
+        ask_phone: "Retomemos 😊 ¿Cuál es tu número de celular?",
+        ask_email_optional:
+          "Retomemos 😊 Escribe tu correo o toca “Omitir correo” .",
+        ask_dni_optional:
+          "Retomemos 😊 Escribe tu DNI o toca “Omitir DNI” .",
+      };
+
+      const mode: ReplyMode =
+        step === "ask_email_optional"
+          ? "skip_email"
+          : step === "ask_dni_optional"
+            ? "skip_dni"
+            : "none";
 
       void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: "No hay problema 😊 No registraré la solicitud por ahora.",
-          },
-          {
-            kind: "text",
-            text: "Puedes seguir consultando costos, horarios o información del programa.",
-          },
-        ],
-        state.selectedProgram ? "program_actions" : "none"
+        [{ kind: "text", text: prompts[step] ?? "Continuemos 😊" }],
+        mode
       );
     }
 
-    function handleEnrollmentConfirmation(value: string) {
-      const confirmation = detectConfirmation(value);
-
-      if (confirmation === "yes") {
-        if (state.selectedProgram) {
-          startEnrollment(state.selectedProgram);
-        } else {
-          state.step = "program";
-          state.pendingAction = "enrollment";
-
-          void sendBotSequence(
-            [
-              {
-                kind: "text",
-                text: "¡Perfecto! 🙌 Elige el programa para registrar tu solicitud.",
-              },
-            ],
-            "programs"
-          );
-        }
-        return;
-      }
-
-      if (confirmation === "no") {
-        cancelEnrollmentConfirmation();
-        return;
-      }
-
-      state.step = "confirm_enrollment";
-
-      void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: "Para continuar, respóndeme “Sí” para registrar tu solicitud o “No” para dejarla para después 😊",
-          },
-        ],
-        "confirmation"
-      );
-    }
-
-    function showAdvisor(programKey?: ProgramKey | null) {
-      if (programKey) {
-        selectProgram(programKey);
-      }
-
-      state.step = "idle";
-      state.pendingAction = "advisor";
-
-      const program = state.selectedProgram
-        ? PROGRAMS[state.selectedProgram]
-        : null;
-
-      void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: program
-              ? `Claro 😊 Un asesor puede ayudarte con ${program.label}.`
-              : "Claro 😊 Puedes conversar con un asesor por WhatsApp.",
-          },
-          {
-            kind: "text",
-            text: "También puedo registrar tus datos aquí.",
-          },
-        ],
-        state.selectedProgram ? "program_actions" : "none"
-      );
-    }
-
-    function resolveSelectedProgram(programKey: ProgramKey) {
-      switch (state.pendingAction) {
-        case "costs":
-          showProgramCosts(programKey);
-          return;
-
-        case "schedules":
-          showProgramSchedules(programKey);
-          return;
-
-        case "enrollment":
-          startEnrollment(programKey);
-          return;
-
-        case "brochure":
-          showProgramBrochure(programKey);
-          return;
-
-        case "advisor":
-          showAdvisor(programKey);
-          return;
-
-        case "info":
-        default:
-          showProgramInformation(programKey);
-      }
-    }
-
-    function handleIntent(
-      intent: Intent,
-      detectedProgram: ProgramKey | null,
-      originalText: string
-    ) {
-      const selectedProgram =
-        detectedProgram ?? (state.selectedProgram || null);
-
-      switch (intent) {
-        case "greeting":
-          state.step = "idle";
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "¡Hola! 😊 Soy Cookito.",
-            },
-            {
-              kind: "text",
-              text: "¿Qué programa o consulta tienes en mente?",
-            },
-          ]);
-          return;
-
-        case "programs":
-          state.step = "program";
-          state.pendingAction = "info";
-          void sendBotSequence(
-            [
-              {
-                kind: "text",
-                text: "Tenemos Gastronomía, Pastelería, Bar, Barismo, Sommelier y Talleres 😊",
-              },
-              {
-                kind: "text",
-                text: "Elige una opción 👇",
-              },
-            ],
-            "programs"
-          );
-          return;
-
-        case "info":
-          if (selectedProgram) {
-            showProgramInformation(selectedProgram);
-          } else {
-            askForProgram("info", [
-              {
-                kind: "text",
-                text: "Claro 😊 ¿Sobre qué programa deseas información?",
-              },
-            ]);
-          }
-          return;
-
-        case "costs":
-          if (selectedProgram) {
-            showProgramCosts(selectedProgram);
-          } else {
-            askForProgram("costs", [
-              {
-                kind: "text",
-                text: "Claro 😊 ¿De qué programa deseas conocer los costos?",
-              },
-            ]);
-          }
-          return;
-
-        case "schedules":
-          if (selectedProgram) {
-            showProgramSchedules(
-              selectedProgram,
-              detectSchedulePreference(originalText)
-            );
-          } else {
-            askForProgram("schedules", [
-              {
-                kind: "text",
-                text: "¿De qué programa deseas consultar horarios? 🕐",
-              },
-            ]);
-          }
-          return;
-
-        case "enrollment":
-          if (selectedProgram) {
-            startEnrollment(selectedProgram);
-          } else {
-            askForProgram("enrollment", [
-              {
-                kind: "text",
-                text: "¡Perfecto! 🙌 ¿En qué programa deseas inscribirte?",
-              },
-            ]);
-          }
-          return;
-
-        case "brochure":
-          if (selectedProgram) {
-            showProgramBrochure(selectedProgram);
-          } else {
-            askForProgram("brochure", [
-              {
-                kind: "text",
-                text: "Claro 📄 ¿De qué programa deseas el PDF?",
-              },
-            ]);
-          }
-          return;
-
-        case "advisor":
-          showAdvisor(selectedProgram);
-          return;
-
-        case "duration":
-          if (selectedProgram) {
-            void sendBotSequence(
-              [
-                {
-                  kind: "text",
-                  text: `La duración de ${PROGRAMS[selectedProgram].label} depende de la convocatoria 😊`,
-                },
-                {
-                  kind: "program_card",
-                  programKey: selectedProgram,
-                },
-              ],
-              "program_actions"
-            );
-          } else {
-            askForProgram("brochure", [
-              {
-                kind: "text",
-                text: "¿De qué programa deseas conocer la duración?",
-              },
-            ]);
-          }
-          return;
-
-        case "requirements":
-          if (selectedProgram) {
-            void sendBotSequence(
-              [
-                {
-                  kind: "text",
-                  text: "Para contactarte pediremos nombre y celular. Correo y DNI son opcionales 😊",
-                },
-                {
-                  kind: "text",
-                  text: "El asesor confirmará cualquier requisito adicional.",
-                },
-              ],
-              "program_actions"
-            );
-          } else {
-            askForProgram("info", [
-              {
-                kind: "text",
-                text: "¿De qué programa deseas conocer los requisitos?",
-              },
-            ]);
-          }
-          return;
-
-        case "location":
-          state.step = "idle";
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "📍 Un asesor puede enviarte la ubicación exacta por WhatsApp.",
-            },
-          ]);
-          return;
-
-        case "thanks":
-          state.step = "idle";
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "¡Con gusto! 😊 ¿Te ayudo con algo más?",
-            },
-          ]);
-          return;
-
-        case "farewell":
-          state.step = "idle";
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "¡Hasta pronto! 👋 Aquí estaré cuando me necesites.",
-            },
-          ]);
-          return;
-
-        case "unknown":
-        default:
-          if (detectedProgram) {
-            showProgramInformation(detectedProgram);
-            return;
-          }
-
-          state.step = "idle";
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "No entendí del todo 😅",
-            },
-            {
-              kind: "text",
-              text: "Prueba: “costos de Gastronomía” o “PDF de Pastelería”.",
-            },
-          ]);
-      }
-    }
-
-    async function submitLead() {
-      if (state.leadStatus === "sending") return;
-
-      state.leadStatus = "sending";
-      render();
-
-      try {
-        await sendLead(state);
-        state.leadStatus = "sent";
-      } catch (error) {
-        state.leadStatus = "error";
-        state.leadError =
-          error instanceof Error ? error.message : "Error desconocido";
-      } finally {
-        render();
-      }
-    }
-
-    function finishEnrollment() {
-      const program = state.selectedProgram
-        ? PROGRAMS[state.selectedProgram]
-        : null;
-
-      if (!program) return;
-
-      state.step = "completed";
-      state.replyMode = "none";
-
-      void submitLead();
-
-      void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text: `¡Listo, ${getFirstName(state.name)}! 🎉 Tu solicitud para ${program.label} fue registrada.`,
-          },
-          {
-            kind: "text",
-            text: "Un asesor te escribirá pronto 😊",
-          },
-        ],
-        "completed"
-      );
-    }
-
-    function handleLeadStep(
-      value: string,
-      intent: Intent,
-      detectedProgram: ProgramKey | null
-    ) {
-      const interruptingIntents: Intent[] = [
-        "programs",
-        "info",
-        "costs",
-        "schedules",
-        "brochure",
-        "advisor",
-        "duration",
-        "requirements",
-        "location",
-      ];
-
-      if (interruptingIntents.includes(intent)) {
-        handleIntent(intent, detectedProgram, value);
-        return;
-      }
-
+    function pauseLeadForQuestion() {
       if (
-        hasAny(value, [
-          "cancelar",
-          "salir",
-          "volver al menu",
-          "otro programa",
-        ])
+        state.leadStep === "ask_phone" ||
+        state.leadStep === "ask_email_optional" ||
+        state.leadStep === "ask_dni_optional"
       ) {
-        state.step = "idle";
-        void sendBotSequence([
-          {
-            kind: "text",
-            text: "Solicitud pausada 😊 ¿Qué deseas consultar?",
-          },
-        ]);
-        return;
+        state.pausedLeadStep = state.leadStep;
+        state.leadStep = "idle";
+        state.pendingQuestion = "resume_lead";
+        persist();
+        updatePlaceholder();
+        return true;
       }
 
-      if (state.step === "ask_name") {
-        const name = value.trim();
+      return false;
+    }
 
-        if (name.length < 2 || /\d/.test(name)) {
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "No pude identificar tu nombre 😅 Escríbelo otra vez.",
-            },
-          ]);
-          return;
-        }
+    function appendResumePromptIfNeeded(wasPaused: boolean) {
+      if (!wasPaused) return;
 
-        state.name = name;
-        state.step = "ask_phone";
-        void sendBotSequence([
-          {
-            kind: "text",
-            text: `Mucho gusto, ${getFirstName(name)} 😊 ¿Cuál es tu celular?`,
-          },
-        ]);
-        return;
-      }
-
-      if (state.step === "ask_phone") {
-        if (!validPhone(value)) {
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "Escribe un celular de 9 a 12 dígitos 📱",
-            },
-          ]);
-          return;
-        }
-
-        state.phone = value.replace(/\D/g, "");
-        state.step = "ask_email_optional";
+      window.setTimeout(() => {
         void sendBotSequence(
           [
             {
               kind: "text",
-              text: "Perfecto 🙌 Ahora puedes dejar tu correo o tocar “Omitir correo”.",
+              text: "¿Retomamos tu solicitud? 😊",
+            },
+          ],
+          "resume_lead"
+        );
+      }, 250);
+    }
+
+    function handleComparison(analysis: MessageAnalysis) {
+      let keys = analysis.programs;
+
+      if (keys.length < 2 && state.selectedProgram && state.previousProgram) {
+        keys = [state.previousProgram, state.selectedProgram];
+      }
+
+      if (keys.length < 2) {
+        keys = PROGRAM_KEYS.filter(
+          (key) => PROGRAMS[key].pricing.monthly !== null
+        );
+      }
+
+      state.currentIntent = "compare";
+      persist();
+
+      void sendBotSequence(
+        comparisonSequence(
+          keys,
+          analysis.costDetail,
+          state.visitorName
+        ),
+        "main"
+      );
+    }
+
+    function handleFaq(intent: Intent, programKey: ProgramKey | null) {
+      const faqIntent = intent as
+        | "duration"
+        | "requirements"
+        | "location"
+        | "modality"
+        | "certification"
+        | "start_date"
+        | "frequency";
+
+      state.currentIntent = intent;
+      persist();
+
+      void sendBotSequence(
+        faqSequence(
+          faqIntent,
+          state.visitorName,
+          programKey ? PROGRAMS[programKey] : undefined
+        ),
+        intent === "location"
+          ? "contact"
+          : programKey
+            ? "program_actions"
+            : "main"
+      );
+    }
+
+    function handlePendingAnswer(analysis: MessageAnalysis) {
+      if (!analysis.affirmative && !analysis.negative) return false;
+
+      if (state.pendingQuestion === "confirm_enrollment") {
+        if (analysis.affirmative && state.selectedProgram) {
+          startEnrollment(state.selectedProgram);
+        } else {
+          state.pendingQuestion = "";
+          persist();
+          void sendBotSequence(
+            [{ kind: "text", text: "Está bien 😊 ¿Qué deseas revisar?" }],
+            "main"
+          );
+        }
+        return true;
+      }
+
+      if (state.pendingQuestion === "confirm_brochure") {
+        if (analysis.affirmative && state.selectedProgram) {
+          answerBrochure(state.selectedProgram);
+        } else {
+          state.pendingQuestion = "";
+          persist();
+          void sendBotSequence(
+            [{ kind: "text", text: "De acuerdo 😊 ¿Qué más deseas saber?" }],
+            "main"
+          );
+        }
+        return true;
+      }
+
+      if (state.pendingQuestion === "resume_lead") {
+        if (analysis.affirmative) {
+          resumeLead();
+        } else {
+          state.pausedLeadStep = "idle";
+          state.pendingQuestion = "";
+          persist();
+          void sendBotSequence(
+            [{ kind: "text", text: "Perfecto 😊 Seguimos conversando." }],
+            "main"
+          );
+        }
+        return true;
+      }
+
+      if (state.pendingQuestion === "confirm_lead") {
+        if (analysis.affirmative) {
+          void submitConfirmedLead();
+        } else {
+          state.pendingQuestion = "";
+          state.leadStep = "idle";
+          persist();
+          void sendBotSequence(
+            [{ kind: "text", text: "Está bien 😊 No enviaré la solicitud." }],
+            "main"
+          );
+        }
+        return true;
+      }
+
+      return false;
+    }
+
+    function resolveProgramForAnalysis(analysis: MessageAnalysis) {
+      return analysis.programs[0] ?? (state.selectedProgram || null);
+    }
+
+    function handleAnalysis(analysis: MessageAnalysis) {
+      if (handlePendingAnswer(analysis)) return;
+
+      const detectedProgram = analysis.programs[0] ?? null;
+      const programKey = resolveProgramForAnalysis(analysis);
+
+      if (detectedProgram) selectProgram(detectedProgram);
+
+      if (analysis.intent === "clarification") {
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `Disculpa por no entenderte bien, ${friendlyName(state)} 🙏`,
+            },
+            {
+              kind: "text",
+              text: "Cuéntame nuevamente qué deseas saber. Puedes preguntarme por costos, horarios, inicio, duración, requisitos, PDF o inscripción.",
+            },
+          ],
+          "main"
+        );
+        return;
+      }
+
+      if (analysis.intent === "compare") {
+        handleComparison(analysis);
+        return;
+      }
+
+      if (analysis.intent === "recommendation") {
+        state.currentIntent = "info";
+        persist();
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `${friendlyName(state)}, te ayudo a elegir 😊 ¿Qué te atrae más?`,
+            },
+          ],
+          "recommendation"
+        );
+        return;
+      }
+
+      if (analysis.intent === "greeting") {
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `¡Hola de nuevo, ${friendlyName(state)}! 😊 ¿Qué deseas consultar?`,
+            },
+          ],
+          "main"
+        );
+        return;
+      }
+
+      if (analysis.intent === "programs") {
+        state.currentIntent = "info";
+        state.pendingQuestion = "choose_program";
+        persist();
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `Claro, ${friendlyName(
+                state
+              )} 😊 Estas son nuestras carreras y programas de estudio:`,
+            },
+          ],
+          "programs"
+        );
+        return;
+      }
+
+      if (analysis.intent === "costs") {
+        if (!programKey) {
+          programNeeded("costs");
+          return;
+        }
+        answerCosts(programKey, analysis.costDetail);
+        return;
+      }
+
+      if (analysis.intent === "schedules") {
+        if (!programKey) {
+          programNeeded("schedules");
+          return;
+        }
+        answerSchedules(programKey, analysis.schedulePreference);
+        return;
+      }
+
+      if (analysis.intent === "brochure") {
+        if (!programKey) {
+          programNeeded("brochure");
+          return;
+        }
+        answerBrochure(programKey);
+        return;
+      }
+
+      if (analysis.intent === "enrollment") {
+        if (!programKey) {
+          programNeeded("enrollment");
+          return;
+        }
+        startEnrollment(programKey);
+        return;
+      }
+
+      if (analysis.intent === "info") {
+        if (!programKey) {
+          programNeeded("info");
+          return;
+        }
+        answerInfo(programKey);
+        return;
+      }
+
+      if (
+        analysis.intent === "duration" ||
+        analysis.intent === "requirements" ||
+        analysis.intent === "location" ||
+        analysis.intent === "modality" ||
+        analysis.intent === "certification" ||
+        analysis.intent === "start_date" ||
+        analysis.intent === "frequency"
+      ) {
+        handleFaq(analysis.intent, programKey);
+        return;
+      }
+
+      if (analysis.intent === "advisor") {
+        state.currentIntent = "advisor";
+        persist();
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `${friendlyName(state)}, nuestro número es ${SALES_PHONE_DISPLAY} 📲`,
+            },
+            {
+              kind: "text",
+              text: "Puedes llamar o continuar por WhatsApp con el resumen de lo que estabas consultando.",
+            },
+          ],
+          "contact"
+        );
+        return;
+      }
+
+      if (analysis.intent === "thanks") {
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `¡Con gusto, ${friendlyName(state)}! 😊 ¿Qué más deseas revisar?`,
+            },
+          ],
+          "main"
+        );
+        return;
+      }
+
+      if (analysis.intent === "farewell") {
+        void sendBotSequence([
+          {
+            kind: "text",
+            text: `¡Hasta pronto, ${friendlyName(state)}! 👋`,
+          },
+        ]);
+        return;
+      }
+
+      // Si solo menciona otra carrera, conserva el último tema.
+      if (detectedProgram) {
+        switch (state.currentIntent) {
+          case "costs":
+            answerCosts(detectedProgram, state.currentCostDetail);
+            return;
+          case "schedules":
+            answerSchedules(detectedProgram, state.schedulePreference);
+            return;
+          case "brochure":
+            answerBrochure(detectedProgram);
+            return;
+          case "enrollment":
+            startEnrollment(detectedProgram);
+            return;
+          default:
+            answerInfo(detectedProgram);
+            return;
+        }
+      }
+
+      if (
+        analysis.intent === "unknown" &&
+        analysis.suggestedIntent !== "unknown" &&
+        analysis.confidence >= 0.45
+      ) {
+        const labels: Partial<Record<Intent, string>> = {
+          costs: "los costos",
+          schedules: "los horarios",
+          enrollment: "la inscripción",
+          brochure: "el brochure PDF",
+          info: "información del programa",
+        };
+
+        const label = labels[analysis.suggestedIntent];
+        if (label) {
+          void sendBotSequence(
+            [
+              {
+                kind: "text",
+                text: `¿Te refieres a ${label}? 😊`,
+              },
+            ],
+            "main"
+          );
+          return;
+        }
+      }
+
+      void sendBotSequence(
+        [
+          {
+            kind: "text",
+            text: `Disculpa, ${friendlyName(state)}, no entendí bien esa pregunta 🙏`,
+          },
+          {
+            kind: "text",
+            text: "¿Qué deseas saber? Escríbelo de otra forma y lo analizaré nuevamente.",
+          },
+        ],
+        "main"
+      );
+    }
+
+    function greetingForNameStep(value: string) {
+      const normalized = normalizeText(value);
+
+      if (textHasTerm(normalized, "buenos dias")) {
+        return "¡Buenos días! 😊";
+      }
+
+      if (textHasTerm(normalized, "buenas tardes")) {
+        return "¡Buenas tardes! 😊";
+      }
+
+      if (textHasTerm(normalized, "buenas noches")) {
+        return "¡Buenas noches! 😊";
+      }
+
+      return "¡Hola! 😊";
+    }
+
+    function formatVisitorName(value: string) {
+      return value
+        .trim()
+        .replace(/\s+/g, " ")
+        .split(" ")
+        .map((word) => {
+          if (!word) return word;
+
+          return (
+            word.charAt(0).toLocaleUpperCase("es-PE") +
+            word.slice(1).toLocaleLowerCase("es-PE")
+          );
+        })
+        .join(" ");
+    }
+
+    function isValidVisitorName(value: string) {
+      const name = value.trim();
+      const normalized = normalizeText(name);
+      const words = name.split(/\s+/).filter(Boolean);
+
+      if (
+        /\d/.test(name) ||
+        name.length < 2 ||
+        name.length > 60 ||
+        words.length < 1 ||
+        words.length > 4
+      ) {
+        return false;
+      }
+
+      const validWordPattern =
+        /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'-]+$/u;
+
+      if (!words.every((word) => validWordPattern.test(word))) {
+        return false;
+      }
+
+      const blockedFirstWords = new Set([
+        "hola",
+        "ola",
+        "holaa",
+        "holi",
+        "buenas",
+        "buenos",
+        "buen",
+        "quiero",
+        "deseo",
+        "necesito",
+        "busco",
+        "soy",
+        "me",
+        "mi",
+        "un",
+        "una",
+        "el",
+        "la",
+        "de",
+        "del",
+        "interesado",
+        "interesada",
+        "estudiante",
+        "cliente",
+      ]);
+
+      const firstWord = normalizeText(words[0] ?? "");
+
+      if (blockedFirstWords.has(firstWord)) {
+        return false;
+      }
+
+      const nonNameTerms = [
+        "informacion",
+        "costos",
+        "precio",
+        "horarios",
+        "matricula",
+        "inscripcion",
+        "carrera",
+        "programa",
+        "estudiar",
+        "gastronomia",
+        "pasteleria",
+        "barismo",
+        "sommelier",
+        "cocina",
+        "bar profesional",
+      ];
+
+      if (
+        nonNameTerms.some((term) =>
+          textHasTerm(normalized, term)
+        )
+      ) {
+        return false;
+      }
+
+      const candidateAnalysis = analyzeMessage(name);
+
+      return (
+        candidateAnalysis.programs.length === 0 &&
+        (candidateAnalysis.intent === "unknown" ||
+          candidateAnalysis.intent === "greeting")
+      );
+    }
+
+    function removeLeadingGreeting(tokens: string[]) {
+      const normalizedTokens = tokens.map((token) =>
+        normalizeText(token)
+      );
+
+      const greetingSequences = [
+        ["buenos", "dias"],
+        ["buenas", "tardes"],
+        ["buenas", "noches"],
+        ["buen", "dia"],
+        ["hola"],
+        ["ola"],
+        ["holaa"],
+        ["holi"],
+        ["buenas"],
+      ];
+
+      for (const sequence of greetingSequences) {
+        const matches = sequence.every(
+          (word, index) =>
+            normalizedTokens[index] === word
+        );
+
+        if (matches) {
+          return tokens.slice(sequence.length);
+        }
+      }
+
+      return tokens;
+    }
+
+    function extractVisitorIdentity(value: string) {
+      const cleaned = value
+        .trim()
+        .replace(/[¡!¿?,.;:]+/g, " ")
+        .replace(/\s+/g, " ");
+
+      const tokens = cleaned.split(" ").filter(Boolean);
+      const normalizedTokens = tokens.map((token) =>
+        normalizeText(token)
+      );
+
+      const markers = [
+        ["mi", "nombre", "es"],
+        ["me", "llamo"],
+        ["puedes", "llamarme"],
+        ["llamame"],
+        ["mi", "nombre"],
+        ["soy"],
+      ];
+
+      const stopWords = new Set([
+        "y",
+        "e",
+        "pero",
+        "aunque",
+        "porque",
+        "quiero",
+        "deseo",
+        "necesito",
+        "busco",
+        "quisiera",
+        "sobre",
+        "para",
+        "consultar",
+        "saber",
+        "informacion",
+        "costos",
+        "precio",
+        "horarios",
+        "matricula",
+        "inscripcion",
+        "carrera",
+        "programa",
+      ]);
+
+      for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex += 1) {
+        for (const marker of markers) {
+          const matches = marker.every(
+            (word, markerIndex) =>
+              normalizedTokens[tokenIndex + markerIndex] === word
+          );
+
+          if (!matches) continue;
+
+          const candidateTokens: string[] = [];
+          let cursor = tokenIndex + marker.length;
+
+          while (
+            cursor < tokens.length &&
+            candidateTokens.length < 4
+          ) {
+            const normalizedToken =
+              normalizedTokens[cursor] ?? "";
+
+            if (
+              stopWords.has(normalizedToken) ||
+              !/^[a-zñáéíóúü'-]+$/i.test(
+                tokens[cursor] ?? ""
+              )
+            ) {
+              break;
+            }
+
+            candidateTokens.push(tokens[cursor] ?? "");
+            cursor += 1;
+          }
+
+          const candidate = formatVisitorName(
+            candidateTokens.join(" ")
+          );
+
+          if (!isValidVisitorName(candidate)) {
+            continue;
+          }
+
+          const remainderTokens = tokens.slice(cursor);
+
+          while (
+            remainderTokens.length > 0 &&
+            ["y", "e", "pero", "ademas"].includes(
+              normalizeText(remainderTokens[0] ?? "")
+            )
+          ) {
+            remainderTokens.shift();
+          }
+
+          return {
+            name: candidate,
+            remainingMessage: remainderTokens.join(" ").trim(),
+          };
+        }
+      }
+
+      const withoutGreeting =
+        removeLeadingGreeting(tokens);
+
+      const standaloneCandidate = formatVisitorName(
+        withoutGreeting.join(" ")
+      );
+
+      if (isValidVisitorName(standaloneCandidate)) {
+        return {
+          name: standaloneCandidate,
+          remainingMessage: "",
+        };
+      }
+
+      return null;
+    }
+
+    function handleVisitorName(value: string) {
+      const analysis = analyzeMessage(value);
+      const extractedIdentity =
+        extractVisitorIdentity(value);
+
+      if (!extractedIdentity) {
+        const normalized = normalizeText(value);
+        const greetingRemainder = normalized
+          .replace(
+            /\b(buenos dias|buenas tardes|buenas noches|buen dia|holaa|holi|hola|ola|buenas)\b/g,
+            ""
+          )
+          .trim();
+
+        const isPureGreeting =
+          analysis.intent === "greeting" &&
+          greetingRemainder.length === 0;
+
+        if (isPureGreeting) {
+          void sendBotSequence([
+            {
+              kind: "text",
+              text: greetingForNameStep(value),
+            },
+            {
+              kind: "text",
+              text: "Antes de conversar, ¿cómo te llamas? 😊",
+            },
+          ]);
+          return;
+        }
+
+        if (
+          analysis.intent !== "unknown" ||
+          analysis.programs.length > 0
+        ) {
+          state.deferredUserMessage = value;
+          persist();
+
+          void sendBotSequence([
+            {
+              kind: "text",
+              text: "Con gusto te ayudo con eso 😊",
+            },
+            {
+              kind: "text",
+              text: "Antes de continuar, ¿cómo te llamas?",
+            },
+          ]);
+          return;
+        }
+
+        void sendBotSequence([
+          {
+            kind: "text",
+            text:
+              "Disculpa, no alcancé a identificar tu nombre 😅 Puedes responder, por ejemplo: “Soy Javier” o “Mi nombre es María”.",
+          },
+        ]);
+        return;
+      }
+
+      state.visitorName = extractedIdentity.name;
+      state.leadStep = "idle";
+
+      if (pageProgram) {
+        selectProgram(pageProgram);
+      }
+
+      const questionToResume =
+        extractedIdentity.remainingMessage ||
+        state.deferredUserMessage;
+
+      state.deferredUserMessage = "";
+      persist();
+      updateHeader();
+      updatePlaceholder();
+
+      void (async () => {
+        await sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `¡Mucho gusto, ${friendlyName(state)}! 😊`,
+            },
+            {
+              kind: "text",
+              text: questionToResume
+                ? "Ahora sí, revisemos tu consulta."
+                : pageProgram
+                  ? `Veo que estás revisando ${PROGRAMS[pageProgram].label}. ¿Deseas costos, horarios o el PDF?`
+                  : "Cuéntame, ¿qué carrera o información estás buscando?",
+            },
+          ],
+          questionToResume
+            ? "none"
+            : pageProgram
+              ? "program_actions"
+              : "main"
+        );
+
+        if (questionToResume) {
+          handleAnalysis(
+            analyzeMessage(questionToResume)
+          );
+        }
+      })();
+    }
+
+    function handleLeadValue(value: string, analysis: MessageAnalysis) {
+      const isConsultation =
+        analysis.intent !== "unknown" || analysis.programs.length > 0;
+
+      if (isConsultation) {
+        pauseLeadForQuestion();
+        handleAnalysis(analysis);
+        return;
+      }
+
+      if (state.leadStep === "ask_phone") {
+        if (!isValidPhone(value)) {
+          void sendBotSequence([
+            {
+              kind: "text",
+              text: "El celular debe tener entre 9 y 12 números. Inténtalo nuevamente 😊",
+            },
+          ]);
+          return;
+        }
+
+        state.phone = normalizePhone(value);
+        state.leadStep = "ask_email_optional";
+        persist();
+        updatePlaceholder();
+
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: "Gracias 🙌 Ahora escribe tu correo o toca “Omitir correo”.",
             },
           ],
           "skip_email"
@@ -1977,290 +1819,383 @@ export function initAssistantWindow() {
         return;
       }
 
-      if (state.step === "ask_email_optional") {
-        if (isSkip(value)) {
+      if (state.leadStep === "ask_email_optional") {
+        if (isSkipValue(value)) {
           state.email = "";
-          state.step = "ask_dni_optional";
+          state.leadStep = "ask_dni_optional";
+          persist();
+          updatePlaceholder();
+
           void sendBotSequence(
-            [
-              {
-                kind: "text",
-                text: "Listo 😊 Puedes dejar tu DNI o tocar “Omitir DNI”.",
-              },
-            ],
+            [{ kind: "text", text: "Perfecto 😊 El DNI también es opcional." }],
             "skip_dni"
           );
           return;
         }
 
-        if (!validEmail(value)) {
-          void sendBotSequence(
-            [
-              {
-                kind: "text",
-                text: "Ese correo parece incompleto 😅 Revísalo o toca “Omitir correo”.",
-              },
-            ],
-            "skip_email"
-          );
+        if (!isValidEmail(value)) {
+          void sendBotSequence([
+            {
+              kind: "text",
+              text: "Ese correo parece incompleto. Revísalo o escribe “omitir”.",
+            },
+          ]);
           return;
         }
 
         state.email = value.trim();
-        state.step = "ask_dni_optional";
+        state.leadStep = "ask_dni_optional";
+        persist();
+        updatePlaceholder();
+
         void sendBotSequence(
-          [
-            {
-              kind: "text",
-              text: "Correo guardado 📧 Ahora puedes dejar tu DNI o tocar “Omitir DNI”.",
-            },
-          ],
+          [{ kind: "text", text: "Listo 😊 Ahora tu DNI, o puedes omitirlo." }],
           "skip_dni"
         );
         return;
       }
 
-      if (state.step === "ask_dni_optional") {
-        if (isSkip(value)) {
+      if (state.leadStep === "ask_dni_optional") {
+        if (isSkipValue(value)) {
           state.dni = "";
-          finishEnrollment();
+          reviewLead();
           return;
         }
 
-        if (!validDni(value)) {
-          void sendBotSequence(
-            [
-              {
-                kind: "text",
-                text: "El DNI debe tener 8 números 😊",
-              },
-            ],
-            "skip_dni"
-          );
+        if (!isValidDni(value)) {
+          void sendBotSequence([
+            {
+              kind: "text",
+              text: "El DNI debe tener 8 números. También puedes escribir “omitir”.",
+            },
+          ]);
           return;
         }
 
         state.dni = value.trim();
-        finishEnrollment();
+        reviewLead();
       }
+    }
+
+    function reviewLead() {
+      const program = state.selectedProgram
+        ? PROGRAMS[state.selectedProgram]
+        : null;
+
+      state.leadStep = "review";
+      state.pendingQuestion = "confirm_lead";
+      state.leadStatus = "idle";
+      persist();
+      updatePlaceholder();
+
+      void sendBotSequence(
+        [
+          {
+            kind: "text",
+            text: `${friendlyName(state)}, revisemos antes de enviar 😊`,
+          },
+          {
+            kind: "info_table",
+            variant: "summary",
+            title: "Resumen de solicitud",
+            subtitle: "Confirma tus datos",
+            rows: [
+              {
+                label: "Programa",
+                value: program?.label ?? "No seleccionado",
+                highlight: true,
+              },
+              { label: "Nombre", value: state.visitorName || "-" },
+              { label: "Celular", value: state.phone || "-" },
+              {
+                label: "Correo",
+                value: state.email || "No compartido",
+              },
+              { label: "DNI", value: state.dni || "No compartido" },
+            ],
+            footer: "¿La información está correcta?",
+          },
+        ],
+        "lead_review"
+      );
+    }
+
+    async function submitConfirmedLead() {
+      state.pendingQuestion = "";
+      state.leadStep = "completed";
+      state.leadStatus = "sending";
+      persist();
+      updatePlaceholder();
+
+      try {
+        await sendLeadToSales(state);
+        state.leadStatus = "sent";
+      } catch (error) {
+        state.leadStatus = "error";
+        state.leadError =
+          error instanceof Error ? error.message : "Error desconocido";
+      }
+
+      persist();
+
+      const program = state.selectedProgram
+        ? PROGRAMS[state.selectedProgram]
+        : null;
+
+      void sendBotSequence(
+        [
+          {
+            kind: "text",
+            text:
+              state.leadStatus === "sent"
+                ? `¡Listo, ${friendlyName(state)}! ✅ Tu solicitud${
+                    program ? ` para ${program.label}` : ""
+                  } fue registrada.`
+                : "No pude enviar la solicitud automáticamente. Puedes continuar por WhatsApp o llamar.",
+          },
+        ],
+        "completed"
+      );
     }
 
     function handleUserMessage(rawValue: string) {
       const value = rawValue.trim();
-      if (!value || state.isTyping || state.locked) return;
+      if (!value || locked) return;
 
-      state.queueToken += 1;
-      state.isTyping = false;
-      state.replyMode = "none";
-      lockInteraction(false);
-
+      queueToken += 1;
+      audio.stopTyping();
+      isTyping = false;
+      renderTyping();
       addUserMessage(value);
       safeInput.value = "";
 
-      const detectedProgram = detectProgram(value);
-      const intent = detectIntent(value);
+      if (state.leadStep === "ask_visitor_name") {
+        handleVisitorName(value);
+        return;
+      }
+
+      const analysis = analyzeMessage(value);
 
       if (
-        hasAny(value, [
-          "reiniciar",
-          "empezar de nuevo",
-          "menu principal",
-          "comenzar de nuevo",
-        ])
+        state.leadStep === "ask_phone" ||
+        state.leadStep === "ask_email_optional" ||
+        state.leadStep === "ask_dni_optional"
       ) {
-        state.selectedProgram = "";
-        state.step = "idle";
-        state.pendingAction = "info";
-
-        void sendBotSequence([
-          {
-            kind: "text",
-            text: "Empecemos de nuevo 😊 ¿Qué deseas consultar?",
-          },
-        ]);
+        handleLeadValue(value, analysis);
         return;
       }
 
-      if (state.step === "confirm_enrollment") {
-        handleEnrollmentConfirmation(value);
-        return;
-      }
-
-      if (
-        state.step === "ask_name" ||
-        state.step === "ask_phone" ||
-        state.step === "ask_email_optional" ||
-        state.step === "ask_dni_optional"
-      ) {
-        handleLeadStep(value, intent, detectedProgram);
-        return;
-      }
-
-      if (state.step === "program") {
-        if (detectedProgram) {
-          resolveSelectedProgram(detectedProgram);
-        } else {
-          void sendBotSequence(
-            [
-              {
-                kind: "text",
-                text: "No identifiqué el programa 😅 Elige una opción:",
-              },
-            ],
-            "programs"
-          );
-        }
-        return;
-      }
-
-      if (intent === "unknown" && detectedProgram) {
-        showProgramInformation(detectedProgram);
-        return;
-      }
-
-      handleIntent(intent, detectedProgram, value);
+      handleAnalysis(analysis);
     }
 
     function bindReplyEvents() {
       const buttons = Array.from(
-        safeChat.querySelectorAll<HTMLButtonElement>("[data-assistant-chip]")
+        safeRepliesHost.querySelectorAll<HTMLButtonElement>("[data-reply-type]")
       );
 
       buttons.forEach((button) => {
-        button.addEventListener("click", (event) => {
-          event.preventDefault();
-          event.stopPropagation();
+        button.addEventListener("click", () => {
+          if (locked) return;
 
-          if (state.locked || state.isTyping) return;
-
-          const type = button.dataset.chipType;
-          const value = button.dataset.chipValue ?? "";
-          const label = button.textContent?.trim() || "Continuar";
+          const type = button.dataset.replyType ?? "";
+          const value = button.dataset.replyValue ?? "";
 
           if (type === "program") {
             const programKey = value as ProgramKey;
             addUserMessage(PROGRAMS[programKey].label);
-            state.replyMode = "none";
-            resolveSelectedProgram(programKey);
+
+            switch (state.currentIntent) {
+              case "costs":
+                answerCosts(programKey, state.currentCostDetail);
+                break;
+              case "schedules":
+                answerSchedules(programKey, "");
+                break;
+              case "brochure":
+                answerBrochure(programKey);
+                break;
+              case "enrollment":
+                startEnrollment(programKey);
+                break;
+              default:
+                answerInfo(programKey);
+            }
             return;
           }
 
-          if (type === "action" && state.selectedProgram) {
-            const action = value as PendingAction;
-            addUserMessage(label);
-            state.replyMode = "none";
+          if (type === "intent") {
+            addUserMessage(button.textContent?.trim() ?? value);
 
-            if (action === "costs") {
-              showProgramCosts(state.selectedProgram);
-              return;
-            }
+            const intentQueries: Record<string, string> = {
+              programs: "ver programas",
+              costs: "consultar costos",
+              schedules: "consultar horarios",
+              brochure: "ver brochure pdf",
+              enrollment: "quiero inscribirme",
+            };
 
-            if (action === "schedules") {
-              showProgramSchedules(state.selectedProgram);
-              return;
-            }
-
-            if (action === "enrollment") {
-              startEnrollment(state.selectedProgram);
-            }
-
-            return;
-          }
-
-          if (type === "schedule" && state.selectedProgram) {
-            addUserMessage(`Turno ${value}`);
-            state.replyMode = "none";
-            showProgramSchedules(state.selectedProgram, value);
-            return;
-          }
-
-          if (type === "confirmation") {
-            state.replyMode = "none";
-
-            if (value === "yes") {
-              addUserMessage("Sí, registrar solicitud");
-
-              if (state.selectedProgram) {
-                startEnrollment(state.selectedProgram);
-              } else {
-                state.step = "program";
-                state.pendingAction = "enrollment";
-
-                void sendBotSequence(
-                  [
-                    {
-                      kind: "text",
-                      text: "¡Perfecto! 🙌 Elige el programa para registrar tu solicitud.",
-                    },
-                  ],
-                  "programs"
-                );
-              }
-              return;
-            }
-
-            addUserMessage("Ahora no");
-            cancelEnrollmentConfirmation();
-            return;
-          }
-
-          if (type === "skip_email") {
-            addUserMessage("Omitir correo");
-            state.email = "";
-            state.step = "ask_dni_optional";
-            state.replyMode = "none";
-
-            void sendBotSequence(
-              [
-                {
-                  kind: "text",
-                  text: "Listo 😊 Puedes dejar tu DNI o tocar “Omitir DNI”.",
-                },
-              ],
-              "skip_dni"
+            handleAnalysis(
+              analyzeMessage(intentQueries[value] ?? value)
             );
             return;
           }
 
-          if (type === "skip_dni") {
-            addUserMessage("Omitir DNI");
-            state.dni = "";
-            state.replyMode = "none";
-            finishEnrollment();
+          if (type === "schedule" && state.selectedProgram) {
+            const preference = value as SchedulePreference;
+            addUserMessage(button.textContent?.trim() ?? value);
+            answerSchedules(state.selectedProgram, preference);
             return;
           }
 
-          if (type === "change_program") {
-            addUserMessage("Consultar otro programa");
-            state.selectedProgram = "";
-            state.step = "program";
-            state.pendingAction = "info";
-            state.replyMode = "none";
+          if (type === "skip") {
+            addUserMessage(value === "email" ? "Omitir correo" : "Omitir DNI");
 
-            void sendBotSequence(
-              [
+            if (value === "email") {
+              state.email = "";
+              state.leadStep = "ask_dni_optional";
+              persist();
+              updatePlaceholder();
+              void sendBotSequence(
+                [{ kind: "text", text: "Perfecto 😊 El DNI también es opcional." }],
+                "skip_dni"
+              );
+            } else {
+              state.dni = "";
+              reviewLead();
+            }
+            return;
+          }
+
+          if (type === "resume") {
+            addUserMessage(
+              value === "yes" ? "Continuar solicitud" : "Seguir consultando"
+            );
+
+            if (value === "yes") resumeLead();
+            else {
+              state.pausedLeadStep = "idle";
+              state.pendingQuestion = "";
+              persist();
+              void sendBotSequence(
+                [{ kind: "text", text: "Perfecto 😊 Seguimos conversando." }],
+                "main"
+              );
+            }
+            return;
+          }
+
+          if (type === "recommend") {
+            const programKey = value as ProgramKey;
+            addUserMessage(button.textContent?.trim() ?? PROGRAMS[programKey].label);
+            answerInfo(programKey);
+            return;
+          }
+
+          if (type === "lead_review") {
+            if (value === "send") {
+              addUserMessage("Enviar solicitud");
+              void submitConfirmedLead();
+              return;
+            }
+
+            if (value === "phone") {
+              addUserMessage("Corregir celular");
+              state.leadStep = "ask_phone";
+              state.pendingQuestion = "";
+              persist();
+              updatePlaceholder();
+              void sendBotSequence([
                 {
                   kind: "text",
-                  text: "¡Claro! 😊 Elige el programa que deseas conocer.",
+                  text: "Claro 😊 Escribe nuevamente tu número de celular.",
                 },
-              ],
-              "programs"
+              ]);
+              return;
+            }
+
+            addUserMessage("Cancelar solicitud");
+            state.leadStep = "idle";
+            state.pendingQuestion = "";
+            state.phone = "";
+            state.email = "";
+            state.dni = "";
+            persist();
+            void sendBotSequence(
+              [{ kind: "text", text: "Solicitud cancelada. Seguimos conversando 😊" }],
+              "main"
+            );
+            return;
+          }
+
+          if (type === "reset") {
+            addUserMessage("Otra consulta");
+            state.leadStep = "idle";
+            state.currentIntent = "unknown";
+            state.pendingQuestion = "";
+            persist();
+            void sendBotSequence(
+              [{ kind: "text", text: "Claro 😊 ¿Qué deseas revisar ahora?" }],
+              "main"
             );
           }
         });
       });
     }
 
+    function openAssistant() {
+      windowEl.classList.add("is-open");
+      safeToggleButton.setAttribute("aria-expanded", "true");
+      safePanel.setAttribute("aria-hidden", "false");
+      stopBubbleRotation();
+
+      if (!state.hasWelcomed && !state.messages.length) {
+        state.hasWelcomed = true;
+        state.leadStep = "ask_visitor_name";
+        persist();
+        updatePlaceholder();
+
+        void sendBotSequence([
+          {
+            kind: "text",
+            text: "¡Hola! 👋 Soy Cookito, tu asistente de Cooking Gourmet.",
+          },
+          {
+            kind: "text",
+            text: "Antes de comenzar, ¿cómo te llamas? 😊",
+          },
+        ]);
+        return;
+      }
+
+      window.setTimeout(() => safeInput.focus(), 100);
+    }
+
+    function closeAssistant() {
+      windowEl.classList.remove("is-open");
+      safeToggleButton.setAttribute("aria-expanded", "false");
+      safePanel.setAttribute("aria-hidden", "true");
+      queueToken += 1;
+      audio.stopTyping();
+      isTyping = false;
+      renderTyping();
+      lockInteraction(false);
+      startBubbleRotation();
+    }
+
+    function toggleAssistant() {
+      if (windowEl.classList.contains("is-open")) closeAssistant();
+      else openAssistant();
+    }
+
+    function updateBubble() {
+      const index = Math.floor(Date.now() / 3400) % BUBBLE_MESSAGES.length;
+      safeBubble.textContent = BUBBLE_MESSAGES[index];
+    }
+
     function startBubbleRotation() {
       if (bubbleTimer !== null) return;
-
-      bubbleTimer = window.setInterval(() => {
-        if (windowEl.classList.contains("is-open")) return;
-
-        state.bubbleIndex = (state.bubbleIndex + 1) % BUBBLES.length;
-
-        safeBubble.textContent = BUBBLES[state.bubbleIndex];
-      }, 3200);
+      updateBubble();
+      bubbleTimer = window.setInterval(updateBubble, 3400);
     }
 
     function stopBubbleRotation() {
@@ -2270,84 +2205,77 @@ export function initAssistantWindow() {
       }
     }
 
-    function openAssistant() {
-      windowEl.classList.add("is-open");
-      safeToggleButton.setAttribute("aria-expanded", "true");
-      safePanel.setAttribute("aria-hidden", "false");
-
-      stopBubbleRotation();
-      render();
-
-      window.setTimeout(() => {
-        safeInput.focus();
-      }, 120);
-    }
-
-    function closeAssistant() {
-      windowEl.classList.remove("is-open");
-      safeToggleButton.setAttribute("aria-expanded", "false");
-      safePanel.setAttribute("aria-hidden", "true");
-
-      state.queueToken += 1;
-      state.isTyping = false;
-      lockInteraction(false);
-      render();
-      startBubbleRotation();
-    }
-
-    function toggleAssistant() {
-      if (windowEl.classList.contains("is-open")) {
-        closeAssistant();
-      } else {
-        openAssistant();
-      }
-    }
-
     safeToggleButton.addEventListener("click", (event) => {
       event.preventDefault();
-      event.stopPropagation();
+      audio.unlock();
       toggleAssistant();
     });
 
-    safeCloseButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      closeAssistant();
+    safeCloseButton.addEventListener("click", closeAssistant);
+
+    safeMuteButton.addEventListener("click", () => {
+      state.muted = !state.muted;
+      audio.setMuted(state.muted);
+      persist();
+      updateHeader();
     });
 
-    safeSendButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (!state.isTyping && !state.locked) {
-        handleUserMessage(safeInput.value);
-      }
+    safeSendButton.addEventListener("click", () => {
+      audio.unlock();
+      handleUserMessage(safeInput.value);
     });
 
     safeInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-
-        if (!state.isTyping && !state.locked) {
-          handleUserMessage(safeInput.value);
-        }
+        audio.unlock();
+        handleUserMessage(safeInput.value);
       }
 
-      if (event.key === "Escape") {
-        closeAssistant();
-      }
+      if (event.key === "Escape") closeAssistant();
     });
+
+    safeChat.addEventListener(
+      "wheel",
+      () => {
+        autoFollow = false;
+        stopScroll();
+        updateScrollButton();
+      },
+      { passive: true }
+    );
+
+    safeChat.addEventListener(
+      "touchstart",
+      () => {
+        autoFollow = false;
+        stopScroll();
+        updateScrollButton();
+      },
+      { passive: true }
+    );
+
+    safeChat.addEventListener(
+      "scroll",
+      () => {
+        if (isNearBottom()) autoFollow = true;
+        updateScrollButton();
+      },
+      { passive: true }
+    );
+
+    safeScrollBottomButton.addEventListener("click", () => scrollToBottom());
 
     document.addEventListener("pointerdown", (event) => {
       const target = event.target as Node | null;
-
-      if (target && !windowEl.contains(target)) {
-        closeAssistant();
-      }
+      if (target && !windowEl.contains(target)) closeAssistant();
     });
 
-    safeBubble.textContent = BUBBLES[0];
-    render();
+    renderStoredMessages();
+    renderTyping();
+    renderReplies();
+    updateHeader();
+    updatePlaceholder();
     startBubbleRotation();
   });
 }
