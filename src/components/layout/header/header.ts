@@ -3,17 +3,46 @@ import { bindDropdown } from "./dropdown";
 
 const MOBILE_BREAKPOINT = 1024;
 
+let pendingHeaderInitFrame: number | null = null;
+
 declare global {
   interface Window {
     __cookingHeaderAbortController?: AbortController;
   }
 }
 
+/**
+ * Programa la inicialización para el siguiente frame.
+ * Esto permite que el HTML ya exista antes de buscar sus elementos.
+ */
+function scheduleHeaderInitialization() {
+  if (typeof window === "undefined") return;
+
+  if (pendingHeaderInitFrame !== null) {
+    window.cancelAnimationFrame(pendingHeaderInitFrame);
+  }
+
+  pendingHeaderInitFrame = window.requestAnimationFrame(() => {
+    pendingHeaderInitFrame = null;
+    initHeader();
+  });
+}
+
 export function renderHeader() {
+  /*
+   * Cada vez que una página interna vuelve a renderizar el header,
+   * se vuelven a enlazar automáticamente sus eventos.
+   */
+  scheduleHeaderInitialization();
+
   return `
     <header class="topbar" id="siteHeader">
       <div class="topbar__inner">
-        <a href="/" class="brand" aria-label="Ir al inicio de Cooking Gourmet">
+        <a
+          href="/"
+          class="brand"
+          aria-label="Ir al inicio de Cooking Gourmet"
+        >
           <span class="brand__mark">
             <img
               src="/images/logo.png"
@@ -24,8 +53,13 @@ export function renderHeader() {
           </span>
 
           <span class="brand__text">
-            <strong class="brand__title">Cooking Gourmet</strong>
-            <small class="brand__subtitle">Escuela de Alta Cocina</small>
+            <strong class="brand__title">
+              Cooking Gourmet
+            </strong>
+
+            <small class="brand__subtitle">
+              Escuela de Alta Cocina
+            </small>
           </span>
         </a>
 
@@ -68,6 +102,10 @@ export function renderHeader() {
 }
 
 export function initHeader() {
+  /*
+   * Elimina todos los eventos de la instancia anterior.
+   * Evita eventos duplicados cuando se navega entre páginas.
+   */
   window.__cookingHeaderAbortController?.abort();
 
   const abortController = new AbortController();
@@ -76,21 +114,30 @@ export function initHeader() {
   window.__cookingHeaderAbortController = abortController;
 
   const header = document.getElementById("siteHeader");
+
   const menuToggle = document.getElementById(
     "menuToggle"
   ) as HTMLButtonElement | null;
+
   const menuClose = document.getElementById(
     "menuClose"
   ) as HTMLButtonElement | null;
+
   const navbar = document.getElementById("navbar");
+
   const backdrop = document.getElementById(
     "navBackdrop"
   ) as HTMLButtonElement | null;
-  const programsDropdown = document.getElementById("programsDropdown");
+
+  const programsDropdown =
+    document.getElementById("programsDropdown");
+
   const programsBtn = document.getElementById(
     "programsBtn"
   ) as HTMLButtonElement | null;
-  const programsMenu = document.getElementById("programsMenu");
+
+  const programsMenu =
+    document.getElementById("programsMenu");
 
   if (
     !header ||
@@ -103,6 +150,9 @@ export function initHeader() {
     return;
   }
 
+  /*
+   * Referencias seguras para TypeScript estricto.
+   */
   const safeHeader = header;
   const safeMenuToggle = menuToggle;
   const safeMenuClose = menuClose;
@@ -112,7 +162,8 @@ export function initHeader() {
   const safeProgramsBtn = programsBtn;
   const safeProgramsMenu = programsMenu;
 
-  const isMobileView = () => window.innerWidth <= MOBILE_BREAKPOINT;
+  const isMobileView = () =>
+    window.innerWidth <= MOBILE_BREAKPOINT;
 
   const dropdownController = bindDropdown(
     safeProgramsBtn,
@@ -123,46 +174,83 @@ export function initHeader() {
   );
 
   function syncHeaderScroll() {
-    safeHeader.classList.toggle("is-scrolled", window.scrollY > 8);
+    safeHeader.classList.toggle(
+      "is-scrolled",
+      window.scrollY > 8
+    );
   }
 
-  function setNavbarOpen(isOpen: boolean, restoreFocus = false) {
+  function setNavbarOpen(
+    isOpen: boolean,
+    restoreFocus = false
+  ) {
     const shouldOpen = isMobileView() && isOpen;
 
-    safeNavbar.classList.toggle("is-open", shouldOpen);
-    safeBackdrop?.classList.toggle("is-open", shouldOpen);
-    document.body.classList.toggle("nav-is-open", shouldOpen);
+    safeNavbar.classList.toggle(
+      "is-open",
+      shouldOpen
+    );
 
-    safeMenuToggle.setAttribute("aria-expanded", String(shouldOpen));
+    safeBackdrop?.classList.toggle(
+      "is-open",
+      shouldOpen
+    );
+
+    document.body.classList.toggle(
+      "nav-is-open",
+      shouldOpen
+    );
+
+    safeMenuToggle.setAttribute(
+      "aria-expanded",
+      String(shouldOpen)
+    );
+
     safeMenuToggle.setAttribute(
       "aria-label",
-      shouldOpen ? "Cerrar menú" : "Abrir menú"
+      shouldOpen
+        ? "Cerrar menú"
+        : "Abrir menú"
     );
 
     if (isMobileView()) {
-      safeNavbar.setAttribute("aria-hidden", String(!shouldOpen));
+      safeNavbar.setAttribute(
+        "aria-hidden",
+        String(!shouldOpen)
+      );
     } else {
       safeNavbar.removeAttribute("aria-hidden");
     }
 
     if (shouldOpen) {
       window.requestAnimationFrame(() => {
-        safeMenuClose?.focus({ preventScroll: true });
+        safeMenuClose?.focus({
+          preventScroll: true,
+        });
       });
+
       return;
     }
 
     dropdownController?.close();
 
     if (restoreFocus) {
-      safeMenuToggle.focus({ preventScroll: true });
+      safeMenuToggle.focus({
+        preventScroll: true,
+      });
     }
   }
 
+  /*
+   * Abrir y cerrar menú móvil.
+   */
   safeMenuToggle.addEventListener(
     "click",
     () => {
-      setNavbarOpen(!safeNavbar.classList.contains("is-open"));
+      const isCurrentlyOpen =
+        safeNavbar.classList.contains("is-open");
+
+      setNavbarOpen(!isCurrentlyOpen);
     },
     { signal }
   );
@@ -183,47 +271,78 @@ export function initHeader() {
     { signal }
   );
 
-  safeNavbar.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((link) => {
-    link.addEventListener(
-      "click",
-      () => {
-        if (isMobileView()) {
-          setNavbarOpen(false);
-        }
-      },
-      { signal }
-    );
-  });
+  /*
+   * Cerrar el panel cuando se elige una ruta.
+   */
+  safeNavbar
+    .querySelectorAll<HTMLAnchorElement>("a[href]")
+    .forEach((link) => {
+      link.addEventListener(
+        "click",
+        () => {
+          if (isMobileView()) {
+            setNavbarOpen(false);
+          }
+        },
+        { signal }
+      );
+    });
 
+  /*
+   * Cerrar con Escape.
+   */
   document.addEventListener(
     "keydown",
     (event) => {
       if (event.key !== "Escape") return;
 
-      if (safeNavbar.classList.contains("is-open")) {
+      if (
+        safeNavbar.classList.contains("is-open")
+      ) {
         event.preventDefault();
         setNavbarOpen(false, true);
+        return;
       }
+
+      dropdownController?.close();
     },
     { signal }
   );
 
+  /*
+   * Restablecer al cambiar el tamaño de pantalla.
+   */
   window.addEventListener(
     "resize",
     () => {
       if (!isMobileView()) {
         setNavbarOpen(false);
-      } else if (!safeNavbar.classList.contains("is-open")) {
-        safeNavbar.setAttribute("aria-hidden", "true");
+        return;
+      }
+
+      if (
+        !safeNavbar.classList.contains("is-open")
+      ) {
+        safeNavbar.setAttribute(
+          "aria-hidden",
+          "true"
+        );
       }
     },
     { signal }
   );
 
-  window.addEventListener("scroll", syncHeaderScroll, {
-    signal,
-    passive: true,
-  });
+  /*
+   * Aplicar estilo compacto al desplazarse.
+   */
+  window.addEventListener(
+    "scroll",
+    syncHeaderScroll,
+    {
+      signal,
+      passive: true,
+    }
+  );
 
   syncHeaderScroll();
   setNavbarOpen(false);
