@@ -11,16 +11,23 @@ export function bindDropdown(
 ): DropdownController | null {
   if (!button || !wrapper || !menu) return null;
 
+  const safeButton = button;
+  const safeWrapper = wrapper;
+  const safeMenu = menu;
+
   const links = Array.from(
-    menu.querySelectorAll<HTMLAnchorElement>('a[href]')
+    safeMenu.querySelectorAll<HTMLAnchorElement>('a[href]')
   );
 
-  const listenerOptions = signal ? { signal } : undefined;
+  const listenerOptions: AddEventListenerOptions | undefined = signal
+    ? { signal }
+    : undefined;
+
   const isMobileView = () => window.innerWidth <= mobileBreakpoint;
 
   function setOpenState(isOpen: boolean) {
-    wrapper.classList.toggle("is-open", isOpen);
-    button.setAttribute("aria-expanded", String(isOpen));
+    safeWrapper.classList.toggle("is-open", isOpen);
+    safeButton.setAttribute("aria-expanded", String(isOpen));
   }
 
   function close() {
@@ -38,7 +45,7 @@ export function bindDropdown(
   }
 
   function toggle() {
-    setOpenState(!wrapper.classList.contains("is-open"));
+    setOpenState(!safeWrapper.classList.contains("is-open"));
   }
 
   function moveFocus(currentIndex: number, direction: 1 | -1) {
@@ -52,7 +59,7 @@ export function bindDropdown(
 
   setOpenState(false);
 
-  button.addEventListener(
+  safeButton.addEventListener(
     "click",
     (event) => {
       event.preventDefault();
@@ -62,7 +69,7 @@ export function bindDropdown(
     listenerOptions
   );
 
-  button.addEventListener(
+  safeButton.addEventListener(
     "keydown",
     (event) => {
       if (event.key === "ArrowDown") {
@@ -78,7 +85,7 @@ export function bindDropdown(
     listenerOptions
   );
 
-  wrapper.addEventListener(
+  safeWrapper.addEventListener(
     "pointerenter",
     () => {
       if (!isMobileView()) {
@@ -88,7 +95,7 @@ export function bindDropdown(
     listenerOptions
   );
 
-  wrapper.addEventListener(
+  safeWrapper.addEventListener(
     "pointerleave",
     () => {
       if (!isMobileView()) {
@@ -98,7 +105,7 @@ export function bindDropdown(
     listenerOptions
   );
 
-  wrapper.addEventListener(
+  safeWrapper.addEventListener(
     "focusin",
     () => {
       if (!isMobileView()) {
@@ -108,14 +115,14 @@ export function bindDropdown(
     listenerOptions
   );
 
-  wrapper.addEventListener(
+  safeWrapper.addEventListener(
     "focusout",
     (event) => {
       if (isMobileView()) return;
 
       const nextTarget = event.relatedTarget as Node | null;
 
-      if (!nextTarget || !wrapper.contains(nextTarget)) {
+      if (!nextTarget || !safeWrapper.contains(nextTarget)) {
         close();
       }
     },
@@ -143,13 +150,13 @@ export function bindDropdown(
 
         if (event.key === "End") {
           event.preventDefault();
-          links.at(-1)?.focus({ preventScroll: true });
+          links[links.length - 1]?.focus({ preventScroll: true });
         }
 
         if (event.key === "Escape") {
           event.preventDefault();
           close();
-          button.focus({ preventScroll: true });
+          safeButton.focus({ preventScroll: true });
         }
       },
       listenerOptions
@@ -161,7 +168,7 @@ export function bindDropdown(
     (event) => {
       const target = event.target as Node;
 
-      if (!wrapper.contains(target)) {
+      if (!safeWrapper.contains(target)) {
         close();
       }
     },

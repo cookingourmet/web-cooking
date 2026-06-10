@@ -103,42 +103,51 @@ export function initHeader() {
     return;
   }
 
+  const safeHeader = header;
+  const safeMenuToggle = menuToggle;
+  const safeMenuClose = menuClose;
+  const safeNavbar = navbar;
+  const safeBackdrop = backdrop;
+  const safeProgramsDropdown = programsDropdown;
+  const safeProgramsBtn = programsBtn;
+  const safeProgramsMenu = programsMenu;
+
   const isMobileView = () => window.innerWidth <= MOBILE_BREAKPOINT;
 
   const dropdownController = bindDropdown(
-    programsBtn,
-    programsDropdown,
-    programsMenu,
+    safeProgramsBtn,
+    safeProgramsDropdown,
+    safeProgramsMenu,
     MOBILE_BREAKPOINT,
     signal
   );
 
   function syncHeaderScroll() {
-    header.classList.toggle("is-scrolled", window.scrollY > 8);
+    safeHeader.classList.toggle("is-scrolled", window.scrollY > 8);
   }
 
   function setNavbarOpen(isOpen: boolean, restoreFocus = false) {
     const shouldOpen = isMobileView() && isOpen;
 
-    navbar.classList.toggle("is-open", shouldOpen);
-    backdrop?.classList.toggle("is-open", shouldOpen);
+    safeNavbar.classList.toggle("is-open", shouldOpen);
+    safeBackdrop?.classList.toggle("is-open", shouldOpen);
     document.body.classList.toggle("nav-is-open", shouldOpen);
 
-    menuToggle.setAttribute("aria-expanded", String(shouldOpen));
-    menuToggle.setAttribute(
+    safeMenuToggle.setAttribute("aria-expanded", String(shouldOpen));
+    safeMenuToggle.setAttribute(
       "aria-label",
       shouldOpen ? "Cerrar menú" : "Abrir menú"
     );
 
     if (isMobileView()) {
-      navbar.setAttribute("aria-hidden", String(!shouldOpen));
+      safeNavbar.setAttribute("aria-hidden", String(!shouldOpen));
     } else {
-      navbar.removeAttribute("aria-hidden");
+      safeNavbar.removeAttribute("aria-hidden");
     }
 
     if (shouldOpen) {
       window.requestAnimationFrame(() => {
-        menuClose?.focus({ preventScroll: true });
+        safeMenuClose?.focus({ preventScroll: true });
       });
       return;
     }
@@ -146,27 +155,19 @@ export function initHeader() {
     dropdownController?.close();
 
     if (restoreFocus) {
-      menuToggle.focus({ preventScroll: true });
+      safeMenuToggle.focus({ preventScroll: true });
     }
   }
 
-  menuToggle.addEventListener(
+  safeMenuToggle.addEventListener(
     "click",
     () => {
-      setNavbarOpen(!navbar.classList.contains("is-open"));
+      setNavbarOpen(!safeNavbar.classList.contains("is-open"));
     },
     { signal }
   );
 
-  menuClose?.addEventListener(
-    "click",
-    () => {
-      setNavbarOpen(false, true);
-    },
-    { signal }
-  );
-
-  backdrop?.addEventListener(
+  safeMenuClose?.addEventListener(
     "click",
     () => {
       setNavbarOpen(false, true);
@@ -174,7 +175,15 @@ export function initHeader() {
     { signal }
   );
 
-  navbar.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((link) => {
+  safeBackdrop?.addEventListener(
+    "click",
+    () => {
+      setNavbarOpen(false, true);
+    },
+    { signal }
+  );
+
+  safeNavbar.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((link) => {
     link.addEventListener(
       "click",
       () => {
@@ -191,7 +200,7 @@ export function initHeader() {
     (event) => {
       if (event.key !== "Escape") return;
 
-      if (navbar.classList.contains("is-open")) {
+      if (safeNavbar.classList.contains("is-open")) {
         event.preventDefault();
         setNavbarOpen(false, true);
       }
@@ -204,8 +213,8 @@ export function initHeader() {
     () => {
       if (!isMobileView()) {
         setNavbarOpen(false);
-      } else if (!navbar.classList.contains("is-open")) {
-        navbar.setAttribute("aria-hidden", "true");
+      } else if (!safeNavbar.classList.contains("is-open")) {
+        safeNavbar.setAttribute("aria-hidden", "true");
       }
     },
     { signal }
