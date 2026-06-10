@@ -28,6 +28,7 @@ export function bindDropdown(
   function setOpenState(isOpen: boolean) {
     safeWrapper.classList.toggle("is-open", isOpen);
     safeButton.setAttribute("aria-expanded", String(isOpen));
+    safeMenu.setAttribute("aria-hidden", String(!isOpen));
   }
 
   function close() {

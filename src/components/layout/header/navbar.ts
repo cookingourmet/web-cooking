@@ -13,39 +13,19 @@ const WHATSAPP_URL =
 type ProgramVisual = {
   label?: string;
   href?: string;
-  description: string;
 };
 
 const PROGRAM_VISUALS: Record<string, ProgramVisual> = {
-  Gastronomía: {
-    href: "/programas/gastronomia",
-    description: "Cocina peruana e internacional con formación práctica.",
-  },
-  Pastelería: {
-    href: "/programas/pasteleria",
-    description: "Pastelería, panadería, decoración y emprendimiento.",
-  },
-  "Bar Profesional": {
-    href: "/programas/bar-profesional",
-    description: "Coctelería, mixología y servicio profesional de barra.",
-  },
-  Barismo: {
-    href: "/programas/barismo",
-    description: "Café, extracción, cata, latte art y cafetería.",
-  },
-  Sommelier: {
-    href: "/programas/sommelier",
-    description: "Vinos, cata, maridaje y servicio especializado.",
-  },
+  Gastronomía: { href: "/programas/gastronomia" },
+  Pastelería: { href: "/programas/pasteleria" },
+  "Bar Profesional": { href: "/programas/bar-profesional" },
+  Barismo: { href: "/programas/barismo" },
+  Sommelier: { href: "/programas/sommelier" },
   Cocina: {
     label: "Cocina Acelerada",
     href: "/programas/cocina-acelerada",
-    description: "Formación culinaria intensiva orientada al trabajo real.",
   },
-  "Cocina Acelerada": {
-    href: "/programas/cocina-acelerada",
-    description: "Formación culinaria intensiva orientada al trabajo real.",
-  },
+  "Cocina Acelerada": { href: "/programas/cocina-acelerada" },
 };
 
 function normalizePath(path: string) {
@@ -219,10 +199,7 @@ function getSocialIcon(type: "facebook" | "instagram" | "tiktok") {
 function renderProgramItems() {
   return programMenu
     .map((item) => {
-      const visual = PROGRAM_VISUALS[item.label] ?? {
-        description: "Conoce este programa de formación profesional.",
-      };
-
+      const visual = PROGRAM_VISUALS[item.label] ?? {};
       const label = visual.label ?? item.label;
       const href = visual.href ?? item.href;
 
@@ -232,10 +209,7 @@ function renderProgramItems() {
             ${getProgramIcon(item.label)}
           </span>
 
-          <span class="program-menu__copy">
-            <strong>${label}</strong>
-            <small>${visual.description}</small>
-          </span>
+          <span class="program-menu__name">${label}</span>
 
           <span class="program-menu__arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -246,6 +220,39 @@ function renderProgramItems() {
       `;
     })
     .join("");
+}
+
+function renderSocialLinks(className: string) {
+  return `
+    <div class="${className}" aria-label="Redes sociales de Cooking Gourmet">
+      <a
+        href="https://www.facebook.com/Cooking.Gourmet"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook de Cooking Gourmet"
+      >
+        ${getSocialIcon("facebook")}
+      </a>
+
+      <a
+        href="https://www.instagram.com/cooking_gourmet/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram de Cooking Gourmet"
+      >
+        ${getSocialIcon("instagram")}
+      </a>
+
+      <a
+        href="https://www.tiktok.com/@cooking.gourmet.oficial"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="TikTok de Cooking Gourmet"
+      >
+        ${getSocialIcon("tiktok")}
+      </a>
+    </div>
+  `;
 }
 
 export function renderNavbar() {
@@ -300,14 +307,21 @@ export function renderNavbar() {
                 </span>
               </button>
 
-              <div class="program-menu" id="programsMenu" role="menu">
-                <div class="program-menu__heading">
-                  <span>Programas de estudio</span>
-                  <strong>Elige el camino que impulsará tu futuro</strong>
-                </div>
+              <div
+                class="program-menu"
+                id="programsMenu"
+                role="menu"
+                aria-hidden="true"
+              >
+                <div class="program-menu__inner">
+                  <div class="program-menu__heading">
+                    <span>Programas de estudio</span>
+                    <strong>Elige el camino que impulsará tu futuro</strong>
+                  </div>
 
-                <div class="program-menu__grid">
-                  ${renderProgramItems()}
+                  <div class="program-menu__grid">
+                    ${renderProgramItems()}
+                  </div>
                 </div>
               </div>
             </li>
@@ -333,6 +347,8 @@ export function renderNavbar() {
               .join("")}
           </ul>
         </div>
+
+        ${renderSocialLinks("nav-socials")}
 
         <div class="nav-actions">
           <a
@@ -370,35 +386,7 @@ export function renderNavbar() {
 
         <div class="navbar__mobile-footer">
           <span>Síguenos</span>
-
-          <div class="navbar__socials">
-            <a
-              href="https://www.facebook.com/Cooking.Gourmet"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook de Cooking Gourmet"
-            >
-              ${getSocialIcon("facebook")}
-            </a>
-
-            <a
-              href="https://www.instagram.com/cooking_gourmet/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram de Cooking Gourmet"
-            >
-              ${getSocialIcon("instagram")}
-            </a>
-
-            <a
-              href="https://www.tiktok.com/@cooking.gourmet.oficial"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="TikTok de Cooking Gourmet"
-            >
-              ${getSocialIcon("tiktok")}
-            </a>
-          </div>
+          ${renderSocialLinks("navbar__socials")}
         </div>
       </div>
     </nav>

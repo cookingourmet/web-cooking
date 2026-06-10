@@ -18,14 +18,11 @@ body.nav-is-open {
   top: 0;
   z-index: 1200;
   padding: 10px 16px;
-
   background: #ffffff;
   border-bottom: none;
   box-shadow: none;
-
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-
   transition:
     padding 0.25s ease,
     box-shadow 0.25s ease;
@@ -34,13 +31,12 @@ body.nav-is-open {
 .topbar.is-scrolled {
   padding-top: 7px;
   padding-bottom: 7px;
-
   background: #ffffff;
   box-shadow: 0 10px 30px rgba(50, 30, 36, 0.07);
-
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+
 .topbar__inner {
   position: relative;
   width: min(1420px, 100%);
@@ -332,6 +328,7 @@ body.nav-is-open {
 .program-menu__icon svg,
 .program-menu__arrow svg,
 .nav-action__icon svg,
+.nav-socials svg,
 .navbar__socials svg {
   width: 100%;
   height: 100%;
@@ -365,15 +362,14 @@ body.nav-is-open {
   position: absolute;
   top: calc(100% + 14px);
   left: 0;
-  width: min(590px, calc(100vw - 36px));
-  padding: 15px;
+  width: min(540px, calc(100vw - 36px));
   border: 1px solid rgba(254, 0, 62, 0.12);
   border-radius: 22px;
   background:
-    radial-gradient(circle at 6% 0%, rgba(254, 0, 62, 0.065), transparent 30%),
-    rgba(255, 255, 255, 0.985);
+    radial-gradient(circle at 6% 0%, rgba(254, 0, 62, 0.055), transparent 30%),
+    rgba(255, 255, 255, 0.99);
   box-shadow:
-    0 28px 70px rgba(72, 40, 50, 0.17),
+    0 28px 70px rgba(72, 40, 50, 0.16),
     0 0 0 1px rgba(255, 255, 255, 0.9) inset;
   opacity: 0;
   visibility: hidden;
@@ -385,6 +381,10 @@ body.nav-is-open {
     visibility 0.22s ease,
     transform 0.22s ease;
   z-index: 50;
+}
+
+.program-menu__inner {
+  padding: 15px;
 }
 
 .nav-item--dropdown:hover .program-menu,
@@ -427,14 +427,14 @@ body.nav-is-open {
 
 .program-menu__grid > a {
   min-width: 0;
-  min-height: 72px;
-  padding: 10px;
+  min-height: 54px;
+  padding: 8px 10px;
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 18px;
+  grid-template-columns: 36px minmax(0, 1fr) 16px;
   align-items: center;
   gap: 10px;
   border: 1px solid transparent;
-  border-radius: 15px;
+  border-radius: 14px;
   color: var(--header-ink);
   text-decoration: none;
   transition:
@@ -459,48 +459,34 @@ body.nav-is-open {
 }
 
 .program-menu__icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(254, 0, 62, 0.1);
-  border-radius: 13px;
+  border-radius: 12px;
   background: #fff;
   color: var(--header-red);
-  box-shadow: 0 8px 18px rgba(85, 49, 60, 0.07);
+  box-shadow: 0 7px 16px rgba(85, 49, 60, 0.065);
 }
 
 .program-menu__icon svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
-.program-menu__copy {
+.program-menu__name {
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.program-menu__copy strong {
   overflow: hidden;
   color: var(--header-ink);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
+  font-weight: 800;
   line-height: 1.15;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.program-menu__copy small {
-  display: -webkit-box;
-  overflow: hidden;
-  color: var(--header-muted);
-  font-size: 0.68rem;
-  line-height: 1.35;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
 
 .program-menu__arrow {
   width: 16px;
@@ -514,6 +500,60 @@ body.nav-is-open {
 .program-menu__grid > a:hover .program-menu__arrow {
   color: var(--header-red);
   transform: translateX(2px);
+}
+
+.nav-socials {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 12px;
+  flex: 0 0 auto;
+}
+
+.nav-socials::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--header-line);
+}
+
+.nav-socials a,
+.navbar__socials a {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(254, 0, 62, 0.1);
+  border-radius: 50%;
+  background: #fff;
+  color: #8d7f84;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nav-socials a:hover,
+.navbar__socials a:hover {
+  transform: translateY(-2px);
+  border-color: rgba(254, 0, 62, 0.22);
+  background: #fff7f9;
+  color: var(--header-red);
+  box-shadow: 0 9px 20px rgba(254, 0, 62, 0.09);
+}
+
+.nav-socials svg,
+.navbar__socials svg {
+  width: 15px;
+  height: 15px;
 }
 
 .nav-actions {
@@ -623,6 +663,10 @@ body.nav-is-open {
     font-size: 0.76rem;
   }
 
+  .nav-socials {
+    display: none;
+  }
+
   .nav-action {
     padding-inline: 11px;
     font-size: 0.74rem;
@@ -680,7 +724,7 @@ body.nav-is-open {
   .navbar {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     z-index: 20;
     width: min(420px, 92vw);
     height: 100dvh;
@@ -689,9 +733,9 @@ body.nav-is-open {
     background:
       radial-gradient(circle at 100% 0%, rgba(254, 0, 62, 0.075), transparent 28%),
       #fff;
-    border-left: 1px solid rgba(254, 0, 62, 0.1);
-    box-shadow: -26px 0 70px rgba(54, 31, 39, 0.18);
-    transform: translateX(105%);
+    border-right: 1px solid rgba(254, 0, 62, 0.1);
+    box-shadow: 26px 0 70px rgba(54, 31, 39, 0.18);
+    transform: translateX(-105%);
     visibility: hidden;
     transition:
       transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
@@ -825,20 +869,38 @@ body.nav-is-open {
   .program-menu {
     position: static;
     width: 100%;
-    margin-top: 7px;
-    padding: 9px;
-    display: none;
+    max-height: 0;
+    margin-top: 0;
+    overflow: hidden;
+    border-color: transparent;
     border-radius: 16px;
     background: rgba(254, 0, 62, 0.035);
     box-shadow: none;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    pointer-events: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition:
+      max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+      margin-top 0.3s ease,
+      opacity 0.22s ease,
+      visibility 0.22s ease,
+      transform 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .program-menu__inner {
+    padding: 9px;
   }
 
   .nav-item--dropdown.is-open .program-menu {
-    display: block;
+    max-height: 620px;
+    margin-top: 7px;
+    border-color: rgba(254, 0, 62, 0.11);
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   .program-menu__heading {
@@ -855,9 +917,9 @@ body.nav-is-open {
   }
 
   .program-menu__grid > a {
-    min-height: 62px;
-    grid-template-columns: 37px minmax(0, 1fr) 17px;
-    background: rgba(255, 255, 255, 0.75);
+    min-height: 52px;
+    grid-template-columns: 36px minmax(0, 1fr) 17px;
+    background: rgba(255, 255, 255, 0.78);
   }
 
   .program-menu__icon {
@@ -866,12 +928,12 @@ body.nav-is-open {
     border-radius: 12px;
   }
 
-  .program-menu__copy strong {
-    font-size: 0.79rem;
+  .program-menu__name {
+    font-size: 0.82rem;
   }
 
-  .program-menu__copy small {
-    font-size: 0.65rem;
+  .nav-socials {
+    display: none;
   }
 
   .nav-actions {
@@ -912,23 +974,8 @@ body.nav-is-open {
   .navbar__socials a {
     width: 38px;
     height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(254, 0, 62, 0.1);
-    border-radius: 50%;
     background: #fff8fa;
     color: #9e0028;
-    transition:
-      transform 0.2s ease,
-      background 0.2s ease,
-      color 0.2s ease;
-  }
-
-  .navbar__socials a:hover {
-    transform: translateY(-1px);
-    background: var(--header-red);
-    color: #fff;
   }
 
   .navbar__socials svg {
@@ -996,9 +1043,6 @@ body.nav-is-open {
     font-size: 0.84rem;
   }
 
-  .program-menu__copy small {
-    -webkit-line-clamp: 1;
-  }
 
   .nav-action {
     min-height: 46px;
@@ -1035,6 +1079,7 @@ body.nav-is-open {
   .program-menu__grid > a,
   .program-menu__arrow,
   .nav-action,
+  .nav-socials a,
   .navbar__socials a {
     scroll-behavior: auto;
     transition-duration: 0.01ms;
