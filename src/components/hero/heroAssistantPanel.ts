@@ -38,7 +38,6 @@ import type {
   CostDetail,
   InfoTableMessage,
   Intent,
-  LeadStep,
   MessageAnalysis,
   ProgramKey,
   ReplyMode,
@@ -99,28 +98,16 @@ function normalizePhone(value: string) {
   return value.replace(/\D/g, "");
 }
 
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
-
-function isValidDni(value: string) {
-  return /^\d{8}$/.test(value.trim());
-}
-
-function isSkipValue(value: string) {
-  const normalized = normalizeText(value);
-  return [
-    "omitir",
-    "saltar",
-    "no tengo",
-    "no deseo",
-    "prefiero no",
-    "despues",
-  ].some((term) => textHasTerm(normalized, term));
-}
-
 function friendlyName(state: AssistantState) {
   return firstName(state.visitorName);
+}
+
+function leadDate() {
+  return new Intl.DateTimeFormat("es-PE", {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone: "America/Lima",
+  }).format(new Date());
 }
 
 function buildLeadSummary(state: AssistantState) {
@@ -130,14 +117,12 @@ function buildLeadSummary(state: AssistantState) {
 
   return [
     "Nuevo lead Cookito",
-    `Programa: ${program?.label ?? "-"}`,
+    "",
     `Nombre: ${state.visitorName || "-"}`,
     `Celular: ${state.phone || "-"}`,
-    `Correo: ${state.email || "No compartido"}`,
-    `DNI: ${state.dni || "No compartido"}`,
-    `Interés: ${state.currentIntent}`,
-    `Turno: ${state.schedulePreference || "No indicado"}`,
+    `Programa: ${program?.label ?? "-"}`,
     `Página: ${window.location.href}`,
+    `Fecha: ${leadDate()}`,
   ].join("\n");
 }
 
@@ -166,7 +151,9 @@ function buildWhatsAppUrl(state: AssistantState) {
     info: "información general",
     costs: costDetailLabels[state.currentCostDetail],
     schedules: state.schedulePreference
-      ? `horarios del turno ${scheduleLabels[state.schedulePreference] ?? state.schedulePreference}`
+      ? `horarios del turno ${
+          scheduleLabels[state.schedulePreference] ?? state.schedulePreference
+        }`
       : "horarios",
     enrollment: "inscripción y vacantes",
     brochure: "el brochure PDF",
@@ -183,12 +170,18 @@ function buildWhatsAppUrl(state: AssistantState) {
   const lines = [
     "Hola, vengo desde la web de Cooking Gourmet.",
     state.visitorName ? `Mi nombre es ${state.visitorName}.` : "",
+    state.phone ? `Mi celular es ${state.phone}.` : "",
     program
       ? `Quiero saber sobre ${program.label}.`
       : "Quiero conocer sus programas.",
-    `Estaba consultando: ${intentLabels[state.currentIntent] ?? "información académica"}.`,
+    `Estaba consultando: ${
+      intentLabels[state.currentIntent] ?? "información académica"
+    }.`,
     state.schedulePreference
-      ? `Turno de interés: ${state.schedulePreference}.`
+      ? `Turno de interés: ${
+          scheduleLabels[state.schedulePreference] ??
+          state.schedulePreference
+        }.`
       : "",
     "¿Podrían ayudarme, por favor?",
   ].filter(Boolean);
@@ -203,29 +196,47 @@ async function sendLeadToSales(state: AssistantState) {
     ? PROGRAMS[state.selectedProgram]
     : null;
 
+  if (!state.visitorName || !state.phone || !program) {
+    throw new Error("Faltan datos obligatorios del lead.");
+  }
+
+  const date = leadDate();
+  const summary = buildLeadSummary(state);
   const formData = new FormData();
+
   formData.append("access_key", WEB3FORMS_ACCESS_KEY);
   formData.append(
     "subject",
-    `Nuevo lead Cookito - ${program?.label ?? "Programa"}`
+    `Nuevo lead Cookito - ${program.label}`
   );
   formData.append("from_name", "Cookito - Cooking Gourmet");
-  formData.append("name", state.visitorName || "Cliente Cookito");
-  formData.append("email", state.email || SALES_EMAIL);
-  formData.append("phone", state.phone || "-");
-  formData.append("message", buildLeadSummary(state));
+  formData.append("name", state.visitorName);
+  formData.append("email", SALES_EMAIL);
+  formData.append("phone", state.phone);
+  formData.append("Programa", program.label);
+  formData.append("Página", window.location.href);
+  formData.append("Fecha", date);
+  formData.append("message", summary);
 
   const response = await fetch(LEAD_ENDPOINT, {
     method: "POST",
     body: formData,
+    headers: {
+      Accept: "application/json",
+    },
   });
 
   const data = (await response
     .json()
-    .catch(() => null)) as { success?: boolean; message?: string } | null;
+    .catch(() => null)) as {
+    success?: boolean;
+    message?: string;
+  } | null;
 
   if (!response.ok || data?.success === false) {
-    throw new Error(data?.message || "No se pudo enviar la solicitud.");
+    throw new Error(
+      data?.message || "No se pudo enviar el lead al correo."
+    );
   }
 }
 
@@ -276,7 +287,9 @@ function renderInfoTable(message: InfoTableMessage) {
   };
 
   return `
-    <section class="hero-assistant-window__info-table hero-assistant-window__info-table--${message.variant}">
+    <section class="hero-assistant-window__info-table hero-assistant-window__info-table--${
+      message.variant
+    }">
       <header class="hero-assistant-window__info-table-header">
         <span>${icons[message.variant]}</span>
         <div>
@@ -315,15 +328,15 @@ function renderInfoTable(message: InfoTableMessage) {
 
 function renderMessage(message: ChatMessage) {
   if (message.kind === "program_card") {
-    return `<div class="hero-assistant-window__message-shell" data-message-id="${message.id}">${renderProgramCard(
-      message.programKey
-    )}</div>`;
+    return `<div class="hero-assistant-window__message-shell" data-message-id="${
+      message.id
+    }">${renderProgramCard(message.programKey)}</div>`;
   }
 
   if (message.kind === "info_table") {
-    return `<div class="hero-assistant-window__message-shell" data-message-id="${message.id}">${renderInfoTable(
-      message
-    )}</div>`;
+    return `<div class="hero-assistant-window__message-shell" data-message-id="${
+      message.id
+    }">${renderInfoTable(message)}</div>`;
   }
 
   const roleClass =
@@ -332,7 +345,9 @@ function renderMessage(message: ChatMessage) {
       : "hero-assistant-window__message--user";
 
   return `
-    <div class="hero-assistant-window__message ${roleClass}" data-message-id="${message.id}">
+    <div class="hero-assistant-window__message ${roleClass}" data-message-id="${
+      message.id
+    }">
       <p class="hero-assistant-window__text">${formatMessage(
         message.text
       )}</p>
@@ -417,7 +432,10 @@ function renderAssistantWindow() {
 
 export function mountAssistantWindow() {
   if (!document.querySelector("[data-assistant-window]")) {
-    document.body.insertAdjacentHTML("beforeend", renderAssistantWindow());
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      renderAssistantWindow()
+    );
   }
 
   initAssistantWindow();
@@ -425,7 +443,9 @@ export function mountAssistantWindow() {
 
 export function initAssistantWindow() {
   const windows = Array.from(
-    document.querySelectorAll<HTMLElement>("[data-assistant-window]")
+    document.querySelectorAll<HTMLElement>(
+      "[data-assistant-window]"
+    )
   );
 
   windows.forEach((windowEl) => {
@@ -447,8 +467,12 @@ export function initAssistantWindow() {
     const input = windowEl.querySelector<HTMLInputElement>(
       "[data-assistant-input]"
     );
-    const panel = windowEl.querySelector<HTMLElement>("[data-assistant-panel]");
-    const chat = windowEl.querySelector<HTMLElement>("[data-assistant-chat]");
+    const panel = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-panel]"
+    );
+    const chat = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-chat]"
+    );
     const messagesHost = windowEl.querySelector<HTMLElement>(
       "[data-assistant-messages]"
     );
@@ -458,16 +482,19 @@ export function initAssistantWindow() {
     const repliesHost = windowEl.querySelector<HTMLElement>(
       "[data-assistant-replies]"
     );
-    const bubble = windowEl.querySelector<HTMLElement>("[data-assistant-bubble]");
+    const bubble = windowEl.querySelector<HTMLElement>(
+      "[data-assistant-bubble]"
+    );
     const headerTitle = windowEl.querySelector<HTMLElement>(
       "[data-assistant-header-title]"
     );
     const headerStatus = windowEl.querySelector<HTMLElement>(
       "[data-assistant-header-status]"
     );
-    const scrollBottomButton = windowEl.querySelector<HTMLButtonElement>(
-      "[data-assistant-scroll-bottom]"
-    );
+    const scrollBottomButton =
+      windowEl.querySelector<HTMLButtonElement>(
+        "[data-assistant-scroll-bottom]"
+      );
 
     if (
       !toggleButton ||
@@ -520,7 +547,13 @@ export function initAssistantWindow() {
       safeHeaderTitle.textContent = state.visitorName
         ? `Cookito · ${firstName(state.visitorName)}`
         : "Cookito";
-      safeHeaderStatus.textContent = isTyping ? "Escribiendo..." : "En línea";
+
+      safeHeaderStatus.textContent = isTyping
+        ? "Escribiendo..."
+        : state.leadStatus === "sending"
+          ? "Registrando tus datos..."
+          : "En línea";
+
       safeMuteButton.textContent = state.muted ? "🔇" : "🔊";
       safeMuteButton.setAttribute(
         "aria-label",
@@ -536,11 +569,8 @@ export function initAssistantWindow() {
         case "ask_phone":
           safeInput.placeholder = "Escribe tu celular...";
           break;
-        case "ask_email_optional":
-          safeInput.placeholder = "Correo u “omitir”...";
-          break;
-        case "ask_dni_optional":
-          safeInput.placeholder = "DNI u “omitir”...";
+        case "ask_program":
+          safeInput.placeholder = "Escribe o elige un programa...";
           break;
         default:
           safeInput.placeholder = "Ej.: mensualidad de Pastelería";
@@ -548,7 +578,12 @@ export function initAssistantWindow() {
     }
 
     function isNearBottom() {
-      return safeChat.scrollHeight - safeChat.scrollTop - safeChat.clientHeight <= 48;
+      return (
+        safeChat.scrollHeight -
+          safeChat.scrollTop -
+          safeChat.clientHeight <=
+        48
+      );
     }
 
     function stopScroll() {
@@ -582,7 +617,9 @@ export function initAssistantWindow() {
           return;
         }
 
-        const distance = safeChat.scrollHeight - safeChat.scrollTop;
+        const distance =
+          safeChat.scrollHeight - safeChat.scrollTop;
+
         if (Math.abs(distance) <= 1) {
           safeChat.scrollTop = safeChat.scrollHeight;
           scrollFrame = null;
@@ -597,12 +634,19 @@ export function initAssistantWindow() {
       scrollFrame = window.requestAnimationFrame(animate);
     }
 
-    function appendMessage(message: ChatMessage, forceScroll = false) {
-      safeMessagesHost.insertAdjacentHTML("beforeend", renderMessage(message));
-
-      const lastImage = safeMessagesHost.querySelector<HTMLImageElement>(
-        `[data-message-id="${message.id}"] img`
+    function appendMessage(
+      message: ChatMessage,
+      forceScroll = false
+    ) {
+      safeMessagesHost.insertAdjacentHTML(
+        "beforeend",
+        renderMessage(message)
       );
+
+      const lastImage =
+        safeMessagesHost.querySelector<HTMLImageElement>(
+          `[data-message-id="${message.id}"] img`
+        );
 
       if (lastImage && !lastImage.complete) {
         lastImage.addEventListener(
@@ -619,7 +663,10 @@ export function initAssistantWindow() {
     }
 
     function renderStoredMessages() {
-      safeMessagesHost.innerHTML = state.messages.map(renderMessage).join("");
+      safeMessagesHost.innerHTML = state.messages
+        .map(renderMessage)
+        .join("");
+
       window.setTimeout(() => scrollToBottom(true), 0);
     }
 
@@ -662,11 +709,13 @@ export function initAssistantWindow() {
         <button
           type="button"
           class="hero-assistant-window__chip${
-            primary ? " hero-assistant-window__chip--primary" : ""
+            primary
+              ? " hero-assistant-window__chip--primary"
+              : ""
           }"
-          data-reply-type="${type}"
-          data-reply-value="${value}"
-        >${label}</button>
+          data-reply-type="${escapeHtml(type)}"
+          data-reply-value="${escapeHtml(value)}"
+        >${escapeHtml(label)}</button>
       `;
     }
 
@@ -678,33 +727,66 @@ export function initAssistantWindow() {
           replyButton("🎓 Programas", "intent", "programs"),
           replyButton("💰 Costos", "intent", "costs"),
           replyButton("🕐 Horarios", "intent", "schedules"),
-          replyButton("✅ Inscribirme", "intent", "enrollment", true),
+          replyButton(
+            "✅ Inscribirme",
+            "intent",
+            "enrollment",
+            true
+          ),
         ].join("");
       }
 
       if (state.replyMode === "programs") {
         html = PROGRAM_KEYS.map((key) =>
-          replyButton(`${PROGRAMS[key].emoji} ${PROGRAMS[key].label}`, "program", key)
+          replyButton(
+            `${PROGRAMS[key].emoji} ${PROGRAMS[key].label}`,
+            "program",
+            key
+          )
         ).join("");
       }
 
       if (state.replyMode === "recommendation") {
         html = [
-          replyButton("👨‍🍳 Cocina", "recommend", "gastronomia"),
-          replyButton("🎂 Postres", "recommend", "pasteleria"),
-          replyButton("🥃 Coctelería", "recommend", "bar_profesional"),
+          replyButton(
+            "👨‍🍳 Cocina",
+            "recommend",
+            "gastronomia"
+          ),
+          replyButton(
+            "🎂 Postres",
+            "recommend",
+            "pasteleria"
+          ),
+          replyButton(
+            "🥃 Coctelería",
+            "recommend",
+            "bar_profesional"
+          ),
           replyButton("☕ Café", "recommend", "barismo"),
           replyButton("🍇 Vinos", "recommend", "sommelier"),
-          replyButton("🔥 Intensivo", "recommend", "cocina_corta"),
+          replyButton(
+            "🔥 Intensivo",
+            "recommend",
+            "cocina_corta"
+          ),
         ].join("");
       }
 
-      if (state.replyMode === "program_actions" && state.selectedProgram) {
+      if (
+        state.replyMode === "program_actions" &&
+        state.selectedProgram
+      ) {
         html = [
           replyButton("💰 Costos", "intent", "costs"),
           replyButton("🕐 Horarios", "intent", "schedules"),
           replyButton("📄 PDF", "intent", "brochure"),
-          replyButton("✅ Inscribirme", "intent", "enrollment", true),
+          replyButton(
+            "✅ Inscribirme",
+            "intent",
+            "enrollment",
+            true
+          ),
         ].join("");
       }
 
@@ -713,63 +795,25 @@ export function initAssistantWindow() {
           replyButton("🌤️ Mañana", "schedule", "morning"),
           replyButton("☀️ Tarde", "schedule", "afternoon"),
           replyButton("🌙 Noche", "schedule", "night"),
+          replyButton(
+            "📅 Fin de semana",
+            "schedule",
+            "weekend"
+          ),
         ].join("");
       }
 
       if (state.replyMode === "contact") {
         html = `
-          <a class="hero-assistant-window__chip hero-assistant-window__chip--call" href="tel:${SALES_PHONE_LINK}">📞 Llamar ${SALES_PHONE_DISPLAY}</a>
+          <a class="hero-assistant-window__chip hero-assistant-window__chip--call" href="tel:${SALES_PHONE_LINK}">
+            📞 Llamar ${SALES_PHONE_DISPLAY}
+          </a>
           <a class="hero-assistant-window__chip hero-assistant-window__chip--primary" href="${buildWhatsAppUrl(
             state
-          )}" target="_blank" rel="noreferrer">💬 WhatsApp</a>
+          )}" target="_blank" rel="noreferrer">
+            💬 WhatsApp
+          </a>
         `;
-      }
-
-      if (state.replyMode === "skip_email") {
-        html = replyButton("Omitir correo", "skip", "email");
-      }
-
-      if (state.replyMode === "skip_dni") {
-        html = replyButton("Omitir DNI", "skip", "dni");
-      }
-
-      if (state.replyMode === "resume_lead") {
-        html = [
-          replyButton("Continuar solicitud", "resume", "yes", true),
-          replyButton("Seguir consultando", "resume", "no"),
-        ].join("");
-      }
-
-      if (state.replyMode === "lead_review") {
-        html = [
-          replyButton("✅ Enviar solicitud", "lead_review", "send", true),
-          replyButton("✏️ Corregir celular", "lead_review", "phone"),
-          replyButton("Cancelar", "lead_review", "cancel"),
-        ].join("");
-      }
-
-      if (state.replyMode === "completed") {
-        html = `
-          <a class="hero-assistant-window__chip hero-assistant-window__chip--call" href="tel:${SALES_PHONE_LINK}">📞 Llamar</a>
-          <a class="hero-assistant-window__chip hero-assistant-window__chip--primary" href="${buildWhatsAppUrl(
-            state
-          )}" target="_blank" rel="noreferrer">💬 WhatsApp</a>
-          ${replyButton("Otra consulta", "reset", "consult")}
-        `;
-      }
-
-      if (
-        state.pausedLeadStep !== "idle" &&
-        state.replyMode !== "completed" &&
-        state.replyMode !== "resume_lead" &&
-        state.replyMode !== "lead_review"
-      ) {
-        html += replyButton(
-          "▶ Continuar solicitud",
-          "resume",
-          "yes",
-          true
-        );
       }
 
       safeRepliesHost.innerHTML = html
@@ -840,8 +884,15 @@ export function initAssistantWindow() {
 
       await wait(FIRST_RESPONSE_PAUSE);
 
-      for (let index = 0; index < items.length; index += 1) {
-        if (token !== queueToken) return;
+      for (
+        let index = 0;
+        index < items.length;
+        index += 1
+      ) {
+        if (token !== queueToken) {
+          lockInteraction(false);
+          return;
+        }
 
         isTyping = true;
         audio.startTyping();
@@ -853,6 +904,7 @@ export function initAssistantWindow() {
           audio.stopTyping();
           isTyping = false;
           renderTyping();
+          lockInteraction(false);
           return;
         }
 
@@ -872,7 +924,10 @@ export function initAssistantWindow() {
     }
 
     function selectProgram(programKey: ProgramKey) {
-      if (state.selectedProgram && state.selectedProgram !== programKey) {
+      if (
+        state.selectedProgram &&
+        state.selectedProgram !== programKey
+      ) {
         state.previousProgram = state.selectedProgram;
       }
 
@@ -889,14 +944,19 @@ export function initAssistantWindow() {
         [
           {
             kind: "text",
-            text: `${friendlyName(state)}, ¿de qué programa deseas esa información?`,
+            text: `${friendlyName(
+              state
+            )}, ¿de qué programa deseas esa información?`,
           },
         ],
         "programs"
       );
     }
 
-    function answerCosts(programKey: ProgramKey, detail: CostDetail) {
+    function answerCosts(
+      programKey: ProgramKey,
+      detail: CostDetail
+    ) {
       selectProgram(programKey);
       state.currentIntent = "costs";
       state.currentCostDetail = detail;
@@ -904,7 +964,11 @@ export function initAssistantWindow() {
       persist();
 
       void sendBotSequence(
-        costSequence(PROGRAMS[programKey], detail, state.visitorName),
+        costSequence(
+          PROGRAMS[programKey],
+          detail,
+          state.visitorName
+        ),
         "program_actions"
       );
     }
@@ -916,12 +980,20 @@ export function initAssistantWindow() {
       selectProgram(programKey);
       state.currentIntent = "schedules";
       state.schedulePreference = preference;
-      state.pendingQuestion = preference ? "" : "choose_schedule";
+      state.pendingQuestion = preference
+        ? ""
+        : "choose_schedule";
       persist();
 
       void sendBotSequence(
-        scheduleSequence(PROGRAMS[programKey], preference, state.visitorName),
-        preference ? "program_actions" : "schedule_options"
+        scheduleSequence(
+          PROGRAMS[programKey],
+          preference,
+          state.visitorName
+        ),
+        preference
+          ? "program_actions"
+          : "schedule_options"
       );
     }
 
@@ -932,7 +1004,10 @@ export function initAssistantWindow() {
       persist();
 
       void sendBotSequence(
-        programInfoSequence(PROGRAMS[programKey], state.visitorName),
+        programInfoSequence(
+          PROGRAMS[programKey],
+          state.visitorName
+        ),
         "program_actions"
       );
     }
@@ -944,7 +1019,10 @@ export function initAssistantWindow() {
       persist();
 
       void sendBotSequence(
-        brochureSequence(PROGRAMS[programKey], state.visitorName),
+        brochureSequence(
+          PROGRAMS[programKey],
+          state.visitorName
+        ),
         "program_actions"
       );
     }
@@ -952,84 +1030,46 @@ export function initAssistantWindow() {
     function startEnrollment(programKey: ProgramKey) {
       selectProgram(programKey);
       state.currentIntent = "enrollment";
-      state.leadStep = "ask_phone";
-      state.pausedLeadStep = "idle";
       state.pendingQuestion = "";
       persist();
-      updatePlaceholder();
-
-      void sendBotSequence([
-        {
-          kind: "text",
-          text: `¡Excelente, ${friendlyName(state)}! 🙌 Iniciaremos tu solicitud para ${PROGRAMS[programKey].label}.`,
-        },
-        {
-          kind: "text",
-          text: "¿Cuál es tu número de celular?",
-        },
-      ]);
-    }
-
-    function resumeLead() {
-      const step =
-        state.pausedLeadStep !== "idle"
-          ? state.pausedLeadStep
-          : state.leadStep;
-
-      state.leadStep = step;
-      state.pausedLeadStep = "idle";
-      state.pendingQuestion = "";
-      persist();
-      updatePlaceholder();
-
-      const prompts: Partial<Record<LeadStep, string>> = {
-        ask_phone: "Retomemos 😊 ¿Cuál es tu número de celular?",
-        ask_email_optional:
-          "Retomemos 😊 Escribe tu correo o toca “Omitir correo” .",
-        ask_dni_optional:
-          "Retomemos 😊 Escribe tu DNI o toca “Omitir DNI” .",
-      };
-
-      const mode: ReplyMode =
-        step === "ask_email_optional"
-          ? "skip_email"
-          : step === "ask_dni_optional"
-            ? "skip_dni"
-            : "none";
 
       void sendBotSequence(
-        [{ kind: "text", text: prompts[step] ?? "Continuemos 😊" }],
-        mode
+        [
+          {
+            kind: "text",
+            text: `¡Excelente, ${friendlyName(
+              state
+            )}! 🙌 Ya tenemos tu nombre, celular y programa de interés.`,
+          },
+          {
+            kind: "text",
+            text: `Un asesor podrá ayudarte a separar una vacante en ${PROGRAMS[programKey].label}. También puedes comunicarte ahora por WhatsApp o llamada.`,
+          },
+        ],
+        "contact"
       );
     }
 
-    function pauseLeadForQuestion() {
-      if (
-        state.leadStep === "ask_phone" ||
-        state.leadStep === "ask_email_optional" ||
-        state.leadStep === "ask_dni_optional"
-      ) {
-        state.pausedLeadStep = state.leadStep;
-        state.leadStep = "idle";
-        state.pendingQuestion = "resume_lead";
-        persist();
-        updatePlaceholder();
-        return true;
-      }
-
-      return false;
-    }
-
-    function handleComparison(analysis: MessageAnalysis) {
+    function handleComparison(
+      analysis: MessageAnalysis
+    ) {
       let keys = analysis.programs;
 
-      if (keys.length < 2 && state.selectedProgram && state.previousProgram) {
-        keys = [state.previousProgram, state.selectedProgram];
+      if (
+        keys.length < 2 &&
+        state.selectedProgram &&
+        state.previousProgram
+      ) {
+        keys = [
+          state.previousProgram,
+          state.selectedProgram,
+        ];
       }
 
       if (keys.length < 2) {
         keys = PROGRAM_KEYS.filter(
-          (key) => PROGRAMS[key].pricing.monthly !== null
+          (key) =>
+            PROGRAMS[key].pricing.monthly !== null
         );
       }
 
@@ -1046,7 +1086,10 @@ export function initAssistantWindow() {
       );
     }
 
-    function handleFaq(intent: Intent, programKey: ProgramKey | null) {
+    function handleFaq(
+      intent: Intent,
+      programKey: ProgramKey | null
+    ) {
       const faqIntent = intent as
         | "duration"
         | "requirements"
@@ -1063,7 +1106,9 @@ export function initAssistantWindow() {
         faqSequence(
           faqIntent,
           state.visitorName,
-          programKey ? PROGRAMS[programKey] : undefined
+          programKey
+            ? PROGRAMS[programKey]
+            : undefined
         ),
         intent === "location"
           ? "contact"
@@ -1073,88 +1118,35 @@ export function initAssistantWindow() {
       );
     }
 
-    function handlePendingAnswer(analysis: MessageAnalysis) {
-      if (!analysis.affirmative && !analysis.negative) return false;
-
-      if (state.pendingQuestion === "confirm_enrollment") {
-        if (analysis.affirmative && state.selectedProgram) {
-          startEnrollment(state.selectedProgram);
-        } else {
-          state.pendingQuestion = "";
-          persist();
-          void sendBotSequence(
-            [{ kind: "text", text: "Está bien 😊 ¿Qué deseas revisar?" }],
-            "main"
-          );
-        }
-        return true;
-      }
-
-      if (state.pendingQuestion === "confirm_brochure") {
-        if (analysis.affirmative && state.selectedProgram) {
-          answerBrochure(state.selectedProgram);
-        } else {
-          state.pendingQuestion = "";
-          persist();
-          void sendBotSequence(
-            [{ kind: "text", text: "De acuerdo 😊 ¿Qué más deseas saber?" }],
-            "main"
-          );
-        }
-        return true;
-      }
-
-      if (state.pendingQuestion === "resume_lead") {
-        if (analysis.affirmative) {
-          resumeLead();
-        } else {
-          state.pausedLeadStep = "idle";
-          state.pendingQuestion = "";
-          persist();
-          void sendBotSequence(
-            [{ kind: "text", text: "Perfecto 😊 Seguimos conversando." }],
-            "main"
-          );
-        }
-        return true;
-      }
-
-      if (state.pendingQuestion === "confirm_lead") {
-        if (analysis.affirmative) {
-          void submitConfirmedLead();
-        } else {
-          state.pendingQuestion = "";
-          state.leadStep = "idle";
-          persist();
-          void sendBotSequence(
-            [{ kind: "text", text: "Está bien 😊 No enviaré la solicitud." }],
-            "main"
-          );
-        }
-        return true;
-      }
-
-      return false;
+    function resolveProgramForAnalysis(
+      analysis: MessageAnalysis
+    ) {
+      return (
+        analysis.programs[0] ??
+        (state.selectedProgram || null)
+      );
     }
 
-    function resolveProgramForAnalysis(analysis: MessageAnalysis) {
-      return analysis.programs[0] ?? (state.selectedProgram || null);
-    }
+    function handleAnalysis(
+      analysis: MessageAnalysis
+    ) {
+      const detectedProgram =
+        analysis.programs[0] ?? null;
+      const programKey =
+        resolveProgramForAnalysis(analysis);
 
-    function handleAnalysis(analysis: MessageAnalysis) {
-      if (handlePendingAnswer(analysis)) return;
-
-      const detectedProgram = analysis.programs[0] ?? null;
-      const programKey = resolveProgramForAnalysis(analysis);
-
-      if (detectedProgram) selectProgram(detectedProgram);
+      if (detectedProgram) {
+        selectProgram(detectedProgram);
+      }
 
       if (analysis.intent === "clarification") {
         void sendBotSequence(
           [
             {
               kind: "text",
-              text: `Disculpa por no entenderte bien, ${friendlyName(state)} 🙏`,
+              text: `Disculpa por no entenderte bien, ${friendlyName(
+                state
+              )} 🙏`,
             },
             {
               kind: "text",
@@ -1174,11 +1166,14 @@ export function initAssistantWindow() {
       if (analysis.intent === "recommendation") {
         state.currentIntent = "info";
         persist();
+
         void sendBotSequence(
           [
             {
               kind: "text",
-              text: `${friendlyName(state)}, te ayudo a elegir 😊 ¿Qué te atrae más?`,
+              text: `${friendlyName(
+                state
+              )}, te ayudo a elegir 😊 ¿Qué te atrae más?`,
             },
           ],
           "recommendation"
@@ -1191,7 +1186,9 @@ export function initAssistantWindow() {
           [
             {
               kind: "text",
-              text: `¡Hola de nuevo, ${friendlyName(state)}! 😊 ¿Qué deseas consultar?`,
+              text: `¡Hola de nuevo, ${friendlyName(
+                state
+              )}! 😊 ¿Qué deseas consultar?`,
             },
           ],
           "main"
@@ -1203,6 +1200,7 @@ export function initAssistantWindow() {
         state.currentIntent = "info";
         state.pendingQuestion = "choose_program";
         persist();
+
         void sendBotSequence(
           [
             {
@@ -1219,19 +1217,31 @@ export function initAssistantWindow() {
 
       if (analysis.intent === "costs") {
         if (!programKey) {
+          state.currentCostDetail =
+            analysis.costDetail;
           programNeeded("costs");
           return;
         }
-        answerCosts(programKey, analysis.costDetail);
+
+        answerCosts(
+          programKey,
+          analysis.costDetail
+        );
         return;
       }
 
       if (analysis.intent === "schedules") {
         if (!programKey) {
+          state.schedulePreference =
+            analysis.schedulePreference;
           programNeeded("schedules");
           return;
         }
-        answerSchedules(programKey, analysis.schedulePreference);
+
+        answerSchedules(
+          programKey,
+          analysis.schedulePreference
+        );
         return;
       }
 
@@ -1240,6 +1250,7 @@ export function initAssistantWindow() {
           programNeeded("brochure");
           return;
         }
+
         answerBrochure(programKey);
         return;
       }
@@ -1249,6 +1260,7 @@ export function initAssistantWindow() {
           programNeeded("enrollment");
           return;
         }
+
         startEnrollment(programKey);
         return;
       }
@@ -1258,6 +1270,7 @@ export function initAssistantWindow() {
           programNeeded("info");
           return;
         }
+
         answerInfo(programKey);
         return;
       }
@@ -1278,11 +1291,14 @@ export function initAssistantWindow() {
       if (analysis.intent === "advisor") {
         state.currentIntent = "advisor";
         persist();
+
         void sendBotSequence(
           [
             {
               kind: "text",
-              text: `${friendlyName(state)}, nuestro número es ${SALES_PHONE_DISPLAY} 📲`,
+              text: `${friendlyName(
+                state
+              )}, nuestro número es ${SALES_PHONE_DISPLAY} 📲`,
             },
             {
               kind: "text",
@@ -1299,7 +1315,9 @@ export function initAssistantWindow() {
           [
             {
               kind: "text",
-              text: `¡Con gusto, ${friendlyName(state)}! 😊 ¿Qué más deseas revisar?`,
+              text: `¡Con gusto, ${friendlyName(
+                state
+              )}! 😊 ¿Qué más deseas revisar?`,
             },
           ],
           "main"
@@ -1311,27 +1329,38 @@ export function initAssistantWindow() {
         void sendBotSequence([
           {
             kind: "text",
-            text: `¡Hasta pronto, ${friendlyName(state)}! 👋`,
+            text: `¡Hasta pronto, ${friendlyName(
+              state
+            )}! 👋`,
           },
         ]);
         return;
       }
 
-      // Si solo menciona otra carrera, conserva el último tema.
       if (detectedProgram) {
         switch (state.currentIntent) {
           case "costs":
-            answerCosts(detectedProgram, state.currentCostDetail);
+            answerCosts(
+              detectedProgram,
+              state.currentCostDetail
+            );
             return;
+
           case "schedules":
-            answerSchedules(detectedProgram, state.schedulePreference);
+            answerSchedules(
+              detectedProgram,
+              state.schedulePreference
+            );
             return;
+
           case "brochure":
             answerBrochure(detectedProgram);
             return;
+
           case "enrollment":
             startEnrollment(detectedProgram);
             return;
+
           default:
             answerInfo(detectedProgram);
             return;
@@ -1343,7 +1372,9 @@ export function initAssistantWindow() {
         analysis.suggestedIntent !== "unknown" &&
         analysis.confidence >= 0.45
       ) {
-        const labels: Partial<Record<Intent, string>> = {
+        const labels: Partial<
+          Record<Intent, string>
+        > = {
           costs: "los costos",
           schedules: "los horarios",
           enrollment: "la inscripción",
@@ -1351,13 +1382,15 @@ export function initAssistantWindow() {
           info: "información del programa",
         };
 
-        const label = labels[analysis.suggestedIntent];
+        const label =
+          labels[analysis.suggestedIntent];
+
         if (label) {
           void sendBotSequence(
             [
               {
                 kind: "text",
-                text: `¿Te refieres a ${label}? 😊`,
+                text: `¿Te refieres a ${label}? Puedes tocar una opción o escribirlo nuevamente 😊`,
               },
             ],
             "main"
@@ -1370,7 +1403,9 @@ export function initAssistantWindow() {
         [
           {
             kind: "text",
-            text: `Disculpa, ${friendlyName(state)}, no entendí bien esa pregunta 🙏`,
+            text: `Disculpa, ${friendlyName(
+              state
+            )}, no entendí bien esa pregunta 🙏`,
           },
           {
             kind: "text",
@@ -1388,11 +1423,15 @@ export function initAssistantWindow() {
         return "¡Buenos días! 😊";
       }
 
-      if (textHasTerm(normalized, "buenas tardes")) {
+      if (
+        textHasTerm(normalized, "buenas tardes")
+      ) {
         return "¡Buenas tardes! 😊";
       }
 
-      if (textHasTerm(normalized, "buenas noches")) {
+      if (
+        textHasTerm(normalized, "buenas noches")
+      ) {
         return "¡Buenas noches! 😊";
       }
 
@@ -1408,8 +1447,12 @@ export function initAssistantWindow() {
           if (!word) return word;
 
           return (
-            word.charAt(0).toLocaleUpperCase("es-PE") +
-            word.slice(1).toLocaleLowerCase("es-PE")
+            word
+              .charAt(0)
+              .toLocaleUpperCase("es-PE") +
+            word
+              .slice(1)
+              .toLocaleLowerCase("es-PE")
           );
         })
         .join(" ");
@@ -1418,7 +1461,9 @@ export function initAssistantWindow() {
     function isValidVisitorName(value: string) {
       const name = value.trim();
       const normalized = normalizeText(name);
-      const words = name.split(/\s+/).filter(Boolean);
+      const words = name
+        .split(/\s+/)
+        .filter(Boolean);
 
       if (
         /\d/.test(name) ||
@@ -1433,7 +1478,11 @@ export function initAssistantWindow() {
       const validWordPattern =
         /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'-]+$/u;
 
-      if (!words.every((word) => validWordPattern.test(word))) {
+      if (
+        !words.every((word) =>
+          validWordPattern.test(word)
+        )
+      ) {
         return false;
       }
 
@@ -1464,7 +1513,9 @@ export function initAssistantWindow() {
         "cliente",
       ]);
 
-      const firstWord = normalizeText(words[0] ?? "");
+      const firstWord = normalizeText(
+        words[0] ?? ""
+      );
 
       if (blockedFirstWords.has(firstWord)) {
         return false;
@@ -1496,7 +1547,8 @@ export function initAssistantWindow() {
         return false;
       }
 
-      const candidateAnalysis = analyzeMessage(name);
+      const candidateAnalysis =
+        analyzeMessage(name);
 
       return (
         candidateAnalysis.programs.length === 0 &&
@@ -1505,9 +1557,11 @@ export function initAssistantWindow() {
       );
     }
 
-    function removeLeadingGreeting(tokens: string[]) {
-      const normalizedTokens = tokens.map((token) =>
-        normalizeText(token)
+    function removeLeadingGreeting(
+      tokens: string[]
+    ) {
+      const normalizedTokens = tokens.map(
+        (token) => normalizeText(token)
       );
 
       const greetingSequences = [
@@ -1542,9 +1596,12 @@ export function initAssistantWindow() {
         .replace(/[¡!¿?,.;:]+/g, " ")
         .replace(/\s+/g, " ");
 
-      const tokens = cleaned.split(" ").filter(Boolean);
-      const normalizedTokens = tokens.map((token) =>
-        normalizeText(token)
+      const tokens = cleaned
+        .split(" ")
+        .filter(Boolean);
+
+      const normalizedTokens = tokens.map(
+        (token) => normalizeText(token)
       );
 
       const markers = [
@@ -1581,17 +1638,24 @@ export function initAssistantWindow() {
         "programa",
       ]);
 
-      for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex += 1) {
+      for (
+        let tokenIndex = 0;
+        tokenIndex < tokens.length;
+        tokenIndex += 1
+      ) {
         for (const marker of markers) {
           const matches = marker.every(
             (word, markerIndex) =>
-              normalizedTokens[tokenIndex + markerIndex] === word
+              normalizedTokens[
+                tokenIndex + markerIndex
+              ] === word
           );
 
           if (!matches) continue;
 
           const candidateTokens: string[] = [];
-          let cursor = tokenIndex + marker.length;
+          let cursor =
+            tokenIndex + marker.length;
 
           while (
             cursor < tokens.length &&
@@ -1609,7 +1673,9 @@ export function initAssistantWindow() {
               break;
             }
 
-            candidateTokens.push(tokens[cursor] ?? "");
+            candidateTokens.push(
+              tokens[cursor] ?? ""
+            );
             cursor += 1;
           }
 
@@ -1621,12 +1687,15 @@ export function initAssistantWindow() {
             continue;
           }
 
-          const remainderTokens = tokens.slice(cursor);
+          const remainderTokens =
+            tokens.slice(cursor);
 
           while (
             remainderTokens.length > 0 &&
             ["y", "e", "pero", "ademas"].includes(
-              normalizeText(remainderTokens[0] ?? "")
+              normalizeText(
+                remainderTokens[0] ?? ""
+              )
             )
           ) {
             remainderTokens.shift();
@@ -1634,7 +1703,9 @@ export function initAssistantWindow() {
 
           return {
             name: candidate,
-            remainingMessage: remainderTokens.join(" ").trim(),
+            remainingMessage: remainderTokens
+              .join(" ")
+              .trim(),
           };
         }
       }
@@ -1642,11 +1713,16 @@ export function initAssistantWindow() {
       const withoutGreeting =
         removeLeadingGreeting(tokens);
 
-      const standaloneCandidate = formatVisitorName(
-        withoutGreeting.join(" ")
-      );
+      const standaloneCandidate =
+        formatVisitorName(
+          withoutGreeting.join(" ")
+        );
 
-      if (isValidVisitorName(standaloneCandidate)) {
+      if (
+        isValidVisitorName(
+          standaloneCandidate
+        )
+      ) {
         return {
           name: standaloneCandidate,
           remainingMessage: "",
@@ -1711,164 +1787,77 @@ export function initAssistantWindow() {
         void sendBotSequence([
           {
             kind: "text",
-            text:
-              "Disculpa, no alcancé a identificar tu nombre 😅 Puedes responder, por ejemplo: “Soy Javier” o “Mi nombre es María”.",
+            text: "Disculpa, no alcancé a identificar tu nombre 😅 Puedes responder, por ejemplo: “Soy Javier” o “Mi nombre es María”.",
           },
         ]);
         return;
       }
 
-      state.visitorName = extractedIdentity.name;
-      state.leadStep = "idle";
+      state.visitorName =
+        extractedIdentity.name;
+      state.leadStep = "ask_phone";
 
-      if (pageProgram) {
-        selectProgram(pageProgram);
-      }
-
-      const questionToResume =
+      const pendingQuestion =
         extractedIdentity.remainingMessage ||
         state.deferredUserMessage;
 
-      state.deferredUserMessage = "";
+      state.deferredUserMessage =
+        pendingQuestion;
       persist();
       updateHeader();
       updatePlaceholder();
 
-      void (async () => {
-        await sendBotSequence(
-          [
-            {
-              kind: "text",
-              text: `¡Mucho gusto, ${friendlyName(state)}! 😊`,
-            },
-            {
-              kind: "text",
-              text: questionToResume
-                ? "Ahora sí, revisemos tu consulta."
-                : pageProgram
-                  ? `Veo que estás revisando ${PROGRAMS[pageProgram].label}. ¿Deseas costos, horarios o el PDF?`
-                  : "Cuéntame, ¿qué carrera o información estás buscando?",
-            },
-          ],
-          questionToResume
-            ? "none"
-            : pageProgram
-              ? "program_actions"
-              : "main"
-        );
-
-        if (questionToResume) {
-          handleAnalysis(
-            analyzeMessage(questionToResume)
-          );
-        }
-      })();
+      void sendBotSequence([
+        {
+          kind: "text",
+          text: `¡Mucho gusto, ${friendlyName(
+            state
+          )}! 😊`,
+        },
+        {
+          kind: "text",
+          text: "Ahora escribe tu número de celular para poder contactarte.",
+        },
+      ]);
     }
 
-    function handleLeadValue(value: string, analysis: MessageAnalysis) {
-      const isConsultation =
-        analysis.intent !== "unknown" || analysis.programs.length > 0;
+    function handleInitialPhone(value: string) {
+      if (!isValidPhone(value)) {
+        const analysis = analyzeMessage(value);
 
-      if (isConsultation) {
-        pauseLeadForQuestion();
-        handleAnalysis(analysis);
-        return;
-      }
-
-      if (state.leadStep === "ask_phone") {
-        if (!isValidPhone(value)) {
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "El celular debe tener entre 9 y 12 números. Inténtalo nuevamente 😊",
-            },
-          ]);
-          return;
-        }
-
-        state.phone = normalizePhone(value);
-        state.leadStep = "ask_email_optional";
-        persist();
-        updatePlaceholder();
-
-        void sendBotSequence(
-          [
-            {
-              kind: "text",
-              text: "Gracias 🙌 Ahora escribe tu correo o toca “Omitir correo”.",
-            },
-          ],
-          "skip_email"
-        );
-        return;
-      }
-
-      if (state.leadStep === "ask_email_optional") {
-        if (isSkipValue(value)) {
-          state.email = "";
-          state.leadStep = "ask_dni_optional";
+        if (
+          analysis.intent !== "unknown" ||
+          analysis.programs.length > 0
+        ) {
+          state.deferredUserMessage =
+            state.deferredUserMessage || value;
           persist();
-          updatePlaceholder();
 
-          void sendBotSequence(
-            [{ kind: "text", text: "Perfecto 😊 El DNI también es opcional." }],
-            "skip_dni"
-          );
-          return;
-        }
-
-        if (!isValidEmail(value)) {
           void sendBotSequence([
             {
               kind: "text",
-              text: "Ese correo parece incompleto. Revísalo o escribe “omitir”.",
+              text: "Guardé tu consulta 😊 Primero necesito tu número de celular.",
+            },
+            {
+              kind: "text",
+              text: "Debe tener entre 9 y 12 números.",
             },
           ]);
           return;
         }
 
-        state.email = value.trim();
-        state.leadStep = "ask_dni_optional";
-        persist();
-        updatePlaceholder();
-
-        void sendBotSequence(
-          [{ kind: "text", text: "Listo 😊 Ahora tu DNI, o puedes omitirlo." }],
-          "skip_dni"
-        );
+        void sendBotSequence([
+          {
+            kind: "text",
+            text: "El celular debe tener entre 9 y 12 números. Inténtalo nuevamente 😊",
+          },
+        ]);
         return;
       }
 
-      if (state.leadStep === "ask_dni_optional") {
-        if (isSkipValue(value)) {
-          state.dni = "";
-          reviewLead();
-          return;
-        }
-
-        if (!isValidDni(value)) {
-          void sendBotSequence([
-            {
-              kind: "text",
-              text: "El DNI debe tener 8 números. También puedes escribir “omitir”.",
-            },
-          ]);
-          return;
-        }
-
-        state.dni = value.trim();
-        reviewLead();
-      }
-    }
-
-    function reviewLead() {
-      const program = state.selectedProgram
-        ? PROGRAMS[state.selectedProgram]
-        : null;
-
-      state.leadStep = "review";
-      state.pendingQuestion = "confirm_lead";
-      state.leadStatus = "idle";
+      state.phone = normalizePhone(value);
+      state.leadStep = "ask_program";
+      state.pendingQuestion = "choose_program";
       persist();
       updatePlaceholder();
 
@@ -1876,70 +1865,109 @@ export function initAssistantWindow() {
         [
           {
             kind: "text",
-            text: `${friendlyName(state)}, revisemos antes de enviar 😊`,
-          },
-          {
-            kind: "info_table",
-            variant: "summary",
-            title: "Resumen de solicitud",
-            subtitle: "Confirma tus datos",
-            rows: [
-              {
-                label: "Programa",
-                value: program?.label ?? "No seleccionado",
-                highlight: true,
-              },
-              { label: "Nombre", value: state.visitorName || "-" },
-              { label: "Celular", value: state.phone || "-" },
-              {
-                label: "Correo",
-                value: state.email || "No compartido",
-              },
-              { label: "DNI", value: state.dni || "No compartido" },
-            ],
-            footer: "¿La información está correcta?",
+            text: `Gracias, ${friendlyName(
+              state
+            )} 🙌 ¿Qué programa deseas estudiar?`,
           },
         ],
-        "lead_review"
+        "programs"
       );
     }
 
-    async function submitConfirmedLead() {
-      state.pendingQuestion = "";
+    async function completeInitialLead(
+      programKey: ProgramKey
+    ) {
+      if (state.leadStatus === "sent") {
+        selectProgram(programKey);
+        state.leadStep = "completed";
+        state.pendingQuestion = "";
+        persist();
+
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `Perfecto 😊 Continuemos con ${PROGRAMS[programKey].label}.`,
+            },
+          ],
+          "program_actions"
+        );
+        return;
+      }
+
+      selectProgram(programKey);
       state.leadStep = "completed";
+      state.pendingQuestion = "";
       state.leadStatus = "sending";
+      state.leadError = "";
       persist();
       updatePlaceholder();
+      updateHeader();
+      setReplyMode("none");
+      lockInteraction(true);
 
       try {
         await sendLeadToSales(state);
         state.leadStatus = "sent";
+        state.leadError = "";
       } catch (error) {
         state.leadStatus = "error";
         state.leadError =
-          error instanceof Error ? error.message : "Error desconocido";
+          error instanceof Error
+            ? error.message
+            : "Error desconocido";
       }
 
       persist();
+      updateHeader();
+      lockInteraction(false);
 
-      const program = state.selectedProgram
-        ? PROGRAMS[state.selectedProgram]
-        : null;
+      const deferred =
+        state.deferredUserMessage.trim();
+      state.deferredUserMessage = "";
+      persist();
 
-      void sendBotSequence(
-        [
-          {
-            kind: "text",
-            text:
-              state.leadStatus === "sent"
-                ? `¡Listo, ${friendlyName(state)}! ✅ Tu solicitud${
-                    program ? ` para ${program.label}` : ""
-                  } fue registrada.`
-                : "No pude enviar la solicitud automáticamente. Puedes continuar por WhatsApp o llamar.",
-          },
-        ],
-        "completed"
-      );
+      if (state.leadStatus === "sent") {
+        await sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: `¡Gracias, ${friendlyName(
+                state
+              )}! ✅ Registré tu interés en ${PROGRAMS[programKey].label}.`,
+            },
+            {
+              kind: "text",
+              text: deferred
+                ? "Ahora sí, responderé la consulta que me dejaste."
+                : "Ahora puedes preguntarme por costos, horarios, duración, requisitos, inscripción o el PDF.",
+            },
+          ],
+          deferred
+            ? "none"
+            : "program_actions"
+        );
+      } else {
+        await sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: "No pude enviar tus datos al correo automáticamente en este momento.",
+            },
+            {
+              kind: "text",
+              text: "Puedes seguir usando el chat normalmente o comunicarte por WhatsApp.",
+            },
+          ],
+          deferred ? "none" : "contact"
+        );
+      }
+
+      if (deferred) {
+        handleAnalysis(
+          analyzeMessage(deferred)
+        );
+      }
     }
 
     function handleUserMessage(rawValue: string) {
@@ -1950,177 +1978,170 @@ export function initAssistantWindow() {
       audio.stopTyping();
       isTyping = false;
       renderTyping();
+
       addUserMessage(value);
       safeInput.value = "";
 
-      if (state.leadStep === "ask_visitor_name") {
+      if (
+        state.leadStep ===
+        "ask_visitor_name"
+      ) {
         handleVisitorName(value);
         return;
       }
 
-      const analysis = analyzeMessage(value);
-
-      if (
-        state.leadStep === "ask_phone" ||
-        state.leadStep === "ask_email_optional" ||
-        state.leadStep === "ask_dni_optional"
-      ) {
-        handleLeadValue(value, analysis);
+      if (state.leadStep === "ask_phone") {
+        handleInitialPhone(value);
         return;
       }
 
-      handleAnalysis(analysis);
+      if (state.leadStep === "ask_program") {
+        const analysis = analyzeMessage(value);
+        const programKey =
+          analysis.programs[0];
+
+        if (programKey) {
+          void completeInitialLead(programKey);
+          return;
+        }
+
+        state.deferredUserMessage =
+          state.deferredUserMessage || value;
+        persist();
+
+        void sendBotSequence(
+          [
+            {
+              kind: "text",
+              text: "Primero elige el programa que te interesa 😊",
+            },
+          ],
+          "programs"
+        );
+        return;
+      }
+
+      handleAnalysis(analyzeMessage(value));
     }
 
     function bindReplyEvents() {
       const buttons = Array.from(
-        safeRepliesHost.querySelectorAll<HTMLButtonElement>("[data-reply-type]")
+        safeRepliesHost.querySelectorAll<HTMLButtonElement>(
+          "[data-reply-type]"
+        )
       );
 
       buttons.forEach((button) => {
         button.addEventListener("click", () => {
           if (locked) return;
 
-          const type = button.dataset.replyType ?? "";
-          const value = button.dataset.replyValue ?? "";
+          const type =
+            button.dataset.replyType ?? "";
+          const value =
+            button.dataset.replyValue ?? "";
 
           if (type === "program") {
-            const programKey = value as ProgramKey;
-            addUserMessage(PROGRAMS[programKey].label);
+            const programKey =
+              value as ProgramKey;
+
+            addUserMessage(
+              PROGRAMS[programKey].label
+            );
+
+            if (
+              state.leadStep === "ask_program"
+            ) {
+              void completeInitialLead(
+                programKey
+              );
+              return;
+            }
 
             switch (state.currentIntent) {
               case "costs":
-                answerCosts(programKey, state.currentCostDetail);
+                answerCosts(
+                  programKey,
+                  state.currentCostDetail
+                );
                 break;
+
               case "schedules":
-                answerSchedules(programKey, "");
+                answerSchedules(
+                  programKey,
+                  state.schedulePreference
+                );
                 break;
+
               case "brochure":
                 answerBrochure(programKey);
                 break;
+
               case "enrollment":
                 startEnrollment(programKey);
                 break;
+
               default:
                 answerInfo(programKey);
             }
+
             return;
           }
 
           if (type === "intent") {
-            addUserMessage(button.textContent?.trim() ?? value);
+            addUserMessage(
+              button.textContent?.trim() ??
+                value
+            );
 
-            const intentQueries: Record<string, string> = {
+            const intentQueries: Record<
+              string,
+              string
+            > = {
               programs: "ver programas",
               costs: "consultar costos",
               schedules: "consultar horarios",
               brochure: "ver brochure pdf",
-              enrollment: "quiero inscribirme",
+              enrollment:
+                "quiero inscribirme",
             };
 
             handleAnalysis(
-              analyzeMessage(intentQueries[value] ?? value)
+              analyzeMessage(
+                intentQueries[value] ?? value
+              )
             );
             return;
           }
 
-          if (type === "schedule" && state.selectedProgram) {
-            const preference = value as SchedulePreference;
-            addUserMessage(button.textContent?.trim() ?? value);
-            answerSchedules(state.selectedProgram, preference);
-            return;
-          }
+          if (
+            type === "schedule" &&
+            state.selectedProgram
+          ) {
+            const preference =
+              value as SchedulePreference;
 
-          if (type === "skip") {
-            addUserMessage(value === "email" ? "Omitir correo" : "Omitir DNI");
-
-            if (value === "email") {
-              state.email = "";
-              state.leadStep = "ask_dni_optional";
-              persist();
-              updatePlaceholder();
-              void sendBotSequence(
-                [{ kind: "text", text: "Perfecto 😊 El DNI también es opcional." }],
-                "skip_dni"
-              );
-            } else {
-              state.dni = "";
-              reviewLead();
-            }
-            return;
-          }
-
-          if (type === "resume") {
             addUserMessage(
-              value === "yes" ? "Continuar solicitud" : "Seguir consultando"
+              button.textContent?.trim() ??
+                value
             );
 
-            if (value === "yes") resumeLead();
-            else {
-              state.pausedLeadStep = "idle";
-              state.pendingQuestion = "";
-              persist();
-              void sendBotSequence(
-                [{ kind: "text", text: "Perfecto 😊 Seguimos conversando." }],
-                "main"
-              );
-            }
+            answerSchedules(
+              state.selectedProgram,
+              preference
+            );
             return;
           }
 
           if (type === "recommend") {
-            const programKey = value as ProgramKey;
-            addUserMessage(button.textContent?.trim() ?? PROGRAMS[programKey].label);
+            const programKey =
+              value as ProgramKey;
+
+            addUserMessage(
+              button.textContent?.trim() ??
+                PROGRAMS[programKey].label
+            );
+
             answerInfo(programKey);
-            return;
-          }
-
-          if (type === "lead_review") {
-            if (value === "send") {
-              addUserMessage("Enviar solicitud");
-              void submitConfirmedLead();
-              return;
-            }
-
-            if (value === "phone") {
-              addUserMessage("Corregir celular");
-              state.leadStep = "ask_phone";
-              state.pendingQuestion = "";
-              persist();
-              updatePlaceholder();
-              void sendBotSequence([
-                {
-                  kind: "text",
-                  text: "Claro 😊 Escribe nuevamente tu número de celular.",
-                },
-              ]);
-              return;
-            }
-
-            addUserMessage("Cancelar solicitud");
-            state.leadStep = "idle";
-            state.pendingQuestion = "";
-            state.phone = "";
-            state.email = "";
-            state.dni = "";
-            persist();
-            void sendBotSequence(
-              [{ kind: "text", text: "Solicitud cancelada. Seguimos conversando 😊" }],
-              "main"
-            );
-            return;
-          }
-
-          if (type === "reset") {
-            addUserMessage("Otra consulta");
-            state.leadStep = "idle";
-            state.currentIntent = "unknown";
-            state.pendingQuestion = "";
-            persist();
-            void sendBotSequence(
-              [{ kind: "text", text: "Claro 😊 ¿Qué deseas revisar ahora?" }],
-              "main"
-            );
           }
         });
       });
@@ -2128,13 +2149,23 @@ export function initAssistantWindow() {
 
     function openAssistant() {
       windowEl.classList.add("is-open");
-      safeToggleButton.setAttribute("aria-expanded", "true");
-      safePanel.setAttribute("aria-hidden", "false");
+      safeToggleButton.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+      safePanel.setAttribute(
+        "aria-hidden",
+        "false"
+      );
       stopBubbleRotation();
 
-      if (!state.hasWelcomed && !state.messages.length) {
+      if (
+        !state.hasWelcomed &&
+        !state.messages.length
+      ) {
         state.hasWelcomed = true;
-        state.leadStep = "ask_visitor_name";
+        state.leadStep =
+          "ask_visitor_name";
         persist();
         updatePlaceholder();
 
@@ -2151,13 +2182,31 @@ export function initAssistantWindow() {
         return;
       }
 
-      window.setTimeout(() => safeInput.focus(), 100);
+      if (
+        pageProgram &&
+        !state.selectedProgram &&
+        state.leadStep === "completed"
+      ) {
+        selectProgram(pageProgram);
+      }
+
+      window.setTimeout(
+        () => safeInput.focus(),
+        100
+      );
     }
 
     function closeAssistant() {
       windowEl.classList.remove("is-open");
-      safeToggleButton.setAttribute("aria-expanded", "false");
-      safePanel.setAttribute("aria-hidden", "true");
+      safeToggleButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+      safePanel.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
       queueToken += 1;
       audio.stopTyping();
       isTyping = false;
@@ -2167,19 +2216,35 @@ export function initAssistantWindow() {
     }
 
     function toggleAssistant() {
-      if (windowEl.classList.contains("is-open")) closeAssistant();
-      else openAssistant();
+      if (
+        windowEl.classList.contains(
+          "is-open"
+        )
+      ) {
+        closeAssistant();
+      } else {
+        openAssistant();
+      }
     }
 
     function updateBubble() {
-      const index = Math.floor(Date.now() / 3400) % BUBBLE_MESSAGES.length;
-      safeBubble.textContent = BUBBLE_MESSAGES[index];
+      const index =
+        Math.floor(Date.now() / 3400) %
+        BUBBLE_MESSAGES.length;
+
+      safeBubble.textContent =
+        BUBBLE_MESSAGES[index];
     }
 
     function startBubbleRotation() {
       if (bubbleTimer !== null) return;
+
       updateBubble();
-      bubbleTimer = window.setInterval(updateBubble, 3400);
+      bubbleTimer =
+        window.setInterval(
+          updateBubble,
+          3400
+        );
     }
 
     function stopBubbleRotation() {
@@ -2189,35 +2254,56 @@ export function initAssistantWindow() {
       }
     }
 
-    safeToggleButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      audio.unlock();
-      toggleAssistant();
-    });
-
-    safeCloseButton.addEventListener("click", closeAssistant);
-
-    safeMuteButton.addEventListener("click", () => {
-      state.muted = !state.muted;
-      audio.setMuted(state.muted);
-      persist();
-      updateHeader();
-    });
-
-    safeSendButton.addEventListener("click", () => {
-      audio.unlock();
-      handleUserMessage(safeInput.value);
-    });
-
-    safeInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
+    safeToggleButton.addEventListener(
+      "click",
+      (event) => {
         event.preventDefault();
         audio.unlock();
-        handleUserMessage(safeInput.value);
+        toggleAssistant();
       }
+    );
 
-      if (event.key === "Escape") closeAssistant();
-    });
+    safeCloseButton.addEventListener(
+      "click",
+      closeAssistant
+    );
+
+    safeMuteButton.addEventListener(
+      "click",
+      () => {
+        state.muted = !state.muted;
+        audio.setMuted(state.muted);
+        persist();
+        updateHeader();
+      }
+    );
+
+    safeSendButton.addEventListener(
+      "click",
+      () => {
+        audio.unlock();
+        handleUserMessage(
+          safeInput.value
+        );
+      }
+    );
+
+    safeInput.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          audio.unlock();
+          handleUserMessage(
+            safeInput.value
+          );
+        }
+
+        if (event.key === "Escape") {
+          closeAssistant();
+        }
+      }
+    );
 
     safeChat.addEventListener(
       "wheel",
@@ -2242,18 +2328,34 @@ export function initAssistantWindow() {
     safeChat.addEventListener(
       "scroll",
       () => {
-        if (isNearBottom()) autoFollow = true;
+        if (isNearBottom()) {
+          autoFollow = true;
+        }
+
         updateScrollButton();
       },
       { passive: true }
     );
 
-    safeScrollBottomButton.addEventListener("click", () => scrollToBottom());
+    safeScrollBottomButton.addEventListener(
+      "click",
+      () => scrollToBottom()
+    );
 
-    document.addEventListener("pointerdown", (event) => {
-      const target = event.target as Node | null;
-      if (target && !windowEl.contains(target)) closeAssistant();
-    });
+    document.addEventListener(
+      "pointerdown",
+      (event) => {
+        const target =
+          event.target as Node | null;
+
+        if (
+          target &&
+          !windowEl.contains(target)
+        ) {
+          closeAssistant();
+        }
+      }
+    );
 
     renderStoredMessages();
     renderTyping();

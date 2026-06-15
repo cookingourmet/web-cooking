@@ -84,19 +84,13 @@ export type LeadStep =
   | "idle"
   | "ask_visitor_name"
   | "ask_phone"
-  | "ask_email_optional"
-  | "ask_dni_optional"
-  | "review"
+  | "ask_program"
   | "completed";
 
 export type PendingQuestion =
   | ""
   | "choose_program"
-  | "choose_schedule"
-  | "confirm_enrollment"
-  | "confirm_brochure"
-  | "resume_lead"
-  | "confirm_lead";
+  | "choose_schedule";
 
 export type ReplyMode =
   | "none"
@@ -105,12 +99,7 @@ export type ReplyMode =
   | "program_actions"
   | "schedule_options"
   | "recommendation"
-  | "contact"
-  | "skip_email"
-  | "skip_dni"
-  | "resume_lead"
-  | "lead_review"
-  | "completed";
+  | "contact";
 
 export type LeadStatus = "idle" | "sending" | "sent" | "error";
 
@@ -172,7 +161,7 @@ export type BotSequenceItem =
     };
 
 export type AssistantState = {
-  version: 7;
+  version: 8;
   hasWelcomed: boolean;
   visitorName: string;
   deferredUserMessage: string;
@@ -183,12 +172,9 @@ export type AssistantState = {
   schedulePreference: SchedulePreference;
   pendingQuestion: PendingQuestion;
   leadStep: LeadStep;
-  pausedLeadStep: LeadStep;
   messages: ChatMessage[];
   replyMode: ReplyMode;
   phone: string;
-  email: string;
-  dni: string;
   leadStatus: LeadStatus;
   leadError: string;
   muted: boolean;

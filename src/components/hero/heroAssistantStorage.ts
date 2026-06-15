@@ -11,9 +11,11 @@ export function loadAssistantState(): AssistantState {
 
     const parsed = JSON.parse(stored) as Partial<AssistantState>;
 
-    if (parsed.version !== 7) {
+    if (parsed.version !== 8) {
       return createInitialAssistantState();
     }
+
+    const interruptedLead = parsed.leadStatus === "sending";
 
     return {
       ...createInitialAssistantState(),
@@ -21,8 +23,8 @@ export function loadAssistantState(): AssistantState {
       messages: Array.isArray(parsed.messages)
         ? parsed.messages.slice(-80)
         : [],
-      leadStatus:
-        parsed.leadStatus === "sending" ? "idle" : parsed.leadStatus ?? "idle",
+      leadStep: interruptedLead ? "ask_program" : parsed.leadStep ?? "idle",
+      leadStatus: interruptedLead ? "idle" : parsed.leadStatus ?? "idle",
       leadError: "",
     };
   } catch {

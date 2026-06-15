@@ -15,6 +15,16 @@ import {
 import { mountAssistantWindow } from "./heroAssistantPanel";
 
 const AUTO_TIME = 5500;
+const WORKSHOP_WHATSAPP_NUMBER = "51981377382";
+
+function workshopWhatsAppUrl(workshopName: string) {
+  const message =
+    `Hola, vengo desde la web. Necesito información sobre el taller de ${workshopName}.`;
+
+  return `https://wa.me/${WORKSHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    message
+  )}`;
+}
 
 function escapeHtml(value: string) {
   return value
@@ -165,12 +175,16 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
 function renderWorkshopCard(
   card: HeroCardsSlide["cards"][number]
 ) {
+  const whatsappUrl = workshopWhatsAppUrl(card.title);
+
   return `
     <a
       class="hero-workshop-card"
-      href="${escapeAttribute(card.href)}"
+      href="${escapeAttribute(whatsappUrl)}"
+      target="_blank"
+      rel="noreferrer"
       aria-label="${escapeAttribute(
-        `${card.title}, inicia el ${card.day} de ${card.month}`
+        `Solicitar información por WhatsApp sobre ${card.title}, inicia el ${card.day} de ${card.month}`
       )}"
     >
       <img

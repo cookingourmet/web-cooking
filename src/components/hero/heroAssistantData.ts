@@ -13,7 +13,7 @@ export const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
 export const WEB3FORMS_ACCESS_KEY =
   "c70db5c3-9654-4b15-b598-091a9ffa909a";
 
-export const CHAT_STORAGE_KEY = "cookito_chat_state_v7_2";
+export const CHAT_STORAGE_KEY = "cookito_chat_state_v8_0";
 
 export const SOUND_PATHS = {
   send: "/sounds/cookito/send.wav",
@@ -337,7 +337,7 @@ export const FAQ_RESPONSES = {
 
 export function createInitialAssistantState(): AssistantState {
   return {
-    version: 7,
+    version: 8,
     hasWelcomed: false,
     visitorName: "",
     deferredUserMessage: "",
@@ -348,12 +348,9 @@ export function createInitialAssistantState(): AssistantState {
     schedulePreference: "",
     pendingQuestion: "",
     leadStep: "idle",
-    pausedLeadStep: "idle",
     messages: [],
     replyMode: "none",
     phone: "",
-    email: "",
-    dni: "",
     leadStatus: "idle",
     leadError: "",
     muted: false,
