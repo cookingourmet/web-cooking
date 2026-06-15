@@ -57,6 +57,24 @@ export type HeroCardsSlide = {
 
 export type HeroSlide = HeroSingleSlide | HeroCardsSlide;
 
+const WHATSAPP_NUMBER = "51981377382";
+
+function informationWhatsAppUrl(
+  programName: string,
+  description: string
+) {
+  const message = [
+    "Hola, vengo desde la web de Cooking Gourmet.",
+    `Necesito información sobre ${programName}.`,
+    description,
+    "¿Podrían ayudarme, por favor?",
+  ].join("\n");
+
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    message
+  )}`;
+}
+
 export const heroSlides: HeroSlide[] = [
   {
     id: "talleres-practicos",
@@ -129,7 +147,10 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryAction: {
       label: "Solicitar información",
-      href: "https://wa.me/51981377382",
+      href: informationWhatsAppUrl(
+        "Gastronomía Profesional",
+        "Quiero conocer costos, horarios, duración, requisitos y fecha de inicio."
+      ),
       external: true,
     },
   },
@@ -159,7 +180,10 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryAction: {
       label: "Solicitar información",
-      href: "https://wa.me/51981377382",
+      href: informationWhatsAppUrl(
+        "Panadería y Pastelería",
+        "Quiero conocer costos, horarios, duración, requisitos y fecha de inicio."
+      ),
       external: true,
     },
   },
@@ -189,7 +213,10 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryAction: {
       label: "Solicitar información",
-      href: "https://wa.me/51981377382",
+      href: informationWhatsAppUrl(
+        "Bar Profesional",
+        "Quiero conocer costos, horarios, duración, requisitos y fecha de inicio."
+      ),
       external: true,
     },
   },
@@ -219,7 +246,10 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryAction: {
       label: "Solicitar información",
-      href: "https://wa.me/51981377382",
+      href: informationWhatsAppUrl(
+        "Barismo Profesional",
+        "Quiero conocer costos, horarios, duración, requisitos y fecha de inicio."
+      ),
       external: true,
     },
   },
@@ -249,9 +279,11 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryAction: {
       label: "Solicitar información",
-      href: "https://wa.me/51981377382",
+      href: informationWhatsAppUrl(
+        "Sommelier Profesional",
+        "Quiero conocer costos, horarios, duración, requisitos y fecha de inicio."
+      ),
       external: true,
     },
   },
-
 ];
