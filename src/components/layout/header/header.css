@@ -1085,3 +1085,62 @@ body.nav-is-open {
     transition-duration: 0.01ms;
   }
 }
+
+
+
+
+
+/* Agrega este bloque al final del CSS del navbar */
+
+.nav-action--inventory {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgba(220, 38, 38, 0.18);
+  border-radius: 12px;
+  background: #ffffff;
+  color: #dc2626;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+}
+
+.nav-action--inventory .nav-action__icon {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+}
+
+.nav-action--inventory .nav-action__icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-action--inventory:hover {
+  transform: translateY(-2px);
+  border-color: rgba(220, 38, 38, 0.3);
+  background: #fef2f2;
+  color: #b91c1c;
+  box-shadow: 0 14px 28px rgba(220, 38, 38, 0.14);
+}
+
+.nav-action--inventory:focus-visible {
+  outline: 3px solid rgba(220, 38, 38, 0.18);
+  outline-offset: 2px;
+}
+
+@media (max-width: 980px) {
+  .nav-action--inventory {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    min-height: 46px;
+  }
+}

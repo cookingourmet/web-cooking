@@ -10,6 +10,9 @@ const HIDDEN_MAIN_MENU_LABELS = new Set([
 const WHATSAPP_URL =
   "https://wa.me/51981377382?text=Hola%2C%20vengo%20desde%20la%20web%20de%20Cooking%20Gourmet%20y%20quiero%20recibir%20informaci%C3%B3n.";
 
+const INVENTORY_URL =
+  "https://inventario.eltigrecorporacion.com/login";
+
 type ProgramVisual = {
   label?: string;
   href?: string;
@@ -351,6 +354,24 @@ export function renderNavbar() {
         ${renderSocialLinks("nav-socials")}
 
         <div class="nav-actions">
+          <a
+            href="${INVENTORY_URL}"
+            class="nav-action nav-action--inventory"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Abrir sistema de inventario"
+            title="Inventario"
+          >
+            <span class="nav-action__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 7.5 12 3l9 4.5" />
+                <path d="M5 9v10h14V9" />
+                <path d="M8 12h3v3H8z" />
+                <path d="M13 12h3v3h-3z" />
+                <path d="M8 17h8" />
+              </svg>
+            </span>
+          </a>
           <a
             href="https://cookingourmet.q10.com/"
             class="nav-action nav-action--secondary"
