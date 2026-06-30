@@ -48,21 +48,14 @@ export type HeroCardsSlide = {
   title: string;
   subtitle: string;
   primaryAction?: HeroAction;
-  cards: [
-    HeroWorkshopCard,
-    HeroWorkshopCard,
-    HeroWorkshopCard
-  ];
+  cards: [HeroWorkshopCard, HeroWorkshopCard, HeroWorkshopCard];
 };
 
 export type HeroSlide = HeroSingleSlide | HeroCardsSlide;
 
 const WHATSAPP_NUMBER = "51981377382";
 
-function informationWhatsAppUrl(
-  programName: string,
-  description: string
-) {
+function informationWhatsAppUrl(programName: string, description: string) {
   const message = [
     "Hola, vengo desde la web de Cooking Gourmet.",
     `Necesito información sobre ${programName}.`,
@@ -70,57 +63,58 @@ function informationWhatsAppUrl(
     "¿Podrían ayudarme, por favor?",
   ].join("\n");
 
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    message
-  )}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 export const heroSlides: HeroSlide[] = [
   {
-  id: "talleres-julio-agosto",
-  layout: "cards",
-  shortLabel: "Talleres",
-  eyebrow: "Talleres julio y agosto",
-  title: "Talleres prácticos",
-  subtitle:
-    "Descubre nuestros talleres intensivos con clases dinámicas, aprendizaje práctico y resultados desde la primera sesión.",
-  primaryAction: {
-    label: "Ver todos los talleres",
-    href: "#talleres",
+    id: "talleres-julio-agosto",
+    layout: "cards",
+    shortLabel: "Talleres",
+    eyebrow: "Julio y agosto",
+    title: "Talleres de temporada",
+    subtitle:
+      "Aprende nuevas técnicas culinarias en talleres prácticos, intensivos y guiados por profesionales.",
+    primaryAction: {
+      label: "Ver talleres disponibles",
+      href: "#talleres",
+    },
+    cards: [
+      {
+        id: "pokes-saludables",
+        day: "23",
+        month: "Julio",
+        title: "Pokes saludables",
+        subtitle: "Fresco, nutritivo y delicioso",
+        image: "/images/portada/talleres/pokes-saludables.png",
+        imageAlt:
+          "Poke bowl saludable con salmón, mango, pepino, edamame y quinoa",
+        href: "#talleres",
+      },
+      {
+        id: "pasteleria-saludable",
+        day: "21",
+        month: "Julio",
+        title: "Pastelería saludable",
+        subtitle: "Postres nutritivos",
+        image: "/images/portada/talleres/pasteleria-saludable.png",
+        imageAlt:
+          "Postres saludables con torta de arándanos, cookies, tartas y crema",
+        href: "#talleres",
+      },
+      {
+        id: "pasteleria-chifa",
+        day: "04",
+        month: "Agosto",
+        title: "Pastelería y chifa",
+        subtitle: "Vacacional · 4 clases",
+        image: "/images/portada/talleres/pasteleria-chifa.png",
+        imageAlt:
+          "Taller vacacional de pastelería y chifa con postres y platos orientales",
+        href: "#talleres",
+      },
+    ],
   },
-  cards: [
-    {
-      id: "pokes-saludables",
-      day: "23",
-      month: "Julio",
-      title: "Pokes saludables",
-      subtitle: "Fresco, nutritivo y delicioso",
-      image: "/images/portada/talleres/pokes-saludables.png",
-      imageAlt: "Bowl de poke saludable con ingredientes frescos y coloridos",
-      href: "#talleres",
-    },
-    {
-      id: "pasteleria-saludable",
-      day: "21",
-      month: "Julio",
-      title: "Pastelería saludable",
-      subtitle: "Postres nutritivos",
-      image: "/images/portada/talleres/pasteleria-saludable.png",
-      imageAlt: "Selección de postres de pastelería saludable",
-      href: "#talleres",
-    },
-    {
-      id: "pasteleria-chifa",
-      day: "4",
-      month: "Agosto",
-      title: "Pastelería y chifa",
-      subtitle: "Vacacional · 4 clases",
-      image: "/images/portada/talleres/pasteleria-chifa.png",
-      imageAlt: "Taller vacacional de pastelería y chifa con platos y postres",
-      href: "#talleres",
-    },
-  ],
-},
   {
     id: "gastronomia",
     layout: "single",
