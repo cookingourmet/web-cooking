@@ -108,12 +108,12 @@ function pickParticleColor() {
 
 function getParticleColor(index: number) {
   const colors = [
-    "rgba(255,255,255,", // blanco puro
-    "rgba(255,250,224,", // blanco cálido
-    "rgba(255,232,168,", // amarillo champagne
-    "rgba(255,211,92,",  // dorado claro
-    "rgba(245,181,43,",  // dorado intenso
-    "rgba(201,143,32,",  // oro elegante
+    "rgba(255,255,255,",
+    "rgba(255,250,224,",
+    "rgba(255,232,168,",
+    "rgba(255,211,92,",
+    "rgba(245,181,43,",
+    "rgba(201,143,32,",
   ];
 
   return colors[index] ?? colors[0];
@@ -129,10 +129,13 @@ export function initSpecializationSwirlBackground(
     canvasId
   ) as HTMLCanvasElement | null;
 
-  const hero = screenCanvas?.closest<HTMLElement>(".specialization-hero");
+  if (!screenCanvas) return;
 
-  if (!screenCanvas || !hero) return;
+  const heroElement = screenCanvas.closest<HTMLElement>(".specialization-hero");
 
+  if (!heroElement) return;
+
+  const safeHero = heroElement;
   const bufferCanvas = document.createElement("canvas");
 
   const bufferContext = bufferCanvas.getContext("2d", {
@@ -310,7 +313,7 @@ export function initSpecializationSwirlBackground(
   }
 
   function resize() {
-    const rect = hero.getBoundingClientRect();
+    const rect = safeHero.getBoundingClientRect();
 
     width = Math.max(1, Math.floor(rect.width));
     height = Math.max(1, Math.floor(rect.height));
@@ -385,13 +388,19 @@ export function initSpecializationSwirlBackground(
 
   window.addEventListener("resize", resize);
   document.addEventListener("visibilitychange", handleVisibilityChange);
-  reduceMotion.addEventListener("change", handleReduceMotionChange);
+
+  if ("addEventListener" in reduceMotion) {
+    reduceMotion.addEventListener("change", handleReduceMotionChange);
+  }
 
   swirlCleanup = () => {
     stopAnimation();
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", handleVisibilityChange);
-    reduceMotion.removeEventListener("change", handleReduceMotionChange);
+
+    if ("removeEventListener" in reduceMotion) {
+      reduceMotion.removeEventListener("change", handleReduceMotionChange);
+    }
   };
 }
 
