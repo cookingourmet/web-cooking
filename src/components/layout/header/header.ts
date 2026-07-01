@@ -11,10 +11,6 @@ declare global {
   }
 }
 
-/**
- * Programa la inicialización para el siguiente frame.
- * Esto permite que el HTML ya exista antes de buscar sus elementos.
- */
 function scheduleHeaderInitialization() {
   if (typeof window === "undefined") return;
 
@@ -29,10 +25,6 @@ function scheduleHeaderInitialization() {
 }
 
 export function renderHeader() {
-  /*
-   * Cada vez que una página interna vuelve a renderizar el header,
-   * se vuelven a enlazar automáticamente sus eventos.
-   */
   scheduleHeaderInitialization();
 
   return `
@@ -41,14 +33,16 @@ export function renderHeader() {
         <a
           href="/"
           class="brand"
-          aria-label="Ir al inicio de Cooking Gourmet"
+          aria-label="Ir al inicio de Cooking Gourmet, Escuela de Gastronomía en Huancayo"
         >
           <span class="brand__mark">
             <img
-              src="/images/logo.png"
-              alt="Cooking Gourmet"
+              src="/logo.png"
+              alt="Cooking Gourmet Escuela de Gastronomía en Huancayo"
               width="46"
               height="46"
+              loading="eager"
+              decoding="async"
             />
           </span>
 
@@ -58,7 +52,7 @@ export function renderHeader() {
             </strong>
 
             <small class="brand__subtitle">
-              Escuela de Alta Cocina
+              Gastronomía en Huancayo
             </small>
           </span>
         </a>
@@ -69,6 +63,7 @@ export function renderHeader() {
             class="topbar__virtual"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Ingresar al aula virtual de Cooking Gourmet"
           >
             Aula Virtual
           </a>
@@ -102,10 +97,6 @@ export function renderHeader() {
 }
 
 export function initHeader() {
-  /*
-   * Elimina todos los eventos de la instancia anterior.
-   * Evita eventos duplicados cuando se navega entre páginas.
-   */
   window.__cookingHeaderAbortController?.abort();
 
   const abortController = new AbortController();
@@ -150,9 +141,6 @@ export function initHeader() {
     return;
   }
 
-  /*
-   * Referencias seguras para TypeScript estricto.
-   */
   const safeHeader = header;
   const safeMenuToggle = menuToggle;
   const safeMenuClose = menuClose;
@@ -241,9 +229,6 @@ export function initHeader() {
     }
   }
 
-  /*
-   * Abrir y cerrar menú móvil.
-   */
   safeMenuToggle.addEventListener(
     "click",
     () => {
@@ -271,9 +256,6 @@ export function initHeader() {
     { signal }
   );
 
-  /*
-   * Cerrar el panel cuando se elige una ruta.
-   */
   safeNavbar
     .querySelectorAll<HTMLAnchorElement>("a[href]")
     .forEach((link) => {
@@ -288,9 +270,6 @@ export function initHeader() {
       );
     });
 
-  /*
-   * Cerrar con Escape.
-   */
   document.addEventListener(
     "keydown",
     (event) => {
@@ -309,9 +288,6 @@ export function initHeader() {
     { signal }
   );
 
-  /*
-   * Restablecer al cambiar el tamaño de pantalla.
-   */
   window.addEventListener(
     "resize",
     () => {
@@ -332,9 +308,6 @@ export function initHeader() {
     { signal }
   );
 
-  /*
-   * Aplicar estilo compacto al desplazarse.
-   */
   window.addEventListener(
     "scroll",
     syncHeaderScroll,

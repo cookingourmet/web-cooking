@@ -6,6 +6,7 @@ import "./styles/layout/container.css";
 import "./styles/layout/spacing.css";
 import "./styles/pages/home.css";
 import "./styles/pages/program-detail.css";
+import "./styles/pages/specialization.css";
 
 import "./components/layout/header/header.css";
 import "./components/layout/footer/footer.css";
@@ -20,12 +21,18 @@ import "./components/sections/testimonials/testimonials.css";
 import "./components/ui/button/button.css";
 
 import { renderHomePage, initHomePage } from "./pages/home";
+import {
+  renderSpecializationPage,
+  initSpecializationPage,
+} from "./pages/specialization";
+
 import { renderGastronomiaPage } from "./pages/programs/gastronomia";
 import { renderPasteleriaPage } from "./pages/programs/pasteleria";
 import { renderBarProfesionalPage } from "./pages/programs/bar-profesional";
 import { renderBarismoPage } from "./pages/programs/barismo";
 import { renderSommelierPage } from "./pages/programs/sommelier";
 import { renderCocinaPage } from "./pages/programs/cocina";
+import { initProgramDetail } from "./pages/programs/programDetail";
 import { initProgramPageEffects } from "./utils/program-effects";
 
 const app = document.querySelector<HTMLDivElement>("#app");
@@ -48,13 +55,37 @@ function redirectTo(path: string) {
   window.history.replaceState({}, "", path);
 }
 
-function renderRoute() {
-  let currentPath = normalizePath(window.location.pathname);
+function getCurrentRoutePath() {
+  return normalizePath(window.location.pathname);
+}
 
-  /**
-   * Redirecciones internas SEO.
-   * Mantenemos una sola URL oficial por página.
-   */
+function scrollAfterRender() {
+  const hash = window.location.hash;
+
+  if (!hash) {
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    const target = document.querySelector<HTMLElement>(hash);
+
+    if (!target) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
+}
+
+function renderRoute() {
+  let currentPath = getCurrentRoutePath();
+  let afterRender: (() => void) | null = null;
+
   if (currentPath === "/index.html") {
     redirectTo("/");
     currentPath = "/";
@@ -68,41 +99,53 @@ function renderRoute() {
   switch (currentPath) {
     case "/":
       appRoot.innerHTML = renderHomePage();
-      initHomePage();
+      afterRender = initHomePage;
+      break;
+
+    case "/especializacion":
+      appRoot.innerHTML = renderSpecializationPage();
+      afterRender = initSpecializationPage;
       break;
 
     case "/programas/gastronomia":
       appRoot.innerHTML = renderGastronomiaPage();
+      afterRender = initProgramDetail;
       break;
 
     case "/programas/pasteleria":
       appRoot.innerHTML = renderPasteleriaPage();
+      afterRender = initProgramDetail;
       break;
 
     case "/programas/bar-profesional":
       appRoot.innerHTML = renderBarProfesionalPage();
+      afterRender = initProgramDetail;
       break;
 
     case "/programas/barismo":
       appRoot.innerHTML = renderBarismoPage();
+      afterRender = initProgramDetail;
       break;
 
     case "/programas/sommelier":
       appRoot.innerHTML = renderSommelierPage();
+      afterRender = initProgramDetail;
       break;
 
     case "/programas/cocina-acelerada":
       appRoot.innerHTML = renderCocinaPage();
+      afterRender = initProgramDetail;
       break;
 
     default:
       appRoot.innerHTML = renderHomePage();
-      initHomePage();
+      afterRender = initHomePage;
       break;
   }
 
+  afterRender?.();
   initProgramPageEffects();
-  window.scrollTo(0, 0);
+  scrollAfterRender();
 }
 
 document.addEventListener("click", (event) => {
@@ -114,17 +157,27 @@ document.addEventListener("click", (event) => {
   const href = link.getAttribute("href");
   if (!href) return;
 
-  const isInternalLink =
-    href.startsWith("/") &&
-    !href.startsWith("//") &&
-    !link.hasAttribute("target") &&
-    !link.hasAttribute("download");
+  if (
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:") ||
+    href.startsWith("https://wa.me") ||
+    link.hasAttribute("target") ||
+    link.hasAttribute("download")
+  ) {
+    return;
+  }
 
-  if (!isInternalLink) return;
+  let targetUrl: URL;
 
-  event.preventDefault();
+  try {
+    targetUrl = new URL(href, window.location.origin);
+  } catch {
+    return;
+  }
 
-  let nextPath = normalizePath(href);
+  if (targetUrl.origin !== window.location.origin) return;
+
+  let nextPath = normalizePath(targetUrl.pathname);
 
   if (nextPath === "/index.html") {
     nextPath = "/";
@@ -134,8 +187,13 @@ document.addEventListener("click", (event) => {
     nextPath = "/programas/cocina-acelerada";
   }
 
-  if (nextPath !== normalizePath(window.location.pathname)) {
-    window.history.pushState({}, "", nextPath);
+  const nextUrl = `${nextPath}${targetUrl.hash}`;
+  const currentUrl = `${normalizePath(window.location.pathname)}${window.location.hash}`;
+
+  event.preventDefault();
+
+  if (nextUrl !== currentUrl) {
+    window.history.pushState({}, "", nextUrl);
   }
 
   renderRoute();

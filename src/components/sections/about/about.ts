@@ -2,6 +2,18 @@ import "./about.css";
 
 type AboutIcon = "fire" | "chef" | "star" | "growth" | "team" | "service";
 
+const WHATSAPP_NUMBER = "51981377382";
+
+function aboutWhatsAppUrl() {
+  const message = [
+    "Hola, vengo de la web de Cooking Gourmet.",
+    "Quiero información sobre sus programas de Gastronomía, Pastelería, Barismo, Bar Profesional, Sommelier y Cocina Acelerada en Huancayo.",
+    "Deseo conocer horarios, matrícula, mensualidad e inicio de clases.",
+  ].join("\n");
+
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
 const values: Array<{
   icon: AboutIcon;
   title: string;
@@ -10,22 +22,22 @@ const values: Array<{
   {
     icon: "star",
     title: "Excelencia",
-    text: "Cuidamos cada detalle del aprendizaje, la técnica y la práctica profesional.",
+    text: "Cuidamos cada detalle del aprendizaje, la técnica culinaria y la práctica profesional.",
   },
   {
     icon: "chef",
     title: "Disciplina",
-    text: "Formamos estudiantes constantes, responsables y preparados para cocinas reales.",
+    text: "Formamos estudiantes responsables, constantes y preparados para cocinas reales.",
   },
   {
     icon: "fire",
     title: "Pasión",
-    text: "Impulsamos el amor por la gastronomía desde la práctica y la creatividad.",
+    text: "Impulsamos el amor por la gastronomía desde la práctica, la creatividad y la vocación.",
   },
   {
     icon: "growth",
     title: "Innovación",
-    text: "Promovemos nuevas ideas, tendencias y visión emprendedora.",
+    text: "Promovemos nuevas ideas, tendencias gastronómicas y visión emprendedora.",
   },
   {
     icon: "team",
@@ -102,7 +114,7 @@ function renderValues() {
 
 export function renderAboutSection() {
   return `
-    <section class="cg-about" id="nosotros">
+    <section class="cg-about" id="nosotros" aria-labelledby="cg-about-title">
       <div class="cg-about__bg"></div>
       <div class="cg-about__shape cg-about__shape--one"></div>
       <div class="cg-about__shape cg-about__shape--two"></div>
@@ -112,21 +124,35 @@ export function renderAboutSection() {
           <div class="cg-about-hero__content" data-cg-about-reveal="left">
             <span class="cg-about__eyebrow">Nosotros</span>
 
-            <h2 class="cg-about__title">
-              18 años formando profesionales
+            <h2 class="cg-about__title" id="cg-about-title">
+              Escuela de alta cocina en Huancayo con 18 años formando profesionales
             </h2>
 
             <p class="cg-about__lead">
-              Cooking Gourmet es una escuela de alta cocina donde la práctica, la creatividad
-              y la disciplina se combinan para preparar estudiantes capaces de destacar en el
-              mundo gastronómico real.
+              Cooking Gourmet es una escuela de gastronomía en Huancayo especializada
+              en formación práctica y presencial. Formamos estudiantes de Huancayo,
+              El Tambo, Chilca y toda la región Junín en programas de Gastronomía
+              Profesional, Pastelería, Barismo, Bar Profesional, Sommelier y Cocina Acelerada.
             </p>
+
+            <div class="cg-about-seo-list" aria-label="Programas principales">
+              <a href="/programas/gastronomia">Gastronomía Profesional</a>
+              <a href="/programas/pasteleria">Pastelería</a>
+              <a href="/programas/barismo">Barismo</a>
+              <a href="/programas/bar-profesional">Bar Profesional</a>
+            </div>
 
             <div class="cg-about-hero__actions">
               <a href="#programas" class="cg-about-btn cg-about-btn--primary">
                 Ver programas
               </a>
-              <a href="#contacto" class="cg-about-btn cg-about-btn--ghost">
+
+              <a
+                href="${aboutWhatsAppUrl()}"
+                class="cg-about-btn cg-about-btn--ghost"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Solicitar información
               </a>
             </div>
@@ -136,29 +162,31 @@ export function renderAboutSection() {
             <div class="cg-about-photo-card cg-about-photo-card--chef">
               <img
                 src="/images/about/chef.png"
-                alt="Chef instructor de Cooking Gourmet"
+                alt="Chef instructor de Cooking Gourmet enseñando gastronomía profesional en Huancayo"
+                loading="lazy"
+                decoding="async"
               />
 
               <div class="cg-about-photo-card__content">
                 <span>Formación práctica</span>
-                <strong>Aprende con experiencia real</strong>
+                <strong>Aprende con experiencia real desde el primer día</strong>
               </div>
             </div>
 
             <div class="cg-about-years">
               <span class="cg-about-years__label">Desde 2008</span>
               <strong>18</strong>
-              <span>Años de trayectoria</span>
+              <span>Años de trayectoria en Huancayo</span>
             </div>
 
             <div class="cg-about-mini-card cg-about-mini-card--top">
-              <strong>2026</strong>
-              <span>Celebramos nuestra experiencia</span>
+              <strong>Huancayo · Junín</strong>
+              <span>Formación gastronómica presencial para la región</span>
             </div>
 
             <div class="cg-about-mini-card cg-about-mini-card--bottom">
               <strong>Práctica real</strong>
-              <span>Aprendizaje desde el primer día</span>
+              <span>Cocina, pastelería, bar y café con aprendizaje aplicado</span>
             </div>
           </div>
         </div>
@@ -171,19 +199,31 @@ export function renderAboutSection() {
             </div>
 
             <h3 class="cg-about-story__title">
-              Formamos profesionales para la cocina real.
+              Formamos profesionales para la cocina real y el mundo gastronómico actual.
             </h3>
 
             <p class="cg-about-story__text">
               Nacimos con el propósito de brindar una formación gastronómica cercana,
-              práctica y exigente. Hoy seguimos impulsando estudiantes que desean convertir
-              su vocación en una carrera con identidad, nivel y oportunidades.
+              práctica y exigente en Huancayo. Hoy seguimos impulsando estudiantes que
+              desean convertir su vocación en una carrera con identidad, técnica, nivel
+              profesional y oportunidades en restaurantes, hoteles, cafeterías, bares,
+              catering y emprendimientos propios.
             </p>
+
+            <div class="cg-about-location">
+              <span>Alcance regional</span>
+              <p>
+                Recibimos estudiantes de Huancayo, El Tambo, Chilca, Chupaca,
+                Concepción, Jauja, Tarma, Chanchamayo, Satipo y otras zonas de Junín.
+              </p>
+            </div>
 
             <div class="cg-about-infra">
               <img
                 src="/images/about/infraestructura.png"
-                alt="Infraestructura de Cooking Gourmet"
+                alt="Ambientes e infraestructura de Cooking Gourmet para estudiar gastronomía en Huancayo"
+                loading="lazy"
+                decoding="async"
               />
 
               <div class="cg-about-infra__content">
@@ -195,17 +235,17 @@ export function renderAboutSection() {
             <div class="cg-about-timeline">
               <div class="cg-about-timeline__item">
                 <span>2008</span>
-                <p>Inicio de una propuesta educativa enfocada en técnica y práctica.</p>
+                <p>Inicio de una propuesta educativa enfocada en técnica, práctica y disciplina.</p>
               </div>
 
               <div class="cg-about-timeline__item">
                 <span>Trayectoria</span>
-                <p>Cientos de estudiantes formados con disciplina, creatividad y pasión.</p>
+                <p>Estudiantes formados con creatividad, exigencia y pasión por la gastronomía.</p>
               </div>
 
               <div class="cg-about-timeline__item">
                 <span>2026</span>
-                <p>18 años fortaleciendo el talento gastronómico de nuevas generaciones.</p>
+                <p>18 años fortaleciendo el talento gastronómico de Huancayo y Junín.</p>
               </div>
             </div>
           </article>
@@ -225,12 +265,13 @@ export function renderAboutSection() {
               </span>
 
               <h3 class="cg-about-card__title">
-                Formar expertos competitivos
+                Formar expertos competitivos y emprendedores
               </h3>
 
               <p class="cg-about-card__text">
-                Ofrecemos formación práctica y creativa en cocina, pastelería y barras,
-                impulsando el éxito de futuros profesionales y emprendedores.
+                Ofrecemos formación práctica y creativa en cocina, pastelería,
+                barismo, bar profesional y servicio gastronómico, impulsando el
+                crecimiento de futuros profesionales y emprendedores.
               </p>
             </article>
 
@@ -244,12 +285,34 @@ export function renderAboutSection() {
               </span>
 
               <h3 class="cg-about-card__title">
-                Liderar la educación gastronómica
+                Liderar la educación gastronómica en Junín
               </h3>
 
               <p class="cg-about-card__text">
-                Ser la institución referente e innovadora, conectada con las
-                tendencias y exigencias actuales del sector global.
+                Buscamos ser una institución referente, innovadora y conectada con
+                las tendencias actuales del sector gastronómico, manteniendo una
+                formación presencial, técnica y orientada al trabajo real.
+              </p>
+            </article>
+
+            <article class="cg-about-card cg-about-card--dark" data-cg-about-reveal="right">
+              <span class="cg-about-card__tag">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 19h16" />
+                  <path d="M6 16l4-4 3 3 5-7" />
+                  <path d="M15 8h3v3" />
+                </svg>
+                Programas
+              </span>
+
+              <h3 class="cg-about-card__title">
+                Formación para diferentes metas profesionales
+              </h3>
+
+              <p class="cg-about-card__text">
+                Nuestros programas están orientados a quienes desean trabajar,
+                emprender o especializarse en gastronomía, pastelería, cafetería,
+                coctelería y servicio especializado.
               </p>
             </article>
           </div>
@@ -259,7 +322,7 @@ export function renderAboutSection() {
           <div class="cg-about-values__header">
             <span class="cg-about__eyebrow">Nuestros valores</span>
             <h3 class="cg-about-values__title">
-              La esencia que guía nuestra formación
+              La esencia que guía nuestra formación gastronómica
             </h3>
           </div>
 

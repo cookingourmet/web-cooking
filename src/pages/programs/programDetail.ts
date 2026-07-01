@@ -61,13 +61,23 @@ const PROGRAM_ROUTES: Record<ProgramKey, string> = {
 };
 
 const PROGRAM_HEADINGS: Record<ProgramKey, string> = {
+  gastronomia: "Gastronomía Profesional",
+  pasteleria: "Pastelería Profesional",
+  "bar-profesional": "Bar Profesional",
+  barismo: "Barismo Profesional",
+  sommelier: "Sommelier Profesional",
+  cocina: "Cocina Acelerada",
+};
+
+const PROGRAM_SEO_HEADINGS: Record<ProgramKey, string> = {
   gastronomia: "Gastronomía Profesional en Huancayo",
-  pasteleria: "Panadería y Pastelería Profesional en Huancayo",
+  pasteleria: "Pastelería Profesional en Huancayo",
   "bar-profesional": "Bar Profesional en Huancayo",
   barismo: "Barismo Profesional en Huancayo",
   sommelier: "Sommelier Profesional en Huancayo",
   cocina: "Cocina Acelerada en Huancayo",
 };
+
 function escapeHtml(value: string | number | null | undefined) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -89,12 +99,16 @@ function getProgramHeading(program: ProgramData) {
   return PROGRAM_HEADINGS[program.slug];
 }
 
+function getProgramSeoHeading(program: ProgramData) {
+  return PROGRAM_SEO_HEADINGS[program.slug];
+}
+
 function getExtendedProgram(program: ProgramData): ProgramDataExtended {
   return program;
 }
 
 function getProgramSeoTitle(program: ProgramDataExtended) {
-  return program.seoTitle ?? `${getProgramHeading(program)} | Cooking Gourmet`;
+  return program.seoTitle ?? `${getProgramSeoHeading(program)} | Cooking Gourmet`;
 }
 
 function getProgramSeoDescription(program: ProgramDataExtended) {
@@ -245,7 +259,7 @@ function applyProgramSeo(program: ProgramDataExtended) {
       {
         "@type": "Course",
         "@id": `${canonicalUrl}#course`,
-        name: program.title,
+        name: getProgramSeoHeading(program),
         description,
         url: canonicalUrl,
         image: imageUrl,
@@ -566,7 +580,9 @@ function renderHero(
             copy.eyebrow
           )}</span>
 
-          <h1>${escapeHtml(getProgramHeading(program))}</h1>
+          <h1 aria-label="${escapeHtml(getProgramSeoHeading(program))}">
+            ${escapeHtml(getProgramHeading(program))}
+          </h1>
 
           <p class="program-landing-hero__lead">${escapeHtml(
             copy.heroDescription
@@ -1058,7 +1074,7 @@ function renderRelatedPrograms(program: ProgramData) {
         <div class="program-landing-heading">
           <span class="program-landing-tag">También puedes estudiar</span>
           <h2>Conoce otros programas de Cooking Gourmet</h2>
-          <p>Explora otras alternativas de formación presencial en Huancayo.</p>
+          <p>Explora otras alternativas de formación presencial y práctica.</p>
         </div>
 
         <div class="program-landing-feature-grid">

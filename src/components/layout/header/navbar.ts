@@ -7,29 +7,60 @@ const HIDDEN_MAIN_MENU_LABELS = new Set([
   "Inscripciones",
 ]);
 
-const WHATSAPP_URL =
-  "https://wa.me/51981377382?text=Hola%2C%20vengo%20desde%20la%20web%20de%20Cooking%20Gourmet%20y%20quiero%20recibir%20informaci%C3%B3n.";
-
-const INVENTORY_URL =
-  "https://inventario.eltigrecorporacion.com/login";
+const WHATSAPP_NUMBER = "51981377382";
+const AULA_VIRTUAL_URL = "https://cookingourmet.q10.com/";
 
 type ProgramVisual = {
   label?: string;
   href?: string;
+  seoLabel: string;
 };
 
 const PROGRAM_VISUALS: Record<string, ProgramVisual> = {
-  Gastronomía: { href: "/programas/gastronomia" },
-  Pastelería: { href: "/programas/pasteleria" },
-  "Bar Profesional": { href: "/programas/bar-profesional" },
-  Barismo: { href: "/programas/barismo" },
-  Sommelier: { href: "/programas/sommelier" },
+  Gastronomía: {
+    label: "Gastronomía Profesional",
+    href: "/programas/gastronomia",
+    seoLabel: "Gastronomía Profesional en Cooking Gourmet Huancayo",
+  },
+  Pastelería: {
+    label: "Pastelería Profesional",
+    href: "/programas/pasteleria",
+    seoLabel: "Pastelería Profesional en Cooking Gourmet Huancayo",
+  },
+  "Bar Profesional": {
+    href: "/programas/bar-profesional",
+    seoLabel: "Bar Profesional en Cooking Gourmet Huancayo",
+  },
+  Barismo: {
+    label: "Barismo Profesional",
+    href: "/programas/barismo",
+    seoLabel: "Barismo Profesional en Cooking Gourmet Huancayo",
+  },
+  Sommelier: {
+    label: "Sommelier Profesional",
+    href: "/programas/sommelier",
+    seoLabel: "Sommelier Profesional en Cooking Gourmet Huancayo",
+  },
   Cocina: {
     label: "Cocina Acelerada",
     href: "/programas/cocina-acelerada",
+    seoLabel: "Cocina Acelerada en Cooking Gourmet Huancayo",
   },
-  "Cocina Acelerada": { href: "/programas/cocina-acelerada" },
+  "Cocina Acelerada": {
+    href: "/programas/cocina-acelerada",
+    seoLabel: "Cocina Acelerada en Cooking Gourmet Huancayo",
+  },
 };
+
+function buildWhatsAppUrl() {
+  const message = [
+    "Hola, vengo de la web de Cooking Gourmet.",
+    "Quiero información sobre sus programas gastronómicos en Huancayo.",
+    "Deseo conocer horarios, matrícula, mensualidad, requisitos e inicio de clases.",
+  ].join("\n");
+
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
 
 function normalizePath(path: string) {
   if (!path || path === "/") return "/";
@@ -132,6 +163,13 @@ function getProgramIcon(label: string) {
 
 function getMainIcon(label: string) {
   const icons: Record<string, string> = {
+    Inicio: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 11 12 4l9 7" />
+        <path d="M5 10v10h14V10" />
+        <path d="M9 20v-6h6v6" />
+      </svg>
+    `,
     Eventos: `
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M7 3v3" />
@@ -202,17 +240,28 @@ function getSocialIcon(type: "facebook" | "instagram" | "tiktok") {
 function renderProgramItems() {
   return programMenu
     .map((item) => {
-      const visual = PROGRAM_VISUALS[item.label] ?? {};
+      const visual = PROGRAM_VISUALS[item.label] ?? {
+        seoLabel: `${item.label} en Cooking Gourmet Huancayo`,
+      };
+
       const label = visual.label ?? item.label;
       const href = visual.href ?? item.href;
 
       return `
-        <a href="${href}" role="menuitem"${activeAttributes(href)}>
+        <a
+          href="${href}"
+          role="menuitem"
+          aria-label="${visual.seoLabel}"
+          title="${label}"
+          ${activeAttributes(href)}
+        >
           <span class="program-menu__icon" aria-hidden="true">
             ${getProgramIcon(item.label)}
           </span>
 
-          <span class="program-menu__name">${label}</span>
+          <span class="program-menu__name">
+            ${label}
+          </span>
 
           <span class="program-menu__arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -264,10 +313,14 @@ export function renderNavbar() {
   );
 
   return `
-    <nav class="navbar" id="navbar" aria-label="Navegación principal">
+    <nav
+      class="navbar"
+      id="navbar"
+      aria-label="Navegación principal de Cooking Gourmet"
+    >
       <div class="navbar__mobile-head">
         <div>
-          <span>Menú principal</span>
+          <span>Menú institucional</span>
           <strong>Cooking Gourmet</strong>
         </div>
 
@@ -293,6 +346,7 @@ export function renderNavbar() {
                 aria-expanded="false"
                 aria-haspopup="true"
                 aria-controls="programsMenu"
+                aria-label="Ver programas profesionales de Cooking Gourmet"
               >
                 <span class="nav-link__icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24">
@@ -318,8 +372,7 @@ export function renderNavbar() {
               >
                 <div class="program-menu__inner">
                   <div class="program-menu__heading">
-                    <span>Programas de estudio</span>
-                    <strong>Elige el camino que impulsará tu futuro</strong>
+                    <span>Programas</span>
                   </div>
 
                   <div class="program-menu__grid">
@@ -338,6 +391,7 @@ export function renderNavbar() {
                       class="nav-link${isCurrentHref(item.href) ? " is-active" : ""}"
                       ${isCurrentHref(item.href) ? 'aria-current="page"' : ""}
                       ${externalAttributes(item.href)}
+                      aria-label="${item.label} - Cooking Gourmet"
                     >
                       <span class="nav-link__icon" aria-hidden="true">
                         ${getMainIcon(item.label)}
@@ -355,28 +409,11 @@ export function renderNavbar() {
 
         <div class="nav-actions">
           <a
-            href="${INVENTORY_URL}"
-            class="nav-action nav-action--inventory"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Abrir sistema de inventario"
-            title="Inventario"
-          >
-            <span class="nav-action__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M3 7.5 12 3l9 4.5" />
-                <path d="M5 9v10h14V9" />
-                <path d="M8 12h3v3H8z" />
-                <path d="M13 12h3v3h-3z" />
-                <path d="M8 17h8" />
-              </svg>
-            </span>
-          </a>
-          <a
-            href="https://cookingourmet.q10.com/"
+            href="${AULA_VIRTUAL_URL}"
             class="nav-action nav-action--secondary"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Ingresar al Aula Virtual de Cooking Gourmet"
           >
             <span class="nav-action__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24">
@@ -390,10 +427,11 @@ export function renderNavbar() {
           </a>
 
           <a
-            href="${WHATSAPP_URL}"
+            href="${buildWhatsAppUrl()}"
             class="nav-action nav-action--primary"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Solicitar información por WhatsApp sobre programas de Cooking Gourmet"
           >
             <span class="nav-action__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24">

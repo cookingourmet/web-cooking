@@ -18,8 +18,7 @@ const AUTO_TIME = 5500;
 const WORKSHOP_WHATSAPP_NUMBER = "51981377382";
 
 function workshopWhatsAppUrl(workshopName: string) {
-  const message =
-    `Hola, vengo desde la web. Necesito información sobre el taller de ${workshopName}.`;
+  const message = `Hola, vengo de la web de Cooking Gourmet. Necesito información sobre el taller de ${workshopName}: horarios, inversión e inicio de clases.`;
 
   return `https://wa.me/${WORKSHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(
     message
@@ -44,7 +43,7 @@ function renderAction(
   variant: "primary" | "secondary"
 ) {
   const externalAttributes = action.external
-    ? ' target="_blank" rel="noreferrer"'
+    ? ' target="_blank" rel="noopener noreferrer"'
     : "";
 
   return `
@@ -53,13 +52,23 @@ function renderAction(
       href="${escapeAttribute(action.href)}"
       ${externalAttributes}
     >
-      ${escapeHtml(action.label)}
+      <span>${escapeHtml(action.label)}</span>
       ${
         variant === "secondary"
           ? '<span aria-hidden="true">→</span>'
           : ""
       }
     </a>
+  `;
+}
+
+function renderHeroTitle(title: string, index: number) {
+  const tagName = index === 0 ? "h1" : "h2";
+
+  return `
+    <${tagName} class="hero-title">
+      ${escapeHtml(title)}
+    </${tagName}>
   `;
 }
 
@@ -89,15 +98,16 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
       : "hero-slide--media-right";
 
   const imageScale = slide.imageScale ?? 1;
+  const isActive = index === 0;
 
   return `
     <article
       class="hero-slide hero-slide--single ${sideClass} ${
-        index === 0 ? "is-active" : ""
+        isActive ? "is-active" : ""
       }"
       data-index="${index}"
       data-slide-id="${escapeAttribute(slide.id)}"
-      aria-hidden="${index === 0 ? "false" : "true"}"
+      aria-hidden="${isActive ? "false" : "true"}"
     >
       <div class="hero-single hero-shell">
         <div class="hero-single__content">
@@ -111,7 +121,7 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
               : ""
           }
 
-          <h1>${escapeHtml(slide.title)}</h1>
+          ${renderHeroTitle(slide.title, index)}
 
           <p class="hero-single__subtitle">
             ${escapeHtml(slide.subtitle)}
@@ -162,7 +172,7 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
             <img
               src="${escapeAttribute(slide.image)}"
               alt="${escapeAttribute(slide.imageAlt)}"
-              ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}
+              ${isActive ? 'fetchpriority="high"' : 'loading="lazy"'}
               decoding="async"
             />
           </picture>
@@ -172,9 +182,7 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
   `;
 }
 
-function renderWorkshopCard(
-  card: HeroCardsSlide["cards"][number]
-) {
+function renderWorkshopCard(card: HeroCardsSlide["cards"][number]) {
   const whatsappUrl = workshopWhatsAppUrl(card.title);
 
   return `
@@ -182,7 +190,7 @@ function renderWorkshopCard(
       class="hero-workshop-card"
       href="${escapeAttribute(whatsappUrl)}"
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       aria-label="${escapeAttribute(
         `Solicitar información por WhatsApp sobre ${card.title}, inicia el ${card.day} de ${card.month}`
       )}"
@@ -215,14 +223,16 @@ function renderWorkshopCard(
 }
 
 function renderCardsSlide(slide: HeroCardsSlide, index: number) {
+  const isActive = index === 0;
+
   return `
     <article
       class="hero-slide hero-slide--cards ${
-        index === 0 ? "is-active" : ""
+        isActive ? "is-active" : ""
       }"
       data-index="${index}"
       data-slide-id="${escapeAttribute(slide.id)}"
-      aria-hidden="${index === 0 ? "false" : "true"}"
+      aria-hidden="${isActive ? "false" : "true"}"
     >
       <div class="hero-cards hero-shell">
         <div class="hero-cards__intro">
@@ -236,7 +246,7 @@ function renderCardsSlide(slide: HeroCardsSlide, index: number) {
               : ""
           }
 
-          <h1>${escapeHtml(slide.title)}</h1>
+          ${renderHeroTitle(slide.title, index)}
 
           <p>${escapeHtml(slide.subtitle)}</p>
 
@@ -266,13 +276,15 @@ function renderSlide(slide: HeroSlide, index: number) {
 }
 
 function renderProgressItem(slide: HeroSlide, index: number) {
+  const isActive = index === 0;
+
   return `
     <button
-      class="hero-progress__item ${index === 0 ? "is-active" : ""}"
+      class="hero-progress__item ${isActive ? "is-active" : ""}"
       type="button"
       data-progress="${index}"
       aria-label="Ir a ${escapeAttribute(slide.shortLabel)}"
-      aria-current="${index === 0 ? "true" : "false"}"
+      aria-current="${isActive ? "true" : "false"}"
     >
       <span class="hero-progress__number" aria-hidden="true">
         ${String(index + 1).padStart(2, "0")}
@@ -294,7 +306,7 @@ export function renderHeroSlider() {
     <section
       class="hero-slider"
       id="heroSlider"
-      aria-label="Programas y talleres destacados"
+      aria-label="Escuela de Gastronomía en Huancayo y programas destacados de Cooking Gourmet"
     >
       <div class="hero-slider__viewport" id="heroViewport">
         ${heroSlides.map(renderSlide).join("")}
@@ -490,10 +502,6 @@ export function initHeroSlider() {
     onNext: goToNextSlide,
     onReset: resetAutoPlay,
   });
-
-  // En escritorio no pausamos el autoplay por hover o foco.
-  // El hero ocupa gran parte de la pantalla y el cursor suele permanecer
-  // encima, lo que detenía el slider de forma permanente.
 
   document.addEventListener("visibilitychange", () => {
     setPaused("visibility", document.hidden);
