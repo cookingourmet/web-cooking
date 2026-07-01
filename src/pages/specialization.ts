@@ -11,6 +11,7 @@ const SPECIALIZATION = {
   location: "Av. Ferrocarril 587 - Huancayo",
   city: "Huancayo, Junín",
   chefImage: "/images/especializacion/chef.png",
+  chefMobileImage: "/images/especializacion/chef-1.png",
   logoImage: "/images/especializacion/master-class.png",
   topics: ["Masas madre", "Croissant", "Panes sin gluten"],
 };
@@ -193,12 +194,19 @@ function renderSpecializationHero() {
 
       <div class="container specialization-hero__container">
         <div class="specialization-hero__chef">
-          <img
-            src="${SPECIALIZATION.chefImage}"
-            alt="Chef ${SPECIALIZATION.chef}, instructor de la Master Class 2026"
-            loading="eager"
-            decoding="async"
-          />
+          <picture>
+            <source
+              media="(max-width: 820px)"
+              srcset="${SPECIALIZATION.chefMobileImage}"
+            />
+
+            <img
+              src="${SPECIALIZATION.chefImage}"
+              alt="Chef ${SPECIALIZATION.chef}, instructor de la Master Class 2026"
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
         </div>
 
         <div class="specialization-hero__content">
@@ -212,11 +220,14 @@ function renderSpecializationHero() {
             />
           </div>
 
-          <h1>Técnicas y Recetas</h1>
+          <h1 class="specialization-hero__title">
+            Técnicas y Recetas
+            <span>en Tendencia.</span>
+          </h1>
 
-          <p class="specialization-hero__lead">
-            En tendencia.
-          </p>
+          <span class="specialization-eyebrow specialization-eyebrow--below">
+            100% práctico · Presencial
+          </span>
 
           <div class="specialization-hero__topics" aria-label="Temas de la especialización">
             ${SPECIALIZATION.topics
