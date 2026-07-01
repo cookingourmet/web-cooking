@@ -186,7 +186,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Cocinas industriales",
     ],
     whatsappMessage:
-      "Hola, quiero información completa del programa de Gastronomía Profesional: horarios, matrícula, mensualidad e inicio de clases.",
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información completa del programa de Gastronomía Profesional: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
     contactPhone: "(064) 659923",
     stats: [
@@ -330,7 +330,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Emprendimiento propio",
     ],
     whatsappMessage:
-      "Hola, quiero información del programa de Pastelería: horarios, matrícula, mensualidad e inicio de clases.",
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información del programa de Pastelería: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
     stats: [
       { value: "+11,200", label: "estudiantes egresados" },
@@ -432,7 +432,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Emprendimiento propio",
     ],
     whatsappMessage:
-      "Hola, quiero información del programa de Bar Profesional: horarios, matrícula, mensualidad e inicio de clases.",
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información del programa de Bar Profesional: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
     stats: [
       { value: "+11,200", label: "estudiantes egresados" },
@@ -524,7 +524,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Emprendimiento propio",
     ],
     whatsappMessage:
-      "Hola, quiero información del programa de Barismo: horarios, matrícula, mensualidad e inicio de clases.",
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información del programa de Barismo: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
     investment: {
       inscription: "S/ 120.00",
@@ -610,7 +610,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Asesoría en vinos",
     ],
     whatsappMessage:
-      "Hola, quiero información del programa de Sommelier: horarios, matrícula, mensualidad e inicio de clases.",
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información del programa de Sommelier: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
     stats: [
       { value: "+11,200", label: "estudiantes egresados" },
@@ -702,7 +702,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
       "Negocio propio",
     ],
     whatsappMessage:
-      "Hola, quiero información del programa de Cocina Acelerada: horarios, matrícula, mensualidad e inicio de clases.",
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información del programa de Cocina Acelerada: horarios, matrícula, mensualidad e inicio de clases.",
     whatsappNumber: "51981377382",
     investment: {
       inscription: "S/ 120.00",

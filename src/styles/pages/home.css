@@ -1,3 +1,638 @@
 .page-home {
   position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(254, 0, 62, 0.08), transparent 34rem),
+    radial-gradient(circle at 85% 35%, rgba(255, 150, 40, 0.08), transparent 30rem),
+    #ffffff;
+}
+
+/* ================================
+   HOME GLOBAL SECTIONS
+================================ */
+
+.home-programs,
+.home-local-seo,
+.home-why,
+.home-faq,
+.home-final-cta {
+  position: relative;
+  padding: clamp(70px, 8vw, 118px) 0;
+}
+
+.home-section-heading {
+  max-width: 820px;
+  margin: 0 auto clamp(36px, 5vw, 58px);
+  text-align: center;
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #fe003e;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.home-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.home-section-heading h2,
+.home-local-seo__content h2,
+.home-final-cta__box h2 {
+  margin: 0;
+  color: #151515;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  font-weight: 850;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+.home-section-heading p,
+.home-local-seo__content p,
+.home-final-cta__box p {
+  margin: 18px 0 0;
+  color: #626262;
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.75;
+}
+
+/* ================================
+   PROGRAMAS HOME
+================================ */
+
+.home-programs {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fff7f7 100%);
+}
+
+.home-programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.home-program-card {
+  position: relative;
+  min-height: 275px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(20, 20, 20, 0.08);
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.76)),
+    #ffffff;
+  box-shadow: 0 22px 70px rgba(18, 18, 18, 0.08);
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.home-program-card::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 155px;
+  height: 155px;
+  border-radius: 999px;
+  background: rgba(254, 0, 62, 0.08);
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.home-program-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 28px 72px 28px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(254, 0, 62, 0.25), transparent);
+}
+
+.home-program-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(254, 0, 62, 0.24);
+  box-shadow: 0 32px 90px rgba(18, 18, 18, 0.13);
+}
+
+.home-program-card:hover::before {
+  transform: scale(1.2);
+  opacity: 0.9;
+}
+
+.home-program-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.home-program-card h3 {
+  margin: 0;
+  color: #171717;
+  font-size: clamp(1.22rem, 1.7vw, 1.55rem);
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.home-program-card p {
+  margin: 14px 0 0;
+  color: #666666;
+  font-size: 0.98rem;
+  line-height: 1.72;
+}
+
+.home-program-card__link {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin-top: 26px;
+  color: #fe003e;
+  font-size: 0.94rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: gap 0.25s ease, color 0.25s ease;
+}
+
+.home-program-card__link:hover {
+  gap: 15px;
+  color: #c90030;
+}
+
+/* ================================
+   SEO LOCAL JUNÍN
+================================ */
+
+.home-local-seo {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(254, 0, 62, 0.22), transparent 26rem),
+    linear-gradient(135deg, #151515 0%, #252020 55%, #3a1018 100%);
+  color: #ffffff;
+}
+
+.home-local-seo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  pointer-events: none;
+}
+
+.home-local-seo__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(310px, 0.88fr);
+  gap: clamp(28px, 5vw, 68px);
+  align-items: center;
+}
+
+.home-local-seo .home-eyebrow {
+  color: #ffffff;
+}
+
+.home-local-seo__content h2,
+.home-local-seo__content p {
+  color: #ffffff;
+}
+
+.home-local-seo__content p {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.home-local-seo__actions,
+.home-final-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.home-local-seo__panel {
+  padding: clamp(24px, 4vw, 38px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(18px);
+}
+
+.home-local-seo__panel h3 {
+  margin: 0 0 22px;
+  color: #ffffff;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-weight: 850;
+  letter-spacing: -0.035em;
+}
+
+.home-local-seo__panel ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-local-seo__panel li {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 12px 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.home-local-seo__panel li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 999px;
+  background: #fe003e;
+  box-shadow: 0 0 0 5px rgba(254, 0, 62, 0.14);
+}
+
+/* ================================
+   BENEFICIOS
+================================ */
+
+.home-why {
+  background: #ffffff;
+}
+
+.home-why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.home-why-card {
+  padding: 26px;
+  border: 1px solid rgba(20, 20, 20, 0.08);
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 20px 64px rgba(18, 18, 18, 0.07);
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.home-why-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(254, 0, 62, 0.22);
+  box-shadow: 0 28px 80px rgba(18, 18, 18, 0.11);
+}
+
+.home-why-card__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  color: #ffffff;
+  font-weight: 900;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #fe003e, #ff7a1a);
+  box-shadow: 0 14px 34px rgba(254, 0, 62, 0.28);
+}
+
+.home-why-card h3 {
+  margin: 0;
+  color: #171717;
+  font-size: 1.1rem;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.home-why-card p {
+  margin: 12px 0 0;
+  color: #666666;
+  font-size: 0.95rem;
+  line-height: 1.68;
+}
+
+/* ================================
+   FAQ
+================================ */
+
+.home-faq {
+  background:
+    linear-gradient(180deg, #fff7f7 0%, #ffffff 100%);
+}
+
+.home-faq-list {
+  max-width: 920px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+.home-faq-item {
+  overflow: hidden;
+  border: 1px solid rgba(20, 20, 20, 0.08);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 18px 55px rgba(18, 18, 18, 0.06);
+}
+
+.home-faq-item summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  padding: 20px 58px 20px 24px;
+  color: #171717;
+  font-size: 1rem;
+  font-weight: 850;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+
+.home-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.home-faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: #fe003e;
+  font-size: 1.35rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: rgba(254, 0, 62, 0.08);
+  transform: translateY(-50%);
+  transition: transform 0.25s ease;
+}
+
+.home-faq-item[open] summary::after {
+  content: "−";
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.home-faq-item p {
+  margin: 0;
+  padding: 0 24px 24px;
+  color: #626262;
+  font-size: 0.98rem;
+  line-height: 1.72;
+}
+
+/* ================================
+   CTA FINAL
+================================ */
+
+.home-final-cta {
+  padding-top: clamp(30px, 5vw, 70px);
+  background: #ffffff;
+}
+
+.home-final-cta__box {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(34px, 6vw, 70px);
+  border-radius: clamp(28px, 4vw, 46px);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.16), transparent 22rem),
+    linear-gradient(135deg, #171717 0%, #2c2020 50%, #fe003e 135%);
+  box-shadow: 0 34px 110px rgba(18, 18, 18, 0.18);
+}
+
+.home-final-cta__box::before {
+  content: "";
+  position: absolute;
+  right: -100px;
+  bottom: -120px;
+  width: 310px;
+  height: 310px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.home-final-cta__box .home-eyebrow,
+.home-final-cta__box h2,
+.home-final-cta__box p {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.home-final-cta__box p {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.home-final-cta__actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================
+   BOTONES DE SOPORTE HOME
+   Si ya tienes button.css, esto solo refuerza.
+================================ */
+
+.page-home .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 0.94rem;
+  font-weight: 850;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.page-home .btn:hover {
+  transform: translateY(-2px);
+}
+
+.page-home .btn--primary {
+  color: #ffffff;
+  border: 1px solid #fe003e;
+  background: linear-gradient(135deg, #fe003e, #ff7a1a);
+  box-shadow: 0 18px 40px rgba(254, 0, 62, 0.28);
+}
+
+.page-home .btn--primary:hover {
+  box-shadow: 0 22px 52px rgba(254, 0, 62, 0.36);
+}
+
+.page-home .btn--ghost {
+  color: #171717;
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  background: #ffffff;
+}
+
+.home-local-seo .btn--ghost,
+.home-final-cta .btn--ghost {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.home-local-seo .btn--ghost:hover,
+.home-final-cta .btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ================================
+   ACCESIBILIDAD
+================================ */
+
+.home-program-card__link:focus-visible,
+.home-faq-item summary:focus-visible,
+.page-home .btn:focus-visible {
+  outline: 3px solid rgba(254, 0, 62, 0.35);
+  outline-offset: 4px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1100px) {
+  .home-programs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-local-seo__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-local-seo__panel {
+    max-width: 760px;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-programs,
+  .home-local-seo,
+  .home-why,
+  .home-faq,
+  .home-final-cta {
+    padding: 64px 0;
+  }
+
+  .home-section-heading {
+    text-align: left;
+    margin-bottom: 30px;
+  }
+
+  .home-section-heading h2,
+  .home-local-seo__content h2,
+  .home-final-cta__box h2 {
+    font-size: clamp(1.85rem, 9vw, 2.55rem);
+  }
+
+  .home-programs-grid,
+  .home-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-program-card {
+    min-height: auto;
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .home-local-seo__panel ul {
+    grid-template-columns: 1fr;
+  }
+
+  .home-local-seo__actions,
+  .home-final-cta__actions {
+    width: 100%;
+  }
+
+  .page-home .btn {
+    width: 100%;
+  }
+
+  .home-faq-item summary {
+    min-height: auto;
+    padding: 18px 54px 18px 18px;
+  }
+
+  .home-faq-item p {
+    padding: 0 18px 20px;
+  }
+
+  .home-final-cta__box {
+    padding: 30px 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-program-card h3 {
+    font-size: 1.18rem;
+  }
+
+  .home-program-card p,
+  .home-why-card p,
+  .home-faq-item p {
+    font-size: 0.93rem;
+  }
+
+  .home-local-seo__panel li {
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-program-card,
+  .home-program-card::before,
+  .home-program-card__link,
+  .home-why-card,
+  .home-faq-item summary::after,
+  .page-home .btn {
+    transition: none;
+  }
+
+  .home-program-card:hover,
+  .home-why-card:hover,
+  .page-home .btn:hover {
+    transform: none;
+  }
 }

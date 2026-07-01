@@ -38,12 +38,32 @@ const appRoot = app;
 
 function normalizePath(pathname: string) {
   if (!pathname) return "/";
+
   const cleanPath = pathname.replace(/\/+$/, "");
+
   return cleanPath === "" ? "/" : cleanPath;
 }
 
+function redirectTo(path: string) {
+  window.history.replaceState({}, "", path);
+}
+
 function renderRoute() {
-  const currentPath = normalizePath(window.location.pathname);
+  let currentPath = normalizePath(window.location.pathname);
+
+  /**
+   * Redirecciones internas SEO.
+   * Mantenemos una sola URL oficial por página.
+   */
+  if (currentPath === "/index.html") {
+    redirectTo("/");
+    currentPath = "/";
+  }
+
+  if (currentPath === "/programas/cocina") {
+    redirectTo("/programas/cocina-acelerada");
+    currentPath = "/programas/cocina-acelerada";
+  }
 
   switch (currentPath) {
     case "/":
@@ -71,7 +91,7 @@ function renderRoute() {
       appRoot.innerHTML = renderSommelierPage();
       break;
 
-    case "/programas/cocina":
+    case "/programas/cocina-acelerada":
       appRoot.innerHTML = renderCocinaPage();
       break;
 
@@ -104,7 +124,15 @@ document.addEventListener("click", (event) => {
 
   event.preventDefault();
 
-  const nextPath = normalizePath(href);
+  let nextPath = normalizePath(href);
+
+  if (nextPath === "/index.html") {
+    nextPath = "/";
+  }
+
+  if (nextPath === "/programas/cocina") {
+    nextPath = "/programas/cocina-acelerada";
+  }
 
   if (nextPath !== normalizePath(window.location.pathname)) {
     window.history.pushState({}, "", nextPath);
