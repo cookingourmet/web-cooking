@@ -1,10 +1,232 @@
+import "./careers.css";
+
+type CareerProgram = {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  duration: string;
+  modality: string;
+  image: string;
+  imageAlt: string;
+  href: string;
+  whatsappText: string;
+  tags: string[];
+};
+
+const WHATSAPP_NUMBER = "51981377382";
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function whatsappUrl(message: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+const careerPrograms: CareerProgram[] = [
+  {
+    id: "gastronomia",
+    title: "Gastronomía Profesional",
+    category: "Carrera principal",
+    description:
+      "Estudia cocina peruana, internacional, técnicas culinarias, gestión gastronómica y práctica profesional en Huancayo.",
+    duration: "18 meses",
+    modality: "Presencial",
+    image: "/images/portada/gastronomia.jpg",
+    imageAlt:
+      "Estudiante de Gastronomía Profesional en Cooking Gourmet Huancayo",
+    href: "/programas/gastronomia",
+    whatsappText:
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre Gastronomía Profesional en Huancayo: horarios, matrícula, mensualidad e inicio de clases.",
+    tags: ["Cocina", "Técnica", "Emprendimiento"],
+  },
+  {
+    id: "pasteleria",
+    title: "Pastelería Profesional",
+    category: "Programa profesional",
+    description:
+      "Aprende pastelería, panadería, decoración, chocolatería y producción comercial con formación práctica presencial.",
+    duration: "1 año",
+    modality: "Presencial",
+    image: "/images/portada/pasteleria.jpg",
+    imageAlt:
+      "Estudiante de Pastelería Profesional en Cooking Gourmet Huancayo",
+    href: "/programas/pasteleria",
+    whatsappText:
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre Pastelería Profesional en Huancayo: horarios, matrícula, mensualidad e inicio de clases.",
+    tags: ["Pastelería", "Panadería", "Decoración"],
+  },
+  {
+    id: "bar-profesional",
+    title: "Bar Profesional",
+    category: "Especialización práctica",
+    description:
+      "Domina coctelería, mixología, destilados, atención al cliente y operación profesional de barra.",
+    duration: "6 meses",
+    modality: "Presencial",
+    image: "/images/portada/bar-profesional.jpg",
+    imageAlt:
+      "Estudiante de Bar Profesional preparando bebidas en Cooking Gourmet Huancayo",
+    href: "/programas/bar-profesional",
+    whatsappText:
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre Bar Profesional en Huancayo: horarios, matrícula, mensualidad e inicio de clases.",
+    tags: ["Coctelería", "Mixología", "Servicio"],
+  },
+  {
+    id: "barismo",
+    title: "Barismo Profesional",
+    category: "Especialización en café",
+    description:
+      "Especialízate en café, espresso, métodos de extracción, cata, latte art y operación profesional de cafetería.",
+    duration: "3 meses",
+    modality: "Presencial",
+    image: "/images/portada/barismo.jpg",
+    imageAlt:
+      "Barista preparando café de especialidad en Cooking Gourmet Huancayo",
+    href: "/programas/barismo",
+    whatsappText:
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre Barismo Profesional en Huancayo: horarios, matrícula, mensualidad e inicio de clases.",
+    tags: ["Café", "Latte art", "Cafetería"],
+  },
+  {
+    id: "sommelier",
+    title: "Sommelier Profesional",
+    category: "Especialización sensorial",
+    description:
+      "Desarrolla conocimientos en vinos, cata, maridaje, servicio especializado y cultura vitivinícola.",
+    duration: "6 meses",
+    modality: "Presencial",
+    image: "/images/portada/sommelier.jpg",
+    imageAlt:
+      "Programa de Sommelier Profesional en Cooking Gourmet Huancayo",
+    href: "/programas/sommelier",
+    whatsappText:
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre Sommelier Profesional en Huancayo: horarios, matrícula, mensualidad e inicio de clases.",
+    tags: ["Vinos", "Cata", "Maridaje"],
+  },
+  {
+    id: "cocina-acelerada",
+    title: "Cocina Acelerada",
+    category: "Formación intensiva",
+    description:
+      "Aprende bases culinarias, técnicas de cocina y preparación práctica para desenvolverte en cocinas reales.",
+    duration: "6 meses",
+    modality: "Presencial",
+    image: "/images/portada/cocina.jpg",
+    imageAlt:
+      "Programa de Cocina Acelerada en Cooking Gourmet Huancayo",
+    href: "/programas/cocina-acelerada",
+    whatsappText:
+      "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre Cocina Acelerada en Huancayo: horarios, matrícula, mensualidad e inicio de clases.",
+    tags: ["Cocina", "Práctica", "Intensivo"],
+  },
+];
+
+function renderCareerCard(program: CareerProgram, index: number) {
+  return `
+    <article class="cg-career-card" data-career="${escapeHtml(program.id)}">
+      <a class="cg-career-card__media" href="${escapeHtml(program.href)}">
+        <img
+          src="${escapeHtml(program.image)}"
+          alt="${escapeHtml(program.imageAlt)}"
+          loading="${index <= 1 ? "eager" : "lazy"}"
+          decoding="async"
+        />
+        <span class="cg-career-card__overlay"></span>
+        <span class="cg-career-card__category">
+          ${escapeHtml(program.category)}
+        </span>
+      </a>
+
+      <div class="cg-career-card__body">
+        <div class="cg-career-card__top">
+          <span>${escapeHtml(program.duration)}</span>
+          <span>${escapeHtml(program.modality)}</span>
+        </div>
+
+        <h3>
+          <a href="${escapeHtml(program.href)}">
+            ${escapeHtml(program.title)}
+          </a>
+        </h3>
+
+        <p>${escapeHtml(program.description)}</p>
+
+        <div class="cg-career-card__tags" aria-label="Temas principales">
+          ${program.tags
+            .map((tag) => `<span>${escapeHtml(tag)}</span>`)
+            .join("")}
+        </div>
+
+        <div class="cg-career-card__actions">
+          <a class="cg-career-btn cg-career-btn--primary" href="${escapeHtml(
+            program.href
+          )}">
+            Ver programa
+          </a>
+
+          <a
+            class="cg-career-btn cg-career-btn--ghost"
+            href="${whatsappUrl(program.whatsappText)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Informes
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 export function renderCareersSection() {
   return `
-    <section class="section-placeholder" id="carreras">
-      <div class="container">
-        <span class="section-placeholder__eyebrow">Carreras</span>
-        <h2>Programas con enfoque práctico y salida laboral</h2>
-        <p>Aquí luego irán tus cards, filtros o detalle de carreras.</p>
+    <section class="cg-careers" id="programas" aria-labelledby="cg-careers-title">
+      <span id="carreras" class="cg-careers__anchor" aria-hidden="true"></span>
+
+      <div class="cg-careers__bg"></div>
+
+      <div class="cg-careers__container">
+        <div class="cg-careers__heading">
+          <span class="cg-careers__eyebrow">Programas de estudio</span>
+
+          <h2 id="cg-careers-title">
+            Estudia gastronomía, pastelería, barismo y cocina profesional en Huancayo
+          </h2>
+
+          <p>
+            Elige un programa presencial en Cooking Gourmet y fórmate con práctica real,
+            docentes especializados y una ruta orientada al trabajo, el emprendimiento y
+            el crecimiento gastronómico.
+          </p>
+        </div>
+
+        <div class="cg-careers__grid">
+          ${careerPrograms.map(renderCareerCard).join("")}
+        </div>
+
+        <div class="cg-careers__cta">
+          <div>
+            <span>Admisión Cooking Gourmet</span>
+            <strong>Solicita orientación personalizada sobre horarios, matrícula e inicio de clases.</strong>
+          </div>
+
+          <a
+            href="${whatsappUrl(
+              "Hola, vengo de la web de Cooking Gourmet. Quiero información sobre los programas presenciales en Huancayo: Gastronomía, Pastelería, Barismo, Bar Profesional, Sommelier y Cocina Acelerada."
+            )}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Hablar por WhatsApp
+          </a>
+        </div>
       </div>
     </section>
   `;

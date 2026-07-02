@@ -110,7 +110,11 @@
   border-radius: 999px;
   font-weight: 800;
   text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .cg-about-btn:hover {
@@ -129,7 +133,53 @@
   border: 1px solid rgba(255, 46, 71, 0.22);
 }
 
-/* VISUAL PRINCIPAL */
+/* =====================================================
+   LISTA SEO DE PROGRAMAS
+===================================================== */
+
+.cg-about-seo-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 680px;
+  margin-top: 24px;
+}
+
+.cg-about-seo-list a {
+  min-height: 42px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #ff1934;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1.1;
+  text-align: center;
+  text-decoration: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 246, 247, 0.86));
+  border: 1px solid rgba(255, 46, 71, 0.18);
+  box-shadow: 0 12px 28px rgba(60, 60, 60, 0.06);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.cg-about-seo-list a:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 46, 71, 0.34);
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(60, 60, 60, 0.09);
+}
+
+/* =====================================================
+   VISUAL PRINCIPAL
+===================================================== */
+
 .cg-about-hero__visual {
   position: relative;
   justify-self: end;
@@ -286,7 +336,10 @@
   animation: cgAboutFloatBottom 10s ease-in-out infinite;
 }
 
-/* ANIMACIONES SUAVES */
+/* =====================================================
+   ANIMACIONES SUAVES
+===================================================== */
+
 @keyframes cgAboutFloatChef {
   0% {
     transform: translate3d(0, 0, 0) rotate(-0.4deg);
@@ -359,7 +412,10 @@
   }
 }
 
-/* CUERPO */
+/* =====================================================
+   CUERPO
+===================================================== */
+
 .cg-about__main {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
@@ -414,6 +470,32 @@
   color: #5f5a5b;
   font-size: 1rem;
   line-height: 1.75;
+}
+
+.cg-about-location {
+  margin-top: 22px;
+  padding: 20px 22px;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 242, 244, 0.88));
+  border: 1px solid rgba(255, 46, 71, 0.16);
+}
+
+.cg-about-location span {
+  display: inline-flex;
+  margin-bottom: 8px;
+  color: #ff1e34;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cg-about-location p {
+  margin: 0;
+  color: #5f5a5b;
+  font-size: 0.98rem;
+  line-height: 1.7;
 }
 
 .cg-about-infra {
@@ -489,7 +571,8 @@
   gap: 18px;
   padding: 18px;
   border-radius: 22px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(244, 244, 244, 0.84));
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(244, 244, 244, 0.84));
   border: 1px solid rgba(160, 160, 160, 0.14);
 }
 
@@ -512,13 +595,30 @@
 .cg-about-card {
   border-radius: 30px;
   padding: 30px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .cg-about-card:hover,
 .cg-about-value:hover {
   transform: translateY(-6px);
   box-shadow: 0 28px 75px rgba(60, 60, 60, 0.12);
+}
+
+.cg-about-card__tag {
+  gap: 8px;
+}
+
+.cg-about-card__tag svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .cg-about-card--accent {
@@ -551,7 +651,34 @@
   color: rgba(97, 97, 97, 0.78);
 }
 
-/* VALORES */
+.cg-about-card--dark {
+  background:
+    radial-gradient(circle at top right, rgba(255, 32, 58, 0.2), transparent 58%),
+    linear-gradient(145deg, #201718, #342326);
+}
+
+.cg-about-card--dark .cg-about-card__tag {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cg-about-card--dark .cg-about-card__title,
+.cg-about-card--dark .cg-about-card__text {
+  color: #ffffff;
+}
+
+.cg-about-card--dark .cg-about-card__text {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.cg-about-card--dark svg {
+  stroke: currentColor;
+}
+
+/* =====================================================
+   VALORES
+===================================================== */
+
 .cg-about-values {
   margin-top: 34px;
 }
@@ -578,7 +705,9 @@
 .cg-about-value {
   border-radius: 28px;
   padding: 24px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .cg-about-value__icon {
@@ -587,7 +716,8 @@
   display: grid;
   place-items: center;
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(218, 166, 170, 0.18), rgba(240, 240, 240, 0.8));
+  background:
+    linear-gradient(135deg, rgba(218, 166, 170, 0.18), rgba(240, 240, 240, 0.8));
   color: #a6656c;
   margin-bottom: 18px;
 }
@@ -615,7 +745,16 @@
   font-size: 0.94rem;
 }
 
-/* ACCESIBILIDAD */
+/* =====================================================
+   ACCESIBILIDAD
+===================================================== */
+
+.cg-about-btn:focus-visible,
+.cg-about-seo-list a:focus-visible {
+  outline: 3px solid rgba(255, 28, 54, 0.32);
+  outline-offset: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cg-about-photo-card,
   .cg-about-years,
@@ -625,7 +764,10 @@
   }
 }
 
-/* LAPTOP PEQUEÑA */
+/* =====================================================
+   LAPTOP PEQUEÑA
+===================================================== */
+
 @media (max-width: 1120px) {
   .cg-about-hero {
     grid-template-columns: 1fr;
@@ -636,12 +778,19 @@
     max-width: 850px;
   }
 
+  .cg-about-seo-list {
+    max-width: 850px;
+  }
+
   .cg-about-hero__visual {
     justify-self: center;
   }
 }
 
-/* TABLET */
+/* =====================================================
+   TABLET
+===================================================== */
+
 @media (max-width: 980px) {
   .cg-about {
     padding: 82px 0;
@@ -656,7 +805,10 @@
     flex-direction: column;
   }
 
-  /* CARRUSEL RESPONSIVE DE VALORES */
+  .cg-about-seo-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .cg-about-values {
     overflow: hidden;
   }
@@ -672,14 +824,11 @@
     margin: 0 -16px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-inline: contain;
+    scrollbar-width: none;
   }
 
   .cg-about-values__grid::-webkit-scrollbar {
     display: none;
-  }
-
-  .cg-about-values__grid {
-    scrollbar-width: none;
   }
 
   .cg-about-value {
@@ -689,7 +838,10 @@
   }
 }
 
-/* MÓVIL */
+/* =====================================================
+   MÓVIL
+===================================================== */
+
 @media (max-width: 640px) {
   .cg-about {
     padding: 66px 0;
@@ -702,6 +854,17 @@
   .cg-about__title {
     font-size: clamp(2.35rem, 12vw, 3.3rem);
     letter-spacing: -0.055em;
+  }
+
+  .cg-about-seo-list {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .cg-about-seo-list a {
+    width: 100%;
+    justify-content: center;
+    min-height: 42px;
   }
 
   .cg-about-hero__actions {
@@ -760,6 +923,10 @@
     grid-template-columns: 1fr;
   }
 
+  .cg-about-location {
+    padding: 18px;
+  }
+
   .cg-about-infra__content {
     left: 20px;
     right: 20px;
@@ -773,129 +940,5 @@
   .cg-about-value {
     flex-basis: 84vw;
     min-height: 220px;
-  }
-}
-
-
-
-.cg-about-card__tag {
-  gap: 8px;
-}
-
-.cg-about-card__tag svg {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* =====================================================
-   SEO LOCAL ABOUT - MEJORAS HOME
-===================================================== */
-
-.cg-about-seo-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.cg-about-seo-list a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 38px;
-  padding: 0 14px;
-  border-radius: 999px;
-  color: #ff1934;
-  font-size: 0.86rem;
-  font-weight: 850;
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(255, 46, 71, 0.18);
-  box-shadow: 0 12px 28px rgba(60, 60, 60, 0.06);
-  transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    background 0.22s ease;
-}
-
-.cg-about-seo-list a:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 46, 71, 0.34);
-  background: #ffffff;
-}
-
-.cg-about-location {
-  margin-top: 22px;
-  padding: 20px 22px;
-  border-radius: 24px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 242, 244, 0.88));
-  border: 1px solid rgba(255, 46, 71, 0.16);
-}
-
-.cg-about-location span {
-  display: inline-flex;
-  margin-bottom: 8px;
-  color: #ff1e34;
-  font-size: 0.76rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.cg-about-location p {
-  margin: 0;
-  color: #5f5a5b;
-  font-size: 0.98rem;
-  line-height: 1.7;
-}
-
-.cg-about-card--dark {
-  background:
-    radial-gradient(circle at top right, rgba(255, 32, 58, 0.2), transparent 58%),
-    linear-gradient(145deg, #201718, #342326);
-}
-
-.cg-about-card--dark .cg-about-card__tag {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.cg-about-card--dark .cg-about-card__title,
-.cg-about-card--dark .cg-about-card__text {
-  color: #ffffff;
-}
-
-.cg-about-card--dark .cg-about-card__text {
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.cg-about-card--dark svg {
-  stroke: currentColor;
-}
-
-.cg-about-btn:focus-visible,
-.cg-about-seo-list a:focus-visible {
-  outline: 3px solid rgba(255, 28, 54, 0.32);
-  outline-offset: 4px;
-}
-
-@media (max-width: 640px) {
-  .cg-about-seo-list {
-    gap: 8px;
-  }
-
-  .cg-about-seo-list a {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .cg-about-location {
-    padding: 18px;
   }
 }

@@ -135,11 +135,16 @@ export function renderAboutSection() {
               Profesional, Pastelería, Barismo, Bar Profesional, Sommelier y Cocina Acelerada.
             </p>
 
-            <div class="cg-about-seo-list" aria-label="Programas principales">
+            <div
+              class="cg-about-seo-list"
+              aria-label="Programas principales de Cooking Gourmet en Huancayo"
+            >
               <a href="/programas/gastronomia">Gastronomía Profesional</a>
-              <a href="/programas/pasteleria">Pastelería</a>
-              <a href="/programas/barismo">Barismo</a>
+              <a href="/programas/pasteleria">Pastelería Profesional</a>
+              <a href="/programas/barismo">Barismo Profesional</a>
               <a href="/programas/bar-profesional">Bar Profesional</a>
+              <a href="/programas/sommelier">Sommelier Profesional</a>
+              <a href="/programas/cocina-acelerada">Cocina Acelerada</a>
             </div>
 
             <div class="cg-about-hero__actions">
@@ -306,13 +311,14 @@ export function renderAboutSection() {
               </span>
 
               <h3 class="cg-about-card__title">
-                Formación para diferentes metas profesionales
+                Programas gastronómicos presenciales en Huancayo
               </h3>
 
               <p class="cg-about-card__text">
                 Nuestros programas están orientados a quienes desean trabajar,
-                emprender o especializarse en gastronomía, pastelería, cafetería,
-                coctelería y servicio especializado.
+                emprender o especializarse en gastronomía profesional, pastelería,
+                barismo, bar profesional, sommelier, cocina acelerada y servicio
+                gastronómico en Huancayo.
               </p>
             </article>
           </div>

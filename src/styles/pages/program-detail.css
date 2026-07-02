@@ -1145,3 +1145,16 @@
     transform: none;
   }
 }
+
+.program-landing-hero__city {
+  display: block;
+  color: inherit;
+  font-size: clamp(1.65rem, 4vw, 3.4rem);
+  line-height: 0.95;
+}
+
+@media (max-width: 768px) {
+  .program-landing-hero__city {
+    font-size: clamp(1.8rem, 9vw, 2.9rem);
+  }
+}

@@ -18,17 +18,8 @@
         tagManagerScript.src =
           `https://www.googletagmanager.com/gtm.js?id=${i}${dataLayerParameter}`;
 
-        firstScript.parentNode.insertBefore(
-          tagManagerScript,
-          firstScript
-        );
-      })(
-        window,
-        document,
-        "script",
-        "dataLayer",
-        "GTM-T8T5TV37"
-      );
+        firstScript.parentNode.insertBefore(tagManagerScript, firstScript);
+      })(window, document, "script", "dataLayer", "GTM-T8T5TV37");
     </script>
     <!-- End Google Tag Manager -->
 
@@ -76,19 +67,29 @@
       content="Cooking Gourmet"
     />
 
-    <!-- SEO predeterminado: portada -->
+    <!-- SEO principal -->
     <title>
-      Escuela de Gastronomía en Huancayo | Cooking Gourmet
+      Cooking Gourmet Huancayo | Gastronomía, Pastelería, Barismo y Cocina Profesional
     </title>
 
     <meta
       name="description"
-      content="Estudia Gastronomía, Pastelería, Bar Profesional, Barismo, Sommelier y Cocina Acelerada en Huancayo. Formación práctica y 100% presencial."
+      content="Estudia en Cooking Gourmet Huancayo. Programas presenciales de Gastronomía Profesional, Pastelería, Bar Profesional, Barismo, Sommelier y Cocina Acelerada."
+    />
+
+    <meta
+      name="keywords"
+      content="Cooking Gourmet, escuela de gastronomía en Huancayo, instituto de cocina en Huancayo, gastronomía profesional, pastelería profesional, barismo profesional, bar profesional, sommelier, cocina acelerada"
     />
 
     <meta
       name="robots"
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+
+    <link
+      rel="canonical"
+      href="https://www.cookingourmet.edu.pe/"
     />
 
     <link
@@ -121,12 +122,12 @@
 
     <meta
       property="og:title"
-      content="Escuela de Gastronomía en Huancayo | Cooking Gourmet"
+      content="Cooking Gourmet Huancayo | Gastronomía, Pastelería, Barismo y Cocina Profesional"
     />
 
     <meta
       property="og:description"
-      content="Fórmate en Gastronomía, Pastelería, Bar, Barismo, Sommelier y Cocina Acelerada en Huancayo."
+      content="Estudia en Cooking Gourmet Huancayo. Programas presenciales de Gastronomía Profesional, Pastelería, Bar Profesional, Barismo, Sommelier y Cocina Acelerada."
     />
 
     <meta
@@ -136,12 +137,27 @@
 
     <meta
       property="og:image"
-      content="https://www.cookingourmet.edu.pe/images/portada/gastronomia.jpg"
+      content="https://www.cookingourmet.edu.pe/images/seo/cooking-gourmet-portada.jpg"
+    />
+
+    <meta
+      property="og:image:secure_url"
+      content="https://www.cookingourmet.edu.pe/images/seo/cooking-gourmet-portada.jpg"
+    />
+
+    <meta
+      property="og:image:width"
+      content="1200"
+    />
+
+    <meta
+      property="og:image:height"
+      content="630"
     />
 
     <meta
       property="og:image:alt"
-      content="Cooking Gourmet, Escuela de Alta Cocina en Huancayo"
+      content="Cooking Gourmet Huancayo, escuela de gastronomía, pastelería, barismo y cocina profesional"
     />
 
     <!-- X / Twitter -->
@@ -152,22 +168,22 @@
 
     <meta
       name="twitter:title"
-      content="Escuela de Gastronomía en Huancayo | Cooking Gourmet"
+      content="Cooking Gourmet Huancayo | Gastronomía, Pastelería, Barismo y Cocina Profesional"
     />
 
     <meta
       name="twitter:description"
-      content="Carreras y programas gastronómicos presenciales en Huancayo."
+      content="Estudia en Cooking Gourmet Huancayo. Programas presenciales de Gastronomía Profesional, Pastelería, Bar Profesional, Barismo, Sommelier y Cocina Acelerada."
     />
 
     <meta
       name="twitter:image"
-      content="https://www.cookingourmet.edu.pe/images/portada/gastronomia.jpg"
+      content="https://www.cookingourmet.edu.pe/images/seo/cooking-gourmet-portada.jpg"
     />
 
     <meta
       name="twitter:image:alt"
-      content="Cooking Gourmet, Escuela de Gastronomía y Alta Cocina en Huancayo"
+      content="Cooking Gourmet Huancayo, escuela de gastronomía y alta cocina"
     />
 
     <!--
@@ -177,36 +193,77 @@
     <script>
       (() => {
         const BASE_URL = "https://www.cookingourmet.edu.pe";
+        const DEFAULT_IMAGE = "/images/seo/cooking-gourmet-portada.jpg";
+        const LOGO_IMAGE = "/logo.png";
 
         const DEFAULT_SEO = {
           title:
-            "Escuela de Gastronomía en Huancayo | Cooking Gourmet",
+            "Cooking Gourmet Huancayo | Gastronomía, Pastelería, Barismo y Cocina Profesional",
           description:
-            "Estudia Gastronomía, Pastelería, Bar Profesional, Barismo, Sommelier y Cocina Acelerada en Huancayo. Formación práctica y 100% presencial.",
-          image:
-            "/images/portada/gastronomia.jpg",
+            "Estudia en Cooking Gourmet Huancayo. Programas presenciales de Gastronomía Profesional, Pastelería, Bar Profesional, Barismo, Sommelier y Cocina Acelerada.",
+          image: DEFAULT_IMAGE,
           imageAlt:
-            "Cooking Gourmet, Escuela de Gastronomía en Huancayo",
+            "Cooking Gourmet Huancayo, escuela de gastronomía, pastelería, barismo y cocina profesional",
           pageName:
-            "Escuela de Gastronomía en Huancayo",
+            "Cooking Gourmet Huancayo",
+          pageType:
+            "WebPage",
           course: null
         };
 
         const SEO_BY_PATH = {
+          "/": DEFAULT_SEO,
+
+          "/especializacion": {
+            title:
+              "Master Class 2026 en Huancayo | Masas Madre, Croissant y Panes Sin Gluten",
+            description:
+              "Participa en la Master Class 2026 de Cooking Gourmet en Huancayo con el chef Ayrton Casas. Especialización práctica en masas madre, croissant y panes sin gluten.",
+            image:
+              DEFAULT_IMAGE,
+            imageAlt:
+              "Master Class 2026 de Cooking Gourmet en Huancayo",
+            pageName:
+              "Master Class 2026 en Huancayo",
+            pageType:
+              "WebPage",
+            course: {
+              name:
+                "Master Class 2026",
+              teaches:
+                [
+                  "Masas madre",
+                  "Croissant",
+                  "Panes sin gluten"
+                ],
+              instructor:
+                "Ayrton Casas"
+            }
+          },
+
           "/programas/gastronomia": {
             title:
               "Gastronomía Profesional en Huancayo | Cooking Gourmet",
             description:
-              "Estudia Gastronomía Profesional en Huancayo. Formación presencial de 18 meses, clases prácticas, cocina nacional e internacional y chefs expertos.",
+              "Estudia Gastronomía Profesional en Huancayo. Formación presencial, clases prácticas, cocina nacional e internacional y chefs expertos.",
             image:
               "/images/portada/gastronomia.jpg",
             imageAlt:
               "Estudiante de Gastronomía Profesional en Cooking Gourmet Huancayo",
             pageName:
               "Gastronomía Profesional en Huancayo",
+            pageType:
+              "WebPage",
             course: {
-              name: "Gastronomía Profesional",
-              duration: "18 meses"
+              name:
+                "Gastronomía Profesional",
+              teaches:
+                [
+                  "Cocina peruana",
+                  "Cocina internacional",
+                  "Técnicas culinarias",
+                  "Gestión gastronómica"
+                ]
             }
           },
 
@@ -214,16 +271,26 @@
             title:
               "Pastelería Profesional en Huancayo | Cooking Gourmet",
             description:
-              "Estudia Panadería y Pastelería Profesional en Huancayo. Aprende postres, tortas, masas y técnicas modernas en modalidad 100% presencial.",
+              "Estudia Panadería y Pastelería Profesional en Huancayo. Aprende postres, tortas, masas, decoración y técnicas modernas en modalidad presencial.",
             image:
               "/images/portada/pasteleria.jpg",
             imageAlt:
               "Programa de Pastelería Profesional en Cooking Gourmet Huancayo",
             pageName:
               "Pastelería Profesional en Huancayo",
+            pageType:
+              "WebPage",
             course: {
-              name: "Panadería y Pastelería Profesional",
-              duration: "1 año"
+              name:
+                "Pastelería Profesional",
+              teaches:
+                [
+                  "Pastelería",
+                  "Panadería",
+                  "Tortas",
+                  "Postres",
+                  "Decoración"
+                ]
             }
           },
 
@@ -238,9 +305,18 @@
               "Programa de Bar Profesional y Coctelería en Huancayo",
             pageName:
               "Bar Profesional en Huancayo",
+            pageType:
+              "WebPage",
             course: {
-              name: "Bar Profesional",
-              duration: "6 meses"
+              name:
+                "Bar Profesional",
+              teaches:
+                [
+                  "Coctelería",
+                  "Mixología",
+                  "Servicio de barra",
+                  "Bebidas profesionales"
+                ]
             }
           },
 
@@ -255,9 +331,18 @@
               "Programa de Barismo Profesional en Cooking Gourmet Huancayo",
             pageName:
               "Barismo Profesional en Huancayo",
+            pageType:
+              "WebPage",
             course: {
-              name: "Barismo Profesional",
-              duration: "3 meses"
+              name:
+                "Barismo Profesional",
+              teaches:
+                [
+                  "Café de especialidad",
+                  "Métodos de extracción",
+                  "Arte latte",
+                  "Operación de cafetería"
+                ]
             }
           },
 
@@ -272,9 +357,18 @@
               "Programa de Sommelier Profesional en Cooking Gourmet Huancayo",
             pageName:
               "Sommelier Profesional en Huancayo",
+            pageType:
+              "WebPage",
             course: {
-              name: "Sommelier Profesional",
-              duration: "6 meses"
+              name:
+                "Sommelier Profesional",
+              teaches:
+                [
+                  "Cata de vinos",
+                  "Maridaje",
+                  "Servicio de vinos",
+                  "Cultura del vino"
+                ]
             }
           },
 
@@ -282,17 +376,74 @@
             title:
               "Cocina Acelerada en Huancayo | Cooking Gourmet",
             description:
-              "Estudia Cocina Acelerada en Huancayo. Aprende técnicas culinarias profesionales en 6 meses mediante formación práctica e intensiva.",
+              "Estudia Cocina Acelerada en Huancayo. Aprende técnicas culinarias profesionales mediante formación práctica e intensiva.",
             image:
               "/images/portada/cocina.jpg",
             imageAlt:
               "Programa de Cocina Acelerada en Cooking Gourmet Huancayo",
             pageName:
               "Cocina Acelerada en Huancayo",
+            pageType:
+              "WebPage",
             course: {
-              name: "Cocina Acelerada",
-              duration: "6 meses"
+              name:
+                "Cocina Acelerada",
+              teaches:
+                [
+                  "Técnicas de cocina",
+                  "Preparaciones profesionales",
+                  "Cocina práctica",
+                  "Producción culinaria"
+                ]
             }
+          },
+
+          "/nosotros": {
+            title:
+              "Nosotros | Cooking Gourmet Huancayo",
+            description:
+              "Conoce Cooking Gourmet, escuela gastronómica en Huancayo dedicada a la formación práctica en cocina, pastelería, barismo, bar y especializaciones.",
+            image:
+              DEFAULT_IMAGE,
+            imageAlt:
+              "Cooking Gourmet Huancayo",
+            pageName:
+              "Nosotros",
+            pageType:
+              "AboutPage",
+            course: null
+          },
+
+          "/bolsa-laboral": {
+            title:
+              "Bolsa Laboral | Cooking Gourmet Huancayo",
+            description:
+              "Bolsa laboral de Cooking Gourmet para estudiantes, egresados y empresas del rubro gastronómico en Huancayo.",
+            image:
+              DEFAULT_IMAGE,
+            imageAlt:
+              "Bolsa laboral Cooking Gourmet Huancayo",
+            pageName:
+              "Bolsa Laboral",
+            pageType:
+              "WebPage",
+            course: null
+          },
+
+          "/contacto": {
+            title:
+              "Contacto | Cooking Gourmet Huancayo",
+            description:
+              "Contáctate con Cooking Gourmet en Huancayo para recibir información sobre programas de gastronomía, pastelería, barismo, bar, sommelier y cocina acelerada.",
+            image:
+              DEFAULT_IMAGE,
+            imageAlt:
+              "Contacto Cooking Gourmet Huancayo",
+            pageName:
+              "Contacto",
+            pageType:
+              "ContactPage",
+            course: null
           }
         };
 
@@ -302,8 +453,7 @@
             : window.location.pathname.replace(/\/+$/, "");
 
         const seo =
-          SEO_BY_PATH[normalizedPath] ??
-          DEFAULT_SEO;
+          SEO_BY_PATH[normalizedPath] || DEFAULT_SEO;
 
         const canonicalUrl =
           normalizedPath === "/"
@@ -311,112 +461,186 @@
             : `${BASE_URL}${normalizedPath}`;
 
         const absoluteImage =
-          `${BASE_URL}${seo.image}`;
+          seo.image.startsWith("http")
+            ? seo.image
+            : `${BASE_URL}${seo.image}`;
 
-        const setMeta = (
-          selector,
-          attribute,
-          value
-        ) => {
+        const absoluteLogo =
+          `${BASE_URL}${LOGO_IMAGE}`;
+
+        const upsertMeta = (attributeName, attributeValue, content) => {
           let element =
-            document.head.querySelector(selector);
+            document.head.querySelector(
+              `meta[${attributeName}="${attributeValue}"]`
+            );
 
           if (!element) {
             element =
               document.createElement("meta");
 
+            element.setAttribute(
+              attributeName,
+              attributeValue
+            );
+
             document.head.appendChild(element);
           }
 
-          element.setAttribute(
-            attribute,
-            value
-          );
+          element.setAttribute("content", content);
         };
 
         const setCanonical = (url) => {
           let canonical =
-            document.head.querySelector(
-              'link[rel="canonical"]'
-            );
+            document.head.querySelector('link[rel="canonical"]');
 
           if (!canonical) {
             canonical =
               document.createElement("link");
 
-            canonical.setAttribute(
-              "rel",
-              "canonical"
-            );
-
-            document.head.appendChild(
-              canonical
-            );
+            canonical.setAttribute("rel", "canonical");
+            document.head.appendChild(canonical);
           }
 
-          canonical.setAttribute(
-            "href",
-            url
-          );
+          canonical.setAttribute("href", url);
+        };
+
+        const setAlternate = (hreflang, url) => {
+          let alternate =
+            document.head.querySelector(
+              `link[rel="alternate"][hreflang="${hreflang}"]`
+            );
+
+          if (!alternate) {
+            alternate =
+              document.createElement("link");
+
+            alternate.setAttribute("rel", "alternate");
+            alternate.setAttribute("hreflang", hreflang);
+            document.head.appendChild(alternate);
+          }
+
+          alternate.setAttribute("href", url);
         };
 
         document.title = seo.title;
 
-        setMeta(
-          'meta[name="description"]',
-          "content",
+        upsertMeta(
+          "name",
+          "description",
           seo.description
+        );
+
+        upsertMeta(
+          "name",
+          "robots",
+          "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
         );
 
         setCanonical(canonicalUrl);
+        setAlternate("es-PE", canonicalUrl);
+        setAlternate("x-default", canonicalUrl);
 
-        setMeta(
-          'meta[property="og:title"]',
-          "content",
+        upsertMeta(
+          "property",
+          "og:type",
+          "website"
+        );
+
+        upsertMeta(
+          "property",
+          "og:locale",
+          "es_PE"
+        );
+
+        upsertMeta(
+          "property",
+          "og:site_name",
+          "Cooking Gourmet"
+        );
+
+        upsertMeta(
+          "property",
+          "og:title",
           seo.title
         );
 
-        setMeta(
-          'meta[property="og:description"]',
-          "content",
+        upsertMeta(
+          "property",
+          "og:description",
           seo.description
         );
 
-        setMeta(
-          'meta[property="og:url"]',
-          "content",
+        upsertMeta(
+          "property",
+          "og:url",
           canonicalUrl
         );
 
-        setMeta(
-          'meta[property="og:image"]',
-          "content",
+        upsertMeta(
+          "property",
+          "og:image",
           absoluteImage
         );
 
-        setMeta(
-          'meta[property="og:image:alt"]',
-          "content",
+        upsertMeta(
+          "property",
+          "og:image:secure_url",
+          absoluteImage
+        );
+
+        upsertMeta(
+          "property",
+          "og:image:width",
+          "1200"
+        );
+
+        upsertMeta(
+          "property",
+          "og:image:height",
+          "630"
+        );
+
+        upsertMeta(
+          "property",
+          "og:image:alt",
           seo.imageAlt
         );
 
-        setMeta(
-          'meta[name="twitter:title"]',
-          "content",
+        upsertMeta(
+          "name",
+          "twitter:card",
+          "summary_large_image"
+        );
+
+        upsertMeta(
+          "name",
+          "twitter:title",
           seo.title
         );
 
-        setMeta(
-          'meta[name="twitter:description"]',
-          "content",
+        upsertMeta(
+          "name",
+          "twitter:description",
           seo.description
         );
 
-        setMeta(
-          'meta[name="twitter:image"]',
-          "content",
+        upsertMeta(
+          "name",
+          "twitter:image",
           absoluteImage
         );
+
+        upsertMeta(
+          "name",
+          "twitter:image:alt",
+          seo.imageAlt
+        );
+
+        document
+          .querySelectorAll(
+            'script[data-seo-schema="base"]'
+          )
+          .forEach((script) => script.remove());
 
         const organization = {
           "@type": [
@@ -425,23 +649,29 @@
           ],
           "@id":
             `${BASE_URL}/#organization`,
-          "name": "Cooking Gourmet",
+          "name":
+            "Cooking Gourmet",
           "alternateName":
             "Cooking Gourmet Escuela de Alta Cocina",
           "description":
-            "Escuela de gastronomía y alta cocina en Huancayo con formación presencial.",
-          "url": `${BASE_URL}/`,
+            "Escuela gastronómica en Huancayo con programas presenciales de gastronomía, pastelería, bar profesional, barismo, sommelier y cocina acelerada.",
+          "url":
+            `${BASE_URL}/`,
           "logo":
-            `${BASE_URL}/logo.png`,
+            absoluteLogo,
           "image":
-            `${BASE_URL}/images/portada/gastronomia.jpg`,
+            `${BASE_URL}${DEFAULT_IMAGE}`,
           "telephone":
             "+51 981 377 382",
           "email":
             "ventas@cookingourmet.edu.pe",
+          "priceRange":
+            "$$",
           "address": {
             "@type":
               "PostalAddress",
+            "streetAddress":
+              "Av. Ferrocarril 587",
             "addressLocality":
               "Huancayo",
             "addressRegion":
@@ -450,9 +680,16 @@
               "PE"
           },
           "areaServed": {
-            "@type": "City",
-            "name": "Huancayo"
+            "@type":
+              "City",
+            "name":
+              "Huancayo"
           },
+          "sameAs": [
+            "https://www.facebook.com/Cooking.Gourmet",
+            "https://www.instagram.com/cooking_gourmet/",
+            "https://www.tiktok.com/@cooking.gourmet.oficial"
+          ],
           "contactPoint": {
             "@type":
               "ContactPoint",
@@ -460,31 +697,41 @@
               "+51 981 377 382",
             "contactType":
               "admisiones",
-            "areaServed": "PE",
+            "areaServed":
+              "PE",
             "availableLanguage":
               "Spanish"
           }
         };
 
         const website = {
-          "@type": "WebSite",
+          "@type":
+            "WebSite",
           "@id":
             `${BASE_URL}/#website`,
-          "url": `${BASE_URL}/`,
-          "name": "Cooking Gourmet",
+          "url":
+            `${BASE_URL}/`,
+          "name":
+            "Cooking Gourmet",
           "publisher": {
             "@id":
               `${BASE_URL}/#organization`
           },
-          "inLanguage": "es-PE"
+          "inLanguage":
+            "es-PE"
         };
 
         const webpage = {
-          "@type": "WebPage",
+          "@type":
+            seo.pageType || "WebPage",
           "@id":
             `${canonicalUrl}#webpage`,
-          "url": canonicalUrl,
-          "name": seo.pageName,
+          "url":
+            canonicalUrl,
+          "name":
+            seo.pageName,
+          "headline":
+            seo.title,
           "description":
             seo.description,
           "isPartOf": {
@@ -498,20 +745,63 @@
           "primaryImageOfPage": {
             "@type":
               "ImageObject",
-            "url": absoluteImage
+            "url":
+              absoluteImage,
+            "width":
+              1200,
+            "height":
+              630
           },
-          "inLanguage": "es-PE"
+          "inLanguage":
+            "es-PE"
+        };
+
+        const breadcrumbItems = [
+          {
+            "@type":
+              "ListItem",
+            "position":
+              1,
+            "name":
+              "Inicio",
+            "item":
+              `${BASE_URL}/`
+          }
+        ];
+
+        if (normalizedPath !== "/") {
+          breadcrumbItems.push({
+            "@type":
+              "ListItem",
+            "position":
+              2,
+            "name":
+              seo.pageName,
+            "item":
+              canonicalUrl
+          });
+        }
+
+        const breadcrumb = {
+          "@type":
+            "BreadcrumbList",
+          "@id":
+            `${canonicalUrl}#breadcrumb`,
+          "itemListElement":
+            breadcrumbItems
         };
 
         const graph = [
           organization,
           website,
-          webpage
+          webpage,
+          breadcrumb
         ];
 
         if (seo.course) {
-          graph.push({
-            "@type": "Course",
+          const course = {
+            "@type":
+              "Course",
             "@id":
               `${canonicalUrl}#course`,
             "name":
@@ -520,12 +810,16 @@
               seo.description,
             "url":
               canonicalUrl,
+            "image":
+              absoluteImage,
             "provider": {
               "@id":
                 `${BASE_URL}/#organization`
             },
             "inLanguage":
               "es-PE",
+            "teaches":
+              seo.course.teaches || undefined,
             "hasCourseInstance": {
               "@type":
                 "CourseInstance",
@@ -539,6 +833,8 @@
                 "address": {
                   "@type":
                     "PostalAddress",
+                  "streetAddress":
+                    "Av. Ferrocarril 587",
                   "addressLocality":
                     "Huancayo",
                   "addressRegion":
@@ -548,27 +844,38 @@
                 }
               }
             }
-          });
+          };
+
+          if (seo.course.instructor) {
+            course.instructor = {
+              "@type":
+                "Person",
+              "name":
+                seo.course.instructor
+            };
+          }
+
+          graph.push(course);
         }
 
         const jsonLd =
-          document.createElement(
-            "script"
-          );
+          document.createElement("script");
 
         jsonLd.type =
           "application/ld+json";
+
+        jsonLd.dataset.seoSchema =
+          "base";
 
         jsonLd.textContent =
           JSON.stringify({
             "@context":
               "https://schema.org",
-            "@graph": graph
+            "@graph":
+              graph
           });
 
-        document.head.appendChild(
-          jsonLd
-        );
+        document.head.appendChild(jsonLd);
       })();
     </script>
   </head>

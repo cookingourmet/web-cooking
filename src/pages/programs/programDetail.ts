@@ -129,18 +129,15 @@ function getProgramFacts(program: ProgramDataExtended): ProgramFact[] {
   const facts: ProgramFact[] = [
     { label: "Duración", value: program.duration },
     { label: "Modalidad", value: program.modality },
+    { label: "Sede", value: program.location ?? "Huancayo, Junín" },
     { label: "Horarios", value: program.schedule },
   ];
-
-  if (program.frequency) {
-    facts.push({ label: "Frecuencia", value: program.frequency });
-  }
 
   if (program.startDate) {
     facts.push({ label: "Próximo inicio", value: program.startDate });
   }
 
-  return facts.slice(0, 4);
+  return facts.slice(0, 5);
 }
 
 function getProgramFaqs(program: ProgramDataExtended): ProgramFaq[] {
@@ -175,7 +172,7 @@ function getProgramFaqs(program: ProgramDataExtended): ProgramFaq[] {
 
   if (program.requirements?.length) {
     faqs.push({
-      question: `¿Qué requisitos necesito para inscribirme?`,
+      question: "¿Qué requisitos necesito para inscribirme?",
       answer: `Necesitas ${program.requirements.join(", ")}.`,
     });
   }
@@ -228,27 +225,99 @@ function setCanonical(url: string) {
   canonical.href = url;
 }
 
+function getAbsoluteUrl(path: string) {
+  const baseUrl = "https://www.cookingourmet.edu.pe";
+
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+
+  return `${baseUrl}${path}`;
+}
+
+function getProgramTeaches(program: ProgramDataExtended) {
+  const modules = normalizeModules(program.modules);
+  const moduleItems = modules.flatMap((module) => module.items);
+  const benefits = program.benefits ?? [];
+  const opportunities = program.opportunities ?? [];
+
+  return Array.from(new Set([...moduleItems, ...benefits, ...opportunities])).slice(
+    0,
+    18
+  );
+}
+
+function removePreviousSeoSchemas() {
+  document.getElementById("program-detail-schema")?.remove();
+
+  document
+    .querySelectorAll('script[data-seo-schema="base"]')
+    .forEach((script) => script.remove());
+}
+
+function setAlternateLink(hreflang: string, href: string) {
+  let alternate = document.head.querySelector<HTMLLinkElement>(
+    `link[rel="alternate"][hreflang="${hreflang}"]`
+  );
+
+  if (!alternate) {
+    alternate = document.createElement("link");
+    alternate.rel = "alternate";
+    alternate.hreflang = hreflang;
+    document.head.appendChild(alternate);
+  }
+
+  alternate.href = href;
+}
+
 function applyProgramSeo(program: ProgramDataExtended) {
   const baseUrl = "https://www.cookingourmet.edu.pe";
   const route = getProgramRoute(program);
   const canonicalUrl = `${baseUrl}${route}`;
-  const imageUrl = `${baseUrl}${program.image}`;
+  const imageUrl = getAbsoluteUrl(program.image);
+  const logoUrl = `${baseUrl}/logo.png`;
   const title = getProgramSeoTitle(program);
   const description = getProgramSeoDescription(program);
   const faqs = getProgramFaqs(program);
+  const teaches = getProgramTeaches(program);
 
   document.title = title;
-  setMetaContent('meta[name="description"]', description);
-  setMetaContent('meta[property="og:title"]', title);
-  setMetaContent('meta[property="og:description"]', description);
-  setMetaContent('meta[property="og:url"]', canonicalUrl);
-  setMetaContent('meta[property="og:image"]', imageUrl);
-  setMetaContent('meta[name="twitter:title"]', title);
-  setMetaContent('meta[name="twitter:description"]', description);
-  setMetaContent('meta[name="twitter:image"]', imageUrl);
-  setCanonical(canonicalUrl);
 
-  document.getElementById("program-detail-schema")?.remove();
+  setMetaContent("meta[name=\"description\"]", description);
+  setMetaContent(
+    "meta[name=\"robots\"]",
+    "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+  );
+
+  setMetaContent("meta[property=\"og:type\"]", "website");
+  setMetaContent("meta[property=\"og:locale\"]", "es_PE");
+  setMetaContent("meta[property=\"og:site_name\"]", "Cooking Gourmet");
+  setMetaContent("meta[property=\"og:title\"]", title);
+  setMetaContent("meta[property=\"og:description\"]", description);
+  setMetaContent("meta[property=\"og:url\"]", canonicalUrl);
+  setMetaContent("meta[property=\"og:image\"]", imageUrl);
+  setMetaContent("meta[property=\"og:image:secure_url\"]", imageUrl);
+  setMetaContent("meta[property=\"og:image:width\"]", "1200");
+  setMetaContent("meta[property=\"og:image:height\"]", "630");
+  setMetaContent(
+    "meta[property=\"og:image:alt\"]",
+    `${getProgramSeoHeading(program)} en Cooking Gourmet`
+  );
+
+  setMetaContent("meta[name=\"twitter:card\"]", "summary_large_image");
+  setMetaContent("meta[name=\"twitter:title\"]", title);
+  setMetaContent("meta[name=\"twitter:description\"]", description);
+  setMetaContent("meta[name=\"twitter:image\"]", imageUrl);
+  setMetaContent(
+    "meta[name=\"twitter:image:alt\"]",
+    `${getProgramSeoHeading(program)} en Cooking Gourmet`
+  );
+
+  setCanonical(canonicalUrl);
+  setAlternateLink("es-PE", canonicalUrl);
+  setAlternateLink("x-default", canonicalUrl);
+
+  removePreviousSeoSchemas();
 
   const schema = document.createElement("script");
   schema.id = "program-detail-schema";
@@ -257,6 +326,74 @@ function applyProgramSeo(program: ProgramDataExtended) {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": ["EducationalOrganization", "LocalBusiness"],
+        "@id": `${baseUrl}/#organization`,
+        name: "Cooking Gourmet",
+        alternateName: "Cooking Gourmet Escuela de Alta Cocina",
+        description:
+          "Escuela gastronómica en Huancayo con programas presenciales de gastronomía, pastelería, bar profesional, barismo, sommelier y cocina acelerada.",
+        url: `${baseUrl}/`,
+        logo: logoUrl,
+        image: `${baseUrl}/images/seo/cooking-gourmet-portada.jpg`,
+        telephone: "+51 981 377 382",
+        email: "ventas@cookingourmet.edu.pe",
+        priceRange: "$$",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Av. Ferrocarril 587",
+          addressLocality: "Huancayo",
+          addressRegion: "Junín",
+          addressCountry: "PE",
+        },
+        areaServed: {
+          "@type": "City",
+          name: "Huancayo",
+        },
+        sameAs: [
+          "https://www.facebook.com/Cooking.Gourmet",
+          "https://www.instagram.com/cooking_gourmet/",
+          "https://www.tiktok.com/@cooking.gourmet.oficial",
+        ],
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+51 981 377 382",
+          contactType: "admisiones",
+          areaServed: "PE",
+          availableLanguage: "Spanish",
+        },
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${baseUrl}/#website`,
+        url: `${baseUrl}/`,
+        name: "Cooking Gourmet",
+        publisher: {
+          "@id": `${baseUrl}/#organization`,
+        },
+        inLanguage: "es-PE",
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${canonicalUrl}#webpage`,
+        url: canonicalUrl,
+        name: getProgramSeoHeading(program),
+        headline: title,
+        description,
+        isPartOf: {
+          "@id": `${baseUrl}/#website`,
+        },
+        about: {
+          "@id": `${baseUrl}/#organization`,
+        },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+        },
+        inLanguage: "es-PE",
+      },
+      {
         "@type": "Course",
         "@id": `${canonicalUrl}#course`,
         name: getProgramSeoHeading(program),
@@ -264,27 +401,19 @@ function applyProgramSeo(program: ProgramDataExtended) {
         url: canonicalUrl,
         image: imageUrl,
         inLanguage: "es-PE",
+        teaches,
         provider: {
-          "@type": "EducationalOrganization",
           "@id": `${baseUrl}/#organization`,
-          name: "Cooking Gourmet",
-          url: `${baseUrl}/`,
-          telephone: "+51 981 377 382",
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Huancayo",
-            addressRegion: "Junín",
-            addressCountry: "PE",
-          },
         },
         hasCourseInstance: {
           "@type": "CourseInstance",
-          courseMode: program.modality,
+          courseMode: "Presencial",
           location: {
             "@type": "Place",
             name: program.location ?? "Cooking Gourmet - Huancayo",
             address: {
               "@type": "PostalAddress",
+              streetAddress: "Av. Ferrocarril 587",
               addressLocality: "Huancayo",
               addressRegion: "Junín",
               addressCountry: "PE",
@@ -294,6 +423,7 @@ function applyProgramSeo(program: ProgramDataExtended) {
       },
       {
         "@type": "BreadcrumbList",
+        "@id": `${canonicalUrl}#breadcrumb`,
         itemListElement: [
           {
             "@type": "ListItem",
@@ -310,13 +440,14 @@ function applyProgramSeo(program: ProgramDataExtended) {
           {
             "@type": "ListItem",
             position: 3,
-            name: program.title,
+            name: getProgramSeoHeading(program),
             item: canonicalUrl,
           },
         ],
       },
       {
         "@type": "FAQPage",
+        "@id": `${canonicalUrl}#faq`,
         mainEntity: faqs.map((faq) => ({
           "@type": "Question",
           name: faq.question,
@@ -549,7 +680,7 @@ function renderBreadcrumb(program: ProgramData) {
       <span aria-hidden="true">/</span>
       <a href="/#programas">Programas</a>
       <span aria-hidden="true">/</span>
-      <span aria-current="page">${escapeHtml(program.title)}</span>
+      <span aria-current="page">${escapeHtml(getProgramSeoHeading(program))}</span>
     </nav>
   `;
 }
@@ -566,7 +697,7 @@ function renderHero(
       <div class="program-landing-hero__bg">
         <img
           src="${escapeHtml(program.image)}"
-          alt="Estudiantes del programa ${escapeHtml(program.title)} en Cooking Gourmet Huancayo"
+          alt="Estudiantes del programa ${escapeHtml(getProgramSeoHeading(program))} en Cooking Gourmet"
         />
       </div>
 
@@ -582,6 +713,7 @@ function renderHero(
 
           <h1 aria-label="${escapeHtml(getProgramSeoHeading(program))}">
             ${escapeHtml(getProgramHeading(program))}
+            <span class="program-landing-hero__city">en Huancayo</span>
           </h1>
 
           <p class="program-landing-hero__lead">${escapeHtml(
@@ -676,7 +808,7 @@ function renderAbout(program: ProgramData, copy: ProgramCopy) {
             <div class="program-landing-about__image-wrap">
               <img
                 src="${escapeHtml(program.image)}"
-                alt="${escapeHtml(program.title)}"
+                alt="${escapeHtml(getProgramSeoHeading(program))} en Cooking Gourmet"
                 class="program-landing-about__image"
               />
               <div class="program-landing-about__badge">
@@ -759,7 +891,7 @@ function renderSchedules(program: ProgramDataExtended) {
       <div class="container">
         <div class="program-landing-heading program-landing-heading--center">
           <span class="program-landing-tag">Horarios</span>
-          <h2>Turnos disponibles</h2>
+          <h2>Turnos disponibles en Huancayo</h2>
           <p>
             Elige el horario que mejor se adapte a tu rutina. Las vacantes se
             confirman durante el proceso de admisión.
@@ -829,7 +961,7 @@ function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
           <h2>${escapeHtml(copy.featuresTitle)}</h2>
           <p>
             Una propuesta académica diseñada para brindarte técnica, experiencia,
-            empleabilidad y una formación más competitiva.
+            empleabilidad y una formación más competitiva en Huancayo.
           </p>
         </div>
 
@@ -1074,7 +1206,7 @@ function renderRelatedPrograms(program: ProgramData) {
         <div class="program-landing-heading">
           <span class="program-landing-tag">También puedes estudiar</span>
           <h2>Conoce otros programas de Cooking Gourmet</h2>
-          <p>Explora otras alternativas de formación presencial y práctica.</p>
+          <p>Explora otras alternativas de formación presencial y práctica en Huancayo.</p>
         </div>
 
         <div class="program-landing-feature-grid">
@@ -1083,7 +1215,7 @@ function renderRelatedPrograms(program: ProgramData) {
               (related) => `
                 <article class="program-landing-feature-card">
                   <div class="program-landing-feature-card__icon">✦</div>
-                  <h3>${escapeHtml(related.title)}</h3>
+                  <h3>${escapeHtml(getProgramHeading(related))}</h3>
                   <p>${escapeHtml(related.subtitle)}</p>
                   <a
                     class="program-landing-btn program-landing-btn--ghost"

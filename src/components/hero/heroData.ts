@@ -78,6 +78,55 @@ function workshopWhatsAppUrl(workshopName: string) {
 
 export const heroSlides: HeroSlide[] = [
   {
+    id: "talleres-julio-agosto",
+    layout: "cards",
+    shortLabel: "Talleres",
+    eyebrow: "Julio y agosto · Huancayo",
+    title: "Talleres gastronómicos",
+    subtitle:
+      "Aprende nuevas técnicas culinarias en talleres prácticos, intensivos y guiados por profesionales de Cooking Gourmet en Huancayo.",
+    primaryAction: {
+      label: "Consultar talleres",
+      href: workshopWhatsAppUrl("temporada julio y agosto"),
+      external: true,
+    },
+    cards: [
+      {
+        id: "pokes-saludables",
+        day: "23",
+        month: "Julio",
+        title: "Pokes saludables",
+        subtitle: "Fresco, nutritivo y delicioso",
+        image: "/images/portada/talleres/pokes-saludables.png",
+        imageAlt:
+          "Taller de pokes saludables en Huancayo con salmón, mango, pepino, edamame y quinoa",
+        href: workshopWhatsAppUrl("Pokes saludables"),
+      },
+      {
+        id: "pasteleria-saludable",
+        day: "21",
+        month: "Julio",
+        title: "Pastelería saludable",
+        subtitle: "Postres nutritivos",
+        image: "/images/portada/talleres/pasteleria-saludable.png",
+        imageAlt:
+          "Taller de pastelería saludable en Huancayo con torta, cookies, tartas y crema",
+        href: workshopWhatsAppUrl("Pastelería saludable"),
+      },
+      {
+        id: "pasteleria-chifa",
+        day: "04",
+        month: "Agosto",
+        title: "Pastelería y chifa",
+        subtitle: "Vacacional · 4 clases",
+        image: "/images/portada/talleres/pasteleria-chifa.png",
+        imageAlt:
+          "Taller vacacional de pastelería y chifa en Huancayo con postres y platos orientales",
+        href: workshopWhatsAppUrl("Pastelería y chifa"),
+      },
+    ],
+  },
+  {
     id: "gastronomia",
     layout: "single",
     shortLabel: "Gastronomía",
@@ -246,54 +295,5 @@ export const heroSlides: HeroSlide[] = [
       ),
       external: true,
     },
-  },
-  {
-    id: "talleres-julio-agosto",
-    layout: "cards",
-    shortLabel: "Talleres",
-    eyebrow: "Julio y agosto",
-    title: "Talleres gastronómicos",
-    subtitle:
-      "Aprende nuevas técnicas culinarias en talleres prácticos, intensivos y guiados por profesionales de Cooking Gourmet en Huancayo.",
-    primaryAction: {
-      label: "Consultar talleres",
-      href: workshopWhatsAppUrl("temporada julio y agosto"),
-      external: true,
-    },
-    cards: [
-      {
-        id: "pokes-saludables",
-        day: "23",
-        month: "Julio",
-        title: "Pokes saludables",
-        subtitle: "Fresco, nutritivo y delicioso",
-        image: "/images/portada/talleres/pokes-saludables.png",
-        imageAlt:
-          "Taller de pokes saludables en Huancayo con salmón, mango, pepino, edamame y quinoa",
-        href: workshopWhatsAppUrl("Pokes saludables"),
-      },
-      {
-        id: "pasteleria-saludable",
-        day: "21",
-        month: "Julio",
-        title: "Pastelería saludable",
-        subtitle: "Postres nutritivos",
-        image: "/images/portada/talleres/pasteleria-saludable.png",
-        imageAlt:
-          "Taller de pastelería saludable en Huancayo con torta, cookies, tartas y crema",
-        href: workshopWhatsAppUrl("Pastelería saludable"),
-      },
-      {
-        id: "pasteleria-chifa",
-        day: "04",
-        month: "Agosto",
-        title: "Pastelería y chifa",
-        subtitle: "Vacacional · 4 clases",
-        image: "/images/portada/talleres/pasteleria-chifa.png",
-        imageAlt:
-          "Taller vacacional de pastelería y chifa en Huancayo con postres y platos orientales",
-        href: workshopWhatsAppUrl("Pastelería y chifa"),
-      },
-    ],
   },
 ];
