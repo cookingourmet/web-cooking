@@ -1371,3 +1371,171 @@ body.nav-is-open {
     height: 42px !important;
   }
 }
+
+/* =====================================================
+   HEADER TRANSPARENTE
+   Solo el menú queda enmarcado, el fondo externo transparente
+===================================================== */
+
+.topbar {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.topbar.is-scrolled {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Caja real del menú: solo desde logo hasta solicitar información */
+.topbar__inner {
+  width: fit-content !important;
+  max-width: calc(100vw - 32px) !important;
+  margin: 0 auto !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(254, 0, 62, 0.045), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.94)) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+}
+
+/* Cuando baja el scroll, solo se compacta la caja, no aparece fondo blanco completo */
+.topbar.is-scrolled .topbar__inner {
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+}
+
+/* Responsive: en móvil sí ocupa el ancho necesario para que no se rompa */
+@media (max-width: 1024px) {
+  .topbar {
+    background: transparent !important;
+  }
+
+  .topbar__inner {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* =====================================================
+   FIX MENÚ RESPONSIVE
+   El lateral queda sólido, claro y por encima del fondo
+===================================================== */
+
+@media (max-width: 1024px) {
+  .topbar {
+    z-index: 5000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .topbar__inner {
+    position: relative !important;
+    z-index: 5002 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .navbar-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 5001 !important;
+    background: rgba(0, 0, 0, 0.48) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition:
+      opacity 0.24s ease,
+      visibility 0.24s ease !important;
+  }
+
+  .navbar-backdrop.is-open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  .navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 5004 !important;
+    width: min(420px, 92vw) !important;
+    height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(254, 0, 62, 0.08), transparent 30%),
+      linear-gradient(180deg, #ffffff 0%, #fff9fb 100%) !important;
+    border-right: 1px solid rgba(254, 0, 62, 0.12) !important;
+    box-shadow: 28px 0 76px rgba(0, 0, 0, 0.24) !important;
+    transform: translateX(-108%) !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition:
+      transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0.32s ease !important;
+  }
+
+  .navbar.is-open {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+  }
+
+  .navbar.is-open,
+  .navbar.is-open * {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+
+  .navbar__mobile-head,
+  .navbar__content,
+  .navbar__mobile-footer {
+    background: transparent !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .navbar__content {
+    color: var(--header-ink) !important;
+  }
+
+  .nav-link {
+    background: linear-gradient(180deg, #ffffff, #fffafb) !important;
+    color: #333333 !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .nav-action {
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .program-menu {
+    opacity: 0 !important;
+    filter: none !important;
+  }
+
+  .nav-item--dropdown.is-open .program-menu {
+    opacity: 1 !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .navbar {
+    width: min(390px, 94vw) !important;
+  }
+}
