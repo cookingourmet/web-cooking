@@ -3,7 +3,10 @@ import { renderFooter } from "../components/layout/footer/footer";
 import { initSpecializationSwirlBackground } from "../components/effects/swirlBackground";
 
 const WHATSAPP_NUMBER = "51981377382";
-const LEAD_ENDPOINT = "/api/specialization-lead";
+const SALES_EMAIL = "ventas@cookingourmet.edu.pe";
+
+const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
+const WEB3FORMS_ACCESS_KEY = "c70db5c3-9654-4b15-b598-091a9ffa909a";
 
 const SPECIALIZATION = {
   name: "Master Class 2026",
@@ -16,6 +19,20 @@ const SPECIALIZATION = {
   topics: ["Masas madre", "Croissant", "Panes sin gluten"],
 };
 
+type SpecializationLeadPayload = {
+  program: string;
+  source: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  dni: string;
+  message: string;
+  topics: string[];
+  chef: string;
+  pageUrl: string;
+  createdAt: string;
+};
+
 function buildWhatsAppUrl() {
   const message = [
     "Hola, vengo de la web de Cooking Gourmet.",
@@ -25,6 +42,104 @@ function buildWhatsAppUrl() {
   ].join("\n");
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function leadDate() {
+  return new Intl.DateTimeFormat("es-PE", {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone: "America/Lima",
+  }).format(new Date());
+}
+
+function buildLeadSummary(
+  payload: SpecializationLeadPayload,
+  formattedDate: string
+) {
+  return [
+    "Nueva solicitud desde la landing de Especialización",
+    "",
+    `Programa: ${payload.program}`,
+    `Chef: ${payload.chef}`,
+    `Temas: ${payload.topics.join(", ")}`,
+    "",
+    `Nombre: ${payload.fullName || "-"}`,
+    `Celular: ${payload.phone || "-"}`,
+    `Correo: ${payload.email || "No compartido"}`,
+    `DNI: ${payload.dni || "No compartido"}`,
+    "",
+    `Mensaje: ${payload.message || "Sin mensaje"}`,
+    `Origen: ${payload.source || "-"}`,
+    `Página: ${payload.pageUrl || "-"}`,
+    `Fecha: ${formattedDate}`,
+    `Fecha ISO: ${payload.createdAt}`,
+  ].join("\n");
+}
+
+function isValidEmail(value: string) {
+  if (!value) return true;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+async function sendSpecializationLeadToSales(
+  payload: SpecializationLeadPayload
+) {
+  if (!payload.fullName || !payload.phone) {
+    throw new Error("Completa tu nombre y celular.");
+  }
+
+  if (!isValidEmail(payload.email)) {
+    throw new Error("Ingresa un correo válido.");
+  }
+
+  const formattedDate = leadDate();
+  const summary = buildLeadSummary(payload, formattedDate);
+
+  const formData = new FormData();
+
+  formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+  formData.append(
+    "subject",
+    `Nuevo lead Master Class 2026 - ${payload.fullName}`
+  );
+  formData.append("from_name", "Master Class 2026 - Cooking Gourmet");
+
+  formData.append("name", payload.fullName);
+  formData.append("email", payload.email || SALES_EMAIL);
+  formData.append("phone", payload.phone);
+
+  formData.append("Programa", payload.program);
+  formData.append("Chef", payload.chef);
+  formData.append("Temas", payload.topics.join(", "));
+  formData.append("DNI", payload.dni || "No compartido");
+  formData.append("Correo del interesado", payload.email || "No compartido");
+  formData.append("Celular", payload.phone);
+  formData.append("Origen", payload.source);
+  formData.append("Página", payload.pageUrl);
+  formData.append("Fecha", formattedDate);
+
+  formData.append("message", summary);
+
+  const response = await fetch(LEAD_ENDPOINT, {
+    method: "POST",
+    body: formData,
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  const data = (await response.json().catch(() => null)) as {
+    success?: boolean;
+    message?: string;
+  } | null;
+
+  if (!response.ok || data?.success === false) {
+    throw new Error(
+      data?.message || "No se pudo enviar la solicitud al correo."
+    );
+  }
+
+  return data;
 }
 
 function setMetaContent(selector: string, content: string) {
@@ -180,8 +295,6 @@ function renderTopicCards() {
 }
 
 function renderSpecializationHero() {
-  const whatsappUrl = buildWhatsAppUrl();
-
   return `
     <section class="specialization-hero">
       <div class="specialization-hero__pattern" aria-hidden="true"></div>
@@ -243,22 +356,14 @@ function renderSpecializationHero() {
           </div>
 
           <div class="specialization-hero__actions">
-            <a
-              class="specialization-btn specialization-btn--primary"
-              href="${whatsappUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+                class="specialization-btn specialization-btn--primary"
+                type="button"
+                data-specialization-primary-action
             >
-              Inscribirme ahora
-            </a>
-
-            <a
-              class="specialization-btn specialization-btn--ghost"
-              href="#specialization-form"
-            >
-              Dejar mis datos
-            </a>
-          </div>
+                Inscribirme ahora
+            </button>
+            </div>
 
           <div class="specialization-hero__info">
             <span>Chef instructor</span>
@@ -484,6 +589,86 @@ function setFormStatus(message: string, type: "success" | "error" | "info") {
   status.className = `specialization-form__status is-${type}`;
 }
 
+function isSpecializationMobile() {
+  return window.matchMedia("(max-width: 820px)").matches;
+}
+
+function getSpecializationFormCard() {
+  return document.getElementById("specialization-form") as HTMLElement | null;
+}
+
+function scrollToSpecializationForm() {
+  const formCard = getSpecializationFormCard();
+  if (!formCard) return;
+
+  const headerOffset = isSpecializationMobile() ? 82 : 110;
+  const targetPosition =
+    formCard.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+  window.scrollTo({
+    top: Math.max(targetPosition, 0),
+    behavior: "smooth",
+  });
+}
+
+function focusSpecializationFirstInput() {
+  const formCard = getSpecializationFormCard();
+  if (!formCard) return;
+
+  const firstInput = formCard.querySelector<HTMLInputElement>(
+    'input[name="fullName"]'
+  );
+
+  window.setTimeout(() => {
+    firstInput?.focus({ preventScroll: true });
+  }, 420);
+}
+
+function triggerSpecializationFormAlert() {
+  const formCard = getSpecializationFormCard();
+  if (!formCard) return;
+
+  formCard.classList.remove("is-alerting");
+
+  // Reinicia la animación aunque el usuario presione varias veces.
+  void formCard.offsetWidth;
+
+  formCard.classList.add("is-alerting");
+  setFormStatus("Completa el formulario para solicitar tu inscripción.", "info");
+  focusSpecializationFirstInput();
+
+  window.setTimeout(() => {
+    formCard.classList.remove("is-alerting");
+  }, 1500);
+}
+
+function initSpecializationPrimaryAction() {
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-specialization-primary-action]"
+  );
+
+  if (!buttons.length) return;
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (isSpecializationMobile()) {
+        scrollToSpecializationForm();
+
+        window.setTimeout(() => {
+          triggerSpecializationFormAlert();
+        }, 560);
+
+        return;
+      }
+
+      triggerSpecializationFormAlert();
+    });
+  });
+}
+
 function initSpecializationForm() {
   const form = document.getElementById(
     "specializationLeadForm"
@@ -500,11 +685,11 @@ function initSpecializationForm() {
 
     const formData = new FormData(form);
 
-    const payload = {
+    const payload: SpecializationLeadPayload = {
       program: getFormValue(formData, "program"),
       source: getFormValue(formData, "source"),
       fullName: getFormValue(formData, "fullName"),
-      phone: getFormValue(formData, "phone"),
+      phone: getFormValue(formData, "phone").replace(/\D/g, ""),
       email: getFormValue(formData, "email"),
       dni: getFormValue(formData, "dni"),
       message: getFormValue(formData, "message"),
@@ -519,29 +704,28 @@ function initSpecializationForm() {
       return;
     }
 
+    if (payload.phone.length < 9 || payload.phone.length > 12) {
+      setFormStatus("El celular debe tener entre 9 y 12 números.", "error");
+      return;
+    }
+
+    if (!isValidEmail(payload.email)) {
+      setFormStatus("Ingresa un correo válido.", "error");
+      return;
+    }
+
     try {
       submitButton?.setAttribute("disabled", "true");
       if (submitButton) submitButton.textContent = "Enviando...";
       setFormStatus("Enviando solicitud...", "info");
 
-      const response = await fetch(LEAD_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = (await response.json().catch(() => null)) as {
-        message?: string;
-      } | null;
-
-      if (!response.ok) {
-        throw new Error(data?.message ?? "No se pudo enviar la solicitud.");
-      }
+      await sendSpecializationLeadToSales(payload);
 
       form.reset();
-      setFormStatus("Solicitud enviada correctamente.", "success");
+      setFormStatus(
+        "Solicitud enviada correctamente. Te contactaremos pronto.",
+        "success"
+      );
     } catch (error) {
       setFormStatus(
         error instanceof Error
@@ -601,6 +785,7 @@ export function initSpecializationPage() {
   initHeader();
   applySpecializationSeo();
   initSpecializationForm();
+  initSpecializationPrimaryAction();
   initRevealEffects();
   initSpecializationSwirlBackground();
 }

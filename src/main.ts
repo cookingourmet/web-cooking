@@ -24,7 +24,7 @@ import { renderHomePage, initHomePage } from "./pages/home";
 import {
   renderSpecializationPage,
   initSpecializationPage,
-} from "./pages/specialization";
+} from "./pages/especializacion";
 
 import { renderGastronomiaPage } from "./pages/programs/gastronomia";
 import { renderPasteleriaPage } from "./pages/programs/pasteleria";
