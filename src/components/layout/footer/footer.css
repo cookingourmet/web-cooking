@@ -532,3 +532,20 @@
     flex-direction: column;
   }
 }
+
+.site-footer__address a.site-footer__address-item {
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+  transition:
+    color 0.22s ease,
+    transform 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.site-footer__address a.site-footer__address-item:hover {
+  color: #ffffff;
+  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.13);
+}

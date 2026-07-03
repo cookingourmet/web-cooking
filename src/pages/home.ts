@@ -1,7 +1,11 @@
 import { renderHeader, initHeader } from "../components/layout/header/header";
 import { renderHeroSlider, initHeroSlider } from "../components/hero/heroSlider";
 import { renderAboutSection } from "../components/sections/about/about";
-import { renderCareersSection } from "../components/sections/careers/careers";
+import {
+  renderCareersSection,
+  initCareersSection,
+} from "../components/sections/careers/careers";
+import { renderContactSection } from "../components/sections/contact/contact";
 import { renderFooter } from "../components/layout/footer/footer";
 
 const SITE_URL = "https://www.cookingourmet.edu.pe";
@@ -127,37 +131,39 @@ function applyHomeSeo() {
 
   document.title = title;
 
-  setMetaContent("meta[name=\"description\"]", description);
+  setMetaContent('meta[name="description"]', description);
+
   setMetaContent(
-    "meta[name=\"keywords\"]",
+    'meta[name="keywords"]',
     "Cooking Gourmet, escuela de gastronomía en Huancayo, instituto de cocina en Huancayo, gastronomía profesional Huancayo, pastelería profesional Huancayo, barismo profesional, bar profesional, sommelier, cocina acelerada"
   );
+
   setMetaContent(
-    "meta[name=\"robots\"]",
+    'meta[name="robots"]',
     "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
   );
 
-  setMetaContent("meta[property=\"og:type\"]", "website");
-  setMetaContent("meta[property=\"og:site_name\"]", SITE_NAME);
-  setMetaContent("meta[property=\"og:title\"]", title);
-  setMetaContent("meta[property=\"og:description\"]", description);
-  setMetaContent("meta[property=\"og:url\"]", canonicalUrl);
-  setMetaContent("meta[property=\"og:image\"]", SITE_IMAGE);
-  setMetaContent("meta[property=\"og:image:secure_url\"]", SITE_IMAGE);
-  setMetaContent("meta[property=\"og:image:width\"]", "1200");
-  setMetaContent("meta[property=\"og:image:height\"]", "630");
+  setMetaContent('meta[property="og:type"]', "website");
+  setMetaContent('meta[property="og:site_name"]', SITE_NAME);
+  setMetaContent('meta[property="og:title"]', title);
+  setMetaContent('meta[property="og:description"]', description);
+  setMetaContent('meta[property="og:url"]', canonicalUrl);
+  setMetaContent('meta[property="og:image"]', SITE_IMAGE);
+  setMetaContent('meta[property="og:image:secure_url"]', SITE_IMAGE);
+  setMetaContent('meta[property="og:image:width"]', "1200");
+  setMetaContent('meta[property="og:image:height"]', "630");
   setMetaContent(
-    "meta[property=\"og:image:alt\"]",
+    'meta[property="og:image:alt"]',
     "Cooking Gourmet Huancayo - Escuela de gastronomía y alta cocina"
   );
-  setMetaContent("meta[property=\"og:locale\"]", "es_PE");
+  setMetaContent('meta[property="og:locale"]', "es_PE");
 
-  setMetaContent("meta[name=\"twitter:card\"]", "summary_large_image");
-  setMetaContent("meta[name=\"twitter:title\"]", title);
-  setMetaContent("meta[name=\"twitter:description\"]", description);
-  setMetaContent("meta[name=\"twitter:image\"]", SITE_IMAGE);
+  setMetaContent('meta[name="twitter:card"]', "summary_large_image");
+  setMetaContent('meta[name="twitter:title"]', title);
+  setMetaContent('meta[name="twitter:description"]', description);
+  setMetaContent('meta[name="twitter:image"]', SITE_IMAGE);
   setMetaContent(
-    "meta[name=\"twitter:image:alt\"]",
+    'meta[name="twitter:image:alt"]',
     "Cooking Gourmet Huancayo - Escuela de gastronomía y alta cocina"
   );
 
@@ -292,6 +298,7 @@ export function renderHomePage() {
         ${renderHeroSlider()}
         ${renderAboutSection()}
         ${renderCareersSection()}
+        ${renderContactSection()}
       </main>
 
       ${renderFooter()}
@@ -303,4 +310,5 @@ export function initHomePage() {
   initHeader();
   applyHomeSeo();
   initHeroSlider();
+  initCareersSection();
 }

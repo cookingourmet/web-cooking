@@ -1,5 +1,11 @@
 const WHATSAPP_NUMBER = "51981377382";
 
+const MAP_CENTRAL_URL =
+  "https://www.google.com/maps/search/?api=1&query=Av.%20Ferrocarril%20587%20Huancayo%20Jun%C3%ADn";
+
+const MAP_BRANCH_URL =
+  "https://www.google.com/maps/search/?api=1&query=Los%20Andes%20376%20Psje.%20Manchego%20Mu%C3%B1oz%20El%20Tambo%20Huancayo";
+
 function footerWhatsAppUrl() {
   const message = [
     "Hola, vengo de la web de Cooking Gourmet.",
@@ -189,7 +195,7 @@ export function renderFooter() {
   const currentYear = new Date().getFullYear();
 
   return `
-    <footer class="site-footer" id="contacto">
+    <footer class="site-footer" id="footer">
       <div class="site-footer__glow site-footer__glow--one"></div>
       <div class="site-footer__glow site-footer__glow--two"></div>
 
@@ -235,7 +241,7 @@ export function renderFooter() {
           <div class="site-footer__col">
             <h4>Programas</h4>
 
-            <nav class="site-footer__links" aria-label="Programas de Cooking Gourmet">
+            <nav class="site-footer__links" aria-label="Programas de Cooking Gourmet en Huancayo">
               ${footerPrograms
                 .map(
                   (program) => `
@@ -304,7 +310,12 @@ export function renderFooter() {
             <h4>Ubicación</h4>
 
             <address class="site-footer__address">
-              <div class="site-footer__address-item">
+              <a
+                class="site-footer__address-item"
+                href="${MAP_CENTRAL_URL}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span class="site-footer__address-icon">
                   ${renderFooterIcon("pin")}
                 </span>
@@ -313,9 +324,14 @@ export function renderFooter() {
                   <span>Sede central</span>
                   Av. Ferrocarril 587 - Huancayo, Junín
                 </div>
-              </div>
+              </a>
 
-              <div class="site-footer__address-item">
+              <a
+                class="site-footer__address-item"
+                href="${MAP_BRANCH_URL}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span class="site-footer__address-icon">
                   ${renderFooterIcon("map")}
                 </span>
@@ -324,7 +340,7 @@ export function renderFooter() {
                   <span>Sucursal</span>
                   Los Andes N° 376, Psje. Manchego Muñoz - El Tambo
                 </div>
-              </div>
+              </a>
             </address>
           </div>
 
