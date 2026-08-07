@@ -298,8 +298,8 @@ export function renderFooter() {
 
                 <div>
                   <span class="site-footer__contact-label">Correo</span>
-                  <a href="mailto:ventas@cookingourmet.edu.pe">
-                    ventas@cookingourmet.edu.pe
+                  <a href=" j.ventas@cookingourmet.edu.pe">
+                     j.ventas@cookingourmet.edu.pe
                   </a>
                 </div>
               </li>

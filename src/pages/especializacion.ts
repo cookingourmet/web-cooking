@@ -3,7 +3,7 @@ import { renderFooter } from "../components/layout/footer/footer";
 import { initSpecializationSwirlBackground } from "../components/effects/swirlBackground";
 
 const WHATSAPP_NUMBER = "51981377382";
-const SALES_EMAIL = "ventas@cookingourmet.edu.pe";
+const SALES_EMAIL = "j.ventas@cookingourmet.edu.pe";
 
 const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_ACCESS_KEY = "c70db5c3-9654-4b15-b598-091a9ffa909a";

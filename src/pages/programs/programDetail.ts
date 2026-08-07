@@ -336,7 +336,7 @@ function applyProgramSeo(program: ProgramDataExtended) {
         logo: logoUrl,
         image: `${baseUrl}/images/seo/cooking-gourmet-portada.jpg`,
         telephone: "+51 981 377 382",
-        email: "ventas@cookingourmet.edu.pe",
+        email: "j.ventas@cookingourmet.edu.pe",
         priceRange: "$$",
         address: {
           "@type": "PostalAddress",

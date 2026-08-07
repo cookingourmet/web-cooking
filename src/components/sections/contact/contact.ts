@@ -11,7 +11,7 @@ type ContactItem = {
 const WHATSAPP_NUMBER = "51981377382";
 const PHONE_LABEL = "+51 981 377 382";
 const PHONE_LINK = "tel:+51981377382";
-const EMAIL = "ventas@cookingourmet.edu.pe";
+const EMAIL = "j.ventas@cookingourmet.edu.pe";
 const ADDRESS = "Av. Ferrocarril 587 - Huancayo, Junín";
 const MAP_URL =
   "https://www.google.com/maps/search/?api=1&query=Av.%20Ferrocarril%20587%20Huancayo%20Jun%C3%ADn";

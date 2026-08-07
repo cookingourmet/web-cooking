@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const TO_EMAIL = "ventas@cookingourmet.edu.pe";
+const TO_EMAIL = " j.ventas@cookingourmet.edu.pe";
 const FROM_EMAIL = "Cooking Gourmet Web <no-reply@cookingourmet.edu.pe>";
 
 function cleanText(value: unknown) {

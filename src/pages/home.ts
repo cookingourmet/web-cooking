@@ -190,7 +190,7 @@ function applyHomeSeo() {
         logo: SITE_LOGO,
         image: SITE_IMAGE,
         telephone: ORGANIZATION.phone,
-        email: "ventas@cookingourmet.edu.pe",
+        email: "j.ventas@cookingourmet.edu.pe",
         priceRange: "$$",
         address: {
           "@type": "PostalAddress",

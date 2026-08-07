@@ -4,7 +4,7 @@ import type {
   ProgramKey,
 } from "./heroAssistantTypes";
 
-export const SALES_EMAIL = "ventas@cookingourmet.edu.pe";
+export const SALES_EMAIL = " j.ventas@cookingourmet.edu.pe";
 export const SALES_WHATSAPP = "51981377382";
 export const SALES_PHONE_DISPLAY = "981 377 382";
 export const SALES_PHONE_LINK = "+51981377382";
