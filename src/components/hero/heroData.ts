@@ -29,29 +29,7 @@ export type HeroSingleSlide = {
   secondaryAction?: HeroAction;
 };
 
-export type HeroWorkshopCard = {
-  id: string;
-  day: string;
-  month: string;
-  title: string;
-  subtitle?: string;
-  image: string;
-  imageAlt: string;
-  href: string;
-};
-
-export type HeroCardsSlide = {
-  id: string;
-  layout: "cards";
-  shortLabel: string;
-  eyebrow?: string;
-  title: string;
-  subtitle: string;
-  primaryAction?: HeroAction;
-  cards: [HeroWorkshopCard, HeroWorkshopCard, HeroWorkshopCard];
-};
-
-export type HeroSlide = HeroSingleSlide | HeroCardsSlide;
+export type HeroSlide = HeroSingleSlide;
 
 const WHATSAPP_NUMBER = "51981377382";
 
@@ -66,18 +44,8 @@ function informationWhatsAppUrl(programName: string, description: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-function workshopWhatsAppUrl(workshopName: string) {
-  const message = [
-    "Hola, vengo de la web de Cooking Gourmet.",
-    `Necesito información sobre el taller de ${workshopName}.`,
-    "Deseo conocer horarios, inversión e inicio de clases.",
-  ].join("\n");
-
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
 
 export const heroSlides: HeroSlide[] = [
-
   {
     id: "gastronomia",
     layout: "single",
