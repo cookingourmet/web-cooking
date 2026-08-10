@@ -29,7 +29,29 @@ export type HeroSingleSlide = {
   secondaryAction?: HeroAction;
 };
 
-export type HeroSlide = HeroSingleSlide;
+export type HeroWorkshopCard = {
+  id: string;
+  day: string;
+  month: string;
+  title: string;
+  subtitle?: string;
+  image: string;
+  imageAlt: string;
+  href: string;
+};
+
+export type HeroCardsSlide = {
+  id: string;
+  layout: "cards";
+  shortLabel: string;
+  eyebrow?: string;
+  title: string;
+  subtitle: string;
+  primaryAction?: HeroAction;
+  cards: [HeroWorkshopCard, HeroWorkshopCard, HeroWorkshopCard];
+};
+
+export type HeroSlide = HeroSingleSlide | HeroCardsSlide;
 
 const WHATSAPP_NUMBER = "51981377382";
 
@@ -44,8 +66,51 @@ function informationWhatsAppUrl(programName: string, description: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-
 export const heroSlides: HeroSlide[] = [
+  {
+    id: "talleres-agosto",
+    layout: "cards",
+    shortLabel: "Talleres",
+    eyebrow: "Talleres de agosto",
+    title: "Talleres prácticos",
+    subtitle:
+      "Aprende nuevas técnicas con talleres presenciales, prácticos y de cupos limitados. Elige tu taller y solicita información por WhatsApp.",
+    cards: [
+      {
+        id: "pasteleria-boutique",
+        day: "26-28",
+        month: "Agosto",
+        title: "Pastelería Boutique 3 Días",
+        subtitle: "Pasta choux · Piononos · Cup cakes · 20 participantes · S/ 280",
+        image: "/images/talleres/taller-pasteleria-boutique.png",
+        imageAlt:
+          "Taller de Pastelería Boutique de Cooking Gourmet en Huancayo",
+        href: "#talleres",
+      },
+      {
+        id: "limonadas-triples",
+        day: "31-01",
+        month: "Ago/Set",
+        title: "Limonadas y Triples",
+        subtitle: "Limonadas · Triples · 20 participantes · S/ 190",
+        image: "/images/talleres/taller-limonadas-triples.png",
+        imageAlt:
+          "Taller de Limonadas y Triples de Cooking Gourmet en Huancayo",
+        href: "#talleres",
+      },
+      {
+        id: "fast-food",
+        day: "20-21",
+        month: "Agosto",
+        title: "Fast Food",
+        subtitle: "Burger Party · Alitas · 20 participantes · S/ 250",
+        image: "/images/talleres/taller-fast-food.png",
+        imageAlt:
+          "Taller Fast Food de Cooking Gourmet en Huancayo",
+        href: "#talleres",
+      },
+    ],
+  },
   {
     id: "gastronomia",
     layout: "single",

@@ -3,6 +3,7 @@ import "./heroSlider.css";
 import {
   heroSlides,
   type HeroAction,
+  type HeroCardsSlide,
   type HeroSingleSlide,
   type HeroSlide,
 } from "./heroData";
@@ -14,6 +15,16 @@ import {
 import { mountAssistantWindow } from "./heroAssistantPanel";
 
 const AUTO_TIME = 5500;
+const WORKSHOP_WHATSAPP_NUMBER = "51981377382";
+
+function workshopWhatsAppUrl(workshopName: string) {
+  const message = `Hola, vengo de la web de Cooking Gourmet. Necesito información sobre el taller de ${workshopName}: horarios, inversión e inicio de clases.`;
+
+  return `https://wa.me/${WORKSHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    message
+  )}`;
+}
+
 function escapeHtml(value: string) {
   return value
     .replaceAll("&", "&amp;")
@@ -171,8 +182,97 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
   `;
 }
 
+function renderWorkshopCard(card: HeroCardsSlide["cards"][number]) {
+  const whatsappUrl = workshopWhatsAppUrl(card.title);
+
+  return `
+    <a
+      class="hero-workshop-card"
+      href="${escapeAttribute(whatsappUrl)}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="${escapeAttribute(
+        `Solicitar información por WhatsApp sobre ${card.title}, inicia el ${card.day} de ${card.month}`
+      )}"
+    >
+      <img
+        src="${escapeAttribute(card.image)}"
+        alt="${escapeAttribute(card.imageAlt)}"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <span class="hero-workshop-card__overlay" aria-hidden="true"></span>
+
+      <span class="hero-workshop-card__date">
+        <small>Inicio</small>
+        <strong>${escapeHtml(card.day)}</strong>
+        <span>${escapeHtml(card.month)}</span>
+      </span>
+
+      <span class="hero-workshop-card__content">
+        <strong>${escapeHtml(card.title)}</strong>
+        ${
+          card.subtitle
+            ? `<small>${escapeHtml(card.subtitle)}</small>`
+            : ""
+        }
+      </span>
+    </a>
+  `;
+}
+
+function renderCardsSlide(slide: HeroCardsSlide, index: number) {
+  const isActive = index === 0;
+
+  return `
+    <article
+      class="hero-slide hero-slide--cards ${
+        isActive ? "is-active" : ""
+      }"
+      data-index="${index}"
+      data-slide-id="${escapeAttribute(slide.id)}"
+      aria-hidden="${isActive ? "false" : "true"}"
+    >
+      <div class="hero-cards hero-shell">
+        <div class="hero-cards__intro">
+          ${
+            slide.eyebrow
+              ? `
+                <span class="hero-eyebrow">
+                  ${escapeHtml(slide.eyebrow)}
+                </span>
+              `
+              : ""
+          }
+
+          ${renderHeroTitle(slide.title, index)}
+
+          <p>${escapeHtml(slide.subtitle)}</p>
+
+          ${
+            slide.primaryAction
+              ? `
+                <div class="hero-actions">
+                  ${renderAction(slide.primaryAction, "primary")}
+                </div>
+              `
+              : ""
+          }
+        </div>
+
+        <div class="hero-cards__grid">
+          ${slide.cards.map(renderWorkshopCard).join("")}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 function renderSlide(slide: HeroSlide, index: number) {
-  return renderSingleSlide(slide, index);
+  return slide.layout === "single"
+    ? renderSingleSlide(slide, index)
+    : renderCardsSlide(slide, index);
 }
 
 function renderProgressItem(slide: HeroSlide, index: number) {
@@ -206,7 +306,7 @@ export function renderHeroSlider() {
     <section
       class="hero-slider"
       id="heroSlider"
-      aria-label="Escuela de Gastronomía en Huancayo y programas destacados de Cooking Gourmet"
+      aria-label="Programas y talleres destacados de Cooking Gourmet en Huancayo"
     >
       <div class="hero-slider__viewport" id="heroViewport">
         ${heroSlides.map(renderSlide).join("")}
