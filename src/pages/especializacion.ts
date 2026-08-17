@@ -9,14 +9,25 @@ const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_ACCESS_KEY = "c70db5c3-9654-4b15-b598-091a9ffa909a";
 
 const SPECIALIZATION = {
-  name: "Master Class 2026",
-  chef: "Ayrton Casas",
-  location: "Av. Ferrocarril 587 - Huancayo",
+  name: "Programa de Capacitación en Inocuidad Alimentaria",
+  instructor: "Lic. Rene Valle",
+  location: "Modalidad virtual",
   city: "Huancayo, Junín",
   chefImage: "/images/especializacion/chef.png",
   chefMobileImage: "/images/especializacion/chef-1.png",
-  logoImage: "/images/especializacion/master-class.png",
-  topics: ["Masas madre", "Croissant", "Panes sin gluten"],
+  startDate: "26 de agosto",
+  duration: "3 sesiones",
+  schedule: "26, 27 y 28 de agosto · 8:00 p.m. a 10:00 p.m.",
+  investment: "Gratuito",
+  certificate: "Certificado al culminar · costo aproximado S/ 50.00",
+  topics: [
+    "Marco sanitario, cultura de inocuidad y PGH",
+    "Peligros, higiene personal y prevención de contaminación cruzada",
+    "Compras, recepción, almacenamiento y cadena de frío",
+    "Preparación segura, cocción, conservación, servicio y alérgenos",
+    "Programa de Higiene y Saneamiento: limpieza y desinfección",
+    "Plagas, residuos, agua, químicos y mantenimiento higiénico",
+  ],
 };
 
 type SpecializationLeadPayload = {
@@ -28,7 +39,7 @@ type SpecializationLeadPayload = {
   dni: string;
   message: string;
   topics: string[];
-  chef: string;
+  instructor: string;
   pageUrl: string;
   createdAt: string;
 };
@@ -36,9 +47,9 @@ type SpecializationLeadPayload = {
 function buildWhatsAppUrl() {
   const message = [
     "Hola, vengo de la web de Cooking Gourmet.",
-    "Quiero información sobre la Master Class 2026.",
-    "Estoy interesado(a) en Masas madre, Croissant y Panes sin gluten.",
-    "Deseo conocer horarios, inversión, vacantes e inscripción.",
+    "Quiero información sobre el Programa de Capacitación en Inocuidad Alimentaria.",
+    "Deseo inscribirme al curso virtual gratuito que inicia el 26 de agosto.",
+    "Quiero confirmar las 3 sesiones, horario, vacantes y el certificado.",
   ].join("\n");
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -60,7 +71,7 @@ function buildLeadSummary(
     "Nueva solicitud desde la landing de Especialización",
     "",
     `Programa: ${payload.program}`,
-    `Chef: ${payload.chef}`,
+    `Instructor: ${payload.instructor}`,
     `Temas: ${payload.topics.join(", ")}`,
     "",
     `Nombre: ${payload.fullName || "-"}`,
@@ -100,16 +111,16 @@ async function sendSpecializationLeadToSales(
   formData.append("access_key", WEB3FORMS_ACCESS_KEY);
   formData.append(
     "subject",
-    `Nuevo lead Master Class 2026 - ${payload.fullName}`
+    `Nuevo lead Inocuidad Alimentaria - ${payload.fullName}`
   );
-  formData.append("from_name", "Master Class 2026 - Cooking Gourmet");
+  formData.append("from_name", "Inocuidad Alimentaria - Cooking Gourmet");
 
   formData.append("name", payload.fullName);
   formData.append("email", payload.email || SALES_EMAIL);
   formData.append("phone", payload.phone);
 
   formData.append("Programa", payload.program);
-  formData.append("Chef", payload.chef);
+  formData.append("Instructor", payload.instructor);
   formData.append("Temas", payload.topics.join(", "));
   formData.append("DNI", payload.dni || "No compartido");
   formData.append("Correo del interesado", payload.email || "No compartido");
@@ -180,9 +191,9 @@ function applySpecializationSeo() {
   const baseUrl = "https://www.cookingourmet.edu.pe";
   const canonicalUrl = `${baseUrl}/especializacion`;
   const title =
-    "Master Class 2026 en Huancayo | Masas Madre, Croissant y Panes Sin Gluten";
+    "Curso Gratuito de Inocuidad Alimentaria | Cooking Gourmet";
   const description =
-    "Master Class 2026 de Cooking Gourmet en Huancayo con el chef Ayrton Casas. Especialización práctica en masas madre, croissant y panes sin gluten.";
+    "Programa virtual gratuito de Cooking Gourmet sobre inocuidad alimentaria, higiene, buenas prácticas de manipulación y saneamiento para chefs y personal de servicios gastronómicos.";
 
   document.title = title;
 
@@ -192,13 +203,13 @@ function applySpecializationSeo() {
   setMetaContent('meta[property="og:url"]', canonicalUrl);
   setMetaContent(
     'meta[property="og:image"]',
-    `${baseUrl}${SPECIALIZATION.logoImage}`
+    `${baseUrl}${SPECIALIZATION.chefImage}`
   );
   setMetaContent('meta[name="twitter:title"]', title);
   setMetaContent('meta[name="twitter:description"]', description);
   setMetaContent(
     'meta[name="twitter:image"]',
-    `${baseUrl}${SPECIALIZATION.logoImage}`
+    `${baseUrl}${SPECIALIZATION.chefImage}`
   );
 
   setCanonical(canonicalUrl);
@@ -217,7 +228,7 @@ function applySpecializationSeo() {
         name: SPECIALIZATION.name,
         description,
         url: canonicalUrl,
-        image: `${baseUrl}${SPECIALIZATION.logoImage}`,
+        image: `${baseUrl}${SPECIALIZATION.chefImage}`,
         inLanguage: "es-PE",
         provider: {
           "@type": "EducationalOrganization",
@@ -236,23 +247,12 @@ function applySpecializationSeo() {
         teaches: SPECIALIZATION.topics,
         instructor: {
           "@type": "Person",
-          name: SPECIALIZATION.chef,
-          jobTitle: "Chef instructor",
+          name: SPECIALIZATION.instructor,
+          jobTitle: "Docente instructor",
         },
         hasCourseInstance: {
           "@type": "CourseInstance",
-          courseMode: "Presencial",
-          location: {
-            "@type": "Place",
-            name: "Cooking Gourmet",
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "Av. Ferrocarril 587",
-              addressLocality: "Huancayo",
-              addressRegion: "Junín",
-              addressCountry: "PE",
-            },
-          },
+          courseMode: "Virtual",
         },
       },
       {
@@ -287,7 +287,7 @@ function renderTopicCards() {
             ${String(index + 1).padStart(2, "0")}
           </span>
           <h3>${topic}</h3>
-          <p>Clase práctica con enfoque técnico y aplicación profesional.</p>
+          <p>Contenido esencial para fortalecer la manipulación segura, la higiene y la prevención de riesgos.</p>
         </article>
       `
     )
@@ -315,7 +315,7 @@ function renderSpecializationHero() {
 
             <img
               src="${SPECIALIZATION.chefImage}"
-              alt="Chef ${SPECIALIZATION.chef}, instructor de la Master Class 2026"
+              alt="${SPECIALIZATION.instructor}, docente del Programa de Inocuidad Alimentaria"
               loading="eager"
               decoding="async"
             />
@@ -323,23 +323,14 @@ function renderSpecializationHero() {
         </div>
 
         <div class="specialization-hero__content">
-          <div class="specialization-hero__logo-wrap">
-            <img
-              src="${SPECIALIZATION.logoImage}"
-              alt="Master Class 2026 Cooking Gourmet"
-              class="specialization-hero__logo"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
 
           <h1 class="specialization-hero__title">
-            Técnicas y Recetas
-            <span>en Tendencia.</span>
+            Inocuidad Alimentaria
+            <span>Higiene y Saneamiento.</span>
           </h1>
 
           <span class="specialization-eyebrow specialization-eyebrow--below">
-            100% práctico · Presencial
+            Curso gratuito · 100% virtual
           </span>
 
           <div class="specialization-hero__topics" aria-label="Temas de la especialización">
@@ -366,8 +357,8 @@ function renderSpecializationHero() {
             </div>
 
           <div class="specialization-hero__info">
-            <span>Chef instructor</span>
-            <strong>${SPECIALIZATION.chef}</strong>
+            <span>Docente instructor</span>
+            <strong>${SPECIALIZATION.instructor}</strong>
           </div>
         </div>
 
@@ -379,7 +370,7 @@ function renderSpecializationHero() {
 
           <form class="specialization-form" id="specializationLeadForm" novalidate>
             <input type="hidden" name="program" value="${SPECIALIZATION.name}" />
-            <input type="hidden" name="source" value="Landing Especialización" />
+            <input type="hidden" name="source" value="Landing Inocuidad Alimentaria" />
 
             <label class="specialization-field">
               <span>Nombre completo</span>
@@ -431,7 +422,7 @@ function renderSpecializationHero() {
               <textarea
                 name="message"
                 rows="3"
-                placeholder="Deseo información sobre horarios y vacantes."
+                placeholder="Deseo inscribirme al curso virtual gratuito."
               ></textarea>
             </label>
 
@@ -455,7 +446,8 @@ function renderLearningSection() {
           <span class="specialization-tag">Contenido práctico</span>
           <h2>Lo que aprenderás</h2>
           <p>
-            Tres técnicas clave para elevar tu nivel en panadería profesional.
+            Seis módulos esenciales sobre higiene, manipulación segura,
+            saneamiento y prevención de riesgos alimentarios.
           </p>
         </div>
 
@@ -476,28 +468,28 @@ function renderMethodSection() {
             Metodología
           </span>
 
-          <h2>Clase práctica, clara y directa</h2>
+          <h2>Capacitación virtual, clara y aplicada</h2>
 
           <p>
-            Una experiencia intensiva para aprender procesos reales,
-            técnica y criterios de producción.
+            Aprende principios de higiene, manipulación segura y prevención
+            de riesgos con contenidos orientados al trabajo gastronómico.
           </p>
         </div>
 
         <div class="specialization-method__list">
           <article class="reveal-up">
             <strong>01</strong>
-            <span>Demostración técnica paso a paso.</span>
+            <span>3 sesiones virtuales de 2 horas cada una.</span>
           </article>
 
           <article class="reveal-up">
             <strong>02</strong>
-            <span>Procesos aplicables a producción real.</span>
+            <span>26, 27 y 28 de agosto · 8:00 p.m. a 10:00 p.m.</span>
           </article>
 
           <article class="reveal-up">
             <strong>03</strong>
-            <span>Orientación para emprender o perfeccionarte.</span>
+            <span>Curso gratuito y certificado al culminar.</span>
           </article>
         </div>
       </div>
@@ -513,24 +505,25 @@ function renderAudienceSection() {
           <span class="specialization-tag">Perfil recomendado</span>
           <h2>¿Para quién es?</h2>
           <p>
-            Ideal para estudiantes, emprendedores y profesionales del rubro.
+            Dirigido al público en general, amantes de la cocina,
+            chefs y personal de servicios gastronómicos.
           </p>
         </div>
 
         <div class="specialization-audience-grid">
           <article class="specialization-audience-card reveal-up">
-            <h3>Estudiantes</h3>
-            <p>Complementa tu formación con técnicas actuales.</p>
+            <h3>Público en general</h3>
+            <p>No necesitas experiencia previa para participar.</p>
           </article>
 
           <article class="specialization-audience-card reveal-up">
-            <h3>Emprendedores</h3>
-            <p>Mejora tu propuesta y crea productos más competitivos.</p>
+            <h3>Amantes de la cocina</h3>
+            <p>Fortalece tus conocimientos de higiene y manipulación segura.</p>
           </article>
 
           <article class="specialization-audience-card reveal-up">
-            <h3>Profesionales</h3>
-            <p>Actualiza tus conocimientos y fortalece tu técnica.</p>
+            <h3>Personal gastronómico</h3>
+            <p>Actualiza buenas prácticas de manipulación y saneamiento.</p>
           </article>
         </div>
       </div>
@@ -549,8 +542,10 @@ function renderLocationCta() {
             <span class="specialization-tag">Admisión</span>
             <h2>Solicita informes</h2>
             <p>
-              Escríbenos para conocer horarios, vacantes e inscripción.
-              Estamos en ${SPECIALIZATION.location}.
+              Inscríbete al programa virtual gratuito. Inicia el
+              ${SPECIALIZATION.startDate}, tiene ${SPECIALIZATION.duration}
+              y se desarrollará ${SPECIALIZATION.schedule}.
+              ${SPECIALIZATION.certificate}.
             </p>
           </div>
 
@@ -694,7 +689,7 @@ function initSpecializationForm() {
       dni: getFormValue(formData, "dni"),
       message: getFormValue(formData, "message"),
       topics: SPECIALIZATION.topics,
-      chef: SPECIALIZATION.chef,
+      instructor: SPECIALIZATION.instructor,
       pageUrl: window.location.href,
       createdAt: new Date().toISOString(),
     };
