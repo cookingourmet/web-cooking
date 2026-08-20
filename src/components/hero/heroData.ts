@@ -1,3 +1,5 @@
+import { getAvailableWorkshops, workshopPath } from "../../data/workshops.data";
+
 export type HeroAction = {
   label: string;
   href: string;
@@ -48,7 +50,7 @@ export type HeroCardsSlide = {
   title: string;
   subtitle: string;
   primaryAction?: HeroAction;
-  cards: [HeroWorkshopCard, HeroWorkshopCard, HeroWorkshopCard];
+  cards: HeroWorkshopCard[];
 };
 
 export type HeroSlide = HeroSingleSlide | HeroCardsSlide;
@@ -66,51 +68,33 @@ function informationWhatsAppUrl(programName: string, description: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+const workshopCards: HeroWorkshopCard[] = getAvailableWorkshops().map((workshop) => ({
+  id: workshop.id,
+  day: workshop.dateBadgeDay,
+  month: workshop.dateBadgeMonth,
+  title: workshop.title,
+  subtitle: `${workshop.topics.join(" · ")} · ${workshop.capacity} · ${workshop.price}`,
+  image: workshop.image,
+  imageAlt: workshop.imageAlt,
+  href: workshopPath(workshop),
+}));
+
+const workshopSlides: HeroCardsSlide[] = workshopCards.length
+  ? [
+      {
+        id: "talleres-disponibles",
+        layout: "cards",
+        shortLabel: "Talleres",
+        eyebrow: "Próximos talleres",
+        title: "Talleres prácticos",
+        subtitle:
+          "Aprende nuevas técnicas con talleres presenciales, prácticos y de cupos limitados. Revisa cada taller y separa tu vacante cuando estés listo.",
+        cards: workshopCards,
+      },
+    ]
+  : [];
+
 export const heroSlides: HeroSlide[] = [
-  {
-    id: "talleres-agosto",
-    layout: "cards",
-    shortLabel: "Talleres",
-    eyebrow: "Talleres de agosto",
-    title: "Talleres prácticos",
-    subtitle:
-      "Aprende nuevas técnicas con talleres presenciales, prácticos y de cupos limitados. Elige tu taller y solicita información por WhatsApp.",
-    cards: [
-      {
-        id: "pasteleria-boutique",
-        day: "26-28",
-        month: "Agosto",
-        title: "Pastelería Boutique 3 Días",
-        subtitle: "Pasta choux · Piononos · Cup cakes · 20 participantes · S/ 280",
-        image: "/images/talleres/taller-pasteleria-boutique.png",
-        imageAlt:
-          "Taller de Pastelería Boutique de Cooking Gourmet en Huancayo",
-        href: "#talleres",
-      },
-      {
-        id: "limonadas-triples",
-        day: "31-01",
-        month: "Ago/Set",
-        title: "Limonadas y Triples",
-        subtitle: "Limonadas · Triples · 20 participantes · S/ 190",
-        image: "/images/talleres/taller-limonadas-triples.png",
-        imageAlt:
-          "Taller de Limonadas y Triples de Cooking Gourmet en Huancayo",
-        href: "#talleres",
-      },
-      {
-        id: "fast-food",
-        day: "20-21",
-        month: "Agosto",
-        title: "Fast Food",
-        subtitle: "Burger Party · Alitas · 20 participantes · S/ 250",
-        image: "/images/talleres/taller-fast-food.png",
-        imageAlt:
-          "Taller Fast Food de Cooking Gourmet en Huancayo",
-        href: "#talleres",
-      },
-    ],
-  },
   {
     id: "gastronomia",
     layout: "single",
@@ -127,11 +111,6 @@ export const heroSlides: HeroSlide[] = [
     objectPosition: "62% center",
     mobileObjectPosition: "56% center",
     imageScale: 1.02,
-    startDate: {
-      label: "Próximo inicio",
-      day: "17",
-      month: "Agosto",
-    },
     primaryAction: {
       label: "Ver programas",
       href: "#programas",
@@ -145,6 +124,7 @@ export const heroSlides: HeroSlide[] = [
       external: true,
     },
   },
+  ...workshopSlides,
   {
     id: "pasteleria",
     layout: "single",
@@ -161,11 +141,6 @@ export const heroSlides: HeroSlide[] = [
     objectPosition: "46% center",
     mobileObjectPosition: "50% center",
     imageScale: 1.03,
-    startDate: {
-      label: "Próximo inicio",
-      day: "17",
-      month: "Agosto",
-    },
     primaryAction: {
       label: "Conoce Pastelería",
       href: "/programas/pasteleria",
@@ -195,11 +170,6 @@ export const heroSlides: HeroSlide[] = [
     objectPosition: "67% center",
     mobileObjectPosition: "58% center",
     imageScale: 1.02,
-    startDate: {
-      label: "Próximo inicio",
-      day: "17",
-      month: "Agosto",
-    },
     primaryAction: {
       label: "Conoce Bar Profesional",
       href: "/programas/bar-profesional",
@@ -229,11 +199,6 @@ export const heroSlides: HeroSlide[] = [
     objectPosition: "45% center",
     mobileObjectPosition: "50% center",
     imageScale: 1.03,
-    startDate: {
-      label: "Próximo inicio",
-      day: "17",
-      month: "Agosto",
-    },
     primaryAction: {
       label: "Conoce Barismo",
       href: "/programas/barismo",
@@ -263,11 +228,6 @@ export const heroSlides: HeroSlide[] = [
     objectPosition: "61% center",
     mobileObjectPosition: "55% center",
     imageScale: 1.02,
-    startDate: {
-      label: "Próximo inicio",
-      day: "17",
-      month: "Agosto",
-    },
     primaryAction: {
       label: "Conoce Sommelier",
       href: "/programas/sommelier",

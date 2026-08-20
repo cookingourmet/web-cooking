@@ -441,7 +441,7 @@
 
 .hero-cards__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 12px;
 }
 
@@ -1169,4 +1169,14 @@
     bottom: 14px !important;
     transform: translateX(-50%) !important;
   }
+}
+
+.hero-workshop-card__content em {
+  display: inline-flex;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }

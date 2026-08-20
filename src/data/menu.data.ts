@@ -40,6 +40,10 @@ export const mainMenu: MenuItem[] = [
     href: "/especializacion",
   },
   {
+    label: "Talleres",
+    href: "/#talleres",
+  },
+  {
     label: "Bolsa laboral",
     href: "/#bolsa-laboral",
   },

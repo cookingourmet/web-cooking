@@ -1,0 +1,84 @@
+COOKING GOURMET - FASE WEB 03
+Fecha: 20/08/2026
+Enfoque: Home, conversión, navegación, limpieza visual y microinteracciones.
+
+CAMBIOS PRINCIPALES
+
+1. INICIO MÁS ORIENTADO A DECISIÓN
+- Se agregó un bloque breve "¿Qué quieres aprender?".
+- Se separan claramente 3 caminos:
+  * Programas profesionales.
+  * Talleres cortos.
+  * Especializaciones.
+- Cada opción tiene acceso directo y seguimiento mediante dataLayer.
+
+2. FRANJA DE CONFIANZA BAJO EL HERO
+- Desde 2008.
+- Formación presencial.
+- Sede Huancayo: Av. Ferrocarril 587.
+- Programas + talleres.
+- Diseño compacto para no convertirlo en un banner pesado.
+
+3. HERO CORREGIDO
+- La primera diapositiva vuelve a ser "Escuela de Gastronomía" para mantener un H1 principal coherente con SEO y marca.
+- El slide de talleres se mantiene, pero pasa después de la presentación principal.
+- Se retiraron las fechas estáticas "17 de Agosto" de los programas porque ya estaban vencidas y podían generar desconfianza.
+- Los talleres continúan usando sus fechas dinámicas definidas en workshops.data.ts.
+
+4. ORDEN DEL HOME MEJORADO
+Nuevo orden:
+- Hero.
+- Franja de confianza.
+- Selector de tipo de formación.
+- Talleres.
+- Programas profesionales.
+- Razones para elegir Cooking Gourmet.
+- Nosotros (compacto).
+- Preguntas frecuentes.
+- Contacto.
+- CTA final de admisión.
+
+5. NOSOTROS MÁS CORTO
+- Se eliminó del Home el bloque excesivamente largo de misión, visión, línea de tiempo y seis tarjetas de valores.
+- Se conserva la información importante para identidad y SEO.
+- Se mantienen 18 años, ubicación, programas, formación práctica y foto institucional.
+- Esto reduce desplazamiento innecesario y lleva más rápido al usuario hacia la conversión.
+
+6. PREGUNTAS FRECUENTES
+- Se agregaron preguntas sobre modalidad, precios/horarios, talleres y ubicación.
+- Se usan elementos <details> accesibles.
+- La apertura tiene una transición suave.
+
+7. CTA FINAL
+- Se agregó una llamada final a admisión para el visitante que todavía no sabe qué elegir.
+- Enlace directo a WhatsApp con mensaje contextual.
+- Acceso secundario a Talleres.
+
+8. EFECTOS Y TRANSICIONES
+- Aparición suave de nuevas secciones al hacer scroll.
+- Stagger ligero entre tarjetas.
+- Hover profesional en tarjetas de elección.
+- Movimiento sutil de indicadores y flechas.
+- Transición de FAQ.
+- Se respeta prefers-reduced-motion por accesibilidad.
+
+9. TRACKING PREPARADO
+Eventos nuevos:
+- home_choice_programs_click
+- home_choice_workshops_click
+- home_choice_specialization_click
+- home_about_whatsapp_click
+- home_final_whatsapp_click
+- home_final_workshops_click
+
+VALIDACIÓN
+- TypeScript: OK con tsc --noEmit.
+- No se incluyeron node_modules ni dist en el ZIP final.
+- No se modificó ningún CRM ni se agregó base de datos.
+
+ARCHIVOS PRINCIPALES MODIFICADOS
+- src/pages/home.ts
+- src/styles/pages/home.css
+- src/components/sections/about/about.ts
+- src/components/sections/about/about.css
+- src/components/hero/heroData.ts

@@ -1,0 +1,100 @@
+COOKING GOURMET - WEB
+FASE WEB 02 - TALLERES / CONVERSION / MOVIMIENTO
+Fecha: 20/08/2026
+
+OBJETIVO
+Mejorar la conversión de los talleres sin integrar todavía un CRM automático.
+Los leads pueden seguir registrándose manualmente mientras la web captura mejor el origen y dirige al interesado a WhatsApp.
+
+CAMBIOS APLICADOS
+
+1. TALLER DESTACADO AUTOMATICO
+- El taller activo o más próximo aparece primero y con mayor jerarquía visual.
+- Si un taller ya terminó, deja de mostrarse dentro de los talleres disponibles.
+- Estados automáticos: Inicia hoy / En curso / Inicia mañana / Faltan X días / Próximo taller / Finalizado.
+
+2. HERO DE TALLERES DINAMICO
+- El slider principal toma los talleres vigentes desde workshops.data.ts.
+- Los talleres finalizados dejan de aparecer también en el hero.
+
+3. PAGINA INDIVIDUAL MEJORADA
+Cada taller ahora muestra:
+- Estado según fecha.
+- Fecha, modalidad, cupos e inversión.
+- Contenido.
+- Para quién está dirigido.
+- Qué encontrará durante el taller.
+- Qué podrá reforzar.
+- Preguntas frecuentes.
+- Otros talleres disponibles.
+
+4. BOTONES DE CONVERSION
+- Se cambió el CTA principal a: Separar mi vacante.
+- Se mantiene una opción secundaria para consultas.
+- En celular se agregó un CTA fijo inferior para facilitar la reserva.
+- Si el taller ya finalizó, el CTA cambia a: Consultar próxima edición.
+
+5. WHATSAPP PREPARADO PARA CRM MANUAL
+Cada consulta de taller envía automáticamente:
+- Taller.
+- Código interno del taller.
+- Fecha.
+- Inversión publicada.
+- Origen.
+- Campaña UTM.
+
+Códigos actuales:
+- Fast Food: FF-AGO26
+- Pastelería Boutique: PB-AGO26
+- Limonadas y Triples: LT-AGO26
+
+6. MEDICION / GOOGLE TAG MANAGER
+Se dejaron eventos para medir:
+- workshop_detail_view
+- workshop_detail_click
+- workshop_reserve_click
+- workshop_info_click
+- workshop_next_edition_click
+- workshop_price_view
+- related_workshop_click
+- workshops_general_whatsapp_click
+- page_scroll_50
+
+7. EFECTOS Y TRANSICIONES
+- Entrada suave al cambiar de página dentro de la SPA.
+- Aparición progresiva de secciones al hacer scroll.
+- Animaciones suaves en tarjetas, imágenes, botones y paneles.
+- Hover más profesional en escritorio.
+- Apertura visual de preguntas frecuentes.
+- Respeta prefers-reduced-motion para accesibilidad.
+
+8. MOVIL
+- CTA fijo inferior en la ficha del taller.
+- Botones a ancho completo en pantallas pequeñas.
+- Distribución responsive de contenido, paneles y talleres relacionados.
+
+9. SIN TESTIMONIOS INVENTADOS
+- No se agregaron testimonios ni fotos de alumnos que no estuvieran disponibles en el proyecto.
+- La estructura puede ampliarse después cuando se proporcionen fotos/testimonios reales.
+
+ARCHIVO PRINCIPAL PARA CAMBIAR TALLERES
+src/data/workshops.data.ts
+
+Allí se cambian:
+- startDate / endDate
+- fecha visible
+- precio
+- cupos
+- imagen
+- contenido
+- público
+- beneficios
+- preguntas frecuentes
+- código interno del lead
+
+VALIDACION
+- TypeScript: OK (tsc --noEmit)
+- Vite no pudo completarse en el entorno de revisión por faltar un binding nativo de Rolldown del sistema Linux; no es un error TypeScript del proyecto.
+
+NOTA
+El ZIP final no incluye node_modules ni dist.

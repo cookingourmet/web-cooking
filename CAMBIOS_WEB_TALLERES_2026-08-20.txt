@@ -1,0 +1,34 @@
+COOKING GOURMET - MEJORA WEB / TALLERES
+Fecha: 20/08/2026
+
+OBJETIVO
+Mejorar la conversión de los talleres sin conectar todavía un CRM. El seguimiento comercial puede continuar registrándose manualmente.
+
+CAMBIOS PRINCIPALES
+1. Nueva sección de Talleres en la página de inicio.
+2. Nueva opción "Talleres" en el menú principal.
+3. Cada taller ahora tiene su propia página:
+   - /talleres/pasteleria-boutique
+   - /talleres/limonadas-y-triples
+   - /talleres/fast-food
+4. El slider principal lleva a la ficha del taller en vez de enviar inmediatamente a WhatsApp.
+5. Cada ficha muestra fecha, modalidad, cupos, inversión, temas y botones claros de consulta.
+6. Se agregaron metas SEO específicas y URLs al sitemap.
+7. Se agregaron eventos dataLayer para Google Tag Manager:
+   - workshop_detail_click
+   - workshop_detail_view
+   - workshop_whatsapp_click
+   - related_workshop_click
+   - workshops_general_whatsapp_click
+8. Se guardan UTM de la visita en sessionStorage para acompañar los eventos de conversión.
+9. Las 3 imágenes de talleres fueron convertidas a WebP optimizado:
+   antes: aprox. 10.2 MB entre las tres
+   ahora: aprox. 0.5 MB entre las tres
+10. Cookito usa papa.webm en lugar del GIF de aprox. 47 MB.
+
+VALIDACIÓN
+- TypeScript: OK con tsc --noEmit.
+- El build completo en el entorno de revisión Linux no se ejecutó porque el ZIP incluía node_modules de Windows y Vite/Rolldown requiere el binario nativo de la plataforma. No es un error del código. En tu PC Windows puedes usar tus node_modules actuales o ejecutar npm install y luego npm run build.
+
+NOTA
+No se agregó base de datos ni conexión a CRM. Esta fase es únicamente web, SEO, velocidad y conversión.

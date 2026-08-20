@@ -178,6 +178,14 @@ function getMainIcon(label: string) {
         <rect x="4" y="5" width="16" height="15" rx="3" />
       </svg>
     `,
+    Talleres: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h16" />
+        <path d="M6 4h12v16H6z" />
+        <path d="M9 11h6" />
+        <path d="M9 15h4" />
+      </svg>
+    `,
     "Bolsa laboral": `
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3" y="7" width="18" height="12" rx="2" />

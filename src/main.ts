@@ -2,6 +2,7 @@ import "./styles/base/reset.css";
 import "./styles/base/variables.css";
 import "./styles/base/global.css";
 import "./styles/base/utilities.css";
+import "./styles/base/motion.css";
 import "./styles/layout/container.css";
 import "./styles/layout/spacing.css";
 import "./styles/pages/home.css";
@@ -34,6 +35,18 @@ import { renderSommelierPage } from "./pages/programs/sommelier";
 import { renderCocinaPage } from "./pages/programs/cocina";
 import { initProgramDetail } from "./pages/programs/programDetail";
 import { initProgramPageEffects } from "./utils/program-effects";
+import { initEngagementTracking, initPageMotion } from "./utils/page-motion";
+import {
+  renderWorkshopDetailPage,
+  initWorkshopDetailPage,
+} from "./pages/workshops/workshopDetail";
+
+
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
+  }
+}
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -57,6 +70,52 @@ function redirectTo(path: string) {
 
 function getCurrentRoutePath() {
   return normalizePath(window.location.pathname);
+}
+
+function getWorkshopSlug(path: string) {
+  const match = path.match(/^\/talleres\/([^/]+)$/);
+  return match?.[1] ?? null;
+}
+
+function getStoredAttribution() {
+  try {
+    const saved = window.sessionStorage.getItem("cg_attribution");
+    return saved ? JSON.parse(saved) : {};
+  } catch {
+    return {};
+  }
+}
+
+function captureAttribution() {
+  const params = new URLSearchParams(window.location.search);
+  const attribution = {
+    utm_source: params.get("utm_source") || undefined,
+    utm_medium: params.get("utm_medium") || undefined,
+    utm_campaign: params.get("utm_campaign") || undefined,
+    utm_content: params.get("utm_content") || undefined,
+    utm_term: params.get("utm_term") || undefined,
+    landing_path: window.location.pathname,
+  };
+
+  if (Object.values(attribution).some(Boolean)) {
+    try {
+      window.sessionStorage.setItem("cg_attribution", JSON.stringify(attribution));
+    } catch {
+      // La navegación continúa aunque sessionStorage no esté disponible.
+    }
+  }
+}
+
+function pushTrackingEvent(element: HTMLElement) {
+  const eventName = element.dataset.trackEvent;
+  if (!eventName) return;
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: eventName,
+    workshop_id: element.dataset.trackWorkshop,
+    ...getStoredAttribution(),
+  });
 }
 
 function scrollAfterRender() {
@@ -94,6 +153,23 @@ function renderRoute() {
   if (currentPath === "/programas/cocina") {
     redirectTo("/programas/cocina-acelerada");
     currentPath = "/programas/cocina-acelerada";
+  }
+
+  const workshopSlug = getWorkshopSlug(currentPath);
+
+  if (workshopSlug) {
+    const workshopPage = renderWorkshopDetailPage(workshopSlug);
+
+    if (workshopPage) {
+      appRoot.innerHTML = workshopPage;
+      afterRender = () => initWorkshopDetailPage(workshopSlug);
+      afterRender?.();
+      initProgramPageEffects();
+      initPageMotion();
+      initEngagementTracking();
+      scrollAfterRender();
+      return;
+    }
   }
 
   switch (currentPath) {
@@ -145,11 +221,16 @@ function renderRoute() {
 
   afterRender?.();
   initProgramPageEffects();
+  initPageMotion();
+  initEngagementTracking();
   scrollAfterRender();
 }
 
 document.addEventListener("click", (event) => {
   const target = event.target as HTMLElement | null;
+  const trackedElement = target?.closest<HTMLElement>("[data-track-event]");
+  if (trackedElement) pushTrackingEvent(trackedElement);
+
   const link = target?.closest("a") as HTMLAnchorElement | null;
 
   if (!link) return;
@@ -201,4 +282,5 @@ document.addEventListener("click", (event) => {
 
 window.addEventListener("popstate", renderRoute);
 
+captureAttribution();
 renderRoute();

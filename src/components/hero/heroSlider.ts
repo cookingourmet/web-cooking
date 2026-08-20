@@ -15,16 +15,6 @@ import {
 import { mountAssistantWindow } from "./heroAssistantPanel";
 
 const AUTO_TIME = 5500;
-const WORKSHOP_WHATSAPP_NUMBER = "51981377382";
-
-function workshopWhatsAppUrl(workshopName: string) {
-  const message = `Hola, vengo de la web de Cooking Gourmet. Necesito información sobre el taller de ${workshopName}: horarios, inversión e inicio de clases.`;
-
-  return `https://wa.me/${WORKSHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    message
-  )}`;
-}
-
 function escapeHtml(value: string) {
   return value
     .replaceAll("&", "&amp;")
@@ -183,16 +173,14 @@ function renderSingleSlide(slide: HeroSingleSlide, index: number) {
 }
 
 function renderWorkshopCard(card: HeroCardsSlide["cards"][number]) {
-  const whatsappUrl = workshopWhatsAppUrl(card.title);
-
   return `
     <a
       class="hero-workshop-card"
-      href="${escapeAttribute(whatsappUrl)}"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="${escapeAttribute(card.href)}"
+      data-track-event="workshop_detail_click"
+      data-track-workshop="${escapeAttribute(card.id)}"
       aria-label="${escapeAttribute(
-        `Solicitar información por WhatsApp sobre ${card.title}, inicia el ${card.day} de ${card.month}`
+        `Ver información sobre ${card.title}, inicia el ${card.day} de ${card.month}`
       )}"
     >
       <img
@@ -217,6 +205,7 @@ function renderWorkshopCard(card: HeroCardsSlide["cards"][number]) {
             ? `<small>${escapeHtml(card.subtitle)}</small>`
             : ""
         }
+        <em>Ver detalles →</em>
       </span>
     </a>
   `;

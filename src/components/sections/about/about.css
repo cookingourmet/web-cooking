@@ -942,3 +942,17 @@
     min-height: 220px;
   }
 }
+/* FASE 03 · versión compacta de Nosotros para el home */
+.cg-about--compact {
+  padding: clamp(76px, 8vw, 104px) 0;
+}
+
+.cg-about--compact .cg-about-hero {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .cg-about--compact {
+    padding: 68px 0;
+  }
+}

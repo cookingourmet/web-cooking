@@ -360,7 +360,7 @@ function renderAssistantWindow() {
     <aside class="hero-assistant-window" data-assistant-window aria-label="Asistente virtual Cookito">
       <div class="hero-assistant-window__dock">
         <div class="hero-assistant-window__character">
-          <img src="/papa.gif" alt="Cookito" />
+          <video src="/papa.webm" autoplay loop muted playsinline aria-label="Cookito"></video>
         </div>
 
         <div class="hero-assistant-window__launcher-group">
@@ -384,7 +384,7 @@ function renderAssistantWindow() {
         <header class="hero-assistant-window__panel-header">
           <div class="hero-assistant-window__profile">
             <span class="hero-assistant-window__profile-avatar">
-              <img src="/papa.gif" alt="" aria-hidden="true" />
+              <video src="/papa.webm" autoplay loop muted playsinline aria-hidden="true"></video>
               <span class="hero-assistant-window__online-dot"></span>
             </span>
 
