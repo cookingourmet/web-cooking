@@ -1,3 +1,5 @@
+import { trackEvent } from "./analytics";
+
 declare global {
   interface Window {
     __cookingMotionObserver?: IntersectionObserver;
@@ -65,27 +67,12 @@ export function initPageMotion() {
   window.__cookingMotionObserver = observer;
 }
 
-function readAttribution() {
-  try {
-    const saved = window.sessionStorage.getItem("cg_attribution");
-    return saved ? (JSON.parse(saved) as Record<string, unknown>) : {};
-  } catch {
-    return {};
-  }
-}
-
 function pushViewEvent(element: HTMLElement) {
   const eventName = element.dataset.trackView;
   if (!eventName || element.dataset.trackViewSent === "true") return;
 
   element.dataset.trackViewSent = "true";
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: eventName,
-    workshop_id: element.dataset.trackWorkshop,
-    path: window.location.pathname,
-    ...readAttribution(),
-  });
+  trackEvent(eventName, { workshop_id: element.dataset.trackWorkshop });
 }
 
 export function initEngagementTracking() {
@@ -132,12 +119,7 @@ export function initEngagementTracking() {
     if (ratio < 0.5) return;
 
     sentHalfPage = true;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "page_scroll_50",
-      path: window.location.pathname,
-      ...readAttribution(),
-    });
+    trackEvent("page_scroll_50");
   };
 
   window.addEventListener("scroll", trackDepth, { passive: true, signal });

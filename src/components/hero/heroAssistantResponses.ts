@@ -1,3 +1,5 @@
+import { brochureLink } from "../../utils/brochures";
+import { INQUIRY_SHIFTS } from "../../data/admission.data";
 import {
   FAQ_RESPONSES,
   PROGRAMS,
@@ -169,11 +171,11 @@ export function scheduleSequence(
     return [
       {
         kind: "text",
-        text: `${firstName(visitorName)}, por ahora no tengo un horario de ese turno para ${program.label}.`,
+        text: `Puedes consultar el turno ${INQUIRY_SHIFTS.find((shift) => shift.id === preference)?.label.toLowerCase() ?? "que prefieras"} para ${program.label}.`,
       },
       {
         kind: "text",
-        text: "Puedes consultar otro turno o hablar con un asesor para confirmar nuevas aperturas.",
+        text: "Admisión te confirmará la hora y las vacantes. Pulsa WhatsApp para enviar tu consulta con el turno seleccionado.",
       },
     ];
   }
@@ -205,7 +207,7 @@ export function brochureSequence(
   return [
     {
       kind: "text",
-      text: `${firstName(visitorName)}, aquí tienes el PDF de ${program.label} 📄`,
+      text: brochureLink(program.brochureUrl, program.label).exists ? `Aquí tienes el brochure de ${program.label}.` : `${firstName(visitorName)}, puedes solicitar el brochure de ${program.label} a admisión con el siguiente botón.`,
     },
     {
       kind: "program_card",

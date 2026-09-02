@@ -1,10 +1,12 @@
+import { ADMISSION } from "../../data/admission.data";
+
 import type {
   AssistantState,
   ProgramInfo,
   ProgramKey,
 } from "./heroAssistantTypes";
 
-export const SALES_EMAIL = " j.ventas@cookingourmet.edu.pe";
+export const SALES_EMAIL = "j.ventas@cookingourmet.edu.pe";
 export const SALES_WHATSAPP = "51981377382";
 export const SALES_PHONE_DISPLAY = "981 377 382";
 export const SALES_PHONE_LINK = "+51981377382";
@@ -51,7 +53,7 @@ export const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
       "carrera de cocina",
       "chef",
     ],
-    startDate: "17 de Agosto",
+    startDate: ADMISSION.label,
     duration: "18 meses",
     frequency: "Lunes a viernes",
     modality: "100% presencial",
@@ -109,7 +111,7 @@ export const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
       "postres",
       "tortas",
     ],
-    startDate: "17 de Agosto",
+    startDate: ADMISSION.label,
     duration: "1 año",
     frequency: "Lunes a viernes",
     modality: "100% presencial",
@@ -157,7 +159,7 @@ export const PROGRAMS: Record<ProgramKey, ProgramInfo> = {
       "mixología",
       "bar",
     ],
-    startDate: "17 de agosto",
+    startDate: ADMISSION.label,
     duration: "6 meses",
     frequency: "2 veces por semana",
     modality: "100% presencial",

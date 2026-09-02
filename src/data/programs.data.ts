@@ -1,3 +1,5 @@
+import { ADMISSION } from "./admission.data";
+
 export type ProgramKey =
   | "gastronomia"
   | "pasteleria"
@@ -82,7 +84,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     duration: "18 meses",
     modality: "100% presencial",
     schedule: "mañana, media mañana y noche",
-    startDate: "16 de marzo",
+    startDate: ADMISSION.label,
     frequency: "Lunes a viernes",
     location: "Huancayo, Junín",
     path: "/programas/gastronomia",
@@ -254,7 +256,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     duration: "1 año",
     modality: "100% presencial",
     schedule: "media mañana y noche",
-    startDate: "16 de marzo",
+    startDate: ADMISSION.label,
     frequency: "Lunes a viernes",
     location: "Huancayo, Junín",
     path: "/programas/pasteleria",
@@ -365,7 +367,7 @@ export const programsData: Record<ProgramKey, ProgramData> = {
     duration: "6 meses",
     modality: "100% presencial",
     schedule: "media mañana y tarde",
-    startDate: "17 de agosto",
+    startDate: ADMISSION.label,
     frequency: "2 veces por semana",
     location: "Huancayo, Junín",
     path: "/programas/bar-profesional",

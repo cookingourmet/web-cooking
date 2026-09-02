@@ -1,3 +1,5 @@
+import { ADMISSION, INQUIRY_SHIFTS, isAdmissionProgram } from "../../data/admission.data";
+import { brochureLink } from "../../utils/brochures";
 import { renderHeader, initHeader } from "../../components/layout/header/header";
 import { renderFooter } from "../../components/layout/footer/footer";
 import {
@@ -107,17 +109,6 @@ function getExtendedProgram(program: ProgramData): ProgramDataExtended {
   return program;
 }
 
-function getProgramSeoTitle(program: ProgramDataExtended) {
-  return program.seoTitle ?? `${getProgramSeoHeading(program)} | Cooking Gourmet`;
-}
-
-function getProgramSeoDescription(program: ProgramDataExtended) {
-  return (
-    program.seoDescription ??
-    `${program.description} Modalidad ${program.modality.toLowerCase()} en Huancayo.`
-  );
-}
-
 function buildCallUrl(program: ProgramData) {
   const digits = (program.whatsappNumber ?? "51981377382").replace(/\D/g, "");
   const internationalNumber = digits.startsWith("51") ? digits : `51${digits}`;
@@ -178,289 +169,6 @@ function getProgramFaqs(program: ProgramDataExtended): ProgramFaq[] {
   }
 
   return faqs.slice(0, 4);
-}
-
-function getProgramFromCurrentPath() {
-  const currentPath =
-    window.location.pathname === "/"
-      ? "/"
-      : window.location.pathname.replace(/\/+$/, "");
-
-  return Object.values(programsData).find(
-    (program) => getProgramRoute(program) === currentPath
-  );
-}
-
-function setMetaContent(selector: string, content: string) {
-  let meta = document.head.querySelector<HTMLMetaElement>(selector);
-
-  if (!meta) {
-    meta = document.createElement("meta");
-
-    if (selector.includes('property="')) {
-      const property = selector.match(/property="([^"]+)"/)?.[1];
-      if (property) meta.setAttribute("property", property);
-    } else {
-      const name = selector.match(/name="([^"]+)"/)?.[1];
-      if (name) meta.setAttribute("name", name);
-    }
-
-    document.head.appendChild(meta);
-  }
-
-  meta.content = content;
-}
-
-function setCanonical(url: string) {
-  let canonical = document.head.querySelector<HTMLLinkElement>(
-    'link[rel="canonical"]'
-  );
-
-  if (!canonical) {
-    canonical = document.createElement("link");
-    canonical.rel = "canonical";
-    document.head.appendChild(canonical);
-  }
-
-  canonical.href = url;
-}
-
-function getAbsoluteUrl(path: string) {
-  const baseUrl = "https://www.cookingourmet.edu.pe";
-
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-
-  return `${baseUrl}${path}`;
-}
-
-function getProgramTeaches(program: ProgramDataExtended) {
-  const modules = normalizeModules(program.modules);
-  const moduleItems = modules.flatMap((module) => module.items);
-  const benefits = program.benefits ?? [];
-  const opportunities = program.opportunities ?? [];
-
-  return Array.from(new Set([...moduleItems, ...benefits, ...opportunities])).slice(
-    0,
-    18
-  );
-}
-
-function removePreviousSeoSchemas() {
-  document.getElementById("program-detail-schema")?.remove();
-
-  document
-    .querySelectorAll('script[data-seo-schema="base"]')
-    .forEach((script) => script.remove());
-}
-
-function setAlternateLink(hreflang: string, href: string) {
-  let alternate = document.head.querySelector<HTMLLinkElement>(
-    `link[rel="alternate"][hreflang="${hreflang}"]`
-  );
-
-  if (!alternate) {
-    alternate = document.createElement("link");
-    alternate.rel = "alternate";
-    alternate.hreflang = hreflang;
-    document.head.appendChild(alternate);
-  }
-
-  alternate.href = href;
-}
-
-function applyProgramSeo(program: ProgramDataExtended) {
-  const baseUrl = "https://www.cookingourmet.edu.pe";
-  const route = getProgramRoute(program);
-  const canonicalUrl = `${baseUrl}${route}`;
-  const imageUrl = getAbsoluteUrl(program.image);
-  const logoUrl = `${baseUrl}/logo.png`;
-  const title = getProgramSeoTitle(program);
-  const description = getProgramSeoDescription(program);
-  const faqs = getProgramFaqs(program);
-  const teaches = getProgramTeaches(program);
-
-  document.title = title;
-
-  setMetaContent("meta[name=\"description\"]", description);
-  setMetaContent(
-    "meta[name=\"robots\"]",
-    "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-  );
-
-  setMetaContent("meta[property=\"og:type\"]", "website");
-  setMetaContent("meta[property=\"og:locale\"]", "es_PE");
-  setMetaContent("meta[property=\"og:site_name\"]", "Cooking Gourmet");
-  setMetaContent("meta[property=\"og:title\"]", title);
-  setMetaContent("meta[property=\"og:description\"]", description);
-  setMetaContent("meta[property=\"og:url\"]", canonicalUrl);
-  setMetaContent("meta[property=\"og:image\"]", imageUrl);
-  setMetaContent("meta[property=\"og:image:secure_url\"]", imageUrl);
-  setMetaContent("meta[property=\"og:image:width\"]", "1200");
-  setMetaContent("meta[property=\"og:image:height\"]", "630");
-  setMetaContent(
-    "meta[property=\"og:image:alt\"]",
-    `${getProgramSeoHeading(program)} en Cooking Gourmet`
-  );
-
-  setMetaContent("meta[name=\"twitter:card\"]", "summary_large_image");
-  setMetaContent("meta[name=\"twitter:title\"]", title);
-  setMetaContent("meta[name=\"twitter:description\"]", description);
-  setMetaContent("meta[name=\"twitter:image\"]", imageUrl);
-  setMetaContent(
-    "meta[name=\"twitter:image:alt\"]",
-    `${getProgramSeoHeading(program)} en Cooking Gourmet`
-  );
-
-  setCanonical(canonicalUrl);
-  setAlternateLink("es-PE", canonicalUrl);
-  setAlternateLink("x-default", canonicalUrl);
-
-  removePreviousSeoSchemas();
-
-  const schema = document.createElement("script");
-  schema.id = "program-detail-schema";
-  schema.type = "application/ld+json";
-  schema.textContent = JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": ["EducationalOrganization", "LocalBusiness"],
-        "@id": `${baseUrl}/#organization`,
-        name: "Cooking Gourmet",
-        alternateName: "Cooking Gourmet Escuela de Alta Cocina",
-        description:
-          "Escuela gastronómica en Huancayo con programas presenciales de gastronomía, pastelería, bar profesional, barismo, sommelier y cocina acelerada.",
-        url: `${baseUrl}/`,
-        logo: logoUrl,
-        image: `${baseUrl}/images/seo/cooking-gourmet-portada.jpg`,
-        telephone: "+51 981 377 382",
-        email: "j.ventas@cookingourmet.edu.pe",
-        priceRange: "$$",
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "Av. Ferrocarril 587",
-          addressLocality: "Huancayo",
-          addressRegion: "Junín",
-          addressCountry: "PE",
-        },
-        areaServed: {
-          "@type": "City",
-          name: "Huancayo",
-        },
-        sameAs: [
-          "https://www.facebook.com/Cooking.Gourmet",
-          "https://www.instagram.com/cooking_gourmet/",
-          "https://www.tiktok.com/@cooking.gourmet.oficial",
-        ],
-        contactPoint: {
-          "@type": "ContactPoint",
-          telephone: "+51 981 377 382",
-          contactType: "admisiones",
-          areaServed: "PE",
-          availableLanguage: "Spanish",
-        },
-      },
-      {
-        "@type": "WebSite",
-        "@id": `${baseUrl}/#website`,
-        url: `${baseUrl}/`,
-        name: "Cooking Gourmet",
-        publisher: {
-          "@id": `${baseUrl}/#organization`,
-        },
-        inLanguage: "es-PE",
-      },
-      {
-        "@type": "WebPage",
-        "@id": `${canonicalUrl}#webpage`,
-        url: canonicalUrl,
-        name: getProgramSeoHeading(program),
-        headline: title,
-        description,
-        isPartOf: {
-          "@id": `${baseUrl}/#website`,
-        },
-        about: {
-          "@id": `${baseUrl}/#organization`,
-        },
-        primaryImageOfPage: {
-          "@type": "ImageObject",
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-        },
-        inLanguage: "es-PE",
-      },
-      {
-        "@type": "Course",
-        "@id": `${canonicalUrl}#course`,
-        name: getProgramSeoHeading(program),
-        description,
-        url: canonicalUrl,
-        image: imageUrl,
-        inLanguage: "es-PE",
-        teaches,
-        provider: {
-          "@id": `${baseUrl}/#organization`,
-        },
-        hasCourseInstance: {
-          "@type": "CourseInstance",
-          courseMode: "Presencial",
-          location: {
-            "@type": "Place",
-            name: program.location ?? "Cooking Gourmet - Huancayo",
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "Av. Ferrocarril 587",
-              addressLocality: "Huancayo",
-              addressRegion: "Junín",
-              addressCountry: "PE",
-            },
-          },
-        },
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${canonicalUrl}#breadcrumb`,
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Inicio",
-            item: `${baseUrl}/`,
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "Programas",
-            item: `${baseUrl}/#programas`,
-          },
-          {
-            "@type": "ListItem",
-            position: 3,
-            name: getProgramSeoHeading(program),
-            item: canonicalUrl,
-          },
-        ],
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${canonicalUrl}#faq`,
-        mainEntity: faqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.answer,
-          },
-        })),
-      },
-    ],
-  });
-
-  document.head.appendChild(schema);
 }
 
 function buildWhatsAppUrl(program: ProgramData) {
@@ -685,90 +393,32 @@ function renderBreadcrumb(program: ProgramData) {
   `;
 }
 
-function renderHero(
-  program: ProgramDataExtended,
-  copy: ProgramCopy,
-  whatsappUrl: string
-) {
-  const facts = getProgramFacts(program);
-
+function renderHero(program: ProgramDataExtended, copy: ProgramCopy, whatsappUrl: string) {
+  const brochure = brochureLink(program.brochure, program.title);
   return `
-    <section class="program-landing-hero">
-      <div class="program-landing-hero__bg">
-        <img
-          src="${escapeHtml(program.image)}"
-          alt="Estudiantes del programa ${escapeHtml(getProgramSeoHeading(program))} en Cooking Gourmet"
-        />
-      </div>
-
-      <div class="program-landing-hero__overlay"></div>
-
-      <div class="container program-landing-hero__content">
-        <div class="program-landing-hero__text">
+    <section class="program-intro" data-program-id="${escapeHtml(program.slug)}">
+      <div class="container program-intro__grid">
+        <div>
           ${renderBreadcrumb(program)}
-
-          <span class="program-landing-hero__eyebrow">${escapeHtml(
-            copy.eyebrow
-          )}</span>
-
-          <h1 aria-label="${escapeHtml(getProgramSeoHeading(program))}">
-            ${escapeHtml(getProgramHeading(program))}
-            <span class="program-landing-hero__city">en Huancayo</span>
-          </h1>
-
-          <p class="program-landing-hero__lead">${escapeHtml(
-            copy.heroDescription
-          )}</p>
-
-          <div class="program-landing-hero__facts" aria-label="Información principal del programa">
-            ${facts
-              .map(
-                (fact) => `
-                  <article class="program-landing-hero__fact">
-                    <span>${escapeHtml(fact.label)}</span>
-                    <strong>${escapeHtml(fact.value)}</strong>
-                  </article>
-                `
-              )
-              .join("")}
+          <p class="admission-kicker">${escapeHtml(copy.eyebrow)}</p>
+          <h1>${escapeHtml(getProgramHeading(program))}<span>en Huancayo</span></h1>
+          <p class="program-intro__lead">${escapeHtml(copy.heroDescription)}</p>
+          ${isAdmissionProgram(program.slug) ? `<div class="admission-date"><span>Nuevo inicio</span><time datetime="${ADMISSION.date}">${ADMISSION.shortLabel}<small>2026</small></time></div>` : ""}
+          <dl class="program-intro__facts">
+            ${getProgramFacts(program).filter((fact) => !isAdmissionProgram(program.slug) || fact.label !== "Próximo inicio").map((fact) => `<div><dt>${escapeHtml(fact.label)}</dt><dd>${escapeHtml(fact.value)}</dd></div>`).join("")}
+          </dl>
+          <div class="admission-actions">
+            <a class="admission-button" href="#program-schedules">Consultar horarios <span aria-hidden="true">↓</span></a>
+            <a class="admission-text-link" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" data-cta-location="program_hero">Hablar con admisión</a>
           </div>
-
-          <div class="program-landing-hero__actions">
-            <a
-              class="program-landing-btn program-landing-btn--primary"
-              href="${whatsappUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ${escapeHtml(copy.primaryAction)}
-            </a>
-
-            <a
-              class="program-landing-btn program-landing-btn--ghost"
-              href="#program-curriculum"
-            >
-              ${escapeHtml(copy.secondaryAction)}
-            </a>
-
-            ${
-              program.brochure
-                ? `
-                  <a
-                    class="program-landing-btn program-landing-btn--ghost"
-                    href="${escapeHtml(program.brochure)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    ${escapeHtml(copy.brochureAction)}
-                  </a>
-                `
-                : ""
-            }
+          <div class="program-intro__links">
+            <a href="#program-curriculum">${escapeHtml(copy.secondaryAction)}</a>
+            <a href="${brochure.href}" target="_blank" rel="noopener noreferrer" data-cta-location="program_brochure">${brochure.label}</a>
           </div>
         </div>
+        <figure class="program-intro__photo"><img src="${escapeHtml(program.image)}" alt="${escapeHtml(getProgramSeoHeading(program))} en Cooking Gourmet" width="1368" height="1279" fetchpriority="high" decoding="async" /><figcaption>${escapeHtml(program.heroBadge ?? program.modality)}</figcaption></figure>
       </div>
-    </section>
-  `;
+    </section>`;
 }
 
 function renderStats(program: ProgramData) {
@@ -884,46 +534,22 @@ function renderCurriculum(program: ProgramData, copy: ProgramCopy) {
 }
 
 function renderSchedules(program: ProgramDataExtended) {
-  if (!program.schedules?.length) return "";
-
+  const inquiryUrl = (shift: string) => `https://wa.me/${program.whatsappNumber ?? "51981377382"}?text=${encodeURIComponent(`Hola, quisiera consultar el horario ${shift} para ${program.title}${isAdmissionProgram(program.slug) ? `, con inicio el ${ADMISSION.label}` : ""}. ¿Me pueden indicar disponibilidad y cómo inscribirme?`)}`;
   return `
     <section class="program-landing-section program-landing-section--light" id="program-schedules">
       <div class="container">
-        <div class="program-landing-heading program-landing-heading--center">
-          <span class="program-landing-tag">Horarios</span>
-          <h2>Turnos disponibles en Huancayo</h2>
-          <p>
-            Elige el horario que mejor se adapte a tu rutina. Las vacantes se
-            confirman durante el proceso de admisión.
-          </p>
+        <div class="program-landing-heading">
+          <span class="program-landing-tag">Horarios y consultas</span>
+          <h2>Encuentra un horario para ti</h2>
+          <p>Consulta el turno que prefieras. Admisión te ayudará con la disponibilidad y la inscripción.</p>
         </div>
-
-        <div class="program-landing-feature-grid">
-          ${program.schedules
-            .map(
-              (schedule) => `
-                <article class="program-landing-feature-card">
-                  <div class="program-landing-feature-card__icon">${escapeHtml(
-                    schedule.code
-                  )}</div>
-                  <h3>${escapeHtml(schedule.label)}</h3>
-                  <p>${escapeHtml(schedule.time)}</p>
-                </article>
-              `
-            )
-            .join("")}
+        <div class="admission-schedules">
+          ${(program.schedules ?? []).map((schedule) => `<a class="admission-schedule" href="${inquiryUrl(`${schedule.label}: ${schedule.time}`)}" target="_blank" rel="noopener noreferrer" data-program-id="${escapeHtml(program.slug)}" data-schedule-id="${escapeHtml(schedule.code)}" data-cta-location="schedule"><span><small>${escapeHtml(schedule.label)}</small><strong>${escapeHtml(schedule.time)}</strong></span><span class="admission-schedule__action">Consultar <b aria-hidden="true">↗</b></span></a>`).join("")}
         </div>
-
-        ${
-          program.frequency
-            ? `<p class="program-landing-schedule-note"><strong>Frecuencia:</strong> ${escapeHtml(
-                program.frequency
-              )}</p>`
-            : ""
-        }
+        <div class="admission-shifts"><span>También puedes consultar por:</span><div>${INQUIRY_SHIFTS.map((shift) => `<a href="${inquiryUrl(shift.label.toLowerCase())}" target="_blank" rel="noopener noreferrer" data-program-id="${escapeHtml(program.slug)}" data-schedule-id="${shift.id}" data-cta-location="shift_inquiry">${shift.label} <span aria-hidden="true">↗</span></a>`).join("")}</div><small>Admisión confirma las horas y vacantes de cada turno.</small></div>
+        ${program.frequency ? `<p class="program-landing-schedule-note"><strong>Frecuencia:</strong> ${escapeHtml(program.frequency)}</p>` : ""}
       </div>
-    </section>
-  `;
+    </section>`;
 }
 
 function renderFeatureCards(program: ProgramData, copy: ProgramCopy) {
@@ -1258,11 +884,11 @@ function renderCta(program: ProgramData, copy: ProgramCopy, whatsappUrl: string)
                 ? `
                   <a
                     class="program-landing-btn program-landing-btn--ghost"
-                    href="${escapeHtml(program.brochure)}"
+                    href="${brochureLink(program.brochure, program.title).href}"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    ${escapeHtml(copy.brochureAction)}
+                    ${brochureLink(program.brochure, program.title).label}
                   </a>
                 `
                 : ""
@@ -1286,9 +912,9 @@ export function renderProgramDetail(program: ProgramData) {
       <main class="page-program-detail">
         ${renderHero(extendedProgram, copy, whatsappUrl)}
         ${renderStats(program)}
+        ${renderSchedules(extendedProgram)}
         ${renderAbout(program, copy)}
         ${renderCurriculum(program, copy)}
-        ${renderSchedules(extendedProgram)}
         ${renderFeatureCards(program, copy)}
         ${renderDarkPanel(program, copy)}
         ${renderAdmission(program, copy, whatsappUrl)}
@@ -1304,10 +930,4 @@ export function renderProgramDetail(program: ProgramData) {
 
 export function initProgramDetail() {
   initHeader();
-
-  const program = getProgramFromCurrentPath();
-
-  if (program) {
-    applyProgramSeo(getExtendedProgram(program));
-  }
 }

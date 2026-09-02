@@ -10,7 +10,6 @@ import {
 } from "../../data/workshops.data";
 import "./workshopDetail.css";
 
-const SITE_URL = "https://www.cookingourmet.edu.pe";
 
 function escapeHtml(value: string) {
   return value
@@ -19,70 +18,6 @@ function escapeHtml(value: string) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-function setMeta(selector: string, content: string) {
-  let meta = document.head.querySelector<HTMLMetaElement>(selector);
-
-  if (!meta) {
-    meta = document.createElement("meta");
-    const property = selector.match(/property="([^"]+)"/)?.[1];
-    const name = selector.match(/name="([^"]+)"/)?.[1];
-    if (property) meta.setAttribute("property", property);
-    if (name) meta.setAttribute("name", name);
-    document.head.appendChild(meta);
-  }
-
-  meta.content = content;
-}
-
-function setCanonical(url: string) {
-  let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-
-  if (!canonical) {
-    canonical = document.createElement("link");
-    canonical.rel = "canonical";
-    document.head.appendChild(canonical);
-  }
-
-  canonical.href = url;
-}
-
-function applyWorkshopSeo(workshop: Workshop) {
-  const url = `${SITE_URL}${workshopPath(workshop)}`;
-  const image = `${SITE_URL}${workshop.image}`;
-  const title = `${workshop.shortTitle} en Huancayo | Cooking Gourmet`;
-
-  document.title = title;
-  setMeta('meta[name="description"]', workshop.seoDescription);
-  setMeta('meta[property="og:type"]', "website");
-  setMeta('meta[property="og:title"]', title);
-  setMeta('meta[property="og:description"]', workshop.seoDescription);
-  setMeta('meta[property="og:url"]', url);
-  setMeta('meta[property="og:image"]', image);
-  setMeta('meta[name="twitter:card"]', "summary_large_image");
-  setMeta('meta[name="twitter:title"]', title);
-  setMeta('meta[name="twitter:description"]', workshop.seoDescription);
-  setMeta('meta[name="twitter:image"]', image);
-  setCanonical(url);
-
-  document.getElementById("workshop-schema")?.remove();
-  const schema = document.createElement("script");
-  schema.id = "workshop-schema";
-  schema.type = "application/ld+json";
-  schema.text = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Course",
-    name: workshop.title,
-    description: workshop.seoDescription,
-    provider: {
-      "@type": "Organization",
-      name: "Cooking Gourmet",
-      url: SITE_URL,
-    },
-    url,
-  });
-  document.head.appendChild(schema);
 }
 
 function renderRelatedWorkshop(workshop: Workshop, index: number) {
@@ -349,7 +284,6 @@ export function initWorkshopDetailPage(slug: string) {
   if (!workshop) return;
 
   initHeader();
-  applyWorkshopSeo(workshop);
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({

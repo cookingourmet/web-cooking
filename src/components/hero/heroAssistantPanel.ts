@@ -1,3 +1,6 @@
+import { brochureLink } from "../../utils/brochures";
+import { deliverLead, LeadDeliveryError } from "../../utils/lead-delivery";
+import { appendLeadAttribution, pageLocation, trackEvent } from "../../utils/analytics";
 import "./heroAssistantPanel.css";
 
 import {
@@ -121,7 +124,7 @@ function buildLeadSummary(state: AssistantState) {
     `Nombre: ${state.visitorName || "-"}`,
     `Celular: ${state.phone || "-"}`,
     `Programa: ${program?.label ?? "-"}`,
-    `Página: ${window.location.href}`,
+    `Página: ${pageLocation()}`,
     `Fecha: ${leadDate()}`,
   ].join("\n");
 }
@@ -214,30 +217,12 @@ async function sendLeadToSales(state: AssistantState) {
   formData.append("email", SALES_EMAIL);
   formData.append("phone", state.phone);
   formData.append("Programa", program.label);
-  formData.append("Página", window.location.href);
+  formData.append("Página", pageLocation());
   formData.append("Fecha", date);
   formData.append("message", summary);
 
-  const response = await fetch(LEAD_ENDPOINT, {
-    method: "POST",
-    body: formData,
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  const data = (await response
-    .json()
-    .catch(() => null)) as {
-    success?: boolean;
-    message?: string;
-  } | null;
-
-  if (!response.ok || data?.success === false) {
-    throw new Error(
-      data?.message || "No se pudo enviar el lead al correo."
-    );
-  }
+  appendLeadAttribution(formData);
+  await deliverLead(LEAD_ENDPOINT, formData);
 }
 
 function renderProgramCard(programKey: ProgramKey) {
@@ -265,9 +250,9 @@ function renderProgramCard(programKey: ProgramKey) {
 
         <div class="hero-assistant-window__program-links">
           <a href="${escapeHtml(
-            program.brochureUrl
+            brochureLink(program.brochureUrl, program.label).href
           )}" target="_blank" rel="noreferrer">
-            📄 PDF
+            ${brochureLink(program.brochureUrl, program.label).label}
           </a>
           <a href="${escapeHtml(program.pageUrl)}">
             Ver programa
@@ -1907,10 +1892,13 @@ export function initAssistantWindow() {
       lockInteraction(true);
 
       try {
+        trackEvent("lead_submit", { form_id: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
         await sendLeadToSales(state);
+        trackEvent("generate_lead", { form_id: "cookito", lead_method: "chat", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
         state.leadStatus = "sent";
         state.leadError = "";
       } catch (error) {
+        trackEvent("lead_error", { form_id: "cookito", error_code: error instanceof LeadDeliveryError ? error.code : "unknown_error" });
         state.leadStatus = "error";
         state.leadError =
           error instanceof Error

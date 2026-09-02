@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build && vite build --ssr src/prerender.ts --outDir .prerender && node scripts/prerender.mjs && node scripts/validar_actualizacion_noviembre.mjs",
+    "preview": "vite preview",
+    "verify:november": "node scripts/validar_actualizacion_noviembre.mjs"
   },
   "devDependencies": {
     "typescript": "~5.9.3",

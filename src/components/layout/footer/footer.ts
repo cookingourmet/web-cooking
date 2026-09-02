@@ -298,7 +298,7 @@ export function renderFooter() {
 
                 <div>
                   <span class="site-footer__contact-label">Correo</span>
-                  <a href=" j.ventas@cookingourmet.edu.pe">
+                  <a href="mailto:j.ventas@cookingourmet.edu.pe">
                      j.ventas@cookingourmet.edu.pe
                   </a>
                 </div>
@@ -359,7 +359,7 @@ export function renderFooter() {
               <li>Satipo</li>
             </ul>
 
-            <a class="site-footer__mini-link" href="#programas">
+            <a class="site-footer__mini-link" href="/#programas">
               <span class="site-footer__mini-link-icon">
                 ${renderFooterIcon("arrow")}
               </span>
@@ -379,17 +379,17 @@ export function renderFooter() {
               <span>Inicio</span>
             </a>
 
-            <a href="#nosotros">
+            <a href="/#nosotros">
               ${renderFooterIcon("users")}
               <span>Nosotros</span>
             </a>
 
-            <a href="#programas">
+            <a href="/#programas">
               ${renderFooterIcon("book")}
               <span>Programas</span>
             </a>
 
-            <a href="#contacto">
+            <a href="/#contacto">
               ${renderFooterIcon("contact")}
               <span>Contacto</span>
             </a>

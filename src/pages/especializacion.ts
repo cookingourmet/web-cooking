@@ -1,3 +1,5 @@
+import { deliverLead, LeadDeliveryError } from "../utils/lead-delivery";
+import { appendLeadAttribution, pageLocation, trackEvent } from "../utils/analytics";
 import { renderHeader, initHeader } from "../components/layout/header/header";
 import { renderFooter } from "../components/layout/footer/footer";
 import { initSpecializationSwirlBackground } from "../components/effects/swirlBackground";
@@ -131,151 +133,8 @@ async function sendSpecializationLeadToSales(
 
   formData.append("message", summary);
 
-  const response = await fetch(LEAD_ENDPOINT, {
-    method: "POST",
-    body: formData,
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  const data = (await response.json().catch(() => null)) as {
-    success?: boolean;
-    message?: string;
-  } | null;
-
-  if (!response.ok || data?.success === false) {
-    throw new Error(
-      data?.message || "No se pudo enviar la solicitud al correo."
-    );
-  }
-
-  return data;
-}
-
-function setMetaContent(selector: string, content: string) {
-  let meta = document.head.querySelector<HTMLMetaElement>(selector);
-
-  if (!meta) {
-    meta = document.createElement("meta");
-
-    if (selector.includes('property="')) {
-      const property = selector.match(/property="([^"]+)"/)?.[1];
-      if (property) meta.setAttribute("property", property);
-    } else {
-      const name = selector.match(/name="([^"]+)"/)?.[1];
-      if (name) meta.setAttribute("name", name);
-    }
-
-    document.head.appendChild(meta);
-  }
-
-  meta.content = content;
-}
-
-function setCanonical(url: string) {
-  let canonical = document.head.querySelector<HTMLLinkElement>(
-    'link[rel="canonical"]'
-  );
-
-  if (!canonical) {
-    canonical = document.createElement("link");
-    canonical.rel = "canonical";
-    document.head.appendChild(canonical);
-  }
-
-  canonical.href = url;
-}
-
-function applySpecializationSeo() {
-  const baseUrl = "https://www.cookingourmet.edu.pe";
-  const canonicalUrl = `${baseUrl}/especializacion`;
-  const title =
-    "Curso Gratuito de Inocuidad Alimentaria | Cooking Gourmet";
-  const description =
-    "Programa virtual gratuito de Cooking Gourmet sobre inocuidad alimentaria, higiene, buenas prácticas de manipulación y saneamiento para chefs y personal de servicios gastronómicos.";
-
-  document.title = title;
-
-  setMetaContent('meta[name="description"]', description);
-  setMetaContent('meta[property="og:title"]', title);
-  setMetaContent('meta[property="og:description"]', description);
-  setMetaContent('meta[property="og:url"]', canonicalUrl);
-  setMetaContent(
-    'meta[property="og:image"]',
-    `${baseUrl}${SPECIALIZATION.chefImage}`
-  );
-  setMetaContent('meta[name="twitter:title"]', title);
-  setMetaContent('meta[name="twitter:description"]', description);
-  setMetaContent(
-    'meta[name="twitter:image"]',
-    `${baseUrl}${SPECIALIZATION.chefImage}`
-  );
-
-  setCanonical(canonicalUrl);
-
-  document.getElementById("specialization-schema")?.remove();
-
-  const schema = document.createElement("script");
-  schema.id = "specialization-schema";
-  schema.type = "application/ld+json";
-  schema.textContent = JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Course",
-        "@id": `${canonicalUrl}#course`,
-        name: SPECIALIZATION.name,
-        description,
-        url: canonicalUrl,
-        image: `${baseUrl}${SPECIALIZATION.chefImage}`,
-        inLanguage: "es-PE",
-        provider: {
-          "@type": "EducationalOrganization",
-          "@id": `${baseUrl}/#organization`,
-          name: "Cooking Gourmet",
-          url: `${baseUrl}/`,
-          telephone: "+51 981 377 382",
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: "Av. Ferrocarril 587",
-            addressLocality: "Huancayo",
-            addressRegion: "Junín",
-            addressCountry: "PE",
-          },
-        },
-        teaches: SPECIALIZATION.topics,
-        instructor: {
-          "@type": "Person",
-          name: SPECIALIZATION.instructor,
-          jobTitle: "Docente instructor",
-        },
-        hasCourseInstance: {
-          "@type": "CourseInstance",
-          courseMode: "Virtual",
-        },
-      },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Inicio",
-            item: `${baseUrl}/`,
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "Especialización",
-            item: canonicalUrl,
-          },
-        ],
-      },
-    ],
-  });
-
-  document.head.appendChild(schema);
+  appendLeadAttribution(formData);
+  await deliverLead(LEAD_ENDPOINT, formData);
 }
 
 function renderTopicCards() {
@@ -690,7 +549,7 @@ function initSpecializationForm() {
       message: getFormValue(formData, "message"),
       topics: SPECIALIZATION.topics,
       instructor: SPECIALIZATION.instructor,
-      pageUrl: window.location.href,
+      pageUrl: pageLocation(),
       createdAt: new Date().toISOString(),
     };
 
@@ -713,8 +572,9 @@ function initSpecializationForm() {
       submitButton?.setAttribute("disabled", "true");
       if (submitButton) submitButton.textContent = "Enviando...";
       setFormStatus("Enviando solicitud...", "info");
-
+      trackEvent("lead_submit", { form_id: "specialization" });
       await sendSpecializationLeadToSales(payload);
+      trackEvent("generate_lead", { form_id: "specialization", lead_method: "form" });
 
       form.reset();
       setFormStatus(
@@ -722,6 +582,7 @@ function initSpecializationForm() {
         "success"
       );
     } catch (error) {
+      trackEvent("lead_error", { form_id: "specialization", error_code: error instanceof LeadDeliveryError ? error.code : "unknown_error" });
       setFormStatus(
         error instanceof Error
           ? error.message
@@ -778,7 +639,6 @@ export function renderSpecializationPage() {
 
 export function initSpecializationPage() {
   initHeader();
-  applySpecializationSeo();
   initSpecializationForm();
   initSpecializationPrimaryAction();
   initRevealEffects();

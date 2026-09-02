@@ -287,6 +287,7 @@ export function workshopPath(workshop: Workshop) {
 type WorkshopWhatsAppIntent = "info" | "reserve" | "next";
 
 function readAttribution() {
+  if (typeof window === "undefined") return { source: "web", campaign: "organico" };
   const direct = new URLSearchParams(window.location.search);
   let stored: Record<string, string> = {};
 

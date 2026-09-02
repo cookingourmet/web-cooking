@@ -1,3 +1,4 @@
+import { ADMISSION, isAdmissionProgram } from "../../../data/admission.data";
 import "./careers.css";
 
 type CareerProgram = {
@@ -137,7 +138,7 @@ function renderCareerCard(program: CareerProgram, index: number) {
         <span class="cg-career-card__shade"></span>
 
         <span class="cg-career-card__badge">
-          ${escapeHtml(program.category)}
+          ${isAdmissionProgram(program.id) ? `Inicio ${ADMISSION.shortLabel}` : escapeHtml(program.category)}
         </span>
       </a>
 
@@ -252,49 +253,4 @@ export function renderCareersSection() {
   `;
 }
 
-export function initCareersSection() {
-  const carousel = document.querySelector<HTMLElement>("[data-careers-carousel]");
-  const prevButton = document.querySelector<HTMLButtonElement>("[data-careers-prev]");
-  const nextButton = document.querySelector<HTMLButtonElement>("[data-careers-next]");
-
-  if (!carousel || !prevButton || !nextButton) return;
-
-  const getScrollAmount = () => {
-    const firstCard = carousel.querySelector<HTMLElement>(".cg-career-card");
-
-    if (!firstCard) {
-      return carousel.clientWidth * 0.8;
-    }
-
-    const styles = window.getComputedStyle(carousel);
-    const gap = Number.parseFloat(styles.columnGap || styles.gap || "16");
-
-    return firstCard.offsetWidth + gap;
-  };
-
-  const updateControls = () => {
-    const maxScroll = carousel.scrollWidth - carousel.clientWidth - 4;
-
-    prevButton.disabled = carousel.scrollLeft <= 4;
-    nextButton.disabled = carousel.scrollLeft >= maxScroll;
-  };
-
-  prevButton.addEventListener("click", () => {
-    carousel.scrollBy({
-      left: -getScrollAmount(),
-      behavior: "smooth",
-    });
-  });
-
-  nextButton.addEventListener("click", () => {
-    carousel.scrollBy({
-      left: getScrollAmount(),
-      behavior: "smooth",
-    });
-  });
-
-  carousel.addEventListener("scroll", updateControls, { passive: true });
-  window.addEventListener("resize", updateControls);
-
-  updateControls();
-}
+export function initCareersSection() {}

@@ -21,266 +21,69 @@ import "./components/sections/contact/contact.css";
 import "./components/sections/testimonials/testimonials.css";
 import "./components/ui/button/button.css";
 
-import { renderHomePage, initHomePage } from "./pages/home";
-import {
-  renderSpecializationPage,
-  initSpecializationPage,
-} from "./pages/especializacion";
+import "./styles/pages/admission.css";
+import { routePage } from "./routes";
+import { applyPageSeo } from "./seo";
+import { initAnalytics, captureAttribution, pageLocation, trackEvent, trackPageView } from "./utils/analytics";
+import { initEngagementTracking } from "./utils/page-motion";
+import { mountAssistantWindow } from "./components/hero/heroAssistantPanel";
 
-import { renderGastronomiaPage } from "./pages/programs/gastronomia";
-import { renderPasteleriaPage } from "./pages/programs/pasteleria";
-import { renderBarProfesionalPage } from "./pages/programs/bar-profesional";
-import { renderBarismoPage } from "./pages/programs/barismo";
-import { renderSommelierPage } from "./pages/programs/sommelier";
-import { renderCocinaPage } from "./pages/programs/cocina";
-import { initProgramDetail } from "./pages/programs/programDetail";
-import { initProgramPageEffects } from "./utils/program-effects";
-import { initEngagementTracking, initPageMotion } from "./utils/page-motion";
-import {
-  renderWorkshopDetailPage,
-  initWorkshopDetailPage,
-} from "./pages/workshops/workshopDetail";
+const appRoot = document.querySelector<HTMLDivElement>("#app");
+if (!appRoot) throw new Error("No se encontró #app");
+let lastPage = "";
+const initialReferrer = (() => { try { return document.referrer ? new URL(document.referrer).origin : ""; } catch { return ""; } })();
 
-
-declare global {
-  interface Window {
-    dataLayer?: Array<Record<string, unknown>>;
-  }
+function normalizePath(path: string) { return path.replace(/\/+$/, "") || "/"; }
+function scrollToCurrentHash() {
+  let id = "";
+  try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
+  if (!id) { window.scrollTo(0,0); return; }
+  window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }));
 }
-
-const app = document.querySelector<HTMLDivElement>("#app");
-
-if (!app) {
-  throw new Error("No se encontró el contenedor #app");
-}
-
-const appRoot = app;
-
-function normalizePath(pathname: string) {
-  if (!pathname) return "/";
-
-  const cleanPath = pathname.replace(/\/+$/, "");
-
-  return cleanPath === "" ? "/" : cleanPath;
-}
-
-function redirectTo(path: string) {
-  window.history.replaceState({}, "", path);
-}
-
-function getCurrentRoutePath() {
-  return normalizePath(window.location.pathname);
-}
-
-function getWorkshopSlug(path: string) {
-  const match = path.match(/^\/talleres\/([^/]+)$/);
-  return match?.[1] ?? null;
-}
-
-function getStoredAttribution() {
-  try {
-    const saved = window.sessionStorage.getItem("cg_attribution");
-    return saved ? JSON.parse(saved) : {};
-  } catch {
-    return {};
-  }
-}
-
-function captureAttribution() {
-  const params = new URLSearchParams(window.location.search);
-  const attribution = {
-    utm_source: params.get("utm_source") || undefined,
-    utm_medium: params.get("utm_medium") || undefined,
-    utm_campaign: params.get("utm_campaign") || undefined,
-    utm_content: params.get("utm_content") || undefined,
-    utm_term: params.get("utm_term") || undefined,
-    landing_path: window.location.pathname,
-  };
-
-  if (Object.values(attribution).some(Boolean)) {
-    try {
-      window.sessionStorage.setItem("cg_attribution", JSON.stringify(attribution));
-    } catch {
-      // La navegación continúa aunque sessionStorage no esté disponible.
-    }
-  }
-}
-
-function pushTrackingEvent(element: HTMLElement) {
-  const eventName = element.dataset.trackEvent;
-  if (!eventName) return;
-
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: eventName,
-    workshop_id: element.dataset.trackWorkshop,
-    ...getStoredAttribution(),
-  });
-}
-
-function scrollAfterRender() {
-  const hash = window.location.hash;
-
-  if (!hash) {
-    window.scrollTo(0, 0);
-    return;
-  }
-
-  window.requestAnimationFrame(() => {
-    const target = document.querySelector<HTMLElement>(hash);
-
-    if (!target) {
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  });
-}
-
 function renderRoute() {
-  let currentPath = getCurrentRoutePath();
-  let afterRender: (() => void) | null = null;
-
-  if (currentPath === "/index.html") {
-    redirectTo("/");
-    currentPath = "/";
+  let path = normalizePath(window.location.pathname);
+  const aliases: Record<string,string> = { "/index.html": "/", "/programas/cocina": "/programas/cocina-acelerada", "/nosotros": "/#nosotros", "/contacto": "/#contacto" };
+  if (aliases[path]) {
+    const url = new URL(aliases[path], window.location.origin);
+    url.search = window.location.search;
+    if (!url.hash) url.hash = window.location.hash;
+    window.history.replaceState({},"", url.pathname + url.search + url.hash);
+    path = normalizePath(url.pathname);
   }
-
-  if (currentPath === "/programas/cocina") {
-    redirectTo("/programas/cocina-acelerada");
-    currentPath = "/programas/cocina-acelerada";
-  }
-
-  const workshopSlug = getWorkshopSlug(currentPath);
-
-  if (workshopSlug) {
-    const workshopPage = renderWorkshopDetailPage(workshopSlug);
-
-    if (workshopPage) {
-      appRoot.innerHTML = workshopPage;
-      afterRender = () => initWorkshopDetailPage(workshopSlug);
-      afterRender?.();
-      initProgramPageEffects();
-      initPageMotion();
-      initEngagementTracking();
-      scrollAfterRender();
-      return;
-    }
-  }
-
-  switch (currentPath) {
-    case "/":
-      appRoot.innerHTML = renderHomePage();
-      afterRender = initHomePage;
-      break;
-
-    case "/especializacion":
-      appRoot.innerHTML = renderSpecializationPage();
-      afterRender = initSpecializationPage;
-      break;
-
-    case "/programas/gastronomia":
-      appRoot.innerHTML = renderGastronomiaPage();
-      afterRender = initProgramDetail;
-      break;
-
-    case "/programas/pasteleria":
-      appRoot.innerHTML = renderPasteleriaPage();
-      afterRender = initProgramDetail;
-      break;
-
-    case "/programas/bar-profesional":
-      appRoot.innerHTML = renderBarProfesionalPage();
-      afterRender = initProgramDetail;
-      break;
-
-    case "/programas/barismo":
-      appRoot.innerHTML = renderBarismoPage();
-      afterRender = initProgramDetail;
-      break;
-
-    case "/programas/sommelier":
-      appRoot.innerHTML = renderSommelierPage();
-      afterRender = initProgramDetail;
-      break;
-
-    case "/programas/cocina-acelerada":
-      appRoot.innerHTML = renderCocinaPage();
-      afterRender = initProgramDetail;
-      break;
-
-    default:
-      appRoot.innerHTML = renderHomePage();
-      afterRender = initHomePage;
-      break;
-  }
-
-  afterRender?.();
-  initProgramPageEffects();
-  initPageMotion();
+  const referrer = lastPage || initialReferrer;
+  const page = routePage(path);
+  appRoot!.innerHTML = page.html;
+  applyPageSeo(path);
+  page.init();
+  mountAssistantWindow();
+  window.dispatchEvent(new Event("cg:route-change"));
+  scrollToCurrentHash();
   initEngagementTracking();
-  scrollAfterRender();
+  trackPageView(referrer);
+  lastPage = pageLocation();
 }
 
-document.addEventListener("click", (event) => {
-  const target = event.target as HTMLElement | null;
-  const trackedElement = target?.closest<HTMLElement>("[data-track-event]");
-  if (trackedElement) pushTrackingEvent(trackedElement);
-
-  const link = target?.closest("a") as HTMLAnchorElement | null;
-
-  if (!link) return;
-
-  const href = link.getAttribute("href");
-  if (!href) return;
-
-  if (
-    href.startsWith("mailto:") ||
-    href.startsWith("tel:") ||
-    href.startsWith("https://wa.me") ||
-    link.hasAttribute("target") ||
-    link.hasAttribute("download")
-  ) {
-    return;
-  }
-
-  let targetUrl: URL;
-
-  try {
-    targetUrl = new URL(href, window.location.origin);
-  } catch {
-    return;
-  }
-
-  if (targetUrl.origin !== window.location.origin) return;
-
-  let nextPath = normalizePath(targetUrl.pathname);
-
-  if (nextPath === "/index.html") {
-    nextPath = "/";
-  }
-
-  if (nextPath === "/programas/cocina") {
-    nextPath = "/programas/cocina-acelerada";
-  }
-
-  const nextUrl = `${nextPath}${targetUrl.hash}`;
-  const currentUrl = `${normalizePath(window.location.pathname)}${window.location.hash}`;
-
+document.addEventListener("click", event => {
+  if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  const target = event.target instanceof Element ? event.target : null;
+  const tracked = target?.closest<HTMLElement>("[data-track-event]");
+  if (tracked?.dataset.trackEvent) trackEvent(tracked.dataset.trackEvent, { workshop_id: tracked.dataset.trackWorkshop });
+  const link = target?.closest<HTMLAnchorElement>("a[href]");
+  if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+  const url = new URL(link.href, window.location.href);
+  if (url.origin !== window.location.origin || !/^https?:$/.test(url.protocol)) return;
+  if (/\.[a-z0-9]+$/i.test(url.pathname) && url.pathname !== "/index.html") return;
   event.preventDefault();
-
-  if (nextUrl !== currentUrl) {
-    window.history.pushState({}, "", nextUrl);
-  }
-
+  const samePage = normalizePath(url.pathname) === normalizePath(window.location.pathname) && url.search === window.location.search;
+  if (url.href === window.location.href) { scrollToCurrentHash(); return; }
+  window.history.pushState({}, "", url.pathname + url.search + url.hash);
+  if (samePage) { scrollToCurrentHash(); return; }
+  captureAttribution();
   renderRoute();
 });
-
-window.addEventListener("popstate", renderRoute);
-
-captureAttribution();
+window.addEventListener("popstate", () => {
+  if (lastPage === pageLocation()) { scrollToCurrentHash(); return; }
+  captureAttribution(); renderRoute();
+});
+initAnalytics();
 renderRoute();

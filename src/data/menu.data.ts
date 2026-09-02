@@ -45,7 +45,7 @@ export const mainMenu: MenuItem[] = [
   },
   {
     label: "Bolsa laboral",
-    href: "/#bolsa-laboral",
+    href: "https://wa.me/51981377382?text=" + encodeURIComponent("Hola, quisiera consultar información sobre la bolsa laboral de Cooking Gourmet."),
   },
   {
     label: "Contacto",

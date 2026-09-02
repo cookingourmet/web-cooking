@@ -1,16 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
   "redirects": [
-    {
-      "source": "/index.html",
-      "destination": "/",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/programas/cocina", "destination": "/programas/cocina-acelerada", "permanent": true },
+    { "source": "/nosotros", "destination": "/#nosotros", "permanent": true },
+    { "source": "/contacto", "destination": "/#contacto", "permanent": true }
   ]
 }
