@@ -1539,3 +1539,51 @@ body.nav-is-open {
     width: min(390px, 94vw) !important;
   }
 }
+
+/* Acabado premium del encabezado */
+.topbar {
+  border-top: 3px solid #17181b;
+}
+
+.topbar__inner {
+  min-height: 72px;
+  border-color: rgba(20, 20, 20, 0.07);
+  box-shadow: 0 16px 42px rgba(28, 20, 22, 0.075);
+}
+
+.brand__mark {
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(254, 0, 62, 0.055);
+}
+
+.nav-action--primary,
+.nav-action--primary:visited {
+  min-width: 182px;
+  border-color: #d90039 !important;
+  background: linear-gradient(135deg, #f00043 0%, #c60034 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 26px rgba(218, 0, 55, 0.24) !important;
+}
+
+.nav-action--primary .nav-action__icon,
+.nav-action--primary span {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.nav-action--primary:hover {
+  background: linear-gradient(135deg, #ff174f 0%, #b80030 100%) !important;
+  box-shadow: 0 16px 34px rgba(218, 0, 55, 0.32) !important;
+}
+
+@media (max-width: 1180px) {
+  .nav-action--primary {
+    min-width: 46px;
+    width: 46px;
+    padding: 0;
+  }
+
+  .nav-action--primary > span:last-child {
+    display: none;
+  }
+}

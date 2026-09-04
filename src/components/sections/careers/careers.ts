@@ -84,43 +84,13 @@ const careerPrograms: CareerProgram[] = [
     id: "barismo",
     title: "Barismo Profesional",
     category: "Especialización en café",
-    description:
-      "Café, espresso, métodos de extracción, cata, latte art y operación de cafetería.",
+    description: "Espresso, métodos de extracción, cata, latte art y operación de cafetería.",
     duration: "3 meses",
     modality: "Presencial",
     image: "/images/portada/barismo.jpg",
-    imageAlt:
-      "Barista preparando café en Cooking Gourmet",
+    imageAlt: "Barismo Profesional en Cooking Gourmet",
     href: "/programas/barismo",
     whatsappText: programWhatsAppMessage("Barismo Profesional"),
-  },
-  {
-    id: "sommelier",
-    title: "Sommelier Profesional",
-    category: "Especialización sensorial",
-    description:
-      "Vinos, cata, maridaje, servicio especializado y cultura vitivinícola.",
-    duration: "6 meses",
-    modality: "Presencial",
-    image: "/images/portada/sommelier.jpg",
-    imageAlt:
-      "Programa de Sommelier Profesional en Cooking Gourmet",
-    href: "/programas/sommelier",
-    whatsappText: programWhatsAppMessage("Sommelier Profesional"),
-  },
-  {
-    id: "cocina-acelerada",
-    title: "Cocina Acelerada",
-    category: "Formación intensiva",
-    description:
-      "Bases culinarias, técnicas de cocina y práctica aplicada para cocinas reales.",
-    duration: "6 meses",
-    modality: "Presencial",
-    image: "/images/portada/cocina.jpg",
-    imageAlt:
-      "Programa de Cocina Acelerada en Cooking Gourmet",
-    href: "/programas/cocina-acelerada",
-    whatsappText: programWhatsAppMessage("Cocina Acelerada"),
   },
 ];
 
@@ -190,15 +160,9 @@ export function renderCareersSection() {
           <div>
             <span class="cg-careers__eyebrow">Programas de estudio</span>
 
-            <h2 id="cg-careers-title">
-              Formación gastronómica profesional
-            </h2>
+            <h2 id="cg-careers-title">Elige tu camino profesional</h2>
 
-            <p>
-              Elige un programa presencial, aprende con práctica real y fórmate
-              con docentes especializados para trabajar, emprender o especializarte
-              en el mundo gastronómico.
-            </p>
+            <p>Programas presenciales y aprendizaje práctico para avanzar con seguridad.</p>
           </div>
 
           <div class="cg-careers__controls" aria-label="Controles del carrusel">

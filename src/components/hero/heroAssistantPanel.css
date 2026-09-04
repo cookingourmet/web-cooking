@@ -40,6 +40,7 @@
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 12px 17px rgba(0, 0, 0, 0.2));
+  background: transparent;
 }
 
 .hero-assistant-window__launcher-group {
