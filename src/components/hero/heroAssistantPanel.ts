@@ -171,7 +171,7 @@ function buildWhatsAppUrl(state: AssistantState) {
   };
 
   const lines = [
-    "Hola, vengo desde la web de Cooking Gourmet.",
+    "Hola, vengo de la página web de Cooking Gourmet.",
     state.visitorName ? `Mi nombre es ${state.visitorName}.` : "",
     state.phone ? `Mi celular es ${state.phone}.` : "",
     program
@@ -229,7 +229,7 @@ function renderProgramCard(programKey: ProgramKey) {
   const program = PROGRAMS[programKey];
 
   return `
-    <article class="hero-assistant-window__program-card">
+    <article class="hero-assistant-window__program-card" data-program-id="${escapeHtml(program.pageUrl.split("/").pop() ?? "")}">
       <div class="hero-assistant-window__program-media">
         <img
           src="${escapeHtml(program.imageUrl)}"
@@ -909,6 +909,11 @@ export function initAssistantWindow() {
     }
 
     function selectProgram(programKey: ProgramKey) {
+      if (state.selectedProgram !== programKey) {
+        trackEvent("assistant_select_program", { form_id: "cookito", cta_location: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
+      }
+      windowEl.dataset.programId = PROGRAMS[programKey].pageUrl.split("/").pop();
+      windowEl.dataset.ctaLocation = "cookito";
       if (
         state.selectedProgram &&
         state.selectedProgram !== programKey
@@ -1892,13 +1897,13 @@ export function initAssistantWindow() {
       lockInteraction(true);
 
       try {
-        trackEvent("lead_submit", { form_id: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
+        trackEvent("lead_submit", { form_id: "cookito", lead_method: "chat", cta_location: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
         await sendLeadToSales(state);
-        trackEvent("generate_lead", { form_id: "cookito", lead_method: "chat", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
+        trackEvent("generate_lead", { form_id: "cookito", lead_method: "chat", cta_location: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
         state.leadStatus = "sent";
         state.leadError = "";
       } catch (error) {
-        trackEvent("lead_error", { form_id: "cookito", error_code: error instanceof LeadDeliveryError ? error.code : "unknown_error" });
+        trackEvent("lead_error", { form_id: "cookito", lead_method: "chat", cta_location: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop(), error_code: error instanceof LeadDeliveryError ? error.code : "unknown_error" });
         state.leadStatus = "error";
         state.leadError =
           error instanceof Error
@@ -2136,6 +2141,11 @@ export function initAssistantWindow() {
     }
 
     function openAssistant() {
+      if (!windowEl.classList.contains("is-open")) {
+        trackEvent("assistant_open", { form_id: "cookito", cta_location: "cookito", program_id: state.selectedProgram ? PROGRAMS[state.selectedProgram].pageUrl.split("/").pop() : undefined });
+      }
+      windowEl.dataset.ctaLocation = "cookito";
+      if (state.selectedProgram) windowEl.dataset.programId = PROGRAMS[state.selectedProgram].pageUrl.split("/").pop();
       windowEl.classList.add("is-open");
       safeToggleButton.setAttribute(
         "aria-expanded",

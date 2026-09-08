@@ -1,7 +1,7 @@
 .cg-careers {
   position: relative;
   overflow: hidden;
-  padding: 92px 0;
+  padding: 78px 0;
   background:
     radial-gradient(circle at 12% 8%, rgba(254, 0, 62, 0.055), transparent 30rem),
     radial-gradient(circle at 88% 18%, rgba(0, 0, 0, 0.045), transparent 28rem),
@@ -500,4 +500,16 @@
   .cg-career-card p {
     min-height: auto;
   }
+}
+.cg-careers__more{display:flex!important;align-items:center;gap:12px;flex-wrap:wrap}.cg-careers__more a{color:#171717;font-size:.82rem;font-weight:850;text-decoration:underline;text-underline-offset:4px}.cg-careers__more a:hover{color:#e5003d}
+
+.cg-career-card__body > p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.cg-careers__cta {
+  display: none;
 }

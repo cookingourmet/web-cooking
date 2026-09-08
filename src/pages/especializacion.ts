@@ -48,7 +48,7 @@ type SpecializationLeadPayload = {
 
 function buildWhatsAppUrl() {
   const message = [
-    "Hola, vengo de la web de Cooking Gourmet.",
+    "Hola, vengo de la página web de Cooking Gourmet.",
     "Quiero información sobre el Programa de Capacitación en Inocuidad Alimentaria.",
     "Deseo inscribirme al curso virtual gratuito que inicia el 26 de agosto.",
     "Quiero confirmar las 3 sesiones, horario, vacantes y el certificado.",
@@ -572,9 +572,9 @@ function initSpecializationForm() {
       submitButton?.setAttribute("disabled", "true");
       if (submitButton) submitButton.textContent = "Enviando...";
       setFormStatus("Enviando solicitud...", "info");
-      trackEvent("lead_submit", { form_id: "specialization" });
+      trackEvent("lead_submit", { form_id: "specialization", lead_method: "form", cta_location: "specialization_form" });
       await sendSpecializationLeadToSales(payload);
-      trackEvent("generate_lead", { form_id: "specialization", lead_method: "form" });
+      trackEvent("generate_lead", { form_id: "specialization", lead_method: "form", cta_location: "specialization_form" });
 
       form.reset();
       setFormStatus(
@@ -582,7 +582,7 @@ function initSpecializationForm() {
         "success"
       );
     } catch (error) {
-      trackEvent("lead_error", { form_id: "specialization", error_code: error instanceof LeadDeliveryError ? error.code : "unknown_error" });
+      trackEvent("lead_error", { form_id: "specialization", lead_method: "form", cta_location: "specialization_form", error_code: error instanceof LeadDeliveryError ? error.code : "unknown_error" });
       setFormStatus(
         error instanceof Error
           ? error.message

@@ -317,7 +317,7 @@ export function workshopWhatsAppUrl(
         : "Quiero información y confirmar disponibilidad.";
 
   const message = [
-    "Hola, vengo de la web de Cooking Gourmet.",
+    "Hola, vengo de la página web de Cooking Gourmet.",
     `Taller: ${workshop.shortTitle}`,
     `Código: ${workshop.leadCode}`,
     `Fecha: ${workshop.dateLabel}`,

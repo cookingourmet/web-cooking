@@ -4,7 +4,7 @@ export function brochureLink(path: string | undefined, title: string) {
   const exists = Boolean(path && Object.hasOwn(available, `/public${path}`));
   return {
     exists,
-    href: exists ? path! : `https://wa.me/51981377382?text=${encodeURIComponent(`Hola, quisiera recibir el brochure y la malla de ${title} de Cooking Gourmet.`)}`,
+    href: exists ? path! : `https://wa.me/51981377382?text=${encodeURIComponent(`Hola, vengo de la página web de Cooking Gourmet. Quisiera recibir el brochure y la malla de ${title}.`)}`,
     label: exists ? "Descargar brochure" : "Solicitar brochure",
   };
 }

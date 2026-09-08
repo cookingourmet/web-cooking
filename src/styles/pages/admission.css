@@ -69,6 +69,15 @@ body.cg-clean {
 .admission-programs small { color: #626973; font-size: .8125rem; margin-top: 3px; }
 .cg-clean :is(.home-choice,.home-why,.home-faq,.home-final-cta,.cg-careers,.cg-about,.cg-contact,.cg-workshops) { padding-block: 62px; background: #fff; background-image: none; }
 .cg-clean :is(.home-choice,.home-faq,.cg-workshops) { background: #f6f7f8; }
+
+/* La sección de admisión usa superficie clara: todo el texto debe ser oscuro y legible. */
+.cg-clean .cg-contact { color:#262b32; background:#ffffff; }
+.cg-clean .cg-contact__container { padding:clamp(30px,4vw,48px); border:1px solid #e3e5e8; border-radius:18px; background:#f7f7f8; gap:clamp(34px,7vw,90px); }
+.cg-clean .cg-contact__copy h2 { color:#20242a; font-size:clamp(2.3rem,4.4vw,4.5rem); }
+.cg-clean .cg-contact__copy p { color:#626973; }
+.cg-clean .cg-contact__details div { border-color:#d9dce0; }
+.cg-clean .cg-contact__details a { color:#30353c; }
+.cg-clean .cg-contact__details a:hover { color:#a91239; }
 .cg-clean :is(.home-section-heading h2,.home-choice__heading h2,.cg-careers__heading h2,.cg-about__title,.cg-contact__heading h2,.cg-workshops__heading h2) { color: #262b32; font-size: clamp(1.8rem,2.5vw,2.5rem); font-weight: 650; line-height: 1.2; letter-spacing: -.03em; }
 .cg-clean :is(.home-eyebrow,.home-choice__eyebrow,.cg-careers__eyebrow,.cg-contact__eyebrow,.cg-workshops__eyebrow,.cg-about__eyebrow,.program-landing-tag) { background: none; border: 0; padding: 0; min-height: auto; color: #a91239; font-weight: 600; font-size: .875rem; letter-spacing: .04em; }
 .cg-clean .home-trust { background: #fff; border: 0; padding: 22px 0; }
@@ -191,4 +200,25 @@ body.cg-clean {
 }
 @media (prefers-reduced-motion: reduce) {
   .cg-clean *, .cg-clean *::before, .cg-clean *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* V6.1 final: contraste del bloque de contacto en la portada. */
+.cg-clean .cg-contact{color:#262b32!important;background:#fff!important;background-image:none!important}
+.cg-clean .cg-contact__container{padding:clamp(30px,4vw,48px);border:1px solid #e3e5e8;border-radius:18px;background:#f7f7f8;gap:clamp(34px,7vw,90px)}
+.cg-clean .cg-contact__copy h2{color:#20242a!important;font-size:clamp(2.3rem,4.4vw,4.5rem)}
+.cg-clean .cg-contact__copy p{color:#626973!important}
+.cg-clean .cg-contact__details div{border-color:#d9dce0!important}
+.cg-clean .cg-contact__details a{color:#30353c!important}
+.cg-clean .cg-contact__details a:hover{color:#a91239!important}
+
+/* Cookito: elimina el marco rojo grande del campo al escribir. */
+.cg-clean .hero-assistant-window__composer input:focus,
+.cg-clean .hero-assistant-window__composer input:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+}
+.cg-clean .hero-assistant-window__composer:focus-within {
+  border-color: rgba(255,0,64,.22);
+  box-shadow: 0 8px 20px rgba(80,0,20,.06);
 }

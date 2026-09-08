@@ -59,7 +59,7 @@ const WHATSAPP_NUMBER = "51981377382";
 
 function informationWhatsAppUrl(programName: string, description: string) {
   const message = [
-    "Hola, vengo de la web de Cooking Gourmet.",
+    "Hola, vengo de la página web de Cooking Gourmet.",
     `Necesito información sobre ${programName}.`,
     description,
     "¿Podrían ayudarme, por favor?",

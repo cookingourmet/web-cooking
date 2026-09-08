@@ -24,9 +24,10 @@ import "./components/ui/button/button.css";
 import "./styles/pages/admission.css";
 import { routePage } from "./routes";
 import { applyPageSeo } from "./seo";
-import { initAnalytics, captureAttribution, pageLocation, trackEvent, trackPageView } from "./utils/analytics";
+import { initAnalytics, captureAttribution, pageLocation, trackPageView } from "./utils/analytics";
 import { initEngagementTracking } from "./utils/page-motion";
 import { mountAssistantWindow } from "./components/hero/heroAssistantPanel";
+import { normalizeWhatsAppLinks } from "./utils/whatsapp";
 
 const appRoot = document.querySelector<HTMLDivElement>("#app");
 if (!appRoot) throw new Error("No se encontró #app");
@@ -56,6 +57,7 @@ function renderRoute() {
   applyPageSeo(path);
   page.init();
   mountAssistantWindow();
+  normalizeWhatsAppLinks(appRoot!);
   window.dispatchEvent(new Event("cg:route-change"));
   scrollToCurrentHash();
   initEngagementTracking();
@@ -66,8 +68,6 @@ function renderRoute() {
 document.addEventListener("click", event => {
   if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   const target = event.target instanceof Element ? event.target : null;
-  const tracked = target?.closest<HTMLElement>("[data-track-event]");
-  if (tracked?.dataset.trackEvent) trackEvent(tracked.dataset.trackEvent, { workshop_id: tracked.dataset.trackWorkshop });
   const link = target?.closest<HTMLAnchorElement>("a[href]");
   if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
   const url = new URL(link.href, window.location.href);

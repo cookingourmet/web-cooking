@@ -31,7 +31,7 @@ function whatsappUrl(message: string) {
 
 function programWhatsAppMessage(programName: string) {
   return [
-    "Hola, vengo de la web de Cooking Gourmet.",
+    "Hola, vengo de la página web de Cooking Gourmet.",
     `Quiero información sobre el programa de ${programName}.`,
     "Deseo conocer horarios, matrícula, mensualidad e inicio de clases.",
   ].join("\n");
@@ -124,8 +124,6 @@ function renderCareerCard(program: CareerProgram, index: number) {
           </a>
         </h3>
 
-        <p>${escapeHtml(program.description)}</p>
-
         <div class="cg-career-card__actions">
           <a
             class="cg-career-btn cg-career-btn--primary"
@@ -134,14 +132,6 @@ function renderCareerCard(program: CareerProgram, index: number) {
             Ver programa
           </a>
 
-          <a
-            class="cg-career-btn cg-career-btn--ghost"
-            href="${whatsappUrl(program.whatsappText)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Informes
-          </a>
         </div>
       </div>
     </article>
@@ -193,15 +183,16 @@ export function renderCareersSection() {
         </div>
 
         <div class="cg-careers__cta">
-          <div>
-            <span>Admisión Cooking Gourmet</span>
-            <strong>Consulta horarios, matrícula e inicio de clases.</strong>
+          <div class="cg-careers__more">
+            <span>Más opciones</span>
+            <a href="/programas/sommelier">Sommelier</a>
+            <a href="/programas/cocina-acelerada">Cocina Acelerada</a>
           </div>
 
           <a
             href="${whatsappUrl(
               [
-                "Hola, vengo de la web de Cooking Gourmet.",
+                "Hola, vengo de la página web de Cooking Gourmet.",
                 "Quiero información sobre los programas presenciales.",
                 "Deseo conocer horarios, matrícula, mensualidad e inicio de clases.",
               ].join("\n")

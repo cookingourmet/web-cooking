@@ -27,8 +27,8 @@
 }
 
 .hero-assistant-window__character {
-  width: 82px;
-  height: 82px;
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: flex-end;
   animation: cookitoFloat 3.4s ease-in-out infinite;
@@ -63,8 +63,10 @@
 }
 
 .hero-assistant-window__launcher {
-  min-height: 39px;
-  padding: 0 14px;
+  width: auto;
+  min-width: 142px;
+  min-height: 46px;
+  padding: 0 18px;
   border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, #ff4775, var(--cookito-primary));
@@ -73,6 +75,21 @@
   cursor: pointer;
   font-size: 12px;
   font-weight: 850;
+  overflow: visible;
+  color: #fff;
+}
+
+.hero-assistant-window__launcher::before {
+  content: "";
+  display:none;
+}
+
+.hero-assistant-window__bubble {
+  display: none;
+}
+
+.hero-assistant-window__dock {
+  gap: 3px;
 }
 
 .hero-assistant-window__panel {
@@ -548,9 +565,12 @@
   }
 
   .hero-assistant-window__character {
-    width: 72px;
-    height: 72px;
+    width: 52px;
+    height: 52px;
   }
+
+  .hero-assistant-window__launcher { min-width:52px; width:52px; padding:0; font-size:0; }
+  .hero-assistant-window__launcher::before { content:"?"; display:block; color:#fff; font-size:1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -633,4 +653,14 @@
     min-height: 35px;
     padding: 7px 10px;
   }
+}
+
+/* V6.1 final: el acceso no puede quedar como un círculo vacío. */
+.hero-assistant-window__launcher{width:auto!important;min-width:142px!important;min-height:46px!important;padding:0 18px!important;color:#fff!important;font-size:12px!important;overflow:visible!important}
+.hero-assistant-window__launcher::before{content:""!important;display:none!important}
+.hero-assistant-window__character{width:56px;height:56px}
+@media(max-width:640px){
+  .hero-assistant-window__character{display:none}
+  .hero-assistant-window__launcher{width:52px!important;min-width:52px!important;height:52px!important;padding:0!important;font-size:0!important}
+  .hero-assistant-window__launcher::before{content:"?"!important;display:block!important;color:#fff!important;font-size:1rem!important}
 }

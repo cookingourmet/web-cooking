@@ -3,6 +3,7 @@ import { renderHeroSlider, initHeroSlider } from "../components/hero/heroSlider"
 import { renderAboutSection } from "../components/sections/about/about";
 import { renderCareersSection, initCareersSection } from "../components/sections/careers/careers";
 import { renderContactSection } from "../components/sections/contact/contact";
+import { renderWorkshopsSection } from "../components/sections/workshops/workshops";
 import { renderFooter } from "../components/layout/footer/footer";
 
 export function renderHomePage() {
@@ -12,6 +13,7 @@ export function renderHomePage() {
       <main class="page-home">
         ${renderHeroSlider()}
         ${renderCareersSection()}
+        ${renderWorkshopsSection()}
         ${renderAboutSection()}
         ${renderContactSection()}
       </main>

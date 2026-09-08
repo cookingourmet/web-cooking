@@ -54,7 +54,7 @@ const PROGRAM_VISUALS: Record<string, ProgramVisual> = {
 
 function buildWhatsAppUrl() {
   const message = [
-    "Hola, vengo de la web de Cooking Gourmet.",
+    "Hola, vengo de la página web de Cooking Gourmet.",
     "Quiero información sobre sus programas gastronómicos en Huancayo.",
     "Deseo conocer horarios, matrícula, mensualidad, requisitos e inicio de clases.",
   ].join("\n");
@@ -319,6 +319,10 @@ export function renderNavbar() {
   const visibleMainMenu = mainMenu.filter(
     (item) => !HIDDEN_MAIN_MENU_LABELS.has(item.label)
   );
+  const primaryLabels = new Set(["Talleres", "Nosotros", "Contacto"]);
+  const moreLabels = new Set(["Especialización", "Bolsa laboral"]);
+  const primaryMenu = visibleMainMenu.filter((item) => primaryLabels.has(item.label));
+  const moreMenu = visibleMainMenu.filter((item) => moreLabels.has(item.label));
 
   return `
     <nav
@@ -390,7 +394,7 @@ export function renderNavbar() {
               </div>
             </li>
 
-            ${visibleMainMenu
+            ${primaryMenu
               .map(
                 (item) => `
                   <li class="nav-item">
@@ -410,10 +414,25 @@ export function renderNavbar() {
                 `
               )
               .join("")}
+
+            <li class="nav-item nav-item--more">
+              <button class="nav-link nav-link--more" type="button" aria-haspopup="true">
+                <span>Más</span>
+                <span class="nav-caret" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
+                </span>
+              </button>
+              <div class="nav-more-menu">
+                ${moreMenu.map((item) => `
+                  <a href="${item.href}" ${externalAttributes(item.href)}>
+                    <span class="nav-link__icon" aria-hidden="true">${getMainIcon(item.label)}</span>
+                    <span>${item.label}</span>
+                  </a>
+                `).join("")}
+              </div>
+            </li>
           </ul>
         </div>
-
-        ${renderSocialLinks("nav-socials")}
 
         <div class="nav-actions">
           <a

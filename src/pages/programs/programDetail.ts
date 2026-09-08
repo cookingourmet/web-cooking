@@ -534,7 +534,7 @@ function renderCurriculum(program: ProgramData, copy: ProgramCopy) {
 }
 
 function renderSchedules(program: ProgramDataExtended) {
-  const inquiryUrl = (shift: string) => `https://wa.me/${program.whatsappNumber ?? "51981377382"}?text=${encodeURIComponent(`Hola, quisiera consultar el horario ${shift} para ${program.title}${isAdmissionProgram(program.slug) ? `, con inicio el ${ADMISSION.label}` : ""}. ¿Me pueden indicar disponibilidad y cómo inscribirme?`)}`;
+  const inquiryUrl = (shift: string) => `https://wa.me/${program.whatsappNumber ?? "51981377382"}?text=${encodeURIComponent(`Hola, vengo de la página web de Cooking Gourmet. Quisiera consultar el horario ${shift} para ${program.title}${isAdmissionProgram(program.slug) ? `, con inicio el ${ADMISSION.label}` : ""}. ¿Me pueden indicar disponibilidad y cómo inscribirme?`)}`;
   return `
     <section class="program-landing-section program-landing-section--light" id="program-schedules">
       <div class="container">
