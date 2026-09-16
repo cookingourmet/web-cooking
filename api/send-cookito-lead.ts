@@ -9,6 +9,9 @@ type CrmRelayResult = {
   status?: string;
   replayed?: boolean;
   httpStatus?: number;
+  chatAvailable?: boolean;
+  chatToken?: string;
+  chatExpiresAt?: string;
 };
 
 const PROGRAM_MAP = new Map<string, string>([
@@ -118,6 +121,9 @@ async function relayWebLeadToCrm(input: {
       status: optional(data?.status, 40),
       replayed: Boolean(data?.replayed),
       httpStatus: response.status,
+      chatAvailable: Boolean(data?.chat_available),
+      chatToken: optional(data?.chat_token, 5000),
+      chatExpiresAt: optional(data?.chat_expires_at, 100),
     };
   } finally {
     clearTimeout(timeout);

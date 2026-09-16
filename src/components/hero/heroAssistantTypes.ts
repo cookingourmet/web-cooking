@@ -177,6 +177,10 @@ export type AssistantState = {
   phone: string;
   leadStatus: LeadStatus;
   leadError: string;
+  crmChatToken: string;
+  crmChatExpiresAt: string;
+  crmChatMode: "ai" | "human" | "";
+  crmChatHandoff: boolean;
   muted: boolean;
 };
 

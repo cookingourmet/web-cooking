@@ -1,5 +1,6 @@
 import { brochureLink } from "../../utils/brochures";
 import { deliverLead, LeadDeliveryError } from "../../utils/lead-delivery";
+import { CookitoCrmChatError, sendCookitoCrmMessage } from "../../utils/cookito-crm-chat";
 import { pageLocation, readAttribution, trackEvent } from "../../utils/analytics";
 import "./heroAssistantPanel.css";
 
@@ -222,7 +223,7 @@ async function sendLeadToSales(state: AssistantState) {
   const summary = buildLeadSummary(state);
   const attribution = readAttribution();
 
-  await deliverLead(LEAD_ENDPOINT, {
+  return deliverLead(LEAD_ENDPOINT, {
     submissionId: crypto.randomUUID(),
     fullName: state.visitorName,
     phone: state.phone,
@@ -916,6 +917,81 @@ export function initAssistantWindow() {
       lockInteraction(false);
       setReplyMode(replyMode);
       safeInput.focus();
+    }
+
+    async function handleCrmAiMessage(message: string) {
+      if (!state.crmChatToken) {
+        handleAnalysis(analyzeMessage(message));
+        return;
+      }
+
+      const requestToken = ++queueToken;
+      setReplyMode("none");
+      lockInteraction(true);
+      isTyping = true;
+      audio.startTyping();
+      renderTyping();
+
+      try {
+        const result = await sendCookitoCrmMessage(state.crmChatToken, message);
+        if (requestToken !== queueToken) return;
+
+        audio.stopTyping();
+        isTyping = false;
+        renderTyping();
+        lockInteraction(false);
+
+        state.crmChatMode = result.mode === "human" ? "human" : "ai";
+        state.crmChatHandoff = Boolean(result.handoff);
+        persist();
+
+        const text = result.reply?.trim();
+        if (text) {
+          await sendBotSequence(
+            [{ kind: "text", text }],
+            result.handoff ? "contact" : "program_actions"
+          );
+        } else {
+          await sendBotSequence(
+            [{
+              kind: "text",
+              text: result.handoff
+                ? "Tu consulta ya quedó registrada 😊 Una asesora continuará contigo. Si deseas atención inmediata, puedes seguir por WhatsApp."
+                : "Recibí tu consulta. ¿Deseas que revisemos otra duda?",
+            }],
+            result.handoff ? "contact" : "program_actions"
+          );
+        }
+      } catch (error) {
+        if (requestToken !== queueToken) return;
+
+        audio.stopTyping();
+        isTyping = false;
+        renderTyping();
+        lockInteraction(false);
+
+        if (error instanceof CookitoCrmChatError && error.code === "chat_expired") {
+          state.crmChatToken = "";
+          state.crmChatExpiresAt = "";
+          state.crmChatMode = "";
+          state.crmChatHandoff = false;
+          persist();
+          await sendBotSequence([
+            {
+              kind: "text",
+              text: "La sesión de Cookito expiró. Puedes seguir consultando aquí o continuar por WhatsApp para atención inmediata.",
+            },
+          ], "contact");
+          return;
+        }
+
+        await sendBotSequence([
+          {
+            kind: "text",
+            text: "Tuve un problema al consultar al asesor virtual. Puedes intentarlo nuevamente o continuar por WhatsApp.",
+          },
+        ], "contact");
+      }
     }
 
     function selectProgram(programKey: ProgramKey) {
@@ -1908,7 +1984,19 @@ export function initAssistantWindow() {
 
       try {
         trackEvent("lead_submit", { form_id: "cookito", lead_method: "chat", cta_location: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
-        await sendLeadToSales(state);
+        const delivery = (await sendLeadToSales(state)) as any;
+        const crm = delivery?.crm;
+        if (crm?.chatAvailable && typeof crm?.chatToken === "string" && crm.chatToken) {
+          state.crmChatToken = crm.chatToken;
+          state.crmChatExpiresAt = typeof crm?.chatExpiresAt === "string" ? crm.chatExpiresAt : "";
+          state.crmChatMode = "ai";
+          state.crmChatHandoff = false;
+        } else {
+          state.crmChatToken = "";
+          state.crmChatExpiresAt = "";
+          state.crmChatMode = "";
+          state.crmChatHandoff = false;
+        }
         trackEvent("generate_lead", { form_id: "cookito", lead_method: "chat", cta_location: "cookito", program_id: PROGRAMS[programKey].pageUrl.split("/").pop() });
         state.leadStatus = "sent";
         state.leadError = "";
@@ -1955,7 +2043,7 @@ export function initAssistantWindow() {
           [
             {
               kind: "text",
-              text: "No pude enviar tus datos al correo automáticamente en este momento.",
+              text: "No pude registrar tus datos automáticamente en este momento.",
             },
             {
               kind: "text",
@@ -1967,9 +2055,11 @@ export function initAssistantWindow() {
       }
 
       if (deferred) {
-        handleAnalysis(
-          analyzeMessage(deferred)
-        );
+        if (state.crmChatToken) {
+          await handleCrmAiMessage(deferred);
+        } else {
+          handleAnalysis(analyzeMessage(deferred));
+        }
       }
     }
 
@@ -2021,6 +2111,11 @@ export function initAssistantWindow() {
           ],
           "programs"
         );
+        return;
+      }
+
+      if (state.leadStatus === "sent" && state.crmChatToken) {
+        void handleCrmAiMessage(value);
         return;
       }
 

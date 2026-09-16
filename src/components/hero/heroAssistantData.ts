@@ -353,6 +353,10 @@ export function createInitialAssistantState(): AssistantState {
     phone: "",
     leadStatus: "idle",
     leadError: "",
+    crmChatToken: "",
+    crmChatExpiresAt: "",
+    crmChatMode: "",
+    crmChatHandoff: false,
     muted: false,
   };
 }
