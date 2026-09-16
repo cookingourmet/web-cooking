@@ -1,6 +1,6 @@
 import { brochureLink } from "../../utils/brochures";
 import { deliverLead, LeadDeliveryError } from "../../utils/lead-delivery";
-import { appendLeadAttribution, pageLocation, trackEvent } from "../../utils/analytics";
+import { pageLocation, readAttribution, trackEvent } from "../../utils/analytics";
 import "./heroAssistantPanel.css";
 
 import {
@@ -8,11 +8,9 @@ import {
   LEAD_ENDPOINT,
   PROGRAM_KEYS,
   PROGRAMS,
-  SALES_EMAIL,
   SALES_PHONE_DISPLAY,
   SALES_PHONE_LINK,
   SALES_WHATSAPP,
-  WEB3FORMS_ACCESS_KEY,
 } from "./heroAssistantData";
 import { CookitoAudio } from "./heroAssistantAudio";
 import {
@@ -194,37 +192,49 @@ function buildWhatsAppUrl(state: AssistantState) {
   )}`;
 }
 
+function crmIntentText(state: AssistantState) {
+  const messages: Partial<Record<Intent, string>> = {
+    info: "Quiero información general del programa.",
+    costs: "Quiero saber cuánto cuesta, la matrícula y la mensualidad.",
+    schedules: "Quiero información de horarios y turnos disponibles.",
+    enrollment: "Quiero matricularme y separar una vacante.",
+    brochure: "Quiero recibir el brochure del programa.",
+    duration: "Quiero saber cuánto dura el programa.",
+    requirements: "Quiero conocer los requisitos y documentos para matricularme.",
+    start_date: "Quiero saber cuándo empiezan las clases.",
+    frequency: "Quiero saber la frecuencia de clases.",
+    modality: "Quiero conocer la modalidad de estudios.",
+    certification: "Quiero información sobre la certificación.",
+    advisor: "Quiero que me atienda un asesor.",
+    compare: "Quiero comparar los programas disponibles.",
+  };
+
+  return messages[state.currentIntent] ?? "Quiero información académica.";
+}
+
 async function sendLeadToSales(state: AssistantState) {
-  const program = state.selectedProgram
-    ? PROGRAMS[state.selectedProgram]
-    : null;
+  const program = state.selectedProgram ? PROGRAMS[state.selectedProgram] : null;
 
   if (!state.visitorName || !state.phone || !program) {
     throw new Error("Faltan datos obligatorios del lead.");
   }
 
-  const date = leadDate();
   const summary = buildLeadSummary(state);
-  const formData = new FormData();
+  const attribution = readAttribution();
 
-  formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-  formData.append(
-    "subject",
-    `Nuevo lead Cookito - ${program.label}`
-  );
-  formData.append("from_name", "Cookito - Cooking Gourmet");
-  formData.append("name", state.visitorName);
-  formData.append("email", SALES_EMAIL);
-  formData.append("phone", state.phone);
-  formData.append("Programa", program.label);
-  formData.append("Página", pageLocation());
-  formData.append("Fecha", date);
-  formData.append("message", summary);
-
-  appendLeadAttribution(formData);
-  await deliverLead(LEAD_ENDPOINT, formData);
+  await deliverLead(LEAD_ENDPOINT, {
+    submissionId: crypto.randomUUID(),
+    fullName: state.visitorName,
+    phone: state.phone,
+    programLabel: program.label,
+    intent: crmIntentText(state),
+    message: `${crmIntentText(state)}\n\n${summary}`,
+    source: "cookito_web_chat",
+    pageUrl: pageLocation(),
+    createdAt: new Date().toISOString(),
+    ...attribution,
+  });
 }
-
 function renderProgramCard(programKey: ProgramKey) {
   const program = PROGRAMS[programKey];
 

@@ -11,9 +11,7 @@ export const SALES_WHATSAPP = "51981377382";
 export const SALES_PHONE_DISPLAY = "981 377 382";
 export const SALES_PHONE_LINK = "+51981377382";
 
-export const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
-export const WEB3FORMS_ACCESS_KEY =
-  "c70db5c3-9654-4b15-b598-091a9ffa909a";
+export const LEAD_ENDPOINT = "/api/send-cookito-lead";
 
 export const CHAT_STORAGE_KEY = "cookito_chat_state_v8_0";
 

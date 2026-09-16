@@ -1,14 +1,11 @@
 import { deliverLead, LeadDeliveryError } from "../utils/lead-delivery";
-import { appendLeadAttribution, pageLocation, trackEvent } from "../utils/analytics";
+import { pageLocation, readAttribution, trackEvent } from "../utils/analytics";
 import { renderHeader, initHeader } from "../components/layout/header/header";
 import { renderFooter } from "../components/layout/footer/footer";
 import { initSpecializationSwirlBackground } from "../components/effects/swirlBackground";
 
 const WHATSAPP_NUMBER = "51981377382";
-const SALES_EMAIL = "j.ventas@cookingourmet.edu.pe";
-
-const LEAD_ENDPOINT = "https://api.web3forms.com/submit";
-const WEB3FORMS_ACCESS_KEY = "c70db5c3-9654-4b15-b598-091a9ffa909a";
+const LEAD_ENDPOINT = "/api/specialization-lead";
 
 const SPECIALIZATION = {
   name: "Programa de Capacitación en Inocuidad Alimentaria",
@@ -57,38 +54,6 @@ function buildWhatsAppUrl() {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-function leadDate() {
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "full",
-    timeStyle: "short",
-    timeZone: "America/Lima",
-  }).format(new Date());
-}
-
-function buildLeadSummary(
-  payload: SpecializationLeadPayload,
-  formattedDate: string
-) {
-  return [
-    "Nueva solicitud desde la landing de Especialización",
-    "",
-    `Programa: ${payload.program}`,
-    `Instructor: ${payload.instructor}`,
-    `Temas: ${payload.topics.join(", ")}`,
-    "",
-    `Nombre: ${payload.fullName || "-"}`,
-    `Celular: ${payload.phone || "-"}`,
-    `Correo: ${payload.email || "No compartido"}`,
-    `DNI: ${payload.dni || "No compartido"}`,
-    "",
-    `Mensaje: ${payload.message || "Sin mensaje"}`,
-    `Origen: ${payload.source || "-"}`,
-    `Página: ${payload.pageUrl || "-"}`,
-    `Fecha: ${formattedDate}`,
-    `Fecha ISO: ${payload.createdAt}`,
-  ].join("\n");
-}
-
 function isValidEmail(value: string) {
   if (!value) return true;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -105,38 +70,12 @@ async function sendSpecializationLeadToSales(
     throw new Error("Ingresa un correo válido.");
   }
 
-  const formattedDate = leadDate();
-  const summary = buildLeadSummary(payload, formattedDate);
-
-  const formData = new FormData();
-
-  formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-  formData.append(
-    "subject",
-    `Nuevo lead Inocuidad Alimentaria - ${payload.fullName}`
-  );
-  formData.append("from_name", "Inocuidad Alimentaria - Cooking Gourmet");
-
-  formData.append("name", payload.fullName);
-  formData.append("email", payload.email || SALES_EMAIL);
-  formData.append("phone", payload.phone);
-
-  formData.append("Programa", payload.program);
-  formData.append("Instructor", payload.instructor);
-  formData.append("Temas", payload.topics.join(", "));
-  formData.append("DNI", payload.dni || "No compartido");
-  formData.append("Correo del interesado", payload.email || "No compartido");
-  formData.append("Celular", payload.phone);
-  formData.append("Origen", payload.source);
-  formData.append("Página", payload.pageUrl);
-  formData.append("Fecha", formattedDate);
-
-  formData.append("message", summary);
-
-  appendLeadAttribution(formData);
-  await deliverLead(LEAD_ENDPOINT, formData);
+  await deliverLead(LEAD_ENDPOINT, {
+    submissionId: crypto.randomUUID(),
+    ...payload,
+    ...readAttribution(),
+  });
 }
-
 function renderTopicCards() {
   return SPECIALIZATION.topics
     .map(
