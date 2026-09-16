@@ -10,6 +10,7 @@
     "verify:november": "node scripts/validar_actualizacion_noviembre.mjs"
   },
   "devDependencies": {
+    "@types/node": "^22.20.3",
     "typescript": "~5.9.3",
     "vite": "^8.0.1"
   },
