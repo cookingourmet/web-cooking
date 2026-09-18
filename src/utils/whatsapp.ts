@@ -55,17 +55,24 @@ function trackingCode() {
 }
 
 function registerClick(anchor: HTMLAnchorElement, code: string, message: string) {
-  const identity = cookitoIdentity();
-  const context = elementContext(anchor);
-  const attribution = readAttribution();
+  let identity: ReturnType<typeof cookitoIdentity> = {};
+  let context: Partial<ReturnType<typeof elementContext>> = {};
+  let attribution: ReturnType<typeof readAttribution> = {};
+  let pageUrl = window.location.href;
+
+  try { identity = cookitoIdentity(); } catch { /* opcional */ }
+  try { context = elementContext(anchor); } catch { /* opcional */ }
+  try { attribution = readAttribution(); } catch { /* opcional */ }
+  try { pageUrl = pageLocation(); } catch { /* usa href actual */ }
+
   const payload = {
     eventId: crypto.randomUUID(),
     trackingCode: code,
     phoneHint: identity.phoneHint || undefined,
     nameHint: identity.nameHint || undefined,
     program: programFor(anchor),
-    pageUrl: pageLocation(),
-    ctaLocation: context.cta_location || "content",
+    pageUrl,
+    ctaLocation: context.cta_location || (anchor.closest("[data-assistant-window]") ? "cookito" : "content"),
     message,
     ...attribution,
   };
@@ -75,6 +82,7 @@ function registerClick(anchor: HTMLAnchorElement, code: string, message: string)
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(payload),
     keepalive: true,
+    credentials: "same-origin",
   }).catch(() => {
     // El clic nunca se bloquea aunque el registro CRM falle temporalmente.
   });
@@ -116,6 +124,21 @@ function trackWhatsAppAnchor(anchor: HTMLAnchorElement) {
   }
 }
 
+export function bindTrackedWhatsAppAnchor(anchor: HTMLAnchorElement) {
+  prepareWhatsAppAnchor(anchor);
+  if (!isWhatsAppAnchor(anchor)) return;
+
+  anchor.dataset.crmDirectWhatsapp = "1";
+  if (anchor.dataset.crmWhatsappBound === "1") return;
+  anchor.dataset.crmWhatsappBound = "1";
+
+  // En Cookito el CTA se crea dinámicamente. El listener directo evita depender
+  // de la delegación global y registra el clic antes de abrir la nueva pestaña.
+  anchor.addEventListener("click", () => {
+    trackWhatsAppAnchor(anchor);
+  }, { capture: true });
+}
+
 export function normalizeWhatsAppLinks(root: ParentNode = document) {
   root.querySelectorAll<HTMLAnchorElement>('a[href*="wa.me/"],a[href*="api.whatsapp.com/"]').forEach(prepareWhatsAppAnchor);
 
@@ -128,7 +151,7 @@ export function normalizeWhatsAppLinks(root: ParentNode = document) {
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     const anchor = target?.closest<HTMLAnchorElement>('a[href*="wa.me/"],a[href*="api.whatsapp.com/"]');
-    if (!anchor) return;
+    if (!anchor || anchor.dataset.crmDirectWhatsapp === "1") return;
     trackWhatsAppAnchor(anchor);
   }, { capture: true });
 }

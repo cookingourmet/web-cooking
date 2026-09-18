@@ -2,6 +2,7 @@ import { brochureLink } from "../../utils/brochures";
 import { deliverLead, LeadDeliveryError } from "../../utils/lead-delivery";
 import { CookitoCrmChatError, sendCookitoCrmMessage } from "../../utils/cookito-crm-chat";
 import { pageLocation, readAttribution, trackEvent } from "../../utils/analytics";
+import { bindTrackedWhatsAppAnchor } from "../../utils/whatsapp";
 import "./heroAssistantPanel.css";
 
 import {
@@ -815,6 +816,12 @@ export function initAssistantWindow() {
       safeRepliesHost.innerHTML = html
         ? `<div class="hero-assistant-window__quick-actions">${html}</div>`
         : "";
+
+      // Cookito genera este CTA de forma dinámica. Se enlaza directamente para
+      // registrar Web → WhatsApp antes de abrir la pestaña externa.
+      safeRepliesHost
+        .querySelectorAll<HTMLAnchorElement>('a[href*="wa.me/"],a[href*="api.whatsapp.com/"]')
+        .forEach(bindTrackedWhatsAppAnchor);
 
       bindReplyEvents();
       if (autoFollow) scrollToBottom();
