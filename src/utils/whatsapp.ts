@@ -80,32 +80,55 @@ function registerClick(anchor: HTMLAnchorElement, code: string, message: string)
   });
 }
 
+function isWhatsAppAnchor(anchor: HTMLAnchorElement) {
+  try {
+    const url = new URL(anchor.href, window.location.href);
+    return url.hostname === "wa.me" || url.hostname === "api.whatsapp.com";
+  } catch {
+    return false;
+  }
+}
+
+function prepareWhatsAppAnchor(anchor: HTMLAnchorElement) {
+  if (!isWhatsAppAnchor(anchor)) return;
+  try {
+    const url = new URL(anchor.href, window.location.href);
+    const currentMessage = cleanCurrentMessage(url.searchParams.get("text")?.trim() ?? "");
+    url.searchParams.set("text", [WEB_ORIGIN_MESSAGE, currentMessage].filter(Boolean).join("\n"));
+    anchor.href = url.toString();
+  } catch {
+    // Se conserva el enlace original si no puede normalizarse.
+  }
+}
+
+function trackWhatsAppAnchor(anchor: HTMLAnchorElement) {
+  if (!isWhatsAppAnchor(anchor)) return;
+  try {
+    const url = new URL(anchor.href, window.location.href);
+    const baseMessage = cleanCurrentMessage(url.searchParams.get("text")?.trim() ?? "");
+    const code = trackingCode();
+    const finalMessage = [WEB_ORIGIN_MESSAGE, baseMessage, `Ref. web: ${code}`].filter(Boolean).join("\n");
+    url.searchParams.set("text", finalMessage);
+    anchor.href = url.toString();
+    registerClick(anchor, code, finalMessage);
+  } catch {
+    // El enlace original sigue funcionando aunque el tracking falle.
+  }
+}
+
 export function normalizeWhatsAppLinks(root: ParentNode = document) {
-  root.querySelectorAll<HTMLAnchorElement>('a[href*="wa.me/"]').forEach((anchor) => {
-    try {
-      const url = new URL(anchor.href);
-      const currentMessage = cleanCurrentMessage(url.searchParams.get("text")?.trim() ?? "");
-      url.searchParams.set("text", [WEB_ORIGIN_MESSAGE, currentMessage].filter(Boolean).join("\n"));
-      anchor.href = url.toString();
-    } catch {
-      return;
-    }
+  root.querySelectorAll<HTMLAnchorElement>('a[href*="wa.me/"],a[href*="api.whatsapp.com/"]').forEach(prepareWhatsAppAnchor);
 
-    if (anchor.dataset.crmWhatsappBound === "1") return;
-    anchor.dataset.crmWhatsappBound = "1";
+  const html = document.documentElement;
+  if (html.dataset.crmWhatsappDelegate === "1") return;
+  html.dataset.crmWhatsappDelegate = "1";
 
-    anchor.addEventListener("click", () => {
-      try {
-        const url = new URL(anchor.href);
-        const baseMessage = cleanCurrentMessage(url.searchParams.get("text")?.trim() ?? "");
-        const code = trackingCode();
-        const finalMessage = [WEB_ORIGIN_MESSAGE, baseMessage, `Ref. web: ${code}`].filter(Boolean).join("\n");
-        url.searchParams.set("text", finalMessage);
-        anchor.href = url.toString();
-        registerClick(anchor, code, finalMessage);
-      } catch {
-        // Se conserva el enlace original si no puede instrumentarse.
-      }
-    }, { capture: true });
-  });
+  // Delegación a nivel documento: cubre botones creados después por Cookito
+  // y cualquier CTA de WhatsApp que aparezca dinámicamente.
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const anchor = target?.closest<HTMLAnchorElement>('a[href*="wa.me/"],a[href*="api.whatsapp.com/"]');
+    if (!anchor) return;
+    trackWhatsAppAnchor(anchor);
+  }, { capture: true });
 }
