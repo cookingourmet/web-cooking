@@ -1,0 +1,16 @@
+WEB COOKING · FASE 30D
+
+Archivos
+- api/track-whatsapp-click.ts
+- src/utils/whatsapp.ts
+
+No necesita una nueva variable de Vercel si ya existen:
+- CRM_WEB_LEAD_URL
+- CRM_WEB_LEAD_TOKEN
+
+Opcional:
+- CRM_WEB_WHATSAPP_CLICK_URL
+
+Todos los enlaces wa.me de la web quedan instrumentados automáticamente.
+Al pulsar WhatsApp se registra el clic en CRM y se agrega al mensaje un código Ref. web: CGW-*.
+Ese código permite unir el recorrido Web → WhatsApp cuando Meta entregue el mensaje.

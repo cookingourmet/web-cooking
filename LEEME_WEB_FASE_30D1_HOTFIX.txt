@@ -1,0 +1,8 @@
+FASE 30D1 - HOTFIX TRACKING WHATSAPP DINAMICO
+
+Corrige:
+- Los botones de WhatsApp generados dinamicamente por Cookito ahora se registran en CRM.
+- El tracking se delega a nivel document y cubre CTAs presentes y futuros.
+- Se conserva el enlace WhatsApp aunque el tracking falle.
+
+Instalar sobre WEB FASE 30D.

@@ -49,38 +49,34 @@ const CHIFA_THEME_STYLES = `
   <style data-chifa-theme>
     .specialization-page {
       --chifa-red: #ff0046;
-      --chifa-red-dark: #cf0039;
-      --chifa-black: #000000;
-      --chifa-panel: #0b0b0b;
-      --chifa-panel-soft: #121212;
-      --chifa-border: rgba(255, 255, 255, 0.12);
+      --chifa-red-dark: #c90038;
+      --chifa-black: #050505;
+      --chifa-panel: #101010;
+      --chifa-panel-soft: #171717;
+      --chifa-border: rgba(255, 255, 255, 0.14);
       --chifa-text-soft: #cfcfcf;
-      background: #000000;
+      background: var(--chifa-black);
       color: #ffffff;
     }
 
     .specialization-page main {
-      background: #000000;
+      background: var(--chifa-black);
     }
 
     .specialization-page .specialization-hero {
       position: relative;
       overflow: hidden;
-      background: #000000;
-      border-bottom: 1px solid rgba(255, 0, 70, 0.20);
-    }
-
-    .specialization-page .specialization-hero::before {
-      display: none;
+      background: linear-gradient(135deg, #050505 0%, #0b0b0b 100%);
+      border-bottom: 1px solid rgba(255, 0, 70, 0.28);
     }
 
     .specialization-page .specialization-hero::after {
       content: "";
       position: absolute;
       inset: auto 0 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent 0%, var(--chifa-red) 50%, transparent 100%);
-      opacity: 0.95;
+      height: 5px;
+      background: linear-gradient(90deg, transparent, var(--chifa-red), transparent);
+      opacity: 0.9;
       pointer-events: none;
     }
 
@@ -93,10 +89,6 @@ const CHIFA_THEME_STYLES = `
       color: #ffffff;
     }
 
-    .specialization-page .specialization-hero__title {
-      letter-spacing: -0.03em;
-    }
-
     .specialization-page .specialization-hero__title span {
       color: var(--chifa-red);
     }
@@ -106,85 +98,64 @@ const CHIFA_THEME_STYLES = `
       color: #ffffff;
       background: var(--chifa-red);
       border-color: var(--chifa-red);
-      box-shadow: none;
+      box-shadow: 0 10px 30px rgba(255, 0, 70, 0.18);
     }
 
     .specialization-page .specialization-hero__topics span {
-      color: #f5f5f5;
-      background: #151515;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-      backdrop-filter: none;
+      color: #f1f1f1;
+      background: rgba(255, 255, 255, 0.055);
+      border-color: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
     }
 
     .specialization-page .specialization-hero__topics strong {
       color: var(--chifa-red);
     }
 
-    .specialization-page .specialization-hero__actions {
-      margin-top: 0.5rem;
-    }
-
-    .specialization-page .specialization-hero__info {
-      background: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.70);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
-      border-radius: 18px;
-    }
-
     .specialization-page .specialization-hero__info span {
-      color: #8a8a8a;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      color: #a9a9a9;
     }
 
     .specialization-page .specialization-hero__info strong {
-      color: #1a1a1a;
+      color: #ffffff;
     }
 
     .specialization-page .specialization-form-card {
-      background: #ffffff;
-      border: 1px solid rgba(18, 18, 18, 0.08);
-      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.24);
-      color: #111111;
+      background: rgba(12, 12, 12, 0.96);
+      border: 1px solid rgba(255, 0, 70, 0.45);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
     }
 
     .specialization-page .specialization-form-card__header {
-      border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
     }
 
-    .specialization-page .specialization-form-card__header span {
-      color: #666666;
-      letter-spacing: 0.10em;
-    }
-
+    .specialization-page .specialization-form-card__header span,
     .specialization-page .specialization-field > span {
-      color: #222222;
-      font-weight: 600;
+      color: #bdbdbd;
     }
 
     .specialization-page .specialization-form-card__header h2 {
-      color: #121212;
+      color: #ffffff;
     }
 
     .specialization-page .specialization-field input,
     .specialization-page .specialization-field textarea {
-      color: #111111;
-      background: #fafafa;
-      border-color: #dddddd;
+      color: #ffffff;
+      background: #181818;
+      border-color: rgba(255, 255, 255, 0.16);
     }
 
     .specialization-page .specialization-field input::placeholder,
     .specialization-page .specialization-field textarea::placeholder {
-      color: #8b8b8b;
+      color: #7f7f7f;
     }
 
     .specialization-page .specialization-field input:focus,
     .specialization-page .specialization-field textarea:focus {
       border-color: var(--chifa-red);
-      box-shadow: 0 0 0 3px rgba(255, 0, 70, 0.10);
+      box-shadow: 0 0 0 3px rgba(255, 0, 70, 0.13);
       outline: none;
-      background: #ffffff;
     }
 
     .specialization-page .specialization-btn--primary,
@@ -193,37 +164,39 @@ const CHIFA_THEME_STYLES = `
       color: #ffffff;
       background: linear-gradient(135deg, var(--chifa-red), var(--chifa-red-dark));
       border-color: var(--chifa-red);
-      box-shadow: 0 12px 28px rgba(255, 0, 70, 0.20);
+      box-shadow: 0 14px 34px rgba(255, 0, 70, 0.24);
     }
 
     .specialization-page .specialization-btn--primary:hover,
     .specialization-page .specialization-btn--primary-red:hover,
     .specialization-page .specialization-btn--form:hover {
       transform: translateY(-2px);
-      filter: brightness(1.04);
+      filter: brightness(1.06);
     }
 
     .specialization-page .specialization-btn--outline {
       color: #ffffff;
       background: transparent;
-      border-color: rgba(255, 255, 255, 0.45);
+      border-color: rgba(255, 255, 255, 0.55);
     }
 
     .specialization-page .specialization-btn--outline:hover {
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       border-color: #ffffff;
     }
 
     .specialization-page .specialization-section--white,
     .specialization-page .specialization-section--soft {
-      background: #060606;
+      background: #090909;
     }
 
     .specialization-page .specialization-section--dark {
-      background: #030303;
-      border-top: 1px solid rgba(255, 0, 70, 0.16);
-      border-bottom: 1px solid rgba(255, 0, 70, 0.16);
+      background:
+        linear-gradient(135deg, rgba(255, 0, 70, 0.11), transparent 36%),
+        #030303;
+      border-top: 1px solid rgba(255, 0, 70, 0.22);
+      border-bottom: 1px solid rgba(255, 0, 70, 0.22);
     }
 
     .specialization-page .specialization-section--cta {
@@ -240,26 +213,26 @@ const CHIFA_THEME_STYLES = `
 
     .specialization-page .specialization-topic-card,
     .specialization-page .specialization-audience-card {
-      background: linear-gradient(180deg, #121212 0%, #090909 100%);
+      background: linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
       border: 1px solid var(--chifa-border);
-      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.24);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.26);
     }
 
     .specialization-page .specialization-topic-card:hover,
     .specialization-page .specialization-audience-card:hover {
-      border-color: rgba(255, 0, 70, 0.44);
-      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.30);
+      border-color: rgba(255, 0, 70, 0.58);
+      box-shadow: 0 22px 56px rgba(0, 0, 0, 0.38);
     }
 
     .specialization-page .specialization-topic-card__number {
       color: var(--chifa-red);
-      border-color: rgba(255, 0, 70, 0.28);
-      background: rgba(255, 0, 70, 0.06);
+      border-color: rgba(255, 0, 70, 0.36);
+      background: rgba(255, 0, 70, 0.08);
     }
 
     .specialization-page .specialization-method__list article {
-      background: #101010;
-      border-color: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(255, 255, 255, 0.11);
     }
 
     .specialization-page .specialization-method__list strong {
@@ -271,21 +244,23 @@ const CHIFA_THEME_STYLES = `
     }
 
     .specialization-page .specialization-final-cta {
-      background: linear-gradient(135deg, #111111, #050505);
-      border: 1px solid rgba(255, 0, 70, 0.24);
-      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.30);
+      background:
+        radial-gradient(circle at 92% 12%, rgba(255, 0, 70, 0.20), transparent 32%),
+        linear-gradient(135deg, #111111, #070707);
+      border: 1px solid rgba(255, 0, 70, 0.34);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
     }
 
     .specialization-page .specialization-form__status.is-success {
-      color: #15925e;
+      color: #78e2a4;
     }
 
     .specialization-page .specialization-form__status.is-error {
-      color: #cc1f45;
+      color: #ff7b91;
     }
 
     .specialization-page .specialization-form__status.is-info {
-      color: #555555;
+      color: #d9d9d9;
     }
 
     .specialization-page .specialization-form-card.is-alerting {
@@ -293,26 +268,21 @@ const CHIFA_THEME_STYLES = `
     }
 
     @keyframes chifaFormAlert {
-      0%, 100% { box-shadow: 0 26px 70px rgba(0, 0, 0, 0.24); }
-      50% { box-shadow: 0 26px 70px rgba(0, 0, 0, 0.24), 0 0 0 4px rgba(255, 0, 70, 0.18); }
+      0%, 100% { box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55); }
+      50% { box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55), 0 0 0 4px rgba(255, 0, 70, 0.32); }
     }
 
     @media (max-width: 820px) {
       .specialization-page .specialization-hero {
-        background: #000000;
+        background: linear-gradient(180deg, #050505 0%, #0b0b0b 100%);
       }
 
       .specialization-page .specialization-form-card {
-        background: #ffffff;
-      }
-
-      .specialization-page .specialization-hero__info {
-        background: #ffffff;
+        background: #0d0d0d;
       }
     }
   </style>
 `;
-
 
 type SpecializationLeadPayload = {
   program: string;
@@ -498,7 +468,7 @@ function renderSpecializationHero() {
               <textarea
                 name="message"
                 rows="3"
-                placeholder="Quiero información sobre la especialización en Cocina Chifa."
+                placeholder="Deseo información sobre la especialización en Cocina Chifa."
               ></textarea>
             </label>
 

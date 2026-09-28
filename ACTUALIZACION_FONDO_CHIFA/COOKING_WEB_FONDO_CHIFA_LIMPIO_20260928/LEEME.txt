@@ -1,0 +1,17 @@
+COOKING WEB - FONDO LIMPIO COCINA CHIFA
+Fecha: 28/09/2026
+
+Esta actualización modifica únicamente la sección principal (hero) de la Especialización en Cocina Chifa.
+
+Cambios:
+- Fondo negro con degradado muy sutil.
+- Eliminados los brillos radiales del fondo.
+- Eliminado el patrón decorativo del hero.
+- Eliminado el canvas/efecto animado del fondo.
+- Se mantienen el chef, textos, botones, formulario, colores y estructura.
+
+Instalación desde Git Bash:
+
+cd /d/web/web-cooking
+unzip -o COOKING_WEB_FONDO_CHIFA_LIMPIO_20260928.zip -d ACTUALIZACION_FONDO_CHIFA
+bash ACTUALIZACION_FONDO_CHIFA/INSTALAR_FONDO_CHIFA.sh /d/web/web-cooking

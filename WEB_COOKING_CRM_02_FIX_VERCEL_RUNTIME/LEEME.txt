@@ -1,0 +1,13 @@
+WEB COOKING CRM 02 - FIX VERCEL RUNTIME
+
+Problema corregido:
+Vercel ejecutaba /api/send-cookito-lead pero fallaba con ERR_MODULE_NOT_FOUND al intentar cargar ../server/crm-web-lead.
+
+Solución:
+Las dos funciones serverless quedan autocontenidas. Ya no dependen del módulo externo server/crm-web-lead en runtime.
+
+Archivos a reemplazar:
+- api/send-cookito-lead.ts
+- api/specialization-lead.ts
+
+No modifica variables de Vercel ni el CRM.

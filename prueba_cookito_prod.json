@@ -1,0 +1,9 @@
+{
+  "submissionId": "55555555-5555-4555-8555-555555555555",
+  "fullName": "Prueba Diagnostico Web",
+  "phone": "987654325",
+  "programLabel": "Gastronomía Profesional",
+  "intent": "Quiero información",
+  "message": "Prueba de conexión Web hacia CRM",
+  "pageUrl": "https://www.cookingourmet.edu.pe/"
+}

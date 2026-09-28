@@ -9,9 +9,6 @@ type CrmRelayResult = {
   status?: string;
   replayed?: boolean;
   httpStatus?: number;
-  chatAvailable?: boolean;
-  chatToken?: string;
-  chatExpiresAt?: string;
 };
 
 const PROGRAM_MAP = new Map<string, string>([
@@ -32,9 +29,6 @@ const PROGRAM_MAP = new Map<string, string>([
   ["cocina corta", "Cocina Corta"],
   ["programa de capacitación en inocuidad alimentaria", "Especialización"],
   ["programa de capacitacion en inocuidad alimentaria", "Especialización"],
-  ["especialización en cocina chifa", "Especialización"],
-  ["especializacion en cocina chifa", "Especialización"],
-  ["cocina chifa", "Especialización"],
   ["especialización", "Especialización"],
   ["especializacion", "Especialización"],
 ]);
@@ -124,9 +118,6 @@ async function relayWebLeadToCrm(input: {
       status: optional(data?.status, 40),
       replayed: Boolean(data?.replayed),
       httpStatus: response.status,
-      chatAvailable: Boolean(data?.chat_available),
-      chatToken: optional(data?.chat_token, 5000),
-      chatExpiresAt: optional(data?.chat_expires_at, 100),
     };
   } finally {
     clearTimeout(timeout);

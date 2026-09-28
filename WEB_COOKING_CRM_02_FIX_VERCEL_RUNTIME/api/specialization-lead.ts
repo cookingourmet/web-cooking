@@ -9,9 +9,6 @@ type CrmRelayResult = {
   status?: string;
   replayed?: boolean;
   httpStatus?: number;
-  chatAvailable?: boolean;
-  chatToken?: string;
-  chatExpiresAt?: string;
 };
 
 const PROGRAM_MAP = new Map<string, string>([
@@ -32,9 +29,6 @@ const PROGRAM_MAP = new Map<string, string>([
   ["cocina corta", "Cocina Corta"],
   ["programa de capacitación en inocuidad alimentaria", "Especialización"],
   ["programa de capacitacion en inocuidad alimentaria", "Especialización"],
-  ["especialización en cocina chifa", "Especialización"],
-  ["especializacion en cocina chifa", "Especialización"],
-  ["cocina chifa", "Especialización"],
   ["especialización", "Especialización"],
   ["especializacion", "Especialización"],
 ]);
@@ -68,6 +62,7 @@ async function relayWebLeadToCrm(input: {
   submissionId: string;
   name: string;
   phone: string;
+  email?: string;
   programLabel?: string;
   message?: string;
   pageUrl?: string;
@@ -99,6 +94,7 @@ async function relayWebLeadToCrm(input: {
         submission_id: cleanText(input.submissionId, 80).toLowerCase(),
         name: cleanText(input.name, 150),
         phone: normalizePhone(input.phone),
+        email: optional(input.email, 255),
         program: crmProgram(input.programLabel),
         message: optional(input.message, 2000),
         page_url: optional(input.pageUrl, 1000),
@@ -124,9 +120,6 @@ async function relayWebLeadToCrm(input: {
       status: optional(data?.status, 40),
       replayed: Boolean(data?.replayed),
       httpStatus: response.status,
-      chatAvailable: Boolean(data?.chat_available),
-      chatToken: optional(data?.chat_token, 5000),
-      chatExpiresAt: optional(data?.chat_expires_at, 100),
     };
   } finally {
     clearTimeout(timeout);
@@ -142,50 +135,43 @@ function escapeHtml(value: string) {
     .replaceAll("'", "&#039;");
 }
 
+function parseTopics(value: unknown) {
+  if (Array.isArray(value)) return value.map((item) => cleanText(item, 180)).filter(Boolean);
+  const text = cleanText(value, 1500);
+  return text ? text.split(",").map((item) => cleanText(item, 180)).filter(Boolean) : [];
+}
+
 async function sendNotification(input: {
   fullName: string;
   phone: string;
-  programLabel: string;
-  intent: string;
+  email?: string;
+  program: string;
+  message: string;
   pageUrl: string;
-  createdAt: string;
 }) {
   if (!process.env.RESEND_API_KEY) return { sent: false, skipped: true };
-
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const subject = `Nuevo lead web - ${input.programLabel}`;
-  const text = [
-    "Nueva solicitud desde Cookito",
-    "",
-    `Programa: ${input.programLabel}`,
-    `Nombre: ${input.fullName}`,
-    `Celular: ${input.phone}`,
-    `Interés: ${input.intent}`,
-    `Página: ${input.pageUrl}`,
-    `Fecha: ${input.createdAt}`,
-  ].join("\n");
-
   const html = `
-    <div style="font-family:Arial,sans-serif;background:#f6fbf8;padding:24px;color:#123026;">
-      <div style="max-width:620px;margin:auto;background:#fff;border-radius:18px;padding:24px;border:1px solid #d8efe5;">
-        <h2 style="margin:0 0 16px;color:#08764f;">Nuevo lead desde la web</h2>
-        <p><strong>Programa:</strong> ${escapeHtml(input.programLabel)}</p>
+    <div style="font-family:Arial,sans-serif;background:#f7f7f7;padding:24px;color:#171717;">
+      <div style="max-width:660px;margin:auto;background:#fff;border-radius:18px;padding:26px;border:1px solid #eee;">
+        <h2 style="margin:0 0 16px;color:#b8002d;">Nuevo lead de Especialización</h2>
+        <p><strong>Programa:</strong> ${escapeHtml(input.program)}</p>
         <p><strong>Nombre:</strong> ${escapeHtml(input.fullName)}</p>
         <p><strong>Celular:</strong> ${escapeHtml(input.phone)}</p>
-        <p><strong>Interés:</strong> ${escapeHtml(input.intent)}</p>
+        <p><strong>Correo:</strong> ${escapeHtml(input.email || "No compartido")}</p>
+        <p><strong>Mensaje:</strong> ${escapeHtml(input.message)}</p>
         <p><strong>Página:</strong> ${escapeHtml(input.pageUrl)}</p>
-        <p><strong>Fecha:</strong> ${escapeHtml(input.createdAt)}</p>
       </div>
     </div>`;
 
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
     to: [TO_EMAIL],
-    subject,
-    text,
+    replyTo: input.email || undefined,
+    subject: `Nuevo lead Especialización - ${input.fullName}`,
+    text: `${input.program}\n${input.fullName}\n${input.phone}\n${input.message}\n${input.pageUrl}`,
     html,
   });
-
   if (error) throw new Error("No se pudo enviar el correo de respaldo.");
   return { sent: true, skipped: false };
 }
@@ -203,15 +189,25 @@ export default async function handler(req: any, res: any) {
     const submissionId = cleanText(body.submissionId, 80);
     const fullName = cleanText(body.fullName, 150);
     const phone = cleanText(body.phone, 30);
-    const programLabel = cleanText(body.programLabel, 120);
-    const intent = cleanText(body.intent || "Información general", 500);
-    const message = cleanText(body.message || intent, 2000);
+    const email = cleanText(body.email, 255);
+    const program = cleanText(body.program || "Programa de Capacitación en Inocuidad Alimentaria", 180);
+    const message = cleanText(body.message || "Deseo información sobre horarios, inversión y vacantes.", 2000);
     const pageUrl = cleanText(body.pageUrl, 1000);
-    const createdAt = cleanText(body.createdAt || new Date().toISOString(), 80);
+    const topics = parseTopics(body.topics);
+    const instructor = cleanText(body.instructor || body.chef, 150);
 
-    if (!submissionId || !fullName || !phone || !programLabel || !pageUrl) {
+    if (!submissionId || !fullName || !phone || !pageUrl) {
       return res.status(422).json({ ok: false, message: "Faltan datos obligatorios" });
     }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(422).json({ ok: false, message: "Correo inválido" });
+    }
+
+    const crmMessage = [
+      message,
+      instructor ? `Instructor: ${instructor}` : "",
+      topics.length ? `Temas: ${topics.join(", ")}` : "",
+    ].filter(Boolean).join("\n");
 
     let crm: any = null;
     let crmError: string | null = null;
@@ -220,8 +216,9 @@ export default async function handler(req: any, res: any) {
         submissionId,
         name: fullName,
         phone,
-        programLabel,
-        message,
+        email: email || undefined,
+        programLabel: program,
+        message: crmMessage,
         pageUrl,
         utm_source: cleanText(body.utm_source, 150) || undefined,
         utm_medium: cleanText(body.utm_medium, 150) || undefined,
@@ -233,45 +230,24 @@ export default async function handler(req: any, res: any) {
       crmError = error instanceof Error ? error.message : "Error CRM";
     }
 
-    let email: any = null;
+    let emailResult: any = null;
     let emailError: string | null = null;
     try {
-      email = await sendNotification({ fullName, phone, programLabel, intent, pageUrl, createdAt });
+      emailResult = await sendNotification({ fullName, phone, email: email || undefined, program, message, pageUrl });
     } catch (error) {
       emailError = error instanceof Error ? error.message : "Error de correo";
     }
 
     const crmFailed = !crm?.delivered;
     if (crmFailed && isCrmRequired()) {
-      return res.status(502).json({
-        ok: false,
-        message: "No pudimos registrar la solicitud en el CRM. Inténtalo nuevamente o escríbenos por WhatsApp.",
-        crm: { ...crm, error: crmError },
-        email: { ...email, error: emailError },
-      });
+      return res.status(502).json({ ok: false, message: "No pudimos registrar la solicitud en el CRM.", crm: { ...crm, error: crmError }, email: { ...emailResult, error: emailError } });
+    }
+    if (crmFailed && !emailResult?.sent) {
+      return res.status(502).json({ ok: false, message: "No pudimos confirmar el envío.", crm: { ...crm, error: crmError }, email: { ...emailResult, error: emailError } });
     }
 
-    if (crmFailed && !email?.sent) {
-      return res.status(502).json({
-        ok: false,
-        message: "No pudimos confirmar el envío. Inténtalo nuevamente o escríbenos por WhatsApp.",
-        crm: { ...crm, error: crmError },
-        email: { ...email, error: emailError },
-      });
-    }
-
-    return res.status(200).json({
-      ok: true,
-      success: true,
-      message: crm?.delivered ? "Solicitud registrada en el CRM." : "Solicitud recibida por respaldo de correo.",
-      crm,
-      email,
-    });
+    return res.status(200).json({ ok: true, success: true, crm, email: emailResult });
   } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      message: "Error interno al enviar la solicitud",
-      error: error instanceof Error ? error.message : "Error desconocido",
-    });
+    return res.status(500).json({ ok: false, message: "Error interno al enviar la solicitud", error: error instanceof Error ? error.message : "Error desconocido" });
   }
 }

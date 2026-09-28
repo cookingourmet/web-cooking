@@ -1,0 +1,10 @@
+src/seo.ts
+scripts/prepare-analytics.mjs
+api/send-cookito-lead.ts
+api/specialization-lead.ts
+src/data/workshops.data.ts
+src/pages/especializacion.ts
+src/utils/analytics.ts
+src/components/hero/heroSlider.ts
+src/components/hero/heroData.ts
+src/components/sections/workshops/workshops.ts

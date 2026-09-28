@@ -1,0 +1,44 @@
+WEB COOKING -> CRM / CONEXION 01
+================================
+
+OBJETIVO
+- Los leads de Cookito llegan al CRM por canal Web.
+- El formulario de Especialización llega al CRM por canal Web.
+- Se conservan UTM source/medium/campaign/content/term y página de origen.
+- El token del CRM NO se expone al navegador: queda como variable privada de Vercel.
+- Se mantiene correo Resend como respaldo si está configurado.
+
+CAMBIOS
+- Cookito deja Web3Forms y usa /api/send-cookito-lead.
+- Especialización usa /api/specialization-lead.
+- Las funciones serverless envían al endpoint seguro del CRM.
+- Mapeo de programas web a catálogo CRM:
+  Gastronomía Profesional -> Gastronomía
+  Panadería y Pastelería -> Pastelería
+  Bar Profesional -> Bar Profesional
+  Barismo Profesional -> Barismo
+  Sommelier Profesional -> Sommelier
+  Cocina Acelerada -> Cocina Corta
+  Inocuidad Alimentaria -> Especialización
+
+VARIABLES PRIVADAS EN VERCEL
+CRM_WEB_LEAD_URL=https://DOMINIO-CRM/api/v1/integrations/web/leads
+CRM_WEB_LEAD_TOKEN=TOKEN_GENERADO_EN_CRM
+CRM_WEB_LEAD_REQUIRED=false
+RESEND_API_KEY=... (si ya la usas)
+
+PRIMERA PUESTA EN MARCHA
+1. Instalar esta actualización y ejecutar npm run build.
+2. En el CRM, como administrador, generar/rotar el token de Captación Web y activar la conexión.
+3. Publicar el CRM en una URL HTTPS accesible desde Internet.
+4. En Vercel > proyecto web-cooking > Settings > Environment Variables agregar URL y TOKEN.
+5. Mantener CRM_WEB_LEAD_REQUIRED=false para la primera prueba.
+6. Redeploy de la web.
+7. Abrir la web con UTM de prueba y enviar un lead desde Cookito.
+8. Confirmar en CRM > Asesor IA > Bandeja > Web.
+9. Cuando quede validado, cambiar CRM_WEB_LEAD_REQUIRED=true y redeploy.
+
+IMPORTANTE
+- Una URL 127.0.0.1/localhost del CRM NO funciona desde Vercel.
+- No crear variables VITE_CRM_WEB_LEAD_TOKEN: eso expondría el secreto en el navegador.
+- El canal Web es de captación. La respuesta al prospecto continúa por ficha/WhatsApp hasta conectar WhatsApp Cloud API.

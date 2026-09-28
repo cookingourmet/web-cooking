@@ -1,0 +1,43 @@
+ACTUALIZACIÓN COOKING GOURMET — COCINA CHIFA + TALLERES OCTUBRE 2026
+
+Este ZIP reemplaza la actualización anterior y puede aplicarse directamente sobre el proyecto.
+También puede instalarse si la actualización anterior ya fue aplicada.
+
+CAMBIOS INCLUIDOS
+- Cocina Chifa conserva la misma estructura de la landing.
+- Diseño de Cocina Chifa actualizado a temática negra, roja y blanca basada en el brochure oficial.
+- Se mantienen formulario, WhatsApp, CRM, analítica, SEO y comportamiento responsive.
+- Se eliminaron las rutas antiguas de Pastelería Comercial y Petit Four usadas como imágenes temporales.
+- Se eliminaron referencias antiguas de esos talleres en analítica.
+- Los talleres mantienen la información aprobada de Fast Food, Pescados y Mariscos y Cocina Peruana.
+- Los textos públicos quedaron sin avisos internos de calendario.
+
+NOMBRES FINALES DE IMÁGENES
+Carga las imágenes conservando las mismas dimensiones que vienes usando:
+
+1. Fast Food
+   public/images/portada/talleres/fast-food.jpg
+
+2. Pescados y Mariscos
+   public/images/portada/talleres/pescados-mariscos.jpg
+
+3. Cocina Peruana
+   public/images/portada/talleres/cocina-peruana.jpg
+
+4. Cocina Chifa — escritorio
+   public/images/especializacion/cocina-chifa.png
+
+5. Cocina Chifa — móvil
+   public/images/especializacion/cocina-chifa-mobile.png
+
+INSTALACIÓN
+Desde Git Bash:
+
+bash INSTALAR.sh /d/web/web-cooking
+
+El instalador:
+- acepta el proyecto original o la actualización anterior;
+- guarda un respaldo antes de copiar;
+- aplica todos los archivos de esta versión;
+- ejecuta npm run build;
+- deja el proyecto compilado y listo para publicar.

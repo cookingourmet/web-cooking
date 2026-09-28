@@ -1,0 +1,16 @@
+FASE 30D2 - Cookito WhatsApp direct tracking
+
+Objetivo:
+- Registrar de forma directa el clic del CTA WhatsApp generado dinámicamente por Cookito.
+- Mantener la delegación global para los demás enlaces WhatsApp de la web.
+- Evitar duplicados entre el listener directo de Cookito y el listener delegado.
+- Blindar el armado del payload para que una lectura auxiliar no impida ejecutar el fetch.
+
+Archivos:
+- src/utils/whatsapp.ts
+- src/components/hero/heroAssistantPanel.ts
+
+No modifica backend ni base de datos.
+
+Validación:
+  bash validar_web_fase_30d2.sh

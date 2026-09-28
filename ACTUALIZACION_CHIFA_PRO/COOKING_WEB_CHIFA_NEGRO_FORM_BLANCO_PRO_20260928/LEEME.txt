@@ -1,0 +1,10 @@
+Actualización PRO de la sección Cocina Chifa.
+
+Incluye:
+- Fondo completamente negro en el hero.
+- Eliminación de luces y efectos del fondo.
+- Formulario en color blanco.
+- Ajustes visuales para una apariencia más profesional.
+
+Instalación:
+  bash INSTALAR_CHIFA_PRO.sh /d/web/web-cooking

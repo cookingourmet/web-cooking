@@ -1,0 +1,31 @@
+WEB FASE 30A - COOKITO <-> ASESOR IA
+
+OBJETIVO
+Despues de registrar el lead, Cookito conserva una sesion segura de chat y las nuevas
+consultas escritas por el visitante se envian al Asesor IA del CRM. La respuesta vuelve
+a Cookito y se muestra en la misma ventana.
+
+ARCHIVOS
+- api/send-cookito-lead.ts
+- api/cookito-chat.ts
+- src/utils/cookito-crm-chat.ts
+- src/components/hero/heroAssistantPanel.ts
+- src/components/hero/heroAssistantTypes.ts
+- src/components/hero/heroAssistantData.ts
+
+VARIABLES VERCEL
+Se reutilizan las existentes:
+- CRM_WEB_LEAD_URL
+- CRM_WEB_LEAD_TOKEN
+- CRM_WEB_LEAD_REQUIRED
+
+No es obligatorio crear otra variable. /api/cookito-chat deriva la URL del chat cambiando
+.../integrations/web/leads por .../integrations/web/chat.
+Opcionalmente se puede definir CRM_WEB_CHAT_URL de forma explicita.
+
+INSTALACION LOCAL
+1) Descomprimir este ZIP en D:/web/web-cooking
+2) Ejecutar:
+   cd /d/web/web-cooking
+   npm run build
+3) No publicar hasta que el build termine verde.
