@@ -8,8 +8,8 @@ export function renderWorkshopsSection() {
   return `<section class="cg-workshops cg-workshops--campaign" id="talleres" aria-labelledby="cg-workshops-title">
     <div class="cg-workshops__container">
       <header class="cg-workshops__heading">
-        <div><span>Cooking Gourmet · Huancayo</span><h2 id="cg-workshops-title">Talleres para aprender y emprender.</h2></div>
-        <p>Descubre las nuevas convocatorias de noviembre y diciembre y consulta las vacantes directamente con nuestro equipo.</p>
+        <div><span>Cooking Gourmet · Huancayo</span><h2 id="cg-workshops-title">Talleres que inspiran.</h2></div>
+        <p>Cuatro experiencias prácticas. Descubre tu próxima especialidad.</p>
       </header>
       <div class="cg-workshops__grid cg-workshops__grid--campaign">
         ${workshopCampaigns.map((item) => `
@@ -21,7 +21,7 @@ export function renderWorkshopsSection() {
               <span class="cg-workshop-campaign-card__date">Inicio · ${item.dateLabel}</span>
               <h3>${item.title}</h3>
               <p>${item.intro}</p>
-              <div class="cg-workshop-campaign-card__benefit"><strong>El plus</strong><p>${item.plus}</p></div>
+              <details class="cg-workshop-campaign-card__benefit"><summary>Qué aprenderás</summary><p>${item.plus}</p></details>
               <p class="cg-workshop-campaign-card__tagline">${item.tagline}</p>
               <a class="cg-workshop-campaign-card__action" href="${workshopCampaignWhatsAppUrl(item)}" target="_blank" rel="noopener noreferrer" data-track-event="workshop_whatsapp_click" data-track-workshop="${item.id}">Consultar vacantes <span aria-hidden="true">↗</span></a>
             </div>

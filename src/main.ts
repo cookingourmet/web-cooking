@@ -22,6 +22,7 @@ import "./components/sections/testimonials/testimonials.css";
 import "./components/ui/button/button.css";
 
 import "./styles/pages/admission.css";
+import "./styles/pages/home-premium-v1.css";
 import { routePage } from "./routes";
 import { applyPageSeo } from "./seo";
 import { initAnalytics, captureAttribution, pageLocation, trackPageView } from "./utils/analytics";
