@@ -193,3 +193,123 @@
     color: rgba(255,255,255,.52);
   }
 }
+
+/* Actualización: un taller por slide, flyers cuadrados sin recortes. */
+.cg-workshop-hero--square {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(26px, 5vw, 70px);
+}
+.cg-workshop-hero--square .cg-workshop-hero__copy h2 {
+  font-size: clamp(2.55rem, 4.7vw, 5rem);
+  overflow-wrap: break-word;
+}
+.cg-workshop-hero--square .cg-hero-actions { margin-top: 24px; }
+.cg-workshop-hero--square .cg-workshop-hero__copy .cg-hero-btn { margin-top: 0; }
+.cg-workshop-hero__info {
+  display: flex; flex-wrap: wrap; gap: 20px; margin-top: 22px;
+}
+.cg-workshop-hero__info span { display: grid; gap: 4px; }
+.cg-workshop-hero__info small { color: #746e70; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
+.cg-workshop-hero__info strong { font-size: .92rem; }
+.cg-workshop-hero__poster {
+  display: block; width: min(100%, 460px); aspect-ratio: 1 / 1;
+  justify-self: center; overflow: hidden; border-radius: 24px; background: #e9e6e7;
+  box-shadow: 0 24px 60px rgba(30,20,22,.15); border: 1px solid rgba(30,20,22,.08);
+  transition: transform .3s, box-shadow .3s;
+}
+.cg-workshop-hero__poster:hover { transform: translateY(-5px); box-shadow: 0 32px 68px rgba(30,20,22,.2); }
+.cg-workshop-hero__poster img { width: 100%; height: 100%; object-fit: contain; display: block; }
+@media (max-width: 900px) {
+  .cg-workshop-hero--square { grid-template-columns: 1fr; gap: 18px; padding-top: 64px; padding-bottom: 94px; }
+  .cg-workshop-hero--square .cg-workshop-hero__copy h2 { font-size: clamp(2rem, 7vw, 3.5rem); }
+  .cg-workshop-hero--square .cg-workshop-hero__copy > p { max-width: 62ch; font-size: .88rem; line-height: 1.5; }
+  .cg-workshop-hero--square .cg-workshop-hero__info { margin-top: 12px; }
+  .cg-workshop-hero--square .cg-hero-actions { margin-top: 16px; }
+  .cg-workshop-hero__poster { width: min(100%, 310px); border-radius: 16px; }
+}
+@media (max-width: 520px) {
+  .cg-workshop-hero--square { gap: 12px; align-content: center; padding-top: 28px; }
+  .cg-workshop-hero--square .cg-workshop-hero__copy h2 { font-size: clamp(2rem, 9.5vw, 2.5rem); margin: 8px 0; }
+  .cg-workshop-hero--square .cg-workshop-hero__copy > p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .cg-workshop-hero__poster { width: min(100%, 245px); }
+  .cg-workshop-hero__info { gap: 12px; }
+  .cg-workshop-hero__info strong { font-size: .8rem; }
+  .cg-workshop-hero--square .cg-hero-btn { min-height: 43px; }
+}
+@media (prefers-reduced-motion: reduce) { .cg-workshop-hero__poster { transition: none; } }
+
+
+/* Talleres noviembre-diciembre 2026: un único slide principal con 4 afiches 1:1. */
+.cg-workshop-hero--campaign {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+  gap: clamp(28px, 5vw, 72px);
+}
+.cg-workshop-hero--campaign .cg-workshop-hero__copy h2 {
+  font-size: clamp(2.65rem, 4.8vw, 5.2rem);
+  overflow-wrap: break-word;
+}
+.cg-workshop-campaign__start { display: grid; gap: 4px; margin: 24px 0; }
+.cg-workshop-campaign__start small { color: #70696c; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; }
+.cg-workshop-campaign__start strong { font-size: 1.25rem; }
+.cg-workshop-campaign__actions { margin-top: 12px; }
+.cg-workshop-hero--campaign .cg-workshop-hero__copy .cg-hero-btn { margin-top: 0; }
+.cg-workshop-campaign__viewer { display: grid; align-content: center; justify-items: center; gap: 14px; min-width: 0; }
+.cg-workshop-campaign__frame {
+  position: relative;
+  width: min(100%, 445px);
+  aspect-ratio: 1 / 1;
+  border-radius: 22px;
+  background: #171316;
+  box-shadow: 0 18px 48px rgba(24, 14, 17, .18);
+  overflow: hidden;
+}
+.cg-workshop-campaign__poster {
+  position: absolute; inset: 0; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .5s ease, visibility .5s;
+}
+.cg-workshop-campaign__poster.is-active { opacity: 1; visibility: visible; pointer-events: auto; }
+.cg-workshop-campaign__poster img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.cg-workshop-campaign__poster:focus-visible { outline: 3px solid #fe003e; outline-offset: -3px; }
+.cg-workshop-campaign__controls { display: flex; align-items: center; justify-content: center; gap: 15px; }
+.cg-workshop-campaign__controls > button {
+  width: 37px; height: 37px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid #ded7da; background: #fff;
+  color: #1d1a1c; cursor: pointer; font: inherit; transition: border-color .2s, color .2s;
+}
+.cg-workshop-campaign__controls > button:hover { color: #fe003e; border-color: #fe003e; }
+.cg-workshop-campaign__dots { display: flex; align-items: center; gap: 9px; }
+.cg-workshop-campaign__dots button { display: grid; place-items: center; padding: 6px 0; cursor: pointer; border: 0; background: transparent; }
+.cg-workshop-campaign__dots span { width: 7px; height: 7px; border-radius: 99px; background: #c5bfc1; transition: width .25s, background .25s; }
+.cg-workshop-campaign__dots .is-active span { width: 22px; background: #fe003e; }
+.cg-workshop-campaign__controls > span { font-size: .71rem; font-weight: 800; color: #81797d; white-space: nowrap; }
+@media (max-width: 900px) {
+  .cg-workshop-hero--campaign { display: grid; grid-template-columns: 1fr; gap: 16px; padding-top: 50px; padding-bottom: 87px; }
+  .cg-workshop-hero--campaign .cg-workshop-hero__copy h2 { font-size: clamp(2.05rem, 7.6vw, 3.7rem); margin: 9px 0; }
+  .cg-workshop-hero--campaign .cg-workshop-hero__copy > p { font-size: .9rem; line-height: 1.4; }
+  .cg-workshop-campaign__start { margin: 9px 0; }
+  .cg-workshop-campaign__start strong { font-size: 1rem; }
+  .cg-workshop-campaign__viewer { gap: 9px; }
+  .cg-workshop-campaign__frame { width: min(100%, 325px); border-radius: 16px; }
+}
+@media (max-width: 520px) {
+  .cg-workshop-hero--campaign { padding-top: 28px; padding-bottom: 83px; gap: 11px; }
+  .cg-workshop-hero--campaign .cg-workshop-hero__copy h2 { font-size: clamp(1.95rem, 8vw, 2.6rem); }
+  .cg-workshop-hero--campaign .cg-workshop-hero__copy > p { display: none; }
+  .cg-workshop-campaign__frame { width: min(100%, 284px); border-radius: 13px; }
+  .cg-workshop-campaign__controls { gap: 11px; }
+  .cg-workshop-campaign__actions { gap: 8px; }
+  .cg-workshop-hero--campaign .cg-hero-btn { padding: 0 12px; font-size: .75rem; min-height: 43px; }
+}
+@media (prefers-reduced-motion: reduce) { .cg-workshop-campaign__poster { transition: none; } }
+
+/* Información de las convocatorias junto al afiche (sin tapar el arte 1:1) */
+.cg-workshop-campaign__plus {
+  margin-top: 16px; padding-left: 14px; border-left: 3px solid #fe003e;
+}
+.cg-workshop-campaign__plus span { color:#e5003d; font-size:.72rem; font-weight:850; letter-spacing:.04em; text-transform:uppercase; }
+.cg-workshop-campaign__plus p { margin:6px 0 0; color:#595155; font-size:.91rem; line-height:1.5; }
+@media (max-width: 1100px) { .cg-workshop-campaign__plus p { font-size:.83rem; } }
+@media (max-width: 900px) { .cg-workshop-campaign__plus { display:none; } .cg-workshop-hero--campaign .cg-workshop-hero__copy > p { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; } }
+@media (max-width: 520px) {
+  .cg-workshop-hero--campaign .cg-workshop-hero__copy > p { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+}

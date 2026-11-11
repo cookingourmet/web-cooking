@@ -1,3 +1,4 @@
+import { initWorkshopPosters } from "../../utils/workshop-posters";
 import { renderHeader, initHeader } from "../../components/layout/header/header";
 import { renderFooter } from "../../components/layout/footer/footer";
 import {
@@ -32,7 +33,7 @@ function renderRelatedWorkshop(workshop: Workshop, index: number) {
       data-reveal
       style="--reveal-delay: ${index * 70}ms"
     >
-      <img src="${escapeHtml(workshop.image)}" alt="${escapeHtml(workshop.imageAlt)}" loading="lazy" />
+      <img src="${escapeHtml(workshop.image)}" data-workshop-square="${escapeHtml(workshop.slug)}" alt="${escapeHtml(workshop.imageAlt)}" loading="lazy" />
       <span>
         <small>${escapeHtml(status.label)} · ${escapeHtml(workshop.dateLabel)}</small>
         <strong>${escapeHtml(workshop.shortTitle)}</strong>
@@ -100,7 +101,7 @@ export function renderWorkshopDetailPage(slug: string) {
         <section class="workshop-detail__hero" data-reveal-section>
           <div class="workshop-detail__container workshop-detail__hero-grid">
             <div class="workshop-detail__media" data-reveal>
-              <img src="${escapeHtml(workshop.image)}" alt="${escapeHtml(workshop.imageAlt)}" fetchpriority="high" />
+              <img src="${escapeHtml(workshop.image)}" data-workshop-square="${escapeHtml(workshop.slug)}" alt="${escapeHtml(workshop.imageAlt)}" fetchpriority="high" />
               <span class="workshop-detail__date-badge">
                 <small>Inicio</small>
                 <strong>${escapeHtml(workshop.dateBadgeDay)}</strong>
@@ -284,6 +285,7 @@ export function initWorkshopDetailPage(slug: string) {
   if (!workshop) return;
 
   initHeader();
+  initWorkshopPosters();
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({

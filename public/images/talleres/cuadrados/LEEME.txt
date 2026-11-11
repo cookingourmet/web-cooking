@@ -1,0 +1,13 @@
+Copia aqui los nuevos afiches de 1080 x 1080 px en formato WebP.
+
+Nombres esperados segun el slug de talleres en src/data/workshops.data.ts:
+fast-food.webp
+pescados-y-mariscos.webp
+cocina-peruana.webp
+
+Para un nuevo taller, su archivo debe llamarse igual que su propiedad slug + .webp.
+La web detecta automaticamente el archivo si existe; si no, mantiene la imagen anterior.
+NO se incluyen afiches nuevos porque aun no fueron adjuntados.
+
+Importante: las fechas, precios y textos se editan en src/data/workshops.data.ts.
+No anuncies ediciones antiguas como nuevas sin actualizar su contenido.

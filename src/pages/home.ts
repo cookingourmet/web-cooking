@@ -1,3 +1,4 @@
+import { initWorkshopPosters } from "../utils/workshop-posters";
 import { renderHeader, initHeader } from "../components/layout/header/header";
 import { renderHeroSlider, initHeroSlider } from "../components/hero/heroSlider";
 import { renderAboutSection } from "../components/sections/about/about";
@@ -26,4 +27,5 @@ export function initHomePage() {
   initHeader();
   initHeroSlider();
   initCareersSection();
+  initWorkshopPosters();
 }
